@@ -1,0 +1,4 @@
+scenarios/snapshots/** -text
+evaluator_private/** -text
+runs/** -text
+*.jsonl -text

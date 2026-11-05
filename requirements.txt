@@ -1,0 +1,9 @@
+pydantic>=2.6
+requests>=2.31
+fastapi>=0.110
+uvicorn>=0.29
+pyyaml>=6.0
+jsonschema>=4.21
+pytest>=8.0
+pandas>=2.0
+transformers==4.57.1   # tokenizer only, for exact Qwen3 token counts
