@@ -1,0 +1,62 @@
+# Experiment matrix (Milestone 2 s6). Case lists are DERIVED from the scenario manifest
+# (and answer keys) at plan time; no incident IDs are hard-coded here.
+#
+# Selectors:
+#   scenario_numbers: [..]      active (non-superseded) manifest entries with these numbers
+#   diagnosable_primary: true   answer key is_primary and diagnosable (fallback: scenarios 1-4)
+#
+# Order matters: within each cell runs are grouped by incident and ordered by `systems`,
+# and B1 needs the initial BlackBox run (ablation none, repeat 0) of the same incident,
+# so blackbox comes first in the main cell.
+matrix_version: 1
+
+# RunConfig = blackbox.schemas.RunConfig defaults <- run_config_file <- run_config.
+# A phase-level run_config_file overrides the top-level one. A configured file that does
+# not exist makes the harness refuse to run (no silent fallback to defaults).
+# pilot -> configs/dev.yaml (development); eval -> configs/frozen_v1.yaml (created by
+# Agent 1 when settings are frozen after the pilot). The file path and sha256 are saved
+# in batch.json and every meta.json; a resumed batch refuses a changed config file.
+run_config: {}
+run_config_file: null
+
+# Repeats keep the identical RunConfig (same seed, same decoding). Alternative: "offset"
+# adds the repeat index to the seed. Kept "same" to hold decoding settings fixed.
+repeat_seed_strategy: same
+
+phases:
+  eval:
+    require_frozen: true          # refuse snapshots whose manifest entry is not frozen
+    run_config_file: configs/frozen_v1.yaml
+    expected_total: 47
+    cells:
+      - name: main                # 9 scenarios x 3 systems = 27
+        select: {scenario_numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9]}
+        systems: [blackbox, b1, b0]
+        ablations: [none]
+        repeats: [0]
+      - name: repeats             # 2 extra BlackBox passes x 4 diagnosable primary = 8
+        select: {diagnosable_primary: true}
+        systems: [blackbox]
+        ablations: [none]
+        repeats: [1, 2]
+      - name: ablations           # 3 ablations x 4 diagnosable primary = 12
+        select: {diagnosable_primary: true}
+        systems: [blackbox]
+        ablations: [no_jira, no_provenance, no_traces]
+        repeats: [0]
+
+  pilot:
+    require_frozen: false
+    run_config_file: configs/dev.yaml
+    expected_total: null
+    cells:
+      - name: main
+        select: {scenario_numbers: [0]}
+        systems: [blackbox, b1, b0]
+        ablations: [none]
+        repeats: [0]
+      - name: ablations
+        select: {scenario_numbers: [0]}
+        systems: [blackbox]
+        ablations: [no_jira, no_provenance, no_traces]
+        repeats: [0]
