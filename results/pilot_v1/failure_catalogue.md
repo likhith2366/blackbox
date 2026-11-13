@@ -1,0 +1,13 @@
+# Failure catalogue
+
+Every failed, incomplete or erroneous run is listed; none are dropped. `likely_cause` is an automated guess for reviewers.
+
+| run_id | incident_id | scenario | system | ablation | repeat | symptom | likely_cause (automated guess, needs review) | evidence |
+|---|---|---|---|---|---|---|---|---|
+| INC-0000_blackbox_none_r0 | INC-0000 | 0 | blackbox | none | 0 | false abstention on a diagnosable case (provisional, automated) | insufficient confidence or decisive evidence missed (coverage 0.00) | runs/pilot_v1/INC-0000_blackbox_none_r0/worksheet |
+| INC-0000_blackbox_none_r0 | INC-0000 | 0 | blackbox | none | 0 | 3 redundant tool call(s) | repeated identical request without new evidence | runs/pilot_v1/INC-0000_blackbox_none_r0/hypothesis trace |
+| INC-0000_blackbox_no_jira_r0 | INC-0000 | 0 | blackbox | no_jira | 0 | planned run not executed | batch incomplete or interrupted | plan.json |
+| INC-0000_blackbox_no_provenance_r0 | INC-0000 | 0 | blackbox | no_provenance | 0 | planned run not executed | batch incomplete or interrupted | plan.json |
+| INC-0000_blackbox_no_traces_r0 | INC-0000 | 0 | blackbox | no_traces | 0 | planned run not executed | batch incomplete or interrupted | plan.json |
+| INC-0000_b1_none_r0 | INC-0000 | 0 | b1 | none | 0 | top-1 diagnosis not matched (provisional, automated) | retrieval: decisive coverage 0.00 | runs/pilot_v1/INC-0000_b1_none_r0/worksheet / hypothesis trace |
+| INC-0000_b0_none_r0 | INC-0000 | 0 | b0 | none | 0 | top-1 diagnosis not matched (provisional, automated) | retrieval: decisive coverage 0.00 | runs/pilot_v1/INC-0000_b0_none_r0/worksheet / hypothesis trace |

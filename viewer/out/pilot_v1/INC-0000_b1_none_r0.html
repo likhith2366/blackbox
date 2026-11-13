@@ -1,0 +1,200 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>INC-0000_b1_none_r0</title><style>
+:root{--bg:#f7f7f5;--panel:#fff;--ink:#1d1d1b;--muted:#6b6b66;--line:#e2e1dc;--accent:#2f5d8a;
+--ok:#2e7d4f;--warn:#a86a00;--bad:#b3261e;--chip:#eef2f7;--code:#f1f0ec;--stub:#b3261e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;
+--muted:#a3a29b;--line:#34332f;--accent:#8fb6dd;--ok:#6cc08f;--warn:#e0a84a;--bad:#ef7a72;--chip:#26303a;
+--code:#262624;--stub:#ef7a72}}
+:root[data-theme="dark"]{--bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--accent:#8fb6dd;
+--ok:#6cc08f;--warn:#e0a84a;--bad:#ef7a72;--chip:#26303a;--code:#262624;--stub:#ef7a72}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}a{color:var(--accent)}
+h1{font-size:20px;margin:8px 0}h2{font-size:16px;margin:24px 0 8px;border-bottom:1px solid var(--line);padding-bottom:4px}
+h3{font-size:14px;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0}
+.muted{color:var(--muted)}.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.stub{background:var(--stub);color:#fff;font-weight:700;padding:6px 10px;border-radius:6px;margin:8px 0}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 16px}
+.kv div span{color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid var(--line);
+padding:4px 6px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600}
+.scroll{overflow-x:auto}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px}
+pre{background:var(--code);padding:8px;border-radius:6px;white-space:pre-wrap;word-break:break-word;margin:4px 0}
+.chip{display:inline-block;background:var(--chip);border-radius:4px;padding:0 5px;margin:1px 2px;font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.chip.missing{outline:1px dashed var(--bad)}
+.tag{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:0 7px;font-size:12px;margin-right:4px}
+details>summary{cursor:pointer;color:var(--accent)}
+.ev{border-top:1px solid var(--line);padding:6px 0}.ev:target{background:var(--chip)}
+</style></head><body><main><p><a href="index.html">&larr; pilot_v1</a></p><h1>INC-0000_b1_none_r0</h1><div class="panel"><div class="kv"><div><span>system</span> b1</div><div><span>incident</span> INC-0000</div><div><span>ablation</span> none</div><div><span>harness status</span> <b class="ok">completed</b></div><div><span>output status</span> <b class="ok">completed</b></div><div><span>report status</span> <b class="ok">diagnosis</b></div><div><span>stopping</span> single call</div><div><span>rounds / tool calls</span> 0 / 0</div><div><span>budget violations</span> 0</div><div><span>unauthorized attempted / executed</span> 0 / 0</div><div><span>model calls</span> 2</div><div><span>tokens prompt+completion</span> 8575+2013</div><div><span>model seconds</span> 310.4</div><div><span>system wall s</span> 310.45</div><div><span>harness wall s</span> 310.517</div><div><span>start / end</span> 2026-11-20T02:15:56.594Z / 2026-11-20T02:21:07.112Z</div><div><span>error</span> -</div></div></div><h2>Final report</h2><div class="panel"><p><b>Most likely cause: payment-svc - ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine</b></p><h3>Ranked causes</h3><div class="scroll"><table><tr><th>#</th><th>component</th><th>mechanism</th><th>confidence</th><th>evidence</th></tr><tr><td>1</td><td>payment-svc</td><td>ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine</td><td>high</td><td><a class="chip" href="#ev-trace_a1bc8a0dcd88d6ec08be5b6a64400a5c">trace:a1bc8a0dcd88d6ec08be5b6a64400a5c</a> <a class="chip" href="#ev-trace_2ae8fe01a9cb14deaa5754d3c82bde50">trace:2ae8fe01a9cb14deaa5754d3c82bde50</a> <a class="chip" href="#ev-trace_0aa1f6ffc7264a85d034f99acbe45571">trace:0aa1f6ffc7264a85d034f99acbe45571</a> <a class="chip" href="#ev-trace_9f037d1aa8d52a8db31719a2c622a500">trace:9f037d1aa8d52a8db31719a2c622a500</a> <a class="chip" href="#ev-trace_8486ebc04f7371a3df8d5e3582302b8e">trace:8486ebc04f7371a3df8d5e3582302b8e</a> <a class="chip" href="#ev-trace_9483bf6e1d582ff01dccfc936788ddc1">trace:9483bf6e1d582ff01dccfc936788ddc1</a></td></tr><tr><td>2</td><td>checkout-svc</td><td>HTTP 504 Gateway Timeout</td><td>medium</td><td><a class="chip" href="#ev-trace_e015ea97b7ad48737584ad821d938f5e">trace:e015ea97b7ad48737584ad821d938f5e</a> <a class="chip" href="#ev-trace_c213d7f6779522c75496f99abf207e55">trace:c213d7f6779522c75496f99abf207e55</a> <a class="chip" href="#ev-trace_a9d713faa39838c4d90df623f5b5e47e">trace:a9d713faa39838c4d90df623f5b5e47e</a> <a class="chip" href="#ev-trace_fb794be8cf5d029895d00301bdfca0a7">trace:fb794be8cf5d029895d00301bdfca0a7</a></td></tr></table></div><h3>Claims</h3><div class="scroll"><table><tr><th>id</th><th>kind</th><th>text</th><th>evidence</th></tr><tr><td>c1</td><td>factual</td><td>The error rate for checkout-svc exceeded 0.05 for 15s due to payment-svc connection failures</td><td><a class="chip" href="#ev-metric_83cc53b310">metric:83cc53b310</a></td></tr><tr><td>c2</td><td>causal</td><td>Multiple traces show payment-svc returning ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine</td><td><a class="chip" href="#ev-trace_a1bc8a0dcd88d6ec08be5b6a64400a5c">trace:a1bc8a0dcd88d6ec08be5b6a64400a5c</a> <a class="chip" href="#ev-trace_2ae8fe01a9cb14deaa5754d3c82bde50">trace:2ae8fe01a9cb14deaa5754d3c82bde50</a> <a class="chip" href="#ev-trace_0aa1f6ffc7264a85d034f99acbe45571">trace:0aa1f6ffc7264a85d034f99acbe45571</a> <a class="chip" href="#ev-trace_9f037d1aa8d52a8db31719a2c622a500">trace:9f037d1aa8d52a8db31719a2c622a500</a></td></tr><tr><td>c3</td><td>factual</td><td>Checkout-svc is timing out on payment-svc calls with HTTP 504 status</td><td><a class="chip" href="#ev-trace_e015ea97b7ad48737584ad821d938f5e">trace:e015ea97b7ad48737584ad821d938f5e</a> <a class="chip" href="#ev-trace_c213d7f6779522c75496f99abf207e55">trace:c213d7f6779522c75496f99abf207e55</a> <a class="chip" href="#ev-trace_a9d713faa39838c4d90df623f5b5e47e">trace:a9d713faa39838c4d90df623f5b5e47e</a></td></tr></table></div><h3>Unresolved questions</h3><ul><li>Why is payment-svc returning ConnectionAbortedError: [WinError 10053]?</li></ul><p><span class='muted'>Next check:</span> Check payment-svc logs for WinError 10053 occurrences</p><p><span class='muted'>Suggested fix (untested):</span> (untested) Increase payment-svc timeout for connection establishment</p><h3>Citation audit (raw vs recovered)</h3><div class="scroll"><table><tr><th>where</th><th>raw (as written)</th><th>resolved</th><th>method</th></tr><tr><td>cause1</td><td><code>trace:a1bc8a0dcd88d6ec08be5b6a64400a5c</code></td><td><code>trace:a1bc8a0dcd88d6ec08be5b6a64400a5c</code></td><td class="ok">exact</td></tr><tr><td>cause1</td><td><code>trace:2ae8fe01a9cb14deaa5754d3c82bde50</code></td><td><code>trace:2ae8fe01a9cb14deaa5754d3c82bde50</code></td><td class="ok">exact</td></tr><tr><td>cause1</td><td><code>trace:0aa1f6ffc7264a85d034f99acbe45571</code></td><td><code>trace:0aa1f6ffc7264a85d034f99acbe45571</code></td><td class="ok">exact</td></tr><tr><td>cause1</td><td><code>trace:9f037d1aa8d52a8db31719a2c622a500</code></td><td><code>trace:9f037d1aa8d52a8db31719a2c622a500</code></td><td class="ok">exact</td></tr><tr><td>cause1</td><td><code>trace:8486ebc04f7371a3df8d5e3582302b8e</code></td><td><code>trace:8486ebc04f7371a3df8d5e3582302b8e</code></td><td class="ok">exact</td></tr><tr><td>cause1</td><td><code>trace:9483bf6e1d582ff01dccfc936788ddc1</code></td><td><code>trace:9483bf6e1d582ff01dccfc936788ddc1</code></td><td class="ok">exact</td></tr><tr><td>cause2</td><td><code>trace:e015ea97b7ad48737584ad821d938f5e</code></td><td><code>trace:e015ea97b7ad48737584ad821d938f5e</code></td><td class="ok">exact</td></tr><tr><td>cause2</td><td><code>trace:c213d7f6779522c75496f99abf207e55</code></td><td><code>trace:c213d7f6779522c75496f99abf207e55</code></td><td class="ok">exact</td></tr><tr><td>cause2</td><td><code>trace:a9d713faa39838c4d90df623f5b5e47e</code></td><td><code>trace:a9d713faa39838c4d90df623f5b5e47e</code></td><td class="ok">exact</td></tr><tr><td>cause2</td><td><code>trace:fb794be8cf5d029895d00301bdfca0a7</code></td><td><code>trace:fb794be8cf5d029895d00301bdfca0a7</code></td><td class="ok">exact</td></tr><tr><td>claim c1</td><td><code>metric:83cc53b310</code></td><td><code>metric:83cc53b310</code></td><td class="ok">exact</td></tr><tr><td>claim c2</td><td><code>trace:a1bc8a0dcd88d6ec08be5b6a64400a5c</code></td><td><code>trace:a1bc8a0dcd88d6ec08be5b6a64400a5c</code></td><td class="ok">exact</td></tr><tr><td>claim c2</td><td><code>trace:2ae8fe01a9cb14deaa5754d3c82bde50</code></td><td><code>trace:2ae8fe01a9cb14deaa5754d3c82bde50</code></td><td class="ok">exact</td></tr><tr><td>claim c2</td><td><code>trace:0aa1f6ffc7264a85d034f99acbe45571</code></td><td><code>trace:0aa1f6ffc7264a85d034f99acbe45571</code></td><td class="ok">exact</td></tr><tr><td>claim c2</td><td><code>trace:9f037d1aa8d52a8db31719a2c622a500</code></td><td><code>trace:9f037d1aa8d52a8db31719a2c622a500</code></td><td class="ok">exact</td></tr><tr><td>claim c3</td><td><code>trace:e015ea97b7ad48737584ad821d938f5e</code></td><td><code>trace:e015ea97b7ad48737584ad821d938f5e</code></td><td class="ok">exact</td></tr><tr><td>claim c3</td><td><code>trace:c213d7f6779522c75496f99abf207e55</code></td><td><code>trace:c213d7f6779522c75496f99abf207e55</code></td><td class="ok">exact</td></tr><tr><td>claim c3</td><td><code>trace:a9d713faa39838c4d90df623f5b5e47e</code></td><td><code>trace:a9d713faa39838c4d90df623f5b5e47e</code></td><td class="ok">exact</td></tr></table></div></div><h2>Evidence budget (single call)</h2><div class='panel'><div class="kv"><div><span>context tokens</span> 8192</div><div><span>reserved</span> 2400</div><div><span>evidence budget</span> 5792</div><div><span>evidence tokens total</span> 3768</div><div><span>included</span> 11</div><div><span>omitted</span> 0</div><div><span>omitted tokens</span> 0</div><div><span>B1 matched</span> <b class="ok">True</b></div></div></div><details><summary>context accounting (run level)</summary><pre>{
+ &quot;num_ctx&quot;: 8192,
+ &quot;num_predict&quot;: 1100,
+ &quot;prompt_tokens_est&quot;: 4272,
+ &quot;prompt_tokens_actual&quot;: 4267
+}</pre></details><h2>Evidence seen (11)</h2><div class='panel'><div class="ev" id="ev-metric_83cc53b310"><b><code>metric:83cc53b310</code></b> <span class="muted">metrics checkout-svc event=2026-11-20T02:03:04.072Z available=2026-11-20T02:05:37.845Z</span> <br>checkout-svc error_rate<pre>checkout-svc error_rate (5.0s points, 2026-11-20T02:03:04.072Z .. 2026-11-20T02:05:37.845Z): min=0 max=0.9583 last=0.6667
+02:03:04 0; 02:03:09 0; 02:03:14 0; 02:03:19 0; 02:03:24 0; 02:03:29 0; 02:03:34 0; 02:03:39 0; 02:03:44 0; 02:03:49 0; 02:03:54 0; 02:03:59 0; 02:04:00 0; 02:04:07 0; 02:04:12 0; 02:04:17 0.8095; 02:04:22 0.3182; 02:04:27 0; 02:04:32 0.2667; 02:04:37 0.9583; 02:04:42 0.4167; 02:04:47 0.7308; 02:04:52 0.6667; 02:04:57 0.6333; 02:05:02 0.6; 02:05:07 0.7619; 02:05:12 0.3684; 02:05:17 0.2381; 02:05:22 0.28; 02:05:27 0.5417; 02:05:32 0.56; 02:05:37 0.6667</pre><p class="muted">cited by: report c1</p></div><div class="ev" id="ev-trace_a1bc8a0dcd88d6ec08be5b6a64400a5c"><b><code>trace:a1bc8a0dcd88d6ec08be5b6a64400a5c</code></b> <span class="muted">traces checkout-svc event=2026-11-20T02:04:02.725Z available=2026-11-20T02:04:03.670Z</span> <span class="tag">truncated</span><br>checkout-svc POST /orders 945.83ms error<pre>trace a1bc8a0dcd88d6ec08be5b6a64400a5c root=checkout-svc POST /orders start=2026-11-20T02:04:02.725Z duration=945.83ms status=error spans=21 services=checkout-svc,payment-svc
+ - checkout-svc POST /orders 945.83ms ok {&quot;http.route&quot;:&quot;/orders&quot;,&quot;order.id&quot;:&quot;ord-0300318&quot;,&quot;http.status_code&quot;:201}
+ - checkout-svc POST /charge 258.02ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:1,&quot;http.timeout_ms&quot;:250}
+ - payment-svc db.pool.acquire 0.0ms ok {&quot;db.pool.wait_ms&quot;:0.0}
+ - payment-svc POST /charge 283.62ms error (ConnectionAbortedError: [WinError 10053] An establis ...[truncated]</pre><p class="muted">cited by: report cause1, report c2</p></div><div class="ev" id="ev-trace_2ae8fe01a9cb14deaa5754d3c82bde50"><b><code>trace:2ae8fe01a9cb14deaa5754d3c82bde50</code></b> <span class="muted">traces checkout-svc event=2026-11-20T02:04:02.936Z available=2026-11-20T02:04:03.727Z</span> <span class="tag">truncated</span><br>checkout-svc POST /orders 729.41ms error<pre>trace 2ae8fe01a9cb14deaa5754d3c82bde50 root=checkout-svc POST /orders start=2026-11-20T02:04:02.936Z duration=729.41ms status=error spans=18 services=checkout-svc,payment-svc
+ - checkout-svc POST /orders 729.41ms ok {&quot;http.route&quot;:&quot;/orders&quot;,&quot;order.id&quot;:&quot;ord-0300320&quot;,&quot;http.status_code&quot;:201}
+ - checkout-svc POST /charge 262.14ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:1,&quot;http.timeout_ms&quot;:250}
+ - payment-svc POST /charge 721.88ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) ...[truncated]</pre><p class="muted">cited by: report cause1, report c2</p></div><div class="ev" id="ev-trace_0aa1f6ffc7264a85d034f99acbe45571"><b><code>trace:0aa1f6ffc7264a85d034f99acbe45571</code></b> <span class="muted">traces checkout-svc event=2026-11-20T02:04:02.985Z available=2026-11-20T02:04:03.687Z</span> <span class="tag">truncated</span><br>checkout-svc POST /orders 688.8ms error<pre>trace 0aa1f6ffc7264a85d034f99acbe45571 root=checkout-svc POST /orders start=2026-11-20T02:04:02.985Z duration=688.8ms status=error spans=18 services=checkout-svc,payment-svc
+ - checkout-svc POST /charge 262.24ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:1,&quot;http.timeout_ms&quot;:250}
+ - checkout-svc POST /orders 688.8ms ok {&quot;http.route&quot;:&quot;/orders&quot;,&quot;order.id&quot;:&quot;ord-0300321&quot;,&quot;http.status_code&quot;:201}
+ - payment-svc db.pool.acquire 0.0ms ok {&quot;db.pool.wait_ms&quot;:0.0}
+ - payment-svc POST /charge 699.84ms error (ConnectionAbortedError: [WinError 10053] An establishe ...[truncated]</pre><p class="muted">cited by: report cause1, report c2</p></div><div class="ev" id="ev-trace_9f037d1aa8d52a8db31719a2c622a500"><b><code>trace:9f037d1aa8d52a8db31719a2c622a500</code></b> <span class="muted">traces checkout-svc event=2026-11-20T02:04:03.413Z available=2026-11-20T02:04:03.854Z</span> <span class="tag">truncated</span><br>checkout-svc POST /orders 439.01ms error<pre>trace 9f037d1aa8d52a8db31719a2c622a500 root=checkout-svc POST /orders start=2026-11-20T02:04:03.413Z duration=439.01ms status=error spans=18 services=checkout-svc,payment-svc
+ - checkout-svc POST /orders 439.01ms ok {&quot;http.route&quot;:&quot;/orders&quot;,&quot;order.id&quot;:&quot;ord-0300328&quot;,&quot;http.status_code&quot;:201}
+ - checkout-svc POST /charge 253.12ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:1,&quot;http.timeout_ms&quot;:250}
+ - payment-svc POST /charge 404.34ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) ...[truncated]</pre><p class="muted">cited by: report cause1, report c2</p></div><div class="ev" id="ev-trace_8486ebc04f7371a3df8d5e3582302b8e"><b><code>trace:8486ebc04f7371a3df8d5e3582302b8e</code></b> <span class="muted">traces checkout-svc event=2026-11-20T02:04:03.474Z available=2026-11-20T02:04:03.825Z</span> <span class="tag">truncated</span><br>checkout-svc POST /orders 326.42ms error<pre>trace 8486ebc04f7371a3df8d5e3582302b8e root=checkout-svc POST /orders start=2026-11-20T02:04:03.474Z duration=326.42ms status=error spans=15 services=checkout-svc,payment-svc
+ - checkout-svc POST /orders 326.42ms ok {&quot;http.route&quot;:&quot;/orders&quot;,&quot;order.id&quot;:&quot;ord-0300329&quot;,&quot;http.status_code&quot;:201}
+ - checkout-svc POST /charge 268.74ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:1,&quot;http.timeout_ms&quot;:250}
+ - payment-svc POST /charge 344.08ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) ...[truncated]</pre><p class="muted">cited by: report cause1</p></div><div class="ev" id="ev-trace_9483bf6e1d582ff01dccfc936788ddc1"><b><code>trace:9483bf6e1d582ff01dccfc936788ddc1</code></b> <span class="muted">traces checkout-svc event=2026-11-20T02:04:12.749Z available=2026-11-20T02:04:13.358Z</span> <span class="tag">truncated</span><br>checkout-svc POST /orders 573.14ms error<pre>trace 9483bf6e1d582ff01dccfc936788ddc1 root=checkout-svc POST /orders start=2026-11-20T02:04:12.749Z duration=573.14ms status=error spans=18 services=checkout-svc,payment-svc
+ - checkout-svc POST /charge 292.03ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:1,&quot;http.timeout_ms&quot;:250}
+ - checkout-svc POST /orders 573.14ms ok {&quot;http.route&quot;:&quot;/orders&quot;,&quot;order.id&quot;:&quot;ord-0300367&quot;,&quot;http.status_code&quot;:201}
+ - payment-svc POST /charge 315.28ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) ...[truncated]</pre><p class="muted">cited by: report cause1</p></div><div class="ev" id="ev-trace_e015ea97b7ad48737584ad821d938f5e"><b><code>trace:e015ea97b7ad48737584ad821d938f5e</code></b> <span class="muted">traces checkout-svc event=2026-11-20T02:04:13.412Z available=2026-11-20T02:04:19.586Z</span> <span class="tag">truncated</span><br>checkout-svc POST /orders 1319.53ms error<pre>trace e015ea97b7ad48737584ad821d938f5e root=checkout-svc POST /orders start=2026-11-20T02:04:13.412Z duration=1319.53ms status=error spans=20 services=checkout-svc,payment-svc
+ - checkout-svc POST /orders 1319.53ms error (HTTP 504) {&quot;http.route&quot;:&quot;/orders&quot;,&quot;order.id&quot;:&quot;ord-0300371&quot;,&quot;http.status_code&quot;:504}
+ - checkout-svc POST /charge 264.4ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:1,&quot;http.timeout_ms&quot;:250}
+ - payment-svc risk.score 5615.48ms ok {&quot;amount&quot;:444.68}
+ - payment-svc db.pool.acquire 0.0ms ok {&quot;db.pool.wait_ms&quot;:0.0}
+ - payment-svc POST /cha ...[truncated]</pre><p class="muted">cited by: report cause2, report c3</p></div><div class="ev" id="ev-trace_c213d7f6779522c75496f99abf207e55"><b><code>trace:c213d7f6779522c75496f99abf207e55</code></b> <span class="muted">traces checkout-svc event=2026-11-20T02:04:13.474Z available=2026-11-20T02:04:19.088Z</span> <span class="tag">truncated</span><br>checkout-svc POST /orders 1305.07ms error<pre>trace c213d7f6779522c75496f99abf207e55 root=checkout-svc POST /orders start=2026-11-20T02:04:13.474Z duration=1305.07ms status=error spans=24 services=checkout-svc,payment-svc
+ - checkout-svc POST /orders 1305.07ms error (HTTP 504) {&quot;http.route&quot;:&quot;/orders&quot;,&quot;order.id&quot;:&quot;ord-0300372&quot;,&quot;http.status_code&quot;:504}
+ - checkout-svc POST /charge 264.07ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:1,&quot;http.timeout_ms&quot;:250}
+ - payment-svc db.pool.acquire 0.0ms ok {&quot;db.pool.wait_ms&quot;:0.0}
+ - payment-svc POST /charge 5558.92ms error (ConnectionAbortedError: [WinError 1 ...[truncated]</pre><p class="muted">cited by: report cause2, report c3</p></div><div class="ev" id="ev-trace_a9d713faa39838c4d90df623f5b5e47e"><b><code>trace:a9d713faa39838c4d90df623f5b5e47e</code></b> <span class="muted">traces checkout-svc event=2026-11-20T02:04:13.521Z available=2026-11-20T02:04:19.079Z</span> <span class="tag">truncated</span><br>checkout-svc POST /orders 1335.91ms error<pre>trace a9d713faa39838c4d90df623f5b5e47e root=checkout-svc POST /orders start=2026-11-20T02:04:13.521Z duration=1335.91ms status=error spans=18 services=checkout-svc,payment-svc
+ - checkout-svc POST /orders 1335.91ms error (HTTP 504) {&quot;http.route&quot;:&quot;/orders&quot;,&quot;order.id&quot;:&quot;ord-0300373&quot;,&quot;http.status_code&quot;:504}
+ - checkout-svc POST /charge 263.69ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:1,&quot;http.timeout_ms&quot;:250}
+ - payment-svc db.pool.acquire 0.0ms ok {&quot;db.pool.wait_ms&quot;:0.0}
+ - payment-svc POST /charge 5550.16ms error (ConnectionAbortedError: [WinError 1 ...[truncated]</pre><p class="muted">cited by: report cause2, report c3</p></div><div class="ev" id="ev-trace_fb794be8cf5d029895d00301bdfca0a7"><b><code>trace:fb794be8cf5d029895d00301bdfca0a7</code></b> <span class="muted">traces checkout-svc event=2026-11-20T02:04:14.143Z available=2026-11-20T02:04:15.463Z</span> <span class="tag">truncated</span><br>checkout-svc POST /orders 1319.36ms error<pre>trace fb794be8cf5d029895d00301bdfca0a7 root=checkout-svc POST /orders start=2026-11-20T02:04:14.143Z duration=1319.36ms status=error spans=6 services=checkout-svc
+ - checkout-svc POST /orders 1319.36ms error (HTTP 504) {&quot;http.route&quot;:&quot;/orders&quot;,&quot;order.id&quot;:&quot;ord-0300374&quot;,&quot;http.status_code&quot;:504}
+ - checkout-svc POST /charge 261.59ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:1,&quot;http.timeout_ms&quot;:250}
+ - checkout-svc POST /charge 263.0ms error (timeout after 250ms) {&quot;peer.service&quot;:&quot;payment-svc&quot;,&quot;http.attempt&quot;:2,&quot;http.timeout_ms&quot;:250}
+ - checkout-svc POST / ...[truncated]</pre><p class="muted">cited by: report cause2</p></div></div><h2>Configuration and metadata</h2><div class='panel'><div class="kv"><div><span>prompt versions</span> {&quot;single_call&quot;: &quot;baseline_v1@049b7a8933&quot;}</div><div><span>model</span> qwen3:4b</div><div><span>seed</span> 7</div><div><span>num_ctx / num_predict</span> 8192 / 900</div><div><span>code revision</span> 45e13142d4343c71f382fc932e3f45d563ca7f82-dirty</div><div><span>schema</span> 1.0</div><div><span>model digest</span> 359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7</div></div><details><summary>RunConfig</summary><pre>{
+ &quot;model&quot;: &quot;qwen3:4b&quot;,
+ &quot;ollama_url&quot;: &quot;http://127.0.0.1:11434&quot;,
+ &quot;temperature&quot;: 0.0,
+ &quot;top_p&quot;: 1.0,
+ &quot;seed&quot;: 7,
+ &quot;num_ctx&quot;: 8192,
+ &quot;num_predict&quot;: 900,
+ &quot;think&quot;: false,
+ &quot;max_rounds&quot;: 6,
+ &quot;max_tool_calls&quot;: 12,
+ &quot;max_calls_per_round&quot;: 3,
+ &quot;model_timeout_s&quot;: 240.0,
+ &quot;tool_timeout_s&quot;: 10.0,
+ &quot;run_timeout_s&quot;: 1200.0,
+ &quot;reserve_output_tokens&quot;: 1100,
+ &quot;reserve_instruction_tokens&quot;: 1300,
+ &quot;coverage_hint&quot;: false,
+ &quot;round_prompt&quot;: &quot;investigator_v2&quot;,
+ &quot;report_prompt&quot;: &quot;report_v1&quot;,
+ &quot;baseline_prompt&quot;: &quot;baseline_v1&quot;,
+ &quot;prompt_version&quot;: &quot;baseline_v1@049b7a8933&quot;,
+ &quot;code_revision&quot;: &quot;45e13142d4343c71f382fc932e3f45d563ca7f82-dirty&quot;
+}</pre></details><details><summary>meta.json</summary><pre>{
+ &quot;git_head&quot;: &quot;45e13142d4343c71f382fc932e3f45d563ca7f82&quot;,
+ &quot;git_dirty&quot;: true,
+ &quot;model&quot;: &quot;qwen3:4b&quot;,
+ &quot;model_digest&quot;: &quot;359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7&quot;,
+ &quot;model_details&quot;: {
+  &quot;parent_model&quot;: &quot;&quot;,
+  &quot;format&quot;: &quot;gguf&quot;,
+  &quot;family&quot;: &quot;qwen3&quot;,
+  &quot;families&quot;: [
+   &quot;qwen3&quot;
+  ],
+  &quot;parameter_size&quot;: &quot;4.0B&quot;,
+  &quot;quantization_level&quot;: &quot;Q4_K_M&quot;
+ },
+ &quot;model_modified_at&quot;: &quot;2026-08-20T15:04:21.1533075-04:00&quot;,
+ &quot;run_config_file&quot;: &quot;configs/dev.yaml&quot;,
+ &quot;run_config_sha256&quot;: &quot;77c6afd527d855146685885ffbd61d87cf77d0cb4373b731da522f539f746266&quot;,
+ &quot;python&quot;: &quot;3.11.9&quot;,
+ &quot;platform&quot;: &quot;Windows-10-10.0.26200-SP0&quot;,
+ &quot;batch&quot;: &quot;pilot_v1&quot;,
+ &quot;matrix_sha256&quot;: &quot;0718a2b8b976e4f727a6357a6c5d28beed2810c3b74a9784ed8a60210d309046&quot;,
+ &quot;run_id&quot;: &quot;INC-0000_b1_none_r0&quot;,
+ &quot;stub&quot;: false,
+ &quot;phase&quot;: &quot;pilot&quot;,
+ &quot;status&quot;: &quot;completed&quot;,
+ &quot;seed&quot;: 7,
+ &quot;prompt_version&quot;: &quot;{\&quot;single_call\&quot;: \&quot;baseline_v1@049b7a8933\&quot;}&quot;,
+ &quot;decoding&quot;: {
+  &quot;temperature&quot;: 0.0,
+  &quot;top_p&quot;: 1.0,
+  &quot;seed&quot;: 7,
+  &quot;num_ctx&quot;: 8192,
+  &quot;num_predict&quot;: 900,
+  &quot;think&quot;: false
+ },
+ &quot;run_config&quot;: {
+  &quot;model&quot;: &quot;qwen3:4b&quot;,
+  &quot;ollama_url&quot;: &quot;http://127.0.0.1:11434&quot;,
+  &quot;temperature&quot;: 0.0,
+  &quot;top_p&quot;: 1.0,
+  &quot;seed&quot;: 7,
+  &quot;num_ctx&quot;: 8192,
+  &quot;num_predict&quot;: 900,
+  &quot;think&quot;: false,
+  &quot;max_rounds&quot;: 6,
+  &quot;max_tool_calls&quot;: 12,
+  &quot;max_calls_per_round&quot;: 3,
+  &quot;model_timeout_s&quot;: 240.0,
+  &quot;tool_timeout_s&quot;: 10.0,
+  &quot;run_timeout_s&quot;: 1200.0,
+  &quot;reserve_output_tokens&quot;: 1100,
+  &quot;reserve_instruction_tokens&quot;: 1300,
+  &quot;round_prompt&quot;: &quot;investigator_v2&quot;,
+  &quot;report_prompt&quot;: &quot;report_v1&quot;,
+  &quot;baseline_prompt&quot;: &quot;baseline_v1&quot;,
+  &quot;prompt_version&quot;: &quot;&quot;,
+  &quot;code_revision&quot;: &quot;45e13142d4343c71f382fc932e3f45d563ca7f82-dirty&quot;
+ },
+ &quot;start_time&quot;: &quot;2026-11-20T02:15:56.594Z&quot;,
+ &quot;end_time&quot;: &quot;2026-11-20T02:21:07.112Z&quot;,
+ &quot;wall_seconds&quot;: 310.517,
+ &quot;exception&quot;: null,
+ &quot;b1_source_run&quot;: &quot;INC-0000_blackbox_none_r0&quot;,
+ &quot;b1_evidence_count&quot;: 11,
+ &quot;system_error&quot;: null,
+ &quot;prompt_versions&quot;: {
+  &quot;single_call&quot;: &quot;baseline_v1@049b7a8933&quot;
+ },
+ &quot;exceeded_run_timeout&quot;: false
+}</pre></details><details><summary>input.json</summary><pre>{
+ &quot;run_id&quot;: &quot;INC-0000_b1_none_r0&quot;,
+ &quot;incident_id&quot;: &quot;INC-0000&quot;,
+ &quot;system&quot;: &quot;b1&quot;,
+ &quot;ablation&quot;: &quot;none&quot;,
+ &quot;repeat_index&quot;: 0,
+ &quot;cell&quot;: &quot;main&quot;,
+ &quot;scenario_number&quot;: 0,
+ &quot;scenario_type&quot;: &quot;pilot&quot;,
+ &quot;phase&quot;: &quot;pilot&quot;,
+ &quot;b1_source_run&quot;: &quot;INC-0000_blackbox_none_r0&quot;,
+ &quot;stub&quot;: false,
+ &quot;config&quot;: {
+  &quot;model&quot;: &quot;qwen3:4b&quot;,
+  &quot;ollama_url&quot;: &quot;http://127.0.0.1:11434&quot;,
+  &quot;temperature&quot;: 0.0,
+  &quot;top_p&quot;: 1.0,
+  &quot;seed&quot;: 7,
+  &quot;num_ctx&quot;: 8192,
+  &quot;num_predict&quot;: 900,
+  &quot;think&quot;: false,
+  &quot;max_rounds&quot;: 6,
+  &quot;max_tool_calls&quot;: 12,
+  &quot;max_calls_per_round&quot;: 3,
+  &quot;model_timeout_s&quot;: 240.0,
+  &quot;tool_timeout_s&quot;: 10.0,
+  &quot;run_timeout_s&quot;: 1200.0,
+  &quot;reserve_output_tokens&quot;: 1100,
+  &quot;reserve_instruction_tokens&quot;: 1300,
+  &quot;round_prompt&quot;: &quot;investigator_v2&quot;,
+  &quot;report_prompt&quot;: &quot;report_v1&quot;,
+  &quot;baseline_prompt&quot;: &quot;baseline_v1&quot;,
+  &quot;prompt_version&quot;: &quot;&quot;,
+  &quot;code_revision&quot;: &quot;45e13142d4343c71f382fc932e3f45d563ca7f82-dirty&quot;
+ }
+}</pre></details></div></main></body></html>

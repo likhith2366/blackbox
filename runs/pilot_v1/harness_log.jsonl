@@ -1,0 +1,6 @@
+{"t": "2026-11-20T02:11:04.495Z", "event": "start", "run_id": "INC-0000_blackbox_none_r0"}
+{"t": "2026-11-20T02:15:56.591Z", "event": "end", "run_id": "INC-0000_blackbox_none_r0", "status": "completed", "wall": 292.093}
+{"t": "2026-11-20T02:15:56.595Z", "event": "start", "run_id": "INC-0000_b1_none_r0"}
+{"t": "2026-11-20T02:21:07.114Z", "event": "end", "run_id": "INC-0000_b1_none_r0", "status": "completed", "wall": 310.517}
+{"t": "2026-11-20T02:21:07.121Z", "event": "start", "run_id": "INC-0000_b0_none_r0"}
+{"t": "2026-11-20T02:22:58.340Z", "event": "end", "run_id": "INC-0000_b0_none_r0", "status": "completed", "wall": 111.218}

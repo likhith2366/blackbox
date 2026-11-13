@@ -1,0 +1,153 @@
+{
+  "incident_id": "INC-0000",
+  "scenario_number": 0,
+  "scenario_type": "pilot",
+  "is_primary": false,
+  "diagnosable": true,
+  "variant_of": null,
+  "expected_status": "diagnosis",
+  "component": "checkout-svc shared HTTP client (libs/httpclient retry policy)",
+  "mechanism": "retry amplification: shared client (httpclient 3.2.0 in checkout-svc 1.9.0) now retries timeouts/5xx up to 4 times with a 250ms per-attempt timeout and no backoff; slow large-charge calls are abandoned and repeated, payment calls multiply (~5/s -> ~20/s), and the concurrent duplicate charge attempts make payment-svc fail with SQLite 'database is locked' and UNIQUE-constraint errors (HTTP 500), so orders fail. The payment-side DB errors are a consequence, not the root cause",
+  "accepted_components": [
+    "checkout-svc",
+    "libs/httpclient",
+    "shared http client",
+    "httpclient retry policy",
+    "checkout payment client"
+  ],
+  "accepted_mechanisms": [
+    "retry amplification",
+    "retry storm",
+    "aggressive retries with short timeout",
+    "per-attempt timeout too short (250ms) with retries",
+    "retrying timeouts multiplies downstream calls",
+    "retries overload payment-svc database causing lock contention"
+  ],
+  "decisive_evidence_ids": [
+    "commit:7addfee",
+    "deploy:d-511",
+    "metric:17f535fce8",
+    "log:5a0955ffc1"
+  ],
+  "distractor_evidence_ids": [
+    "metric:75680f44c4"
+  ],
+  "injected_fault": {
+    "faults": [
+      {
+        "change_id": "retry-policy",
+        "family": "retry_amplification",
+        "kind": "commit",
+        "at": "2026-11-20T02:03:59.343Z",
+        "commit": "7addfee820edbbd240229333f6141050e9589a35",
+        "builds": [
+          "b-1205"
+        ],
+        "deployments": [
+          "d-511"
+        ],
+        "env": null
+      }
+    ],
+    "all_changes": [
+      {
+        "change_id": "retry-policy",
+        "family": "retry_amplification",
+        "kind": "commit",
+        "at": "2026-11-20T02:03:59.343Z",
+        "commit": "7addfee820edbbd240229333f6141050e9589a35",
+        "builds": [
+          "b-1205"
+        ],
+        "deployments": [
+          "d-511"
+        ],
+        "env": null
+      }
+    ],
+    "decisive_equivalents": {
+      "log:5a0955ffc1": [
+        "log:6abe6f4751",
+        "log:2f61832767",
+        "log:dacbe0d29d",
+        "log:2a18203b82",
+        "log:6204d9bbb3",
+        "log:75149f0ae3",
+        "log:ba68d6cbd8",
+        "log:481e7f1672",
+        "log:d1e8097eb6",
+        "log:d813118609",
+        "log:c2bf5c78c0",
+        "log:bb31ae4bc8",
+        "log:1067b7a8f1",
+        "log:86d0c3fe4e",
+        "log:d93e6d33ba",
+        "log:3d5c1041ee",
+        "log:e272ed4746",
+        "log:69dfe306e1",
+        "log:083d28113e",
+        "log:54a131816e",
+        "log:ce8aefa6c4",
+        "log:ae420f5e4a",
+        "log:27f303f730",
+        "log:fb2677807b",
+        "log:f28ae5a125",
+        "log:29b345064d",
+        "log:136a83212e",
+        "log:64f45fda02",
+        "log:98ca4764e2",
+        "log:03f59ced26",
+        "log:8221f5ae6c",
+        "log:15e49e1103",
+        "log:82f75d3989",
+        "log:554b84b41a",
+        "log:84b98f7816",
+        "log:bafc28cab2",
+        "log:0e3b9400f3",
+        "log:9debf5053d",
+        "log:f47ef627c7",
+        "log:5f2480276e",
+        "log:477292a6b8",
+        "log:89802a1257",
+        "log:80494ed539",
+        "log:8d678627b2",
+        "log:e9d0075b19",
+        "log:5f7d6cb2b6",
+        "log:b9a635a302",
+        "log:ad8b8b3223",
+        "log:4daa309c2a",
+        "log:df6bb564cd",
+        "log:8e472a421f",
+        "log:5573d15b6b",
+        "log:24dc9fb38c",
+        "log:a67cbf1667",
+        "log:d40cb36d54",
+        "log:72153fa4dd",
+        "log:153aa46c86",
+        "log:b28f4d6e94",
+        "log:1ada36fa9a",
+        "log:7cc2a9bbdb",
+        "log:141e241eee",
+        "log:d3a1cf630a",
+        "log:cb88852bf1",
+        "log:d168b635e1",
+        "log:2c6c1dec40"
+      ]
+    },
+    "withheld": {},
+    "connector_runtime": {}
+  },
+  "available_sources": [
+    "logs",
+    "traces",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "remaining_evidence_sufficient": null,
+  "notes": "",
+  "frozen_at": null
+}

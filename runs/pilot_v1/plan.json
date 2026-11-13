@@ -1,0 +1,72 @@
+{
+  "phase": "pilot",
+  "runs": [
+    {
+      "run_id": "INC-0000_blackbox_none_r0",
+      "incident_id": "INC-0000",
+      "system": "blackbox",
+      "ablation": "none",
+      "repeat_index": 0,
+      "cell": "main",
+      "scenario_number": 0,
+      "scenario_type": "pilot",
+      "phase": "pilot"
+    },
+    {
+      "run_id": "INC-0000_b1_none_r0",
+      "incident_id": "INC-0000",
+      "system": "b1",
+      "ablation": "none",
+      "repeat_index": 0,
+      "cell": "main",
+      "scenario_number": 0,
+      "scenario_type": "pilot",
+      "phase": "pilot",
+      "b1_source_run": "INC-0000_blackbox_none_r0"
+    },
+    {
+      "run_id": "INC-0000_b0_none_r0",
+      "incident_id": "INC-0000",
+      "system": "b0",
+      "ablation": "none",
+      "repeat_index": 0,
+      "cell": "main",
+      "scenario_number": 0,
+      "scenario_type": "pilot",
+      "phase": "pilot"
+    },
+    {
+      "run_id": "INC-0000_blackbox_no_jira_r0",
+      "incident_id": "INC-0000",
+      "system": "blackbox",
+      "ablation": "no_jira",
+      "repeat_index": 0,
+      "cell": "ablations",
+      "scenario_number": 0,
+      "scenario_type": "pilot",
+      "phase": "pilot"
+    },
+    {
+      "run_id": "INC-0000_blackbox_no_provenance_r0",
+      "incident_id": "INC-0000",
+      "system": "blackbox",
+      "ablation": "no_provenance",
+      "repeat_index": 0,
+      "cell": "ablations",
+      "scenario_number": 0,
+      "scenario_type": "pilot",
+      "phase": "pilot"
+    },
+    {
+      "run_id": "INC-0000_blackbox_no_traces_r0",
+      "incident_id": "INC-0000",
+      "system": "blackbox",
+      "ablation": "no_traces",
+      "repeat_index": 0,
+      "cell": "ablations",
+      "scenario_number": 0,
+      "scenario_type": "pilot",
+      "phase": "pilot"
+    }
+  ]
+}
