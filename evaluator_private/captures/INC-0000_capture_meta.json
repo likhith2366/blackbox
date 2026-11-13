@@ -1,0 +1,44 @@
+{
+  "capture_id": "INC-0000",
+  "plan": {
+    "seed": 3,
+    "duration_s": 210,
+    "schedule": [
+      [
+        0,
+        5.0
+      ]
+    ],
+    "steps": [
+      {
+        "at_s": 60,
+        "change": "retry-policy"
+      }
+    ],
+    "special_orders": {}
+  },
+  "t_start": "2026-11-20T02:37:12.027Z",
+  "load_start": "2026-11-20T02:37:24.298Z",
+  "t_end": "2026-11-20T02:41:01.074Z",
+  "events": [
+    {
+      "change_id": "retry-policy",
+      "family": "retry_amplification",
+      "kind": "commit",
+      "at": "2026-11-20T02:38:24.298Z",
+      "commit": "e7a0cc0f0e8492abe652cb31eec201d653cffb1d",
+      "builds": [
+        "b-1216"
+      ],
+      "deployments": [
+        "d-535"
+      ],
+      "done_at": "2026-11-20T02:38:27.313Z"
+    }
+  ],
+  "load_stats": {
+    "sent": 1037,
+    "ok": 703,
+    "failed": 334
+  }
+}
