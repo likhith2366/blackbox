@@ -1,0 +1,114 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>STUB-0004_blackbox_none_r2</title><style>
+:root{--bg:#f7f7f5;--panel:#fff;--ink:#1d1d1b;--muted:#6b6b66;--line:#e2e1dc;--accent:#2f5d8a;
+--ok:#2e7d4f;--warn:#a86a00;--bad:#b3261e;--chip:#eef2f7;--code:#f1f0ec;--stub:#b3261e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;
+--muted:#a3a29b;--line:#34332f;--accent:#8fb6dd;--ok:#6cc08f;--warn:#e0a84a;--bad:#ef7a72;--chip:#26303a;
+--code:#262624;--stub:#ef7a72}}
+:root[data-theme="dark"]{--bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--accent:#8fb6dd;
+--ok:#6cc08f;--warn:#e0a84a;--bad:#ef7a72;--chip:#26303a;--code:#262624;--stub:#ef7a72}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}a{color:var(--accent)}
+h1{font-size:20px;margin:8px 0}h2{font-size:16px;margin:24px 0 8px;border-bottom:1px solid var(--line);padding-bottom:4px}
+h3{font-size:14px;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0}
+.muted{color:var(--muted)}.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.stub{background:var(--stub);color:#fff;font-weight:700;padding:6px 10px;border-radius:6px;margin:8px 0}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 16px}
+.kv div span{color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid var(--line);
+padding:4px 6px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600}
+.scroll{overflow-x:auto}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px}
+pre{background:var(--code);padding:8px;border-radius:6px;white-space:pre-wrap;word-break:break-word;margin:4px 0}
+.chip{display:inline-block;background:var(--chip);border-radius:4px;padding:0 5px;margin:1px 2px;font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.chip.missing{outline:1px dashed var(--bad)}
+.tag{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:0 7px;font-size:12px;margin-right:4px}
+details>summary{cursor:pointer;color:var(--accent)}
+.ev{border-top:1px solid var(--line);padding:6px 0}.ev:target{background:var(--chip)}
+</style></head><body><main><div class="stub">STUB: development output from eval/stub.py. Not a model output, not a result.</div><p><a href="index.html">&larr; dry1</a></p><h1>STUB-0004_blackbox_none_r2</h1><div class="panel"><div class="kv"><div><span>system</span> blackbox</div><div><span>incident</span> STUB-0004</div><div><span>ablation</span> none</div><div><span>harness status</span> <b class="ok">completed</b></div><div><span>output status</span> <b class="ok">completed</b></div><div><span>report status</span> <b class="ok">diagnosis</b></div><div><span>stopping</span> stop_diagnosis: STUB</div><div><span>rounds / tool calls</span> 2 / 3</div><div><span>budget violations</span> 0</div><div><span>unauthorized attempted / executed</span> 0 / 0</div><div><span>model calls</span> 1</div><div><span>tokens prompt+completion</span> 100+20</div><div><span>model seconds</span> 0.0</div><div><span>system wall s</span> 0.014</div><div><span>harness wall s</span> 0.005</div><div><span>start / end</span> 2026-11-20T01:44:47.005Z / 2026-11-20T01:44:47.012Z</div><div><span>error</span> -</div></div></div><h2>Final report</h2><div class="panel"><p><b>STUB headline</b></p><h3>Ranked causes</h3><div class="scroll"><table><tr><th>#</th><th>component</th><th>mechanism</th><th>confidence</th><th>evidence</th></tr><tr><td>1</td><td>stub-service</td><td>stub mechanism</td><td>low</td><td><a class="chip" href="#ev-log_stub-1">log:stub-1</a></td></tr><tr><td>2</td><td>other-service</td><td>connection pool exhaustion</td><td>low</td><td><a class="chip missing" title="not in supplied evidence" href="#ev-log_stub-9">log:stub-9</a></td></tr></table></div><h3>Claims</h3><div class="scroll"><table><tr><th>id</th><th>kind</th><th>text</th><th>evidence</th></tr><tr><td>c1</td><td>factual</td><td>STUB cited claim</td><td><a class="chip" href="#ev-log_stub-1">log:stub-1</a></td></tr><tr><td>c2</td><td>causal</td><td>STUB uncited claim</td><td><span class="muted">none</span></td></tr><tr><td>c3</td><td>factual</td><td>STUB invalid citation</td><td><a class="chip missing" title="not in supplied evidence" href="#ev-log_stub-9">log:stub-9</a></td></tr><tr><td>c4</td><td>tentative</td><td>STUB tentative</td><td><span class="muted">none</span></td></tr></table></div><p><span class='muted'>Invalid citations removed:</span> <a class="chip missing" title="not in supplied evidence" href="#ev-log_stub-9">log:stub-9</a></p><h3>Citation audit (raw vs recovered)</h3><p class="muted">no citations</p></div><h2>Investigation steps</h2><div class="panel"><h3>Round 1: model asked <code>STUB</code> &rarr; <span class="warn">continue</span></h3><div class="kv"><div><span>model s</span> 0.0</div><div><span>tokens</span> None+None</div><div><span>context</span> -</div></div><h3>Hypothesis changes</h3><ul><li><code>STUB: added h1</code></li></ul><h3>Ledger after round</h3><div class="scroll"><table><tr><th>id</th><th>status</th><th>conf.</th><th>hypothesis</th><th>supporting</th><th>contradicting</th></tr><tr><td>h1</td><td>active</td><td>low</td><td>stub-service: stub mechanism</td><td><a class="chip" href="#ev-log_stub-1">log:stub-1</a></td><td><a class="chip" href="#ev-metric_stub-3">metric:stub-3</a></td></tr></table></div><h3>Tool calls</h3><div class="scroll"><table><tr><th>call</th><th>tool</th><th>args</th><th>status</th><th>records</th><th>ms</th><th>notes</th></tr><tr><td>t1</td><td>search_logs</td><td><code>{&quot;service&quot;: &quot;stub-service&quot;}</code></td><td class="ok">ok</td><td>2</td><td>0</td><td> </td></tr><tr><td></td><td colspan="6"><a class="chip" href="#ev-log_stub-1">log:stub-1</a> <a class="chip" href="#ev-log_stub-2">log:stub-2</a></td></tr><tr><td>t2</td><td>get_metrics</td><td><code>{&quot;service&quot;: &quot;stub-service&quot;}</code></td><td class="ok">ok</td><td>1</td><td>0</td><td> </td></tr><tr><td></td><td colspan="6"><a class="chip" href="#ev-metric_stub-3">metric:stub-3</a></td></tr></table></div><details><summary>raw model output</summary><pre></pre></details></div><div class="panel"><h3>Round 2: model asked <code>STUB</code> &rarr; <span class="ok">stop_diagnosis</span></h3><p class="muted">STUB</p><div class="kv"><div><span>model s</span> 0.0</div><div><span>tokens</span> None+None</div><div><span>context</span> -</div></div><h3>Ledger after round</h3><div class="scroll"><table><tr><th>id</th><th>status</th><th>conf.</th><th>hypothesis</th><th>supporting</th><th>contradicting</th></tr><tr><td>h1</td><td>active</td><td>low</td><td>stub-service: stub mechanism</td><td><a class="chip" href="#ev-log_stub-1">log:stub-1</a></td><td><a class="chip" href="#ev-metric_stub-3">metric:stub-3</a></td></tr></table></div><h3>Tool calls</h3><div class="scroll"><table><tr><th>call</th><th>tool</th><th>args</th><th>status</th><th>records</th><th>ms</th><th>notes</th></tr><tr><td>t3</td><td>search_logs</td><td><code>{&quot;service&quot;: &quot;stub-service&quot;}</code></td><td class="ok">ok</td><td>2</td><td>0</td><td> </td></tr><tr><td></td><td colspan="6"><a class="chip" href="#ev-log_stub-1">log:stub-1</a> <a class="chip" href="#ev-log_stub-2">log:stub-2</a></td></tr></table></div><details><summary>raw model output</summary><pre></pre></details></div><h2>Evidence seen (3)</h2><div class='panel'><div class="ev" id="ev-log_stub-1"><b><code>log:stub-1</code></b> <span class="muted">logs stub-service event= available=2026-01-01T00:05:00Z</span> <br>stub log 1<pre>STUB evidence text 1</pre><p class="muted">cited by: r1 h1, r2 h1, report cause1, report c1</p></div><div class="ev" id="ev-log_stub-2"><b><code>log:stub-2</code></b> <span class="muted">logs stub-service event= available=2026-01-01T00:05:00Z</span> <br>stub log 2<pre>STUB evidence text 2</pre></div><div class="ev" id="ev-metric_stub-3"><b><code>metric:stub-3</code></b> <span class="muted">metrics stub-service event= available=2026-01-01T00:05:00Z</span> <br>stub metric<pre>STUB metric text</pre><p class="muted">cited by: r1 h1, r2 h1</p></div><p class="bad">Cited but not in supplied evidence: log:stub-9</p></div><h2>Configuration and metadata</h2><div class='panel'><div class="kv"><div><span>prompt versions</span> {&quot;stub&quot;: &quot;stub&quot;}</div><div><span>model</span> qwen3:4b</div><div><span>seed</span> 7</div><div><span>num_ctx / num_predict</span> 8192 / 900</div><div><span>code revision</span> dd11a388ddb8e7ce4d21aa27e409349c6a94d241-dirty</div><div><span>schema</span> 1.0</div><div><span>model digest</span> STUB-no-model</div></div><details><summary>RunConfig</summary><pre>{
+ &quot;model&quot;: &quot;qwen3:4b&quot;,
+ &quot;ollama_url&quot;: &quot;http://127.0.0.1:11434&quot;,
+ &quot;temperature&quot;: 0.0,
+ &quot;top_p&quot;: 1.0,
+ &quot;seed&quot;: 7,
+ &quot;num_ctx&quot;: 8192,
+ &quot;num_predict&quot;: 900,
+ &quot;think&quot;: false,
+ &quot;max_rounds&quot;: 6,
+ &quot;max_tool_calls&quot;: 12,
+ &quot;max_calls_per_round&quot;: 3,
+ &quot;model_timeout_s&quot;: 240.0,
+ &quot;tool_timeout_s&quot;: 10.0,
+ &quot;run_timeout_s&quot;: 1200.0,
+ &quot;reserve_output_tokens&quot;: 1100,
+ &quot;reserve_instruction_tokens&quot;: 1300,
+ &quot;round_prompt&quot;: &quot;investigator_v2&quot;,
+ &quot;report_prompt&quot;: &quot;report_v1&quot;,
+ &quot;baseline_prompt&quot;: &quot;baseline_v1&quot;,
+ &quot;prompt_version&quot;: &quot;&quot;,
+ &quot;code_revision&quot;: &quot;dd11a388ddb8e7ce4d21aa27e409349c6a94d241-dirty&quot;
+}</pre></details><details><summary>meta.json</summary><pre>{
+ &quot;git_head&quot;: &quot;dd11a388ddb8e7ce4d21aa27e409349c6a94d241&quot;,
+ &quot;git_dirty&quot;: true,
+ &quot;model&quot;: &quot;qwen3:4b&quot;,
+ &quot;model_digest&quot;: &quot;STUB-no-model&quot;,
+ &quot;python&quot;: &quot;3.11.9&quot;,
+ &quot;platform&quot;: &quot;Windows-10-10.0.26200-SP0&quot;,
+ &quot;batch&quot;: &quot;dry1&quot;,
+ &quot;matrix_sha256&quot;: &quot;b2b2f52045153d2630dbc6052e93bf9ae73c02394839090778ced3c572f62f89&quot;,
+ &quot;run_id&quot;: &quot;STUB-0004_blackbox_none_r2&quot;,
+ &quot;stub&quot;: true,
+ &quot;phase&quot;: &quot;eval&quot;,
+ &quot;status&quot;: &quot;completed&quot;,
+ &quot;seed&quot;: 7,
+ &quot;prompt_version&quot;: &quot;{\&quot;stub\&quot;: \&quot;stub\&quot;}&quot;,
+ &quot;decoding&quot;: {
+  &quot;temperature&quot;: 0.0,
+  &quot;top_p&quot;: 1.0,
+  &quot;seed&quot;: 7,
+  &quot;num_ctx&quot;: 8192,
+  &quot;num_predict&quot;: 900,
+  &quot;think&quot;: false
+ },
+ &quot;start_time&quot;: &quot;2026-11-20T01:44:47.005Z&quot;,
+ &quot;end_time&quot;: &quot;2026-11-20T01:44:47.012Z&quot;,
+ &quot;wall_seconds&quot;: 0.005,
+ &quot;exception&quot;: null,
+ &quot;system_error&quot;: null,
+ &quot;prompt_versions&quot;: {
+  &quot;stub&quot;: &quot;stub&quot;
+ },
+ &quot;exceeded_run_timeout&quot;: false
+}</pre></details><details><summary>input.json</summary><pre>{
+ &quot;run_id&quot;: &quot;STUB-0004_blackbox_none_r2&quot;,
+ &quot;incident_id&quot;: &quot;STUB-0004&quot;,
+ &quot;system&quot;: &quot;blackbox&quot;,
+ &quot;ablation&quot;: &quot;none&quot;,
+ &quot;repeat_index&quot;: 2,
+ &quot;cell&quot;: &quot;repeats&quot;,
+ &quot;scenario_number&quot;: 4,
+ &quot;scenario_type&quot;: &quot;unrelated_change&quot;,
+ &quot;phase&quot;: &quot;eval&quot;,
+ &quot;stub&quot;: true,
+ &quot;config&quot;: {
+  &quot;model&quot;: &quot;qwen3:4b&quot;,
+  &quot;ollama_url&quot;: &quot;http://127.0.0.1:11434&quot;,
+  &quot;temperature&quot;: 0.0,
+  &quot;top_p&quot;: 1.0,
+  &quot;seed&quot;: 7,
+  &quot;num_ctx&quot;: 8192,
+  &quot;num_predict&quot;: 900,
+  &quot;think&quot;: false,
+  &quot;max_rounds&quot;: 6,
+  &quot;max_tool_calls&quot;: 12,
+  &quot;max_calls_per_round&quot;: 3,
+  &quot;model_timeout_s&quot;: 240.0,
+  &quot;tool_timeout_s&quot;: 10.0,
+  &quot;run_timeout_s&quot;: 1200.0,
+  &quot;reserve_output_tokens&quot;: 1100,
+  &quot;reserve_instruction_tokens&quot;: 1300,
+  &quot;prompt_version&quot;: &quot;&quot;,
+  &quot;code_revision&quot;: &quot;dd11a388ddb8e7ce4d21aa27e409349c6a94d241-dirty&quot;
+ }
+}</pre></details></div><div class="stub">STUB: development output from eval/stub.py. Not a model output, not a result.</div></main></body></html>
