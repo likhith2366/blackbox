@@ -1,0 +1,55 @@
+{
+  "incident_id": "INC-4417",
+  "scenario_number": 7,
+  "scenario_type": "healthy",
+  "is_primary": false,
+  "diagnosable": false,
+  "variant_of": null,
+  "expected_status": "no_fault_observed",
+  "component": null,
+  "mechanism": null,
+  "accepted_components": [],
+  "accepted_mechanisms": [],
+  "decisive_evidence_ids": [
+    "metric:97faf26904",
+    "metric:d7fcb61222"
+  ],
+  "distractor_evidence_ids": [
+    "deploy:d-558"
+  ],
+  "injected_fault": {
+    "faults": [],
+    "all_changes": [
+      {
+        "change_id": "h-checkout-item-log",
+        "family": "harmless",
+        "kind": "commit",
+        "at": "2026-11-20T03:08:23.552Z",
+        "commit": "65fbf2beb59563261678d9cdb8ba530363888e23",
+        "builds": [
+          "b-1224"
+        ],
+        "deployments": [
+          "d-558"
+        ],
+        "env": null
+      }
+    ],
+    "decisive_equivalents": {},
+    "withheld": {},
+    "connector_runtime": {}
+  },
+  "available_sources": [
+    "logs",
+    "traces",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "remaining_evidence_sufficient": null,
+  "notes": "Traffic spike (real load burst) trips a rate alert; errors stay ~0 and latency normal.",
+  "frozen_at": "2026-11-20T03:32:52.940Z"
+}

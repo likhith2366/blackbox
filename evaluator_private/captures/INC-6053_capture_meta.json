@@ -1,0 +1,48 @@
+{
+  "capture_id": "INC-6053",
+  "plan": {
+    "seed": 66,
+    "duration_s": 230,
+    "schedule": [
+      [
+        0,
+        5.0
+      ],
+      [
+        72,
+        12.0
+      ]
+    ],
+    "steps": [
+      {
+        "at_s": 74,
+        "change": "index-migration"
+      }
+    ],
+    "special_orders": {}
+  },
+  "t_start": "2026-11-20T03:02:56.441Z",
+  "load_start": "2026-11-20T03:03:12.739Z",
+  "t_end": "2026-11-20T03:07:10.456Z",
+  "events": [
+    {
+      "change_id": "index-migration",
+      "family": "missing_index",
+      "kind": "commit",
+      "at": "2026-11-20T03:04:26.742Z",
+      "commit": "ea3a3b6a3f643a3110c5963fd9fbdf9ca559a501",
+      "builds": [
+        "b-1223"
+      ],
+      "deployments": [
+        "d-555"
+      ],
+      "done_at": "2026-11-20T03:04:39.137Z"
+    }
+  ],
+  "load_stats": {
+    "sent": 2314,
+    "ok": 384,
+    "failed": 1930
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "incident_id": "INC-8290",
+  "schema_version": "1.0",
+  "built_at": "2026-11-20T03:11:12.144Z",
+  "files": {
+    "builds.jsonl": "afb32aabfe0b2928f42940108517e8668b91b1ca090aca32d6fa3c068c59687c",
+    "commits.jsonl": "ab9fecbfc36b458a2cf38398fe4323c9fd6221c881cfdd31c91c7958f3e8292f",
+    "configs.jsonl": "9cb91d3e1de4e132ac280a66ead965b0fa68e809b192b445b5f87172de6b23bb",
+    "deployments.jsonl": "299a28c749ee42e53d3f0be7c20f8060e358d4bb75b5984b91407fa36c6fec59",
+    "incident.json": "316a8307186ab1240eb083962c91cc8daf002818ebfeb24e0ed7e19b36985f2d",
+    "logs.jsonl": "8d8ebeee88e442bbd26b4126b5cd77583f9f78f147bc1de86c297b03a6d7bf69",
+    "metrics.jsonl": "48a3d3cdd6c1b93c037f891fd8f583e0e573858f40d0ddb525aa82313647927c",
+    "runtime.json": "cb82902d4ab8d33a05540581df0f6bc2c5752603e1f1a9e319a345e85d5897bb",
+    "spans.jsonl": "440db5a51c6c40118d253ce518f4a973365bf937db6ead672c841b565255d658",
+    "tickets.json": "0b92b53013aedba233960fdd80e12d87bdc901dd647d4bb6daec2473b7bc37f2"
+  },
+  "frozen_at": "2026-11-20T03:33:05.657Z"
+}

@@ -1,0 +1,86 @@
+{
+  "incident_id": "INC-1846",
+  "scenario_number": 5,
+  "scenario_type": "insufficient_evidence",
+  "is_primary": true,
+  "diagnosable": false,
+  "variant_of": null,
+  "expected_status": "insufficient_evidence",
+  "component": "payment-svc (runtime DB pool configuration)",
+  "mechanism": "ground truth: an operator restarted payment-svc (same build) as a routine restart (OPS-17) and the restart applied an environment override PAYMENT_DB_POOL_SIZE=1, so charges queue for the single DB connection (higher latency, intermittent 503s)",
+  "accepted_components": [
+    "payment-svc"
+  ],
+  "accepted_mechanisms": [
+    "db pool size reduced by runtime override"
+  ],
+  "decisive_evidence_ids": [
+    "deploy:d-565"
+  ],
+  "distractor_evidence_ids": [
+    "jira:OPS-17"
+  ],
+  "injected_fault": {
+    "faults": [
+      {
+        "change_id": "pool-override",
+        "family": "config_override_pool_size",
+        "kind": "restart_env",
+        "at": "2026-11-20T03:17:32.658Z",
+        "commit": null,
+        "builds": null,
+        "deployments": [
+          "d-565"
+        ],
+        "env": {
+          "PAYMENT_DB_POOL_SIZE": "1"
+        }
+      }
+    ],
+    "all_changes": [
+      {
+        "change_id": "pool-override",
+        "family": "config_override_pool_size",
+        "kind": "restart_env",
+        "at": "2026-11-20T03:17:32.658Z",
+        "commit": null,
+        "builds": null,
+        "deployments": [
+          "d-565"
+        ],
+        "env": {
+          "PAYMENT_DB_POOL_SIZE": "1"
+        }
+      }
+    ],
+    "decisive_equivalents": {},
+    "withheld": {
+      "sources": [
+        "traces",
+        "configs"
+      ],
+      "log_services": [
+        "payment-svc"
+      ],
+      "metrics": {
+        "payment-svc": [
+          "db_pool_wait_p95_ms",
+          "db_query_p95_ms",
+          "db_pool_in_use"
+        ]
+      }
+    },
+    "connector_runtime": {}
+  },
+  "available_sources": [
+    "logs",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "tickets"
+  ],
+  "remaining_evidence_sufficient": null,
+  "notes": "Why the visible evidence cannot separate the causes: the model can see checkout latency and intermittent payment 503/timeouts, payment request/error/latency metrics, a constant 9 rps load, and a payment-svc restart with the SAME build/version/commit, ticketed as a routine weekly restart (the override is not mentioned anywhere). Three causes fit everything visible equally well: (a) a runtime setting changed at restart, which is the truth (pool size, but timeouts or the DB path would look the same); (b) a cold start after the restart (empty OS/SQLite caches, slow first queries); (c) payment DB or host contention that started around the same time. Telling them apart needs payment logs (pool acquire timeouts vs slow queries), pool/query metrics, traces or the effective runtime config. All of these are withheld or never recorded (deploy records do not store env overrides, and no config commit exists). Correct output: insufficient_evidence naming the payment-svc restart window and asking for payment logs/pool metrics/runtime config.",
+  "frozen_at": "2026-11-20T03:32:25.910Z"
+}

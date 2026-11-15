@@ -1,0 +1,44 @@
+{
+  "capture_id": "INC-3172",
+  "plan": {
+    "seed": 21,
+    "duration_s": 230,
+    "schedule": [
+      [
+        0,
+        5.0
+      ]
+    ],
+    "steps": [
+      {
+        "at_s": 70,
+        "change": "pool-fastpath"
+      }
+    ],
+    "special_orders": {}
+  },
+  "t_start": "2026-11-20T02:41:07.834Z",
+  "load_start": "2026-11-20T02:41:18.810Z",
+  "t_end": "2026-11-20T02:45:14.986Z",
+  "events": [
+    {
+      "change_id": "pool-fastpath",
+      "family": "connection_leak",
+      "kind": "commit",
+      "at": "2026-11-20T02:42:28.811Z",
+      "commit": "44c654c3cd9c582aa5350e0528552e79edbce370",
+      "builds": [
+        "b-1217"
+      ],
+      "deployments": [
+        "d-538"
+      ],
+      "done_at": "2026-11-20T02:42:32.287Z"
+    }
+  ],
+  "load_stats": {
+    "sent": 1196,
+    "ok": 458,
+    "failed": 738
+  }
+}

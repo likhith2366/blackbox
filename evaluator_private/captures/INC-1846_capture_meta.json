@@ -1,0 +1,44 @@
+{
+  "capture_id": "INC-1846",
+  "plan": {
+    "seed": 55,
+    "duration_s": 220,
+    "schedule": [
+      [
+        0,
+        9.0
+      ]
+    ],
+    "steps": [
+      {
+        "at_s": 70,
+        "change": "pool-override"
+      }
+    ],
+    "special_orders": {}
+  },
+  "t_start": "2026-11-20T03:16:03.611Z",
+  "load_start": "2026-11-20T03:16:22.512Z",
+  "t_end": "2026-11-20T03:20:08.694Z",
+  "events": [
+    {
+      "change_id": "pool-override",
+      "family": "config_override_pool_size",
+      "kind": "restart_env",
+      "at": "2026-11-20T03:17:32.658Z",
+      "service": "payment-svc",
+      "env": {
+        "PAYMENT_DB_POOL_SIZE": "1"
+      },
+      "deployments": [
+        "d-565"
+      ],
+      "done_at": "2026-11-20T03:17:47.537Z"
+    }
+  ],
+  "load_stats": {
+    "sent": 1990,
+    "ok": 1798,
+    "failed": 192
+  }
+}

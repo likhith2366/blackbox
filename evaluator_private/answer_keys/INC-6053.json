@@ -1,0 +1,85 @@
+{
+  "incident_id": "INC-6053",
+  "scenario_number": 6,
+  "scenario_type": "insufficient_evidence",
+  "is_primary": true,
+  "diagnosable": false,
+  "variant_of": null,
+  "expected_status": "insufficient_evidence",
+  "component": "payment-svc database (dropped index)",
+  "mechanism": "ground truth: migration 003 dropped idx_payments_customer_created, so payment queries full-scan and payment saturates. In the same minute real traffic rose from 5 to 12 rps (the DEMO-70 email campaign), which is an equally plausible cause of payment saturation",
+  "accepted_components": [
+    "payment-svc"
+  ],
+  "accepted_mechanisms": [
+    "missing index",
+    "traffic surge saturating payment-svc"
+  ],
+  "decisive_evidence_ids": [
+    "commit:ea3a3b6",
+    "deploy:d-555",
+    "metric:bcf55b37bd"
+  ],
+  "distractor_evidence_ids": [
+    "jira:DEMO-70"
+  ],
+  "injected_fault": {
+    "faults": [
+      {
+        "change_id": "index-migration",
+        "family": "missing_index",
+        "kind": "commit",
+        "at": "2026-11-20T03:04:26.742Z",
+        "commit": "ea3a3b6a3f643a3110c5963fd9fbdf9ca559a501",
+        "builds": [
+          "b-1223"
+        ],
+        "deployments": [
+          "d-555"
+        ],
+        "env": null
+      }
+    ],
+    "all_changes": [
+      {
+        "change_id": "index-migration",
+        "family": "missing_index",
+        "kind": "commit",
+        "at": "2026-11-20T03:04:26.742Z",
+        "commit": "ea3a3b6a3f643a3110c5963fd9fbdf9ca559a501",
+        "builds": [
+          "b-1223"
+        ],
+        "deployments": [
+          "d-555"
+        ],
+        "env": null
+      }
+    ],
+    "decisive_equivalents": {},
+    "withheld": {
+      "sources": [
+        "traces"
+      ],
+      "log_services": [
+        "payment-svc"
+      ],
+      "metrics": {
+        "payment-svc": "*"
+      }
+    },
+    "connector_runtime": {}
+  },
+  "available_sources": [
+    "logs",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "remaining_evidence_sufficient": null,
+  "notes": "Why the visible evidence cannot separate the causes: checkout shows timeouts after 2000ms and p95 at the timeout. At the same time, checkout request rate rises 5 -> 12 rps (real load, announced in DEMO-70) and payment-svc deploys migration 003 (index drop). Both 'more traffic than payment can serve' and 'each payment query became slower' predict exactly this checkout-side signature. The evidence that separates them (payment request rate vs query time, pool waits, payment logs, traces) is withheld: all payment metrics, payment logs and traces. The same app served 16 rps healthy in another capture, but the model cannot see that. Correct output: insufficient_evidence naming both candidates and asking for payment-side query latency and request rate.",
+  "frozen_at": "2026-11-20T03:32:31.818Z"
+}

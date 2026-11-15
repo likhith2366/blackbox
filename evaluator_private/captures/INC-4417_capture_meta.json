@@ -1,0 +1,52 @@
+{
+  "capture_id": "INC-4417",
+  "plan": {
+    "seed": 77,
+    "duration_s": 200,
+    "schedule": [
+      [
+        0,
+        5.0
+      ],
+      [
+        90,
+        16.0
+      ],
+      [
+        135,
+        5.0
+      ]
+    ],
+    "steps": [
+      {
+        "at_s": 50,
+        "change": "h-checkout-item-log"
+      }
+    ],
+    "special_orders": {}
+  },
+  "t_start": "2026-11-20T03:07:19.290Z",
+  "load_start": "2026-11-20T03:07:33.551Z",
+  "t_end": "2026-11-20T03:11:00.061Z",
+  "events": [
+    {
+      "change_id": "h-checkout-item-log",
+      "family": "harmless",
+      "kind": "commit",
+      "at": "2026-11-20T03:08:23.552Z",
+      "commit": "65fbf2beb59563261678d9cdb8ba530363888e23",
+      "builds": [
+        "b-1224"
+      ],
+      "deployments": [
+        "d-558"
+      ],
+      "done_at": "2026-11-20T03:08:30.035Z"
+    }
+  ],
+  "load_stats": {
+    "sent": 1519,
+    "ok": 1494,
+    "failed": 25
+  }
+}

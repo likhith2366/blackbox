@@ -1,0 +1,10 @@
+{
+ "failures": [
+  {
+   "source": "logs",
+   "after_successful_calls": 2,
+   "error": "logs connector: upstream query failed (HTTP 502 from log gateway)"
+  }
+ ],
+ "coverage": {}
+}
