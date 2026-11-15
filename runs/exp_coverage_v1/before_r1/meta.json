@@ -1,0 +1,13 @@
+{
+  "run": "before_r1",
+  "phase": "development experiment (not evaluation)",
+  "config_file": "configs\\exp_before.yaml",
+  "config_sha256": "a7eb17488e4de9847b45382442409be193b15561e6c06f73e8639e34a82cec2b",
+  "code_revision": "4d2951e",
+  "snapshot": "INC-0000 (frozen copy)",
+  "snapshot_manifest_sha256": "328500cc94a919c57ddeacdc38809e5f5b780d4ce5479ef1791b1a1a4d0b166a",
+  "started": "2026-11-20T02:45:11Z",
+  "status": "completed",
+  "wall_seconds": 286.11,
+  "ended": "2026-11-20T02:49:57Z"
+}
