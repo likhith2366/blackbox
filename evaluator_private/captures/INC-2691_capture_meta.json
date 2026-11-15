@@ -1,0 +1,62 @@
+{
+  "capture_id": "INC-2691",
+  "plan": {
+    "seed": 33,
+    "duration_s": 210,
+    "schedule": [
+      [
+        0,
+        5.0
+      ]
+    ],
+    "steps": [
+      {
+        "at_s": 60,
+        "change": "endpoint-port"
+      },
+      {
+        "at_s": 68,
+        "change": "h-payment-currency-log"
+      }
+    ],
+    "special_orders": {}
+  },
+  "t_start": "2026-11-20T02:50:01.264Z",
+  "load_start": "2026-11-20T02:50:17.240Z",
+  "t_end": "2026-11-20T02:53:55.182Z",
+  "events": [
+    {
+      "change_id": "endpoint-port",
+      "family": "config_mismatch_endpoint",
+      "kind": "commit",
+      "at": "2026-11-20T02:51:17.240Z",
+      "commit": "75951621ae56d41195d4724877d186eabb490d4f",
+      "builds": [
+        "b-1220"
+      ],
+      "deployments": [
+        "d-545"
+      ],
+      "done_at": "2026-11-20T02:51:24.699Z"
+    },
+    {
+      "change_id": "h-payment-currency-log",
+      "family": "harmless",
+      "kind": "commit",
+      "at": "2026-11-20T02:51:25.241Z",
+      "commit": "0791ee4ab5caa4836a4d3c7a112e271570e3f009",
+      "builds": [
+        "b-1221"
+      ],
+      "deployments": [
+        "d-546"
+      ],
+      "done_at": "2026-11-20T02:51:29.540Z"
+    }
+  ],
+  "load_stats": {
+    "sent": 1034,
+    "ok": 309,
+    "failed": 725
+  }
+}

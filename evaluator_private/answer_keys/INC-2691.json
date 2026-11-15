@@ -1,0 +1,99 @@
+{
+  "incident_id": "INC-2691",
+  "scenario_number": 3,
+  "scenario_type": "unrelated_change",
+  "is_primary": true,
+  "diagnosable": true,
+  "variant_of": null,
+  "expected_status": "diagnosis",
+  "component": "checkout-svc configuration (payment base_url)",
+  "mechanism": "configuration mismatch: checkout config points payment base_url at port 18112 where nothing listens (the sidecar is not deployed), so no payment call can connect; on this Windows host the refused connects surface as client timeouts after 2000ms (observed). The newer payment-svc release is unrelated",
+  "accepted_components": [
+    "checkout-svc",
+    "checkout-svc config",
+    "config/checkout-svc.yaml"
+  ],
+  "accepted_mechanisms": [
+    "wrong endpoint",
+    "wrong port",
+    "misconfigured payment url",
+    "configuration mismatch",
+    "connection refused due to bad endpoint config",
+    "calls to a non-listening port time out"
+  ],
+  "decisive_evidence_ids": [
+    "config:checkout-svc@7595162",
+    "commit:7595162",
+    "deploy:d-545",
+    "log:df9fe83f35"
+  ],
+  "distractor_evidence_ids": [
+    "deploy:d-546",
+    "commit:0791ee4",
+    "jira:DEMO-47"
+  ],
+  "injected_fault": {
+    "faults": [
+      {
+        "change_id": "endpoint-port",
+        "family": "config_mismatch_endpoint",
+        "kind": "commit",
+        "at": "2026-11-20T02:51:17.240Z",
+        "commit": "75951621ae56d41195d4724877d186eabb490d4f",
+        "builds": [
+          "b-1220"
+        ],
+        "deployments": [
+          "d-545"
+        ],
+        "env": null
+      }
+    ],
+    "all_changes": [
+      {
+        "change_id": "endpoint-port",
+        "family": "config_mismatch_endpoint",
+        "kind": "commit",
+        "at": "2026-11-20T02:51:17.240Z",
+        "commit": "75951621ae56d41195d4724877d186eabb490d4f",
+        "builds": [
+          "b-1220"
+        ],
+        "deployments": [
+          "d-545"
+        ],
+        "env": null
+      },
+      {
+        "change_id": "h-payment-currency-log",
+        "family": "harmless",
+        "kind": "commit",
+        "at": "2026-11-20T02:51:25.241Z",
+        "commit": "0791ee4ab5caa4836a4d3c7a112e271570e3f009",
+        "builds": [
+          "b-1221"
+        ],
+        "deployments": [
+          "d-546"
+        ],
+        "env": null
+      }
+    ],
+    "decisive_equivalents": {},
+    "withheld": {},
+    "connector_runtime": {}
+  },
+  "available_sources": [
+    "logs",
+    "traces",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "remaining_evidence_sufficient": null,
+  "notes": "",
+  "frozen_at": "2026-11-20T03:08:30.618Z"
+}

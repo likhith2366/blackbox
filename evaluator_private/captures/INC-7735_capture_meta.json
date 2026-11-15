@@ -1,0 +1,56 @@
+{
+  "capture_id": "INC-7735",
+  "plan": {
+    "seed": 44,
+    "duration_s": 210,
+    "schedule": [
+      [
+        0,
+        5.0
+      ]
+    ],
+    "steps": [
+      {
+        "at_s": 70,
+        "change": "payment-stop"
+      },
+      {
+        "at_s": 80,
+        "change": "h-checkout-item-log"
+      }
+    ],
+    "special_orders": {}
+  },
+  "t_start": "2026-11-20T02:54:02.088Z",
+  "load_start": "2026-11-20T02:54:17.291Z",
+  "t_end": "2026-11-20T02:57:55.172Z",
+  "events": [
+    {
+      "change_id": "payment-stop",
+      "family": "stopped_dependency",
+      "kind": "stop",
+      "at": "2026-11-20T02:55:27.293Z",
+      "service": "payment-svc",
+      "done_at": "2026-11-20T02:55:31.258Z"
+    },
+    {
+      "change_id": "h-checkout-item-log",
+      "family": "harmless",
+      "kind": "commit",
+      "at": "2026-11-20T02:55:37.292Z",
+      "commit": "14644684fbaed7480cabf4996f21d06aece677ec",
+      "builds": [
+        "b-1222"
+      ],
+      "deployments": [
+        "d-549"
+      ],
+      "done_at": "2026-11-20T02:55:42.384Z"
+    }
+  ],
+  "load_stats": {
+    "sent": 1035,
+    "ok": 345,
+    "failed": 690
+  }
+}

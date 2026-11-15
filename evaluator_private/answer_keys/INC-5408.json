@@ -1,0 +1,99 @@
+{
+  "incident_id": "INC-5408",
+  "scenario_number": 2,
+  "scenario_type": "misleading_symptom",
+  "is_primary": true,
+  "diagnosable": true,
+  "variant_of": null,
+  "expected_status": "diagnosis",
+  "component": "payment-svc database (payments table velocity/duplicate queries)",
+  "mechanism": "slow query / missing index: migration 003 dropped idx_payments_customer_created, so velocity and duplicate-check queries full-scan 1.5M rows (~1s), saturating the DB pool; checkout reports client timeouts after 2000ms",
+  "accepted_components": [
+    "payment-svc",
+    "payment database",
+    "payments table",
+    "payment-svc db migration"
+  ],
+  "accepted_mechanisms": [
+    "missing index",
+    "dropped index",
+    "slow query due to missing index",
+    "full table scan",
+    "slow database queries after index removal"
+  ],
+  "decisive_evidence_ids": [
+    "commit:5d2e089",
+    "deploy:d-542",
+    "metric:1a92f537d4",
+    "log:e694d3cc24"
+  ],
+  "distractor_evidence_ids": [
+    "deploy:d-541",
+    "commit:e17143b",
+    "log:89eabf82d5"
+  ],
+  "injected_fault": {
+    "faults": [
+      {
+        "change_id": "index-migration",
+        "family": "missing_index",
+        "kind": "commit",
+        "at": "2026-11-20T02:46:52.882Z",
+        "commit": "5d2e089b505ea6721ba84e1739269eee1a8d846e",
+        "builds": [
+          "b-1219"
+        ],
+        "deployments": [
+          "d-542"
+        ],
+        "env": null
+      }
+    ],
+    "all_changes": [
+      {
+        "change_id": "h-checkout-qty-limit",
+        "family": "harmless",
+        "kind": "commit",
+        "at": "2026-11-20T02:46:17.882Z",
+        "commit": "e17143bcb7573950ca068cc71b4ecc25e49a385f",
+        "builds": [
+          "b-1218"
+        ],
+        "deployments": [
+          "d-541"
+        ],
+        "env": null
+      },
+      {
+        "change_id": "index-migration",
+        "family": "missing_index",
+        "kind": "commit",
+        "at": "2026-11-20T02:46:52.882Z",
+        "commit": "5d2e089b505ea6721ba84e1739269eee1a8d846e",
+        "builds": [
+          "b-1219"
+        ],
+        "deployments": [
+          "d-542"
+        ],
+        "env": null
+      }
+    ],
+    "decisive_equivalents": {},
+    "withheld": {},
+    "connector_runtime": {}
+  },
+  "available_sources": [
+    "logs",
+    "traces",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "remaining_evidence_sufficient": null,
+  "notes": "",
+  "frozen_at": "2026-11-20T03:08:16.837Z"
+}

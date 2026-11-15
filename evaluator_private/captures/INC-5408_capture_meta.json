@@ -1,0 +1,62 @@
+{
+  "capture_id": "INC-5408",
+  "plan": {
+    "seed": 12,
+    "duration_s": 240,
+    "schedule": [
+      [
+        0,
+        5.0
+      ]
+    ],
+    "steps": [
+      {
+        "at_s": 40,
+        "change": "h-checkout-qty-limit"
+      },
+      {
+        "at_s": 75,
+        "change": "index-migration"
+      }
+    ],
+    "special_orders": {}
+  },
+  "t_start": "2026-11-20T02:45:23.460Z",
+  "load_start": "2026-11-20T02:45:37.881Z",
+  "t_end": "2026-11-20T02:49:46.074Z",
+  "events": [
+    {
+      "change_id": "h-checkout-qty-limit",
+      "family": "harmless",
+      "kind": "commit",
+      "at": "2026-11-20T02:46:17.882Z",
+      "commit": "e17143bcb7573950ca068cc71b4ecc25e49a385f",
+      "builds": [
+        "b-1218"
+      ],
+      "deployments": [
+        "d-541"
+      ],
+      "done_at": "2026-11-20T02:46:22.460Z"
+    },
+    {
+      "change_id": "index-migration",
+      "family": "missing_index",
+      "kind": "commit",
+      "at": "2026-11-20T02:46:52.882Z",
+      "commit": "5d2e089b505ea6721ba84e1739269eee1a8d846e",
+      "builds": [
+        "b-1219"
+      ],
+      "deployments": [
+        "d-542"
+      ],
+      "done_at": "2026-11-20T02:47:03.158Z"
+    }
+  ],
+  "load_stats": {
+    "sent": 1196,
+    "ok": 357,
+    "failed": 839
+  }
+}
