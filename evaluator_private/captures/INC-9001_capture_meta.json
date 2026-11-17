@@ -1,0 +1,24 @@
+{
+  "capture_id": "INC-9001",
+  "kind": "ui-demo-session",
+  "t_start": "2026-11-20T03:43:42.797Z",
+  "load_start": "2026-11-20T03:44:09.460Z",
+  "t_end": "2026-11-20T03:45:12.174Z",
+  "events": [
+    {
+      "change_id": "pool-fastpath",
+      "family": "connection_leak",
+      "kind": "commit",
+      "at": "2026-11-20T03:44:03.231Z",
+      "commit": "d142601829cee858851b38811fb27a5ef4621880",
+      "builds": [
+        "b-1229"
+      ],
+      "deployments": [
+        "d-576"
+      ],
+      "done_at": "2026-11-20T03:44:07.544Z"
+    }
+  ],
+  "telemetry_source": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\telemetry\\sessions\\20261120T034342"
+}

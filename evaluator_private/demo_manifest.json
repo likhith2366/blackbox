@@ -1,0 +1,40 @@
+{
+  "incidents": {
+    "INC-9001": {
+      "slug": null,
+      "scenario_number": null,
+      "scenario_type": "demo",
+      "development": true,
+      "variant_of": null,
+      "frozen": false,
+      "frozen_at": null,
+      "superseded_by": null,
+      "build_command": "POST http://127.0.0.1:8710/api/incidents/snapshot",
+      "capture_id": "INC-9001",
+      "capture_start": "2026-11-20T03:43:42.797Z",
+      "capture_end": "2026-11-20T03:45:12.174Z",
+      "alert_fired_at": "2026-11-20T03:44:34.628Z",
+      "investigation_cutoff": "2026-11-20T03:45:11.174Z",
+      "replay_of_capture": null,
+      "status": "built"
+    },
+    "INC-9002": {
+      "slug": null,
+      "scenario_number": null,
+      "scenario_type": "demo",
+      "development": true,
+      "variant_of": null,
+      "frozen": false,
+      "frozen_at": null,
+      "superseded_by": null,
+      "build_command": "POST http://127.0.0.1:8710/api/incidents/snapshot",
+      "capture_id": "INC-9002",
+      "capture_start": "2026-11-20T03:46:01.722Z",
+      "capture_end": "2026-11-20T03:47:28.010Z",
+      "alert_fired_at": "2026-11-20T03:47:04.971Z",
+      "investigation_cutoff": "2026-11-20T03:47:27.010Z",
+      "replay_of_capture": null,
+      "status": "built"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "capture_id": "INC-9002",
+  "kind": "ui-demo-session",
+  "t_start": "2026-11-20T03:46:01.722Z",
+  "load_start": "2026-11-20T03:46:26.258Z",
+  "t_end": "2026-11-20T03:47:28.010Z",
+  "events": [
+    {
+      "change_id": "retry-policy",
+      "family": "retry_amplification",
+      "kind": "commit",
+      "at": "2026-11-20T03:46:22.112Z",
+      "commit": "0d6ba14efa876f117f0951c0916da6b9fa7e1887",
+      "builds": [
+        "b-1230"
+      ],
+      "deployments": [
+        "d-581"
+      ],
+      "done_at": "2026-11-20T03:46:25.031Z"
+    }
+  ],
+  "telemetry_source": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\telemetry\\sessions\\20261120T034601"
+}
