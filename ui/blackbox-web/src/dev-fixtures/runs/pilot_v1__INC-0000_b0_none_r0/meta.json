@@ -1,0 +1,69 @@
+{
+  "git_head": "45e13142d4343c71f382fc932e3f45d563ca7f82",
+  "git_dirty": true,
+  "model": "qwen3:4b",
+  "model_digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+  "model_details": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "qwen3",
+    "families": [
+      "qwen3"
+    ],
+    "parameter_size": "4.0B",
+    "quantization_level": "Q4_K_M"
+  },
+  "model_modified_at": "2026-08-20T15:04:21.1533075-04:00",
+  "run_config_file": "configs/dev.yaml",
+  "run_config_sha256": "77c6afd527d855146685885ffbd61d87cf77d0cb4373b731da522f539f746266",
+  "python": "3.11.9",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "batch": "pilot_v1",
+  "matrix_sha256": "0718a2b8b976e4f727a6357a6c5d28beed2810c3b74a9784ed8a60210d309046",
+  "run_id": "INC-0000_b0_none_r0",
+  "stub": false,
+  "phase": "pilot",
+  "status": "completed",
+  "seed": 7,
+  "prompt_version": "{\"single_call\": \"baseline_v1@049b7a8933\"}",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false
+  },
+  "run_config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "",
+    "code_revision": "45e13142d4343c71f382fc932e3f45d563ca7f82-dirty"
+  },
+  "start_time": "2026-11-20T02:21:07.120Z",
+  "end_time": "2026-11-20T02:22:58.338Z",
+  "wall_seconds": 111.218,
+  "exception": null,
+  "system_error": null,
+  "prompt_versions": {
+    "single_call": "baseline_v1@049b7a8933"
+  },
+  "exceeded_run_timeout": false
+}

@@ -1,0 +1,29 @@
+{
+  "incident_id": "INC-1846",
+  "alert": {
+    "alert_id": "ALR-3105",
+    "title": "checkout-svc error rate high",
+    "service": "checkout-svc",
+    "signal": "error_rate",
+    "condition": "error_rate > 0.05 for 15s",
+    "observed_value": 1.0,
+    "fired_at": "2026-11-20T03:00:06.440Z"
+  },
+  "window_start": "2026-11-20T02:58:31.448Z",
+  "window_end": "2026-11-20T03:01:06.440Z",
+  "investigation_cutoff": "2026-11-20T03:01:06.440Z",
+  "environment": "demo-local",
+  "services": [
+    "checkout-svc",
+    "payment-svc"
+  ],
+  "available_sources": [
+    "logs",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "tickets"
+  ],
+  "notes": "Alert fired in demo-local. Investigate using the available evidence sources."
+}
