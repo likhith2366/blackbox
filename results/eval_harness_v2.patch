@@ -1,0 +1,132 @@
+diff --git a/eval/harness.py b/eval/harness.py
+index c48d7e4..f04774a 100644
+--- a/eval/harness.py
++++ b/eval/harness.py
+@@ -79,7 +79,14 @@ def run_provenance(incident_id: str, keys_dir: Path, snapshot_root: Optional[Pat
+     """Which answer key and snapshot a run was made against (sha256s), so a later rebuild
+     of either is detected at scoring time instead of silently re-scoring old outputs."""
+     root = Path(snapshot_root) if snapshot_root else SNAPSHOT_ROOT
+-    return {"answer_key_sha256": file_sha256(Path(keys_dir) / f"{incident_id}.json"),
++    snap = root / incident_id
++    try:
++        snap_rel = snap.resolve().relative_to(REPO_ROOT).as_posix()
++    except ValueError:
++        snap_rel = None
++    scoped = git_scoped_status(list(RELEVANT_PATHS) + ([snap_rel] if snap_rel else []))
++    return {"git_scoped": scoped,
++            "answer_key_sha256": file_sha256(Path(keys_dir) / f"{incident_id}.json"),
+             "snapshot_manifest_sha256": file_sha256(root / incident_id / "manifest.json"),
+             "snapshot_incident_sha256": file_sha256(root / incident_id / "incident.json")}
+ 
+@@ -291,6 +298,23 @@ def git_info() -> dict[str, Any]:
+     return info
+ 
+ 
++RELEVANT_PATHS = ("blackbox", "eval", "configs")
++
++
++def git_scoped_status(paths: list[str]) -> dict[str, Any]:
++    """`git status --porcelain -- <paths>`: whether the code/config/snapshot a run depends on
++    differs from HEAD. Unrelated dirty paths elsewhere in the checkout do not count."""
++    try:
++        st = subprocess.run(["git", "status", "--porcelain", "--", *paths], cwd=REPO_ROOT,
++                            capture_output=True, text=True, timeout=20)
++        if st.returncode != 0:
++            return {"scoped_paths": paths, "scoped_dirty": None, "scoped_error": st.stderr.strip()[:300]}
++        lines = [l for l in st.stdout.splitlines() if l.strip()]
++        return {"scoped_paths": paths, "scoped_dirty": bool(lines), "scoped_changes": lines[:50]}
++    except Exception as e:
++        return {"scoped_paths": paths, "scoped_dirty": None, "scoped_error": str(e)[:300]}
++
++
+ def model_metadata(cfg: RunConfig) -> dict[str, Any]:
+     """Metadata only (/api/show, /api/tags): never a generation request."""
+     import requests
+@@ -376,6 +400,7 @@ def run_batch(*, plan: list[dict], batch_dir: Path, phase: str, stub: bool, cfg:
+               system_fn: Callable, backend_fn: Callable, base_meta: dict,
+               repeat_seed_strategy: str = "same", max_runs: Optional[int] = None,
+               provenance_fn: Optional[Callable[[str], dict]] = None,
++              b1_source_dir: Optional[Path] = None,
+               log: Callable[[str], None] = print) -> dict[str, int]:
+     counts = {"skipped_done": 0, "executed": 0, "skipped_with_reason": 0}
+     executed = 0
+@@ -421,7 +446,9 @@ def run_batch(*, plan: list[dict], batch_dir: Path, phase: str, stub: bool, cfg:
+         try:
+             b1_ev: Optional[list[EvidenceRecord]] = None
+             if p["system"] == "b1":
+-                src = batch_dir / p["b1_source_run"] / "output.json"
++                src = (b1_source_dir or batch_dir) / p["b1_source_run"] / "output.json"
++                if b1_source_dir is not None:
++                    meta["b1_source_batch"] = str(b1_source_dir)
+                 meta["b1_source_run"] = p["b1_source_run"]
+                 if not src.exists():
+                     meta["status"] = "skipped_dependency"
+@@ -515,6 +542,11 @@ def main(argv: Optional[list[str]] = None) -> int:
+             sp.add_argument("--break-lock", action="store_true")
+             sp.add_argument("--no-gpu-lock", action="store_true",
+                             help="do not take runs/_gpu.lock (only if another wrapper serialises GPU use)")
++        sp.add_argument("--only-runs", default=None,
++                        help="comma-separated run ids to run now (e.g. timed-out cells); others stay planned")
++        sp.add_argument("--supplementary-of", default=None,
++                        help="label this batch a SUPPLEMENTARY rerun of <batch>; B1 then takes its evidence "
++                             "from that batch's BlackBox r0 runs. Never merged into the original's numbers.")
+         sp.add_argument("--cases", default=None,
+                         help="comma-separated incident ids to run now; other planned runs stay planned (not_run)")
+     a = ap.parse_args(argv)
+@@ -547,10 +579,23 @@ def main(argv: Optional[list[str]] = None) -> int:
+     unknown = [c for c in cases if c not in {p["incident_id"] for p in plan}]
+     if unknown:
+         blocking.append(f"--cases not in the {a.phase} plan: {unknown}")
++    only = [r.strip() for r in (a.only_runs or "").split(",") if r.strip()]
++    bad_only = [r for r in only if r not in {p["run_id"] for p in plan}]
++    if bad_only:
++        blocking.append(f"--only-runs not in the {a.phase} plan: {bad_only}")
++    sup_dir = None
++    if a.supplementary_of:
++        sup_dir = (STUB_ROOT if a.stub else RUNS_ROOT) / a.supplementary_of
++        if not sup_dir.is_dir():
++            blocking.append(f"--supplementary-of batch not found: {sup_dir}")
++        if a.cmd == "run" and a.batch == a.supplementary_of:
++            blocking.append("a supplementary batch must have its own name")
+     for p in plan:     # every planned run stays in plan.json; skipped ones carry the reason
+         reason = skips.get(p["incident_id"])
+         if cases and p["incident_id"] not in cases:
+             reason = "not selected (--cases)" + (f"; {reason}" if reason else "")
++        if only and p["run_id"] not in only:
++            reason = "not selected (--only-runs)" + (f"; {reason}" if reason else "")
+         if reason:
+             p["skip_reason"] = reason
+     warnings_ = []
+@@ -650,7 +695,8 @@ def main(argv: Optional[list[str]] = None) -> int:
+                   "answer_keys_dir": str(keys_dir), "snapshot_root": a.snapshot_root,
+                   "run_config": cfg.model_dump(), **cfg_src, **gi, **md,
+                   "expected_total": exp, "planned_total": len(plan), "plan_warnings": warnings_,
+-                  "skipped_incidents": skips, "cases": cases or None}
++                  "skipped_incidents": skips, "cases": cases or None, "only_runs": only or None,
++                  "supplementary_of": a.supplementary_of}
+     write_json(bpath, batch_meta)
+     write_json(batch_dir / "plan.json", {"phase": a.phase, "runs": plan})
+ 
+@@ -667,6 +713,7 @@ def main(argv: Optional[list[str]] = None) -> int:
+                            system_fn=system_fn, backend_fn=backend_fn, base_meta=base_meta,
+                            repeat_seed_strategy=matrix.get("repeat_seed_strategy", "same"),
+                            max_runs=a.max_runs,
++                           b1_source_dir=sup_dir,
+                            provenance_fn=lambda iid: run_provenance(
+                                iid, keys_dir, Path(a.snapshot_root) if a.snapshot_root else None))
+     if not a.stub:
+diff --git a/eval/report.py b/eval/report.py
+index 3d91552..3483ec8 100644
+--- a/eval/report.py
++++ b/eval/report.py
+@@ -300,6 +300,10 @@ def summary_md(batch: str, s: dict, rows: list[dict], spread: dict, n_fail: int,
+     L = []
+     if stub:
+         L.append(STUB_BANNER)
++    if batch_meta.get("supplementary_of"):
++        L.append(f"> **SUPPLEMENTARY rerun of `{batch_meta['supplementary_of']}`** (same frozen config). "
++                 "Reported separately; never merged into the original batch's primary numbers.
++")
+     L += [f"# Batch `{batch}` summary", "",
+           f"Generated {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} from run "
+           f"records on disk. Phase: `{s.get('phase')}`.", "",

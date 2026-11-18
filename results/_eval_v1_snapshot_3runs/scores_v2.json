@@ -1,0 +1,105 @@
+{
+  "family": "formal",
+  "rows": [
+    {
+      "run": "INC-3172_b0_none_r0",
+      "incident_id": "INC-3172",
+      "system": "b0",
+      "ablation": "none",
+      "run_status": "timeout",
+      "report_status": null,
+      "answer_key_sha256": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "answer_key_recorded_at_run": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "decisive_total": 4,
+      "retrieved_v1": 1,
+      "retrieved_v2": 1,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": "equivalent:log:ece95d3c2b"
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      }
+    },
+    {
+      "run": "INC-3172_b1_none_r0",
+      "incident_id": "INC-3172",
+      "system": "b1",
+      "ablation": "none",
+      "run_status": "timeout",
+      "report_status": null,
+      "answer_key_sha256": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "answer_key_recorded_at_run": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      }
+    },
+    {
+      "run": "INC-3172_blackbox_none_r0",
+      "incident_id": "INC-3172",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "answer_key_recorded_at_run": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      }
+    }
+  ],
+  "notes": [],
+  "name": "eval_v1",
+  "scoring_version": "v2",
+  "answer_keys_dir": "A:\\subjects\\genAI\\final_project\\blackbox\\evaluator_private\\answer_keys",
+  "generated": "2026-11-20T03:57:03Z",
+  "code": {
+    "scoring_v1": {
+      "file": "eval/metrics.py",
+      "sha256": "906d4b9ca8a8e47d6cd0616ae395a7f5dde410329682cf877ad5c000e2c44d6e"
+    },
+    "scoring_v2": {
+      "file": "scripts/score_v2.py",
+      "sha256": "97e16197b9b86955d888a0d00c69a912f08085f2f655db894e7652b95250d57e"
+    },
+    "git_head": "4dd96c0b640531427864e6ad1653e75e5e9bee5d"
+  }
+}

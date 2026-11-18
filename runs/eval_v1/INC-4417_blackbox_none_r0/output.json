@@ -1,0 +1,921 @@
+{
+  "schema_version": "1.0",
+  "system": "blackbox",
+  "incident_id": "INC-4417",
+  "ablation": "none",
+  "status": "completed",
+  "error": null,
+  "report": {
+    "incident_id": "INC-4417",
+    "system": "blackbox",
+    "status": "insufficient_evidence",
+    "headline": "No reliable root cause identified.",
+    "ranked_causes": [],
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "checkout-svc request rate spiked to 21 requests per second at 03:09:09Z",
+        "kind": "factual",
+        "evidence_ids": [
+          "metric:97faf26904"
+        ]
+      },
+      {
+        "claim_id": "c2",
+        "text": "payment-svc request rate spiked to 21 requests per second at 03:09:09Z",
+        "kind": "factual",
+        "evidence_ids": [
+          "metric:709f0f13a6"
+        ]
+      }
+    ],
+    "unresolved_questions": [
+      "Why did both services spike at the same time?"
+    ],
+    "next_check": "Check if the spike was caused by a specific user action or external event (e.g., a large number of users attempting checkout simultaneously)",
+    "suggested_fix": null,
+    "invalid_citations": [],
+    "normalized_citations": [],
+    "citation_audit": [
+      {
+        "where": "claim c1",
+        "raw": "metric:97faf26904",
+        "resolved": "metric:97faf26904",
+        "method": "exact"
+      },
+      {
+        "where": "claim c2",
+        "raw": "metric:709f0f13a6",
+        "resolved": "metric:709f0f13a6",
+        "method": "exact"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "round": 1,
+      "prompt_tokens": 978,
+      "completion_tokens": 118,
+      "model_seconds": 3.38810330000706,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"level\": \"ERROR\",\n        \"limit\": 15\n      }\n    }\n  ],\n  \"decision\": \"continue\",\n  \"rationale\": \"Start by checking for errors in checkout-svc logs to see if there's a failure causing the request rate anomaly. The alert is for request rate >12 per second, so errors might indicate a bottleneck or failure.\"\n}",
+      "model_decision": "continue",
+      "hypotheses_before": [],
+      "hypotheses_after": [],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r1c1",
+          "round": 1,
+          "tool": "search_logs",
+          "args": {
+            "service": "checkout-svc",
+            "level": "ERROR",
+            "limit": 15
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r1c1",
+          "tool": "search_logs",
+          "status": "empty",
+          "records": [],
+          "total_matches": 0,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 46.65159992873669,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [],
+      "orchestration_rules": [
+        "first-tool rule: no evidence yet, so >=1 tool call required and decision limited to 'continue' (orchestration, not model behaviour)"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1009,
+        "fixed_part_cut": false,
+        "prompt_tokens_est": 983,
+        "prompt_tokens_actual": 978,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": ""
+    },
+    {
+      "round": 2,
+      "prompt_tokens": 1006,
+      "completion_tokens": 455,
+      "model_seconds": 8.585743300034665,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"rate limiting\",\n      \"status\": \"active\",\n      \"confidence\": \"low\",\n      \"supporting\": [\n        \"metric:7c1e2a\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"rate limiting\",\n      \"status\": \"active\",\n      \"confidence\": \"low\",\n      \"supporting\": [\n        \"metric:7c1e2b\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"request_rate\",\n        \"start\": \"2026-11-20T03:07:19.290Z\",\n        \"end\": \"2026-11-20T03:10:20.017Z\"\n      }\n    },\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"metric\": \"request_rate\",\n        \"start\": \"2026-11-20T03:07:19.290Z\",\n        \"end\": \"2026-11-20T03:10:20.017Z\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The alert is for checkout-svc request rate anomaly. We need to check if the request rate metric is actually high or if there's a misconfiguration. The get_metrics tool will show the actual request rate for both services in the window. If checkout-svc request rate is high, then the anomaly is real. If payment-svc is the cause, we need to check its rate as well.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "payment-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [
+        "+ h1 [active/low] checkout-svc: rate limiting",
+        "+ h2 [active/low] payment-svc: rate limiting"
+      ],
+      "tool_requests": [
+        {
+          "call_id": "r2c1",
+          "round": 2,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "request_rate",
+            "start": "2026-11-20T03:07:19.290Z",
+            "end": "2026-11-20T03:10:20.017Z"
+          }
+        },
+        {
+          "call_id": "r2c2",
+          "round": 2,
+          "tool": "get_metrics",
+          "args": {
+            "service": "payment-svc",
+            "metric": "request_rate",
+            "start": "2026-11-20T03:07:19.290Z",
+            "end": "2026-11-20T03:10:20.017Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r2c1",
+          "tool": "get_metrics",
+          "status": "empty",
+          "records": [],
+          "total_matches": 0,
+          "truncated": false,
+          "error": "no matching series; metrics for this service: error_rate, inflight_requests, latency_p50_ms, latency_p95_ms, requests_per_s, upstream_attempts_per_s, upstream_errors_per_s",
+          "elapsed_ms": 2.947599976323545,
+          "is_retry": false
+        },
+        {
+          "call_id": "r2c2",
+          "tool": "get_metrics",
+          "status": "empty",
+          "records": [],
+          "total_matches": 0,
+          "truncated": false,
+          "error": "no matching series; metrics for this service: db_pool_in_use, db_pool_wait_p95_ms, db_query_p95_ms, error_rate, latency_p50_ms, latency_p95_ms, requests_per_s",
+          "elapsed_ms": 0.37340004928410053,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [
+        "metric:7c1e2a",
+        "metric:7c1e2b"
+      ],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:7c1e2a",
+          "resolved": null,
+          "method": "invalid"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "metric:7c1e2b",
+          "resolved": null,
+          "method": "invalid"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 0 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1037,
+        "fixed_part_cut": false,
+        "prompt_tokens_est": 1011,
+        "prompt_tokens_actual": 1006,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 0 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 3,
+      "prompt_tokens": 1381,
+      "completion_tokens": 393,
+      "model_seconds": 7.678456600056961,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"rate limiting\",\n      \"status\": \"active\",\n      \"confidence\": \"low\",\n      \"supporting\": [],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"rate limiting\",\n      \"status\": \"active\",\n      \"confidence\": \"low\",\n      \"supporting\": [],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"requests_per_s\",\n        \"start\": \"2026-11-20T03:07:19.290Z\",\n        \"end\": \"2026-11-20T03:10:20.017Z\"\n      }\n    },\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"metric\": \"requests_per_s\",\n        \"start\": \"2026-11-20T03:07:19.290Z\",\n        \"end\": \"2026-11-20T03:10:20.017Z\"\n      }\n    }\n  ],\n  \"decision\": \"continue\",\n  \"rationale\": \"Need to verify the request rate metric for both services to determine if the anomaly is due to checkout-svc or payment-svc. The previous tool calls returned empty, so we need to fetch the actual metric data for the specified time window.\"\n}",
+      "model_decision": "continue",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "payment-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "payment-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r3c1",
+          "round": 3,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "requests_per_s",
+            "start": "2026-11-20T03:07:19.290Z",
+            "end": "2026-11-20T03:10:20.017Z"
+          }
+        },
+        {
+          "call_id": "r3c2",
+          "round": 3,
+          "tool": "get_metrics",
+          "args": {
+            "service": "payment-svc",
+            "metric": "requests_per_s",
+            "start": "2026-11-20T03:07:19.290Z",
+            "end": "2026-11-20T03:10:20.017Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r3c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:97faf26904",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:07:38.266Z",
+              "available_time": "2026-11-20T03:10:15.423Z",
+              "version": null,
+              "title": "checkout-svc requests_per_s",
+              "content": "checkout-svc requests_per_s (5.0s points, 2026-11-20T03:07:38.266Z .. 2026-11-20T03:10:15.423Z): min=1.8 max=21 last=4.8\n03:07:38 2.2; 03:07:43 4.2; 03:07:48 3.8; 03:07:53 6.4; 03:07:58 5.4; 03:08:03 4.4; 03:08:08 5.6; 03:08:13 5.4; 03:08:18 5.6; 03:08:23 7; 03:08:25 1.8; 03:08:34 9.6; 03:08:39 4.6; 03:08:44 5; 03:08:49 6.2; 03:08:54 4.2; 03:08:59 5.6; 03:09:04 7.4; 03:09:09 21; 03:09:14 14; 03:09:20 13.8; 03:09:25 17.2; 03:09:30 17.6; 03:09:35 12.4; 03:09:40 14; 03:09:45 16.6; 03:09:50 11; 03:09:55 6; 03:10:00 4.8; 03:10:05 4.6; 03:10:10 4.6; 03:10:15 4.8",
+              "content_ref": "metrics.jsonl#checkout-svc/requests_per_s",
+              "attributes": {
+                "metric": "requests_per_s",
+                "points": 32,
+                "min": 1.8,
+                "max": 21.0,
+                "last": 4.8
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.6019000429660082,
+          "is_retry": false
+        },
+        {
+          "call_id": "r3c2",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:709f0f13a6",
+              "source": "metrics",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T03:07:34.327Z",
+              "available_time": "2026-11-20T03:10:15.467Z",
+              "version": null,
+              "title": "payment-svc requests_per_s",
+              "content": "payment-svc requests_per_s (5.0s points, 2026-11-20T03:07:34.327Z .. 2026-11-20T03:10:15.467Z): min=0.2 max=21 last=4.8\n03:07:34 0.2; 03:07:39 3.6; 03:07:44 3.2; 03:07:49 4.6; 03:07:54 5.8; 03:07:59 5; 03:08:04 5; 03:08:09 6; 03:08:14 5.2; 03:08:19 6.2; 03:08:24 5.6; 03:08:29 1.4; 03:08:34 9.6; 03:08:39 4.6; 03:08:44 5; 03:08:49 6.2; 03:08:54 4.2; 03:08:59 5.6; 03:09:04 7.4; 03:09:09 21; 03:09:14 14; 03:09:20 13.8; 03:09:25 17.2; 03:09:30 17.6; 03:09:35 12.4; 03:09:40 14; 03:09:45 16.6; 03:09:50 11; 03:09:55 6; 03:10:00 4.8; 03:10:05 4.6; 03:10:10 4.6; 03:10:15 4.8",
+              "content_ref": "metrics.jsonl#payment-svc/requests_per_s",
+              "attributes": {
+                "metric": "requests_per_s",
+                "points": 33,
+                "min": 0.2,
+                "max": 21.0,
+                "last": 4.8
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.45140006113797426,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [],
+      "orchestration_rules": [],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1411,
+        "fixed_part_cut": false,
+        "prompt_tokens_est": 1386,
+        "prompt_tokens_actual": 1381,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": ""
+    },
+    {
+      "round": 4,
+      "prompt_tokens": 2247,
+      "completion_tokens": 390,
+      "model_seconds": 9.058630599989556,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"rate limiting\",\n      \"status\": \"active\",\n      \"confidence\": \"low\",\n      \"supporting\": [\n        \"metric:97faf26904\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"rate limiting\",\n      \"status\": \"active\",\n      \"confidence\": \"low\",\n      \"supporting\": [\n        \"metric:709f0f13a6\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"level\": \"ERROR\",\n        \"limit\": 15\n      }\n    },\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"level\": \"ERROR\",\n        \"limit\": 15\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The metric data shows both services had high request rates, but the alert is for checkout-svc. The high spike in checkout-svc (21 requests/s) at 03:09:09 and 03:09:14 (14 requests/s) matches the alert condition. Payment-svc also had a spike but the alert is specific to checkout-svc. No error logs found, so rate limiting is likely a misconfiguration or temporary spike. Since the alert is for checkout-svc, the cause is likely checkout-svc's rate limiting mechanism.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "payment-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [
+            "metric:97faf26904"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "payment-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [
+            "metric:709f0f13a6"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [
+        "~ h1 new support ['metric:97faf26904']",
+        "~ h2 new support ['metric:709f0f13a6']"
+      ],
+      "tool_requests": [
+        {
+          "call_id": "r4c1",
+          "round": 4,
+          "tool": "search_logs",
+          "args": {
+            "service": "checkout-svc",
+            "level": "ERROR",
+            "limit": 15
+          }
+        },
+        {
+          "call_id": "r4c2",
+          "round": 4,
+          "tool": "search_logs",
+          "args": {
+            "service": "payment-svc",
+            "level": "ERROR",
+            "limit": 15
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r4c1",
+          "tool": "search_logs",
+          "status": "empty",
+          "records": [],
+          "total_matches": 0,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        },
+        {
+          "call_id": "r4c2",
+          "tool": "search_logs",
+          "status": "empty",
+          "records": [],
+          "total_matches": 0,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 6.3665000488981605,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r4c1==r1c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:97faf26904",
+          "resolved": "metric:97faf26904",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "metric:709f0f13a6",
+          "resolved": "metric:709f0f13a6",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1128,
+        "fixed_part_cut": false,
+        "notebook_budget": 6014,
+        "notebook_tokens": 1153,
+        "records_retrieved": 2,
+        "records_full": 2,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 2252,
+        "prompt_tokens_actual": 2247,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 5,
+      "prompt_tokens": 2334,
+      "completion_tokens": 276,
+      "model_seconds": 7.50888280000072,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"rate limiting\",\n      \"status\": \"active\",\n      \"confidence\": \"low\",\n      \"supporting\": [\n        \"metric:97faf26904\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"rate limiting\",\n      \"status\": \"active\",\n      \"confidence\": \"low\",\n      \"supporting\": [\n        \"metric:709f0f13a6\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"level\": \"ERROR\",\n        \"limit\": 15\n      }\n    }\n  ],\n  \"decision\": \"continue\",\n  \"rationale\": \"Hypothesis h1 and h2 have low confidence and need more evidence. Checked logs for checkout-svc and payment-svc errors but found none. Need to verify if the spike in request rate is due to a specific event or misconfiguration.\"\n}",
+      "model_decision": "continue",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [
+            "metric:97faf26904"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "payment-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [
+            "metric:709f0f13a6"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [
+            "metric:97faf26904"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "payment-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [
+            "metric:709f0f13a6"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r5c1",
+          "round": 5,
+          "tool": "search_logs",
+          "args": {
+            "service": "checkout-svc",
+            "level": "ERROR",
+            "limit": 15
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r5c1",
+          "tool": "search_logs",
+          "status": "empty",
+          "records": [],
+          "total_matches": 0,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r5c1==r1c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:97faf26904",
+          "resolved": "metric:97faf26904",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "metric:709f0f13a6",
+          "resolved": "metric:709f0f13a6",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1215,
+        "fixed_part_cut": false,
+        "notebook_budget": 5927,
+        "notebook_tokens": 1153,
+        "records_retrieved": 2,
+        "records_full": 2,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 2339,
+        "prompt_tokens_actual": 2334,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": ""
+    },
+    {
+      "round": 6,
+      "prompt_tokens": 2276,
+      "completion_tokens": 424,
+      "model_seconds": 12.185802799998783,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"rate limiting\",\n      \"status\": \"active\",\n      \"confidence\": \"low\",\n      \"supporting\": [\n        \"metric:97faf26904\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"rate limiting\",\n      \"status\": \"active\",\n      \"confidence\": \"low\",\n      \"supporting\": [\n        \"metric:709f0f13a6\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"level\": \"ERROR\",\n        \"limit\": 15\n      }\n    },\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"level\": \"ERROR\",\n        \"limit\": 15\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The metric data shows both services had high request rates, but the alert is for checkout-svc. The hypothesis that checkout-svc is rate limiting is low confidence. However, the payment-svc metric also shows a spike at the same time (21 requests/s) which might indicate a shared issue. Since the alert is for checkout-svc, and the payment-svc spike could be causing checkout-svc to rate limit, the most likely cause is payment-svc impacting checkout-svc. The error logs for both services were checked but no errors were found, so the issue is likely a temporary spike in payment-svc requests causing checkout-svc to hit its rate limit. This is supported by the metric data showing both services had spikes at the same time.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [
+            "metric:97faf26904"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "payment-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [
+            "metric:709f0f13a6"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [
+            "metric:97faf26904"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "payment-svc",
+          "mechanism": "rate limiting",
+          "status": "active",
+          "confidence": "low",
+          "supporting": [
+            "metric:709f0f13a6"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r6c1",
+          "round": 6,
+          "tool": "search_logs",
+          "args": {
+            "service": "checkout-svc",
+            "level": "ERROR",
+            "limit": 15
+          }
+        },
+        {
+          "call_id": "r6c2",
+          "round": 6,
+          "tool": "search_logs",
+          "args": {
+            "service": "payment-svc",
+            "level": "ERROR",
+            "limit": 15
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r6c1",
+          "tool": "search_logs",
+          "status": "empty",
+          "records": [],
+          "total_matches": 0,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        },
+        {
+          "call_id": "r6c2",
+          "tool": "search_logs",
+          "status": "empty",
+          "records": [],
+          "total_matches": 0,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r6c1==r1c1",
+        "r6c2==r4c2"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:97faf26904",
+          "resolved": "metric:97faf26904",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "metric:709f0f13a6",
+          "resolved": "metric:709f0f13a6",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1157,
+        "fixed_part_cut": false,
+        "notebook_budget": 5985,
+        "notebook_tokens": 1153,
+        "records_retrieved": 2,
+        "records_full": 2,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 2281,
+        "prompt_tokens_actual": 2276,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "stop_rounds",
+      "stop_reason": "limit reached after 6 rounds and 10 tool calls"
+    }
+  ],
+  "evidence_seen": [
+    {
+      "evidence_id": "metric:97faf26904",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:07:38.266Z",
+      "available_time": "2026-11-20T03:10:15.423Z",
+      "version": null,
+      "title": "checkout-svc requests_per_s",
+      "content": "checkout-svc requests_per_s (5.0s points, 2026-11-20T03:07:38.266Z .. 2026-11-20T03:10:15.423Z): min=1.8 max=21 last=4.8\n03:07:38 2.2; 03:07:43 4.2; 03:07:48 3.8; 03:07:53 6.4; 03:07:58 5.4; 03:08:03 4.4; 03:08:08 5.6; 03:08:13 5.4; 03:08:18 5.6; 03:08:23 7; 03:08:25 1.8; 03:08:34 9.6; 03:08:39 4.6; 03:08:44 5; 03:08:49 6.2; 03:08:54 4.2; 03:08:59 5.6; 03:09:04 7.4; 03:09:09 21; 03:09:14 14; 03:09:20 13.8; 03:09:25 17.2; 03:09:30 17.6; 03:09:35 12.4; 03:09:40 14; 03:09:45 16.6; 03:09:50 11; 03:09:55 6; 03:10:00 4.8; 03:10:05 4.6; 03:10:10 4.6; 03:10:15 4.8",
+      "content_ref": "metrics.jsonl#checkout-svc/requests_per_s",
+      "attributes": {
+        "metric": "requests_per_s",
+        "points": 32,
+        "min": 1.8,
+        "max": 21.0,
+        "last": 4.8
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:709f0f13a6",
+      "source": "metrics",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T03:07:34.327Z",
+      "available_time": "2026-11-20T03:10:15.467Z",
+      "version": null,
+      "title": "payment-svc requests_per_s",
+      "content": "payment-svc requests_per_s (5.0s points, 2026-11-20T03:07:34.327Z .. 2026-11-20T03:10:15.467Z): min=0.2 max=21 last=4.8\n03:07:34 0.2; 03:07:39 3.6; 03:07:44 3.2; 03:07:49 4.6; 03:07:54 5.8; 03:07:59 5; 03:08:04 5; 03:08:09 6; 03:08:14 5.2; 03:08:19 6.2; 03:08:24 5.6; 03:08:29 1.4; 03:08:34 9.6; 03:08:39 4.6; 03:08:44 5; 03:08:49 6.2; 03:08:54 4.2; 03:08:59 5.6; 03:09:04 7.4; 03:09:09 21; 03:09:14 14; 03:09:20 13.8; 03:09:25 17.2; 03:09:30 17.6; 03:09:35 12.4; 03:09:40 14; 03:09:45 16.6; 03:09:50 11; 03:09:55 6; 03:10:00 4.8; 03:10:05 4.6; 03:10:10 4.6; 03:10:15 4.8",
+      "content_ref": "metrics.jsonl#payment-svc/requests_per_s",
+      "attributes": {
+        "metric": "requests_per_s",
+        "points": 33,
+        "min": 0.2,
+        "max": 21.0,
+        "last": 4.8
+      },
+      "truncated": false,
+      "fixture": false
+    }
+  ],
+  "usage": {
+    "model_calls": 7,
+    "prompt_tokens": 12031,
+    "completion_tokens": 2263,
+    "model_seconds": 56.15400230011437
+  },
+  "wall_seconds": 66.29,
+  "rounds_used": 6,
+  "tool_calls_used": 10,
+  "budget_violations": 0,
+  "unauthorized_attempts": [],
+  "unauthorized_executed": 0,
+  "evidence_budget": null,
+  "context": {
+    "report_call": {
+      "num_ctx": 8192,
+      "notebook_budget": 6419,
+      "notebook_tokens": 1153,
+      "records_retrieved": 2,
+      "records_full": 2,
+      "records_one_line": 0,
+      "records_omitted": 0,
+      "prompt_tokens_est": 1814,
+      "prompt_tokens_actual": 1809
+    }
+  },
+  "config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "investigator_v2@efd3f21bee+report_v1@035e5ce0d8",
+    "code_revision": "4dd96c0b640531427864e6ad1653e75e5e9bee5d-dirty"
+  },
+  "prompt_versions": {
+    "round": "investigator_v2@efd3f21bee",
+    "report": "report_v1@035e5ce0d8"
+  }
+}

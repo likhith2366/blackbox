@@ -1,0 +1,319 @@
+{
+  "schema_version": "1.0",
+  "system": "b1",
+  "incident_id": "INC-7735",
+  "ablation": "none",
+  "status": "failed",
+  "error": "unparseable report: output cut at num_predict (1100 tokens): invalid JSON: Expecting ',' delimiter at char 1957",
+  "report": null,
+  "steps": [],
+  "evidence_seen": [
+    {
+      "evidence_id": "metric:67b490093f",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:54:21.526Z",
+      "available_time": "2026-11-20T02:56:37.364Z",
+      "version": null,
+      "title": "checkout-svc error_rate",
+      "content": "checkout-svc error_rate (5.0s points, 2026-11-20T02:54:21.526Z .. 2026-11-20T02:56:37.364Z): min=0 max=1 last=1\n02:54:21 0; 02:54:26 0; 02:54:31 0; 02:54:36 0; 02:54:41 0; 02:54:46 0; 02:54:51 0; 02:54:56 0; 02:55:01 0; 02:55:06 0; 02:55:11 0; 02:55:16 0; 02:55:21 0; 02:55:26 0; 02:55:31 0.6429; 02:55:37 1; 02:55:38 1; 02:55:47 1; 02:55:52 1; 02:55:57 1; 02:56:02 1; 02:56:07 1; 02:56:12 1; 02:56:17 1; 02:56:22 1; 02:56:27 1; 02:56:32 1; 02:56:37 1",
+      "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 28,
+        "min": 0.0,
+        "max": 1.0,
+        "last": 1.0
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:c60bcdf7c807ac6a224d289315c385a5",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:55:27.782Z",
+      "available_time": "2026-11-20T02:55:29.934Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2151.44ms error",
+      "content": "trace c60bcdf7c807ac6a224d289315c385a5 root=checkout-svc POST /orders start=2026-11-20T02:55:27.782Z duration=2151.44ms status=error spans=3 services=checkout-svc\n - checkout-svc POST /orders 2151.44ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-4400345\",\"http.status_code\":504}\n - checkout-svc POST /charge 23.01ms error (connect error: [WinError 10054] An existing connection was forcibly closed by the remote host) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000}\n - checkout-svc POST /charge 2010.37ms error (timeout after 2000ms) {\"peer.service\" ...[truncated]",
+      "content_ref": "spans.jsonl?trace_id=c60bcdf7c807ac6a224d289315c385a5",
+      "attributes": {
+        "trace_id": "c60bcdf7c807ac6a224d289315c385a5",
+        "duration_ms": 2151.44,
+        "status": "error",
+        "span_count": 3,
+        "services": [
+          "checkout-svc"
+        ]
+      },
+      "truncated": true,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:7fe8e20ae7b18a1007b62596a207605e",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:55:27.978Z",
+      "available_time": "2026-11-20T02:55:30.001Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2022.44ms error",
+      "content": "trace 7fe8e20ae7b18a1007b62596a207605e root=checkout-svc POST /orders start=2026-11-20T02:55:27.978Z duration=2022.44ms status=error spans=2 services=checkout-svc\n - checkout-svc POST /orders 2022.44ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-4400346\",\"http.status_code\":504}\n - checkout-svc POST /charge 2018.43ms error (timeout after 2000ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000}",
+      "content_ref": "spans.jsonl?trace_id=7fe8e20ae7b18a1007b62596a207605e",
+      "attributes": {
+        "trace_id": "7fe8e20ae7b18a1007b62596a207605e",
+        "duration_ms": 2022.44,
+        "status": "error",
+        "span_count": 2,
+        "services": [
+          "checkout-svc"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:0fdfed992e0693e61bdaf0c0521dd7ca",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:55:28.177Z",
+      "available_time": "2026-11-20T02:55:30.184Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2006.91ms error",
+      "content": "trace 0fdfed992e0693e61bdaf0c0521dd7ca root=checkout-svc POST /orders start=2026-11-20T02:55:28.177Z duration=2006.91ms status=error spans=2 services=checkout-svc\n - checkout-svc POST /orders 2006.91ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-4400347\",\"http.status_code\":504}\n - checkout-svc POST /charge 2004.46ms error (timeout after 2000ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000}",
+      "content_ref": "spans.jsonl?trace_id=0fdfed992e0693e61bdaf0c0521dd7ca",
+      "attributes": {
+        "trace_id": "0fdfed992e0693e61bdaf0c0521dd7ca",
+        "duration_ms": 2006.91,
+        "status": "error",
+        "span_count": 2,
+        "services": [
+          "checkout-svc"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:d078fdc375717b91e6cb4fd2d8de9e99",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:55:28.395Z",
+      "available_time": "2026-11-20T02:55:30.401Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2005.92ms error",
+      "content": "trace d078fdc375717b91e6cb4fd2d8de9e99 root=checkout-svc POST /orders start=2026-11-20T02:55:28.395Z duration=2005.92ms status=error spans=2 services=checkout-svc\n - checkout-svc POST /orders 2005.92ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-4400348\",\"http.status_code\":504}\n - checkout-svc POST /charge 2003.92ms error (timeout after 2000ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000}",
+      "content_ref": "spans.jsonl?trace_id=d078fdc375717b91e6cb4fd2d8de9e99",
+      "attributes": {
+        "trace_id": "d078fdc375717b91e6cb4fd2d8de9e99",
+        "duration_ms": 2005.92,
+        "status": "error",
+        "span_count": 2,
+        "services": [
+          "checkout-svc"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:8da4204d1030597b954f4e95da3a40d9",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:55:28.530Z",
+      "available_time": "2026-11-20T02:55:30.586Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2056.26ms error",
+      "content": "trace 8da4204d1030597b954f4e95da3a40d9 root=checkout-svc POST /orders start=2026-11-20T02:55:28.530Z duration=2056.26ms status=error spans=2 services=checkout-svc\n - checkout-svc POST /orders 2056.26ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-4400349\",\"http.status_code\":504}\n - checkout-svc POST /charge 2053.26ms error (timeout after 2000ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000}",
+      "content_ref": "spans.jsonl?trace_id=8da4204d1030597b954f4e95da3a40d9",
+      "attributes": {
+        "trace_id": "8da4204d1030597b954f4e95da3a40d9",
+        "duration_ms": 2056.26,
+        "status": "error",
+        "span_count": 2,
+        "services": [
+          "checkout-svc"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:a5fe79e4120f7fb8e36a2f35653b7edb",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:55:28.699Z",
+      "available_time": "2026-11-20T02:55:30.710Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2010.87ms error",
+      "content": "trace a5fe79e4120f7fb8e36a2f35653b7edb root=checkout-svc POST /orders start=2026-11-20T02:55:28.699Z duration=2010.87ms status=error spans=2 services=checkout-svc\n - checkout-svc POST /orders 2010.87ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-4400350\",\"http.status_code\":504}\n - checkout-svc POST /charge 2005.87ms error (timeout after 2000ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000}",
+      "content_ref": "spans.jsonl?trace_id=a5fe79e4120f7fb8e36a2f35653b7edb",
+      "attributes": {
+        "trace_id": "a5fe79e4120f7fb8e36a2f35653b7edb",
+        "duration_ms": 2010.87,
+        "status": "error",
+        "span_count": 2,
+        "services": [
+          "checkout-svc"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:eacde9f7049a8960943a7cdd430b50b7",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:55:29.082Z",
+      "available_time": "2026-11-20T02:55:31.085Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2002.45ms error",
+      "content": "trace eacde9f7049a8960943a7cdd430b50b7 root=checkout-svc POST /orders start=2026-11-20T02:55:29.082Z duration=2002.45ms status=error spans=2 services=checkout-svc\n - checkout-svc POST /orders 2002.45ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-4400351\",\"http.status_code\":504}\n - checkout-svc POST /charge 2001.45ms error (timeout after 2000ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000}",
+      "content_ref": "spans.jsonl?trace_id=eacde9f7049a8960943a7cdd430b50b7",
+      "attributes": {
+        "trace_id": "eacde9f7049a8960943a7cdd430b50b7",
+        "duration_ms": 2002.45,
+        "status": "error",
+        "span_count": 2,
+        "services": [
+          "checkout-svc"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:0d661f123781b56054efd9aecedb8f96",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:55:29.626Z",
+      "available_time": "2026-11-20T02:55:31.633Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2006.86ms error",
+      "content": "trace 0d661f123781b56054efd9aecedb8f96 root=checkout-svc POST /orders start=2026-11-20T02:55:29.626Z duration=2006.86ms status=error spans=2 services=checkout-svc\n - checkout-svc POST /charge 2004.26ms error (timeout after 2000ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000}\n - checkout-svc POST /orders 2006.86ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-4400352\",\"http.status_code\":504}",
+      "content_ref": "spans.jsonl?trace_id=0d661f123781b56054efd9aecedb8f96",
+      "attributes": {
+        "trace_id": "0d661f123781b56054efd9aecedb8f96",
+        "duration_ms": 2006.86,
+        "status": "error",
+        "span_count": 2,
+        "services": [
+          "checkout-svc"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:c3dd2a54a516e63f03251bcbd3007bbc",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:55:29.919Z",
+      "available_time": "2026-11-20T02:55:31.988Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2069.37ms error",
+      "content": "trace c3dd2a54a516e63f03251bcbd3007bbc root=checkout-svc POST /orders start=2026-11-20T02:55:29.919Z duration=2069.37ms status=error spans=2 services=checkout-svc\n - checkout-svc POST /orders 2069.37ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-4400353\",\"http.status_code\":504}\n - checkout-svc POST /charge 2056.35ms error (timeout after 2000ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000}",
+      "content_ref": "spans.jsonl?trace_id=c3dd2a54a516e63f03251bcbd3007bbc",
+      "attributes": {
+        "trace_id": "c3dd2a54a516e63f03251bcbd3007bbc",
+        "duration_ms": 2069.37,
+        "status": "error",
+        "span_count": 2,
+        "services": [
+          "checkout-svc"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:30074e63dd56b091da2ec74e04b0ff82",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:55:30.067Z",
+      "available_time": "2026-11-20T02:55:32.083Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2015.06ms error",
+      "content": "trace 30074e63dd56b091da2ec74e04b0ff82 root=checkout-svc POST /orders start=2026-11-20T02:55:30.067Z duration=2015.06ms status=error spans=2 services=checkout-svc\n - checkout-svc POST /orders 2015.06ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-4400354\",\"http.status_code\":504}\n - checkout-svc POST /charge 2012.04ms error (timeout after 2000ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000}",
+      "content_ref": "spans.jsonl?trace_id=30074e63dd56b091da2ec74e04b0ff82",
+      "attributes": {
+        "trace_id": "30074e63dd56b091da2ec74e04b0ff82",
+        "duration_ms": 2015.06,
+        "status": "error",
+        "span_count": 2,
+        "services": [
+          "checkout-svc"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    }
+  ],
+  "usage": {
+    "model_calls": 2,
+    "prompt_tokens": 7377,
+    "completion_tokens": 2200,
+    "model_seconds": 39.77091560000554
+  },
+  "wall_seconds": 53.34,
+  "rounds_used": 0,
+  "tool_calls_used": 0,
+  "budget_violations": 0,
+  "unauthorized_attempts": [],
+  "unauthorized_executed": 0,
+  "evidence_budget": {
+    "context_tokens": 8192,
+    "reserved_tokens": 2400,
+    "evidence_token_budget": 5792,
+    "evidence_tokens_total": 3173,
+    "included_ids": [
+      "metric:67b490093f",
+      "trace:c60bcdf7c807ac6a224d289315c385a5",
+      "trace:7fe8e20ae7b18a1007b62596a207605e",
+      "trace:0fdfed992e0693e61bdaf0c0521dd7ca",
+      "trace:d078fdc375717b91e6cb4fd2d8de9e99",
+      "trace:8da4204d1030597b954f4e95da3a40d9",
+      "trace:a5fe79e4120f7fb8e36a2f35653b7edb",
+      "trace:eacde9f7049a8960943a7cdd430b50b7",
+      "trace:0d661f123781b56054efd9aecedb8f96",
+      "trace:c3dd2a54a516e63f03251bcbd3007bbc",
+      "trace:30074e63dd56b091da2ec74e04b0ff82"
+    ],
+    "omitted_ids": [],
+    "omitted_tokens": 0,
+    "matched": true
+  },
+  "context": {
+    "num_ctx": 8192,
+    "num_predict": 1100,
+    "prompt_tokens_est": 3673,
+    "prompt_tokens_actual": 3668
+  },
+  "config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "baseline_v1@049b7a8933",
+    "code_revision": "4dd96c0b640531427864e6ad1653e75e5e9bee5d-dirty"
+  },
+  "prompt_versions": {
+    "single_call": "baseline_v1@049b7a8933"
+  }
+}

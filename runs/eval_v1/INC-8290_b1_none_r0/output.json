@@ -1,0 +1,305 @@
+{
+  "schema_version": "1.0",
+  "system": "b1",
+  "incident_id": "INC-8290",
+  "ablation": "none",
+  "status": "completed",
+  "error": null,
+  "report": {
+    "incident_id": "INC-8290",
+    "system": "b1",
+    "status": "diagnosis",
+    "headline": "Most likely cause: payment-svc - db pool timeout",
+    "ranked_causes": [
+      {
+        "rank": 1,
+        "component": "payment-svc",
+        "mechanism": "db pool timeout",
+        "confidence": "high",
+        "evidence_ids": [
+          "metric:edf19d2794",
+          "log:2286714109",
+          "span:4700ad4a4830c636"
+        ]
+      },
+      {
+        "rank": 2,
+        "component": "checkout-svc",
+        "mechanism": "retrying payment-svc",
+        "confidence": "medium",
+        "evidence_ids": [
+          "span:d6bbf4ef83c2d3bc",
+          "span:387c95ec2aff8a2d"
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "checkout-svc error rate spiked due to payment-svc returning HTTP 503 errors",
+        "kind": "factual",
+        "evidence_ids": [
+          "log:2286714109"
+        ]
+      },
+      {
+        "claim_id": "c2",
+        "text": "payment-svc db pool acquisition timed out due to insufficient database connections",
+        "kind": "causal",
+        "evidence_ids": [
+          "span:4700ad4a4830c636"
+        ]
+      },
+      {
+        "claim_id": "c3",
+        "text": "checkout-svc retries payment-svc with HTTP 503 errors",
+        "kind": "factual",
+        "evidence_ids": [
+          "span:d6bbf4ef83c2d3bc"
+        ]
+      }
+    ],
+    "unresolved_questions": [
+      "Why did payment-svc db pool timeout?"
+    ],
+    "next_check": "Check payment-svc database connection pool configuration and database load metrics",
+    "suggested_fix": "(untested) Increase payment-svc db pool size or optimize database queries",
+    "invalid_citations": [],
+    "normalized_citations": [],
+    "citation_audit": [
+      {
+        "where": "cause1",
+        "raw": "metric:edf19d2794",
+        "resolved": "metric:edf19d2794",
+        "method": "exact"
+      },
+      {
+        "where": "cause1",
+        "raw": "log:2286714109",
+        "resolved": "log:2286714109",
+        "method": "exact"
+      },
+      {
+        "where": "cause1",
+        "raw": "span:4700ad4a4830c636",
+        "resolved": "span:4700ad4a4830c636",
+        "method": "exact"
+      },
+      {
+        "where": "cause2",
+        "raw": "span:d6bbf4ef83c2d3bc",
+        "resolved": "span:d6bbf4ef83c2d3bc",
+        "method": "exact"
+      },
+      {
+        "where": "cause2",
+        "raw": "span:387c95ec2aff8a2d",
+        "resolved": "span:387c95ec2aff8a2d",
+        "method": "exact"
+      },
+      {
+        "where": "claim c1",
+        "raw": "log:2286714109",
+        "resolved": "log:2286714109",
+        "method": "exact"
+      },
+      {
+        "where": "claim c2",
+        "raw": "span:4700ad4a4830c636",
+        "resolved": "span:4700ad4a4830c636",
+        "method": "exact"
+      },
+      {
+        "where": "claim c3",
+        "raw": "span:d6bbf4ef83c2d3bc",
+        "resolved": "span:d6bbf4ef83c2d3bc",
+        "method": "exact"
+      }
+    ]
+  },
+  "steps": [],
+  "evidence_seen": [
+    {
+      "evidence_id": "metric:edf19d2794",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:41:23.665Z",
+      "available_time": "2026-11-20T02:43:59.145Z",
+      "version": null,
+      "title": "checkout-svc error_rate",
+      "content": "checkout-svc error_rate (5.0s points, 2026-11-20T02:41:23.665Z .. 2026-11-20T02:43:59.145Z): min=0 max=1 last=1\n02:41:23 0; 02:41:28 0; 02:41:33 0; 02:41:38 0; 02:41:43 0; 02:41:48 0; 02:41:53 0; 02:41:58 0; 02:42:03 0; 02:42:08 0; 02:42:13 0; 02:42:18 0; 02:42:23 0; 02:42:28 0; 02:42:33 0; 02:42:38 0; 02:42:43 0; 02:42:48 0; 02:42:53 0.6667; 02:42:58 1; 02:43:03 1; 02:43:08 1; 02:43:13 1; 02:43:18 1; 02:43:24 1; 02:43:29 1; 02:43:34 1; 02:43:39 1; 02:43:44 1; 02:43:49 1; 02:43:54 1; 02:43:59 1",
+      "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 32,
+        "min": 0.0,
+        "max": 1.0,
+        "last": 1.0
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:2286714109",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:42:51.162Z",
+      "available_time": "2026-11-20T02:42:51.162Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment service returned HTTP 503 (x383 similar lines 2026-11-20T02:42:51.162Z .. 2026-11-20T02:44:03.304Z)",
+      "content": "2026-11-20T02:42:51.162Z ERROR checkout-svc payment service returned HTTP 503 {\"trace_id\":\"6576afa64a1ff91179331c85d63aa05c\",\"span_id\":\"387c95ec2aff8a2d\",\"order_id\":\"ord-2100458\",\"attempts\":1,\"body\":\"{\\\"error\\\": \\\"service unavailable\\\"}\"}",
+      "content_ref": "logs.jsonl#926",
+      "attributes": {
+        "level": "ERROR",
+        "msg": "payment service returned HTTP 503",
+        "similar_lines": 383,
+        "first_seen": "2026-11-20T02:42:51.162Z",
+        "last_seen": "2026-11-20T02:44:03.304Z"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:387c95ec2aff8a2d",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:42:50.148Z",
+      "available_time": "2026-11-20T02:42:51.162Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1013.67ms error",
+      "content": "span 387c95ec2aff8a2d parent=- trace=6576afa64a1ff91179331c85d63aa05c start=2026-11-20T02:42:50.148Z checkout-svc POST /orders 1013.67ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-2100458\",\"http.status_code\":502} resource={\"service.version\":\"1.8.2\"}",
+      "content_ref": "spans.jsonl#387c95ec2aff8a2d",
+      "attributes": {
+        "trace_id": "6576afa64a1ff91179331c85d63aa05c",
+        "parent_span_id": null,
+        "kind": "server",
+        "duration_ms": 1013.67,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:d6bbf4ef83c2d3bc",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:42:50.149Z",
+      "available_time": "2026-11-20T02:42:51.161Z",
+      "version": null,
+      "title": "checkout-svc POST /charge 1011.67ms error",
+      "content": "span d6bbf4ef83c2d3bc parent=387c95ec2aff8a2d trace=6576afa64a1ff91179331c85d63aa05c start=2026-11-20T02:42:50.149Z checkout-svc POST /charge 1011.67ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503} resource={\"service.version\":\"1.8.2\"}",
+      "content_ref": "spans.jsonl#d6bbf4ef83c2d3bc",
+      "attributes": {
+        "trace_id": "6576afa64a1ff91179331c85d63aa05c",
+        "parent_span_id": "387c95ec2aff8a2d",
+        "kind": "client",
+        "duration_ms": 1011.67,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:4700ad4a4830c636",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:42:50.151Z",
+      "available_time": "2026-11-20T02:42:51.159Z",
+      "version": null,
+      "title": "payment-svc db.pool.acquire 1007.67ms error",
+      "content": "span 4700ad4a4830c636 parent=96d83eed9aaae31c trace=6576afa64a1ff91179331c85d63aa05c start=2026-11-20T02:42:50.151Z payment-svc db.pool.acquire 1007.67ms error (PoolTimeout: db pool acquire timed out after 1000ms) resource={\"service.version\":\"2.5.0\"}",
+      "content_ref": "spans.jsonl#4700ad4a4830c636",
+      "attributes": {
+        "trace_id": "6576afa64a1ff91179331c85d63aa05c",
+        "parent_span_id": "96d83eed9aaae31c",
+        "kind": "internal",
+        "duration_ms": 1007.67,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:96d83eed9aaae31c",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:42:50.151Z",
+      "available_time": "2026-11-20T02:42:51.160Z",
+      "version": null,
+      "title": "payment-svc POST /charge 1008.67ms error",
+      "content": "span 96d83eed9aaae31c parent=d6bbf4ef83c2d3bc trace=6576afa64a1ff91179331c85d63aa05c start=2026-11-20T02:42:50.151Z payment-svc POST /charge 1008.67ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-2100458\",\"http.status_code\":503} resource={\"service.version\":\"2.5.0\"}",
+      "content_ref": "spans.jsonl#96d83eed9aaae31c",
+      "attributes": {
+        "trace_id": "6576afa64a1ff91179331c85d63aa05c",
+        "parent_span_id": "d6bbf4ef83c2d3bc",
+        "kind": "server",
+        "duration_ms": 1008.67,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    }
+  ],
+  "usage": {
+    "model_calls": 1,
+    "prompt_tokens": 2063,
+    "completion_tokens": 414,
+    "model_seconds": 8.079931799904443
+  },
+  "wall_seconds": 17.12,
+  "rounds_used": 0,
+  "tool_calls_used": 0,
+  "budget_violations": 0,
+  "unauthorized_attempts": [],
+  "unauthorized_executed": 0,
+  "evidence_budget": {
+    "context_tokens": 8192,
+    "reserved_tokens": 2400,
+    "evidence_token_budget": 5792,
+    "evidence_tokens_total": 1563,
+    "included_ids": [
+      "metric:edf19d2794",
+      "log:2286714109",
+      "span:387c95ec2aff8a2d",
+      "span:d6bbf4ef83c2d3bc",
+      "span:4700ad4a4830c636",
+      "span:96d83eed9aaae31c"
+    ],
+    "omitted_ids": [],
+    "omitted_tokens": 0,
+    "matched": true
+  },
+  "context": {
+    "num_ctx": 8192,
+    "num_predict": 1100,
+    "prompt_tokens_est": 2068,
+    "prompt_tokens_actual": 2063
+  },
+  "config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "baseline_v1@049b7a8933",
+    "code_revision": "4dd96c0b640531427864e6ad1653e75e5e9bee5d-dirty"
+  },
+  "prompt_versions": {
+    "single_call": "baseline_v1@049b7a8933"
+  }
+}

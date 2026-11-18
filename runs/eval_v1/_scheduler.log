@@ -1,0 +1,109 @@
+2026-11-20T03:28:56Z waiting for end of INC-3172_b0_none_r0 in the running batch
+2026-11-20T03:35:06Z waiting for end of INC-3172_b0_none_r0 in the running batch
+2026-11-20T03:35:18Z stopping batch harness pid 18556 at the run boundary after INC-3172_b0_none_r0
+2026-11-20T03:35:24Z yielding GPU to 1 interactive job(s): ['20261120T032323-52d9fe']
+2026-11-20T03:38:14Z yielding GPU to 1 interactive job(s): ['20261120T032323-52d9fe']
+2026-11-20T03:39:54Z interactive jobs finished
+2026-11-20T03:39:54Z waiting for machine health before next run: {'gpu_temp_c': 93, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 2.29}
+2026-11-20T03:40:55Z waiting for machine health before next run: {'gpu_temp_c': 89, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 1.77}
+2026-11-20T03:41:55Z waiting for machine health before next run: {'gpu_temp_c': 89, 'sm_mhz': 900, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 2.04}
+2026-11-20T03:42:55Z waiting for machine health before next run: {'gpu_temp_c': 90, 'sm_mhz': 307, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 2.4}
+2026-11-20T03:43:55Z waiting for machine health before next run: {'gpu_temp_c': 91, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 2.26}
+2026-11-20T03:44:55Z waiting for machine health before next run: {'gpu_temp_c': 86, 'sm_mhz': 982, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 4.36}
+2026-11-20T03:45:55Z waiting for machine health before next run: {'gpu_temp_c': 84, 'sm_mhz': 930, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 3.22}
+2026-11-20T03:46:55Z waiting for machine health before next run: {'gpu_temp_c': 84, 'sm_mhz': 952, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 2.1}
+2026-11-20T03:47:55Z waiting for machine health before next run: {'gpu_temp_c': 79, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 4.66}
+2026-11-20T03:48:55Z waiting for machine health before next run: {'gpu_temp_c': 82, 'sm_mhz': 765, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 3.55}
+2026-11-20T03:49:55Z waiting for machine health before next run: {'gpu_temp_c': 92, 'sm_mhz': 307, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 2.01}
+2026-11-20T03:50:44Z yielding GPU to 1 interactive job(s): ['20261120T034855-a3febe']
+2026-11-20T03:51:24Z interactive jobs finished
+2026-11-20T03:51:24Z waiting for machine health before next run: {'gpu_temp_c': 88, 'sm_mhz': 397, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 1.61}
+2026-11-20T03:52:24Z waiting for machine health before next run: {'gpu_temp_c': 84, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 2.04}
+2026-11-20T03:53:24Z waiting for machine health before next run: {'gpu_temp_c': 90, 'sm_mhz': 307, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 1.41}
+2026-11-20T03:54:32Z waiting for machine health before next run: {'gpu_temp_c': 87, 'sm_mhz': 900, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 0.79}
+2026-11-20T03:55:32Z waiting for machine health before next run: {'gpu_temp_c': 82, 'sm_mhz': 1290, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 0.69}
+2026-11-20T03:56:32Z waiting for machine health before next run: {'gpu_temp_c': 80, 'sm_mhz': 1117, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 1.41}
+2026-11-20T03:57:32Z waiting for machine health before next run: {'gpu_temp_c': 82, 'sm_mhz': 1110, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 0.96}
+2026-11-20T03:58:32Z waiting for machine health before next run: {'gpu_temp_c': 83, 'sm_mhz': 1282, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 2.99}
+2026-11-20T03:59:32Z waiting for machine health before next run: {'gpu_temp_c': 85, 'sm_mhz': 1455, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 3.87}
+2026-11-20T04:00:32Z waiting for machine health before next run: {'gpu_temp_c': 83, 'sm_mhz': 1200, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 2.39}
+2026-11-20T04:01:32Z waiting for machine health before next run: {'gpu_temp_c': 80, 'sm_mhz': 930, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 3.64}
+2026-11-20T04:02:33Z waiting for machine health before next run: {'gpu_temp_c': 76, 'sm_mhz': 1117, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 4.13}
+2026-11-20T04:03:33Z waiting for machine health before next run: {'gpu_temp_c': 72, 'sm_mhz': 1575, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 4.11}
+2026-11-20T04:04:33Z waiting for machine health before next run: {'gpu_temp_c': 65, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 4.38}
+2026-11-20T04:05:33Z waiting for machine health before next run: {'gpu_temp_c': 63, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 3.87}
+2026-11-20T04:06:33Z waiting for machine health before next run: {'gpu_temp_c': 58, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 3.94}
+2026-11-20T04:07:33Z waiting for machine health before next run: {'gpu_temp_c': 56, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': True, 'ram_free_gb': 4.14}
+2026-11-20T04:08:13Z scheduler restarted: throttle parsing fixed ('Not Active' had matched 'Active'); thermal_throttle values logged before this line are unreliable
+2026-11-20T04:08:14Z machine health at run start: {'gpu_temp_c': 62, 'sm_mhz': 1545, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 3.96}
+2026-11-20T04:08:14Z harness --max-runs 1 rc=1 executed=-1
+2026-11-20T04:08:14Z no further runnable runs (or harness error); scheduler exits
+2026-11-20T04:10:19Z restart: harness had refused the manifest (demo entries INC-9001/9002 have no scenario number); demo entries moved to evaluator_private/demo_manifest.json, frozen entries unchanged
+2026-11-20T04:10:20Z machine health at run start: {'gpu_temp_c': 60, 'sm_mhz': 1230, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 4.07}
+2026-11-20T04:10:23Z harness --max-runs 1 rc=1 executed=-1
+2026-11-20T04:10:23Z no further runnable runs (or harness error); scheduler exits
+2026-11-20T04:10:38Z stale batch lock of terminated harness pid 18556 (03:21Z) moved aside to _lock.stale_pid18556
+2026-11-20T04:10:44Z machine health at run start: {'gpu_temp_c': 61, 'sm_mhz': 1282, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 4.0}
+2026-11-20T04:11:12Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:11:12Z machine health at run start: {'gpu_temp_c': 67, 'sm_mhz': 2055, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 3.11}
+2026-11-20T04:11:27Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:11:27Z machine health at run start: {'gpu_temp_c': 65, 'sm_mhz': 2070, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 3.17}
+2026-11-20T04:11:52Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:11:52Z machine health at run start: {'gpu_temp_c': 69, 'sm_mhz': 2055, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 3.01}
+2026-11-20T04:12:32Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:12:32Z waiting for machine health before next run: {'gpu_temp_c': 76, 'sm_mhz': 2040, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.33}
+2026-11-20T04:13:33Z machine health at run start: {'gpu_temp_c': 63, 'sm_mhz': 1305, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.05}
+2026-11-20T04:14:06Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:14:06Z machine health at run start: {'gpu_temp_c': 74, 'sm_mhz': 2040, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.82}
+2026-11-20T04:14:37Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:14:37Z waiting for machine health before next run: {'gpu_temp_c': 78, 'sm_mhz': 2032, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.4}
+2026-11-20T04:15:38Z waiting for machine health before next run: {'gpu_temp_c': 65, 'sm_mhz': 1215, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.28}
+2026-11-20T04:16:38Z waiting for machine health before next run: {'gpu_temp_c': 63, 'sm_mhz': 1170, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.22}
+2026-11-20T04:17:38Z waiting for machine health before next run: {'gpu_temp_c': 61, 'sm_mhz': 1425, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.26}
+2026-11-20T04:18:38Z machine health at run start: {'gpu_temp_c': 63, 'sm_mhz': 1290, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.81}
+2026-11-20T04:19:46Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:19:46Z waiting for machine health before next run: {'gpu_temp_c': 79, 'sm_mhz': 1875, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.3}
+2026-11-20T04:20:46Z waiting for machine health before next run: {'gpu_temp_c': 69, 'sm_mhz': 1117, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.12}
+2026-11-20T04:21:46Z waiting for machine health before next run: {'gpu_temp_c': 66, 'sm_mhz': 1252, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.09}
+2026-11-20T04:22:46Z waiting for machine health before next run: {'gpu_temp_c': 65, 'sm_mhz': 1170, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 0.71}
+2026-11-20T04:23:46Z machine health at run start: {'gpu_temp_c': 60, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.48}
+2026-11-20T04:24:43Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:24:44Z machine health at run start: {'gpu_temp_c': 77, 'sm_mhz': 1650, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.45}
+2026-11-20T04:25:09Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:25:09Z waiting for machine health before next run: {'gpu_temp_c': 80, 'sm_mhz': 2025, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.25}
+2026-11-20T04:26:09Z machine health at run start: {'gpu_temp_c': 65, 'sm_mhz': 1095, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.77}
+2026-11-20T04:26:31Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:26:31Z waiting for machine health before next run: {'gpu_temp_c': 73, 'sm_mhz': 1350, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 0.82}
+2026-11-20T04:27:31Z machine health at run start: {'gpu_temp_c': 66, 'sm_mhz': 1245, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 4.16}
+2026-11-20T04:27:51Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:27:51Z machine health at run start: {'gpu_temp_c': 70, 'sm_mhz': 2047, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 4.08}
+2026-11-20T04:28:23Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:28:23Z machine health at run start: {'gpu_temp_c': 77, 'sm_mhz': 2040, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 4.12}
+2026-11-20T04:28:43Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:28:43Z machine health at run start: {'gpu_temp_c': 76, 'sm_mhz': 1785, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 3.24}
+2026-11-20T04:28:59Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:28:59Z machine health at run start: {'gpu_temp_c': 75, 'sm_mhz': 1867, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 3.15}
+2026-11-20T04:29:26Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:29:27Z machine health at run start: {'gpu_temp_c': 78, 'sm_mhz': 1230, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.55}
+2026-11-20T04:30:37Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:30:37Z waiting for machine health before next run: {'gpu_temp_c': 84, 'sm_mhz': 915, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.66}
+2026-11-20T04:31:37Z machine health at run start: {'gpu_temp_c': 69, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.14}
+2026-11-20T04:31:59Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:31:59Z machine health at run start: {'gpu_temp_c': 77, 'sm_mhz': 2032, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.06}
+2026-11-20T04:32:39Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:32:39Z machine health at run start: {'gpu_temp_c': 75, 'sm_mhz': 210, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.77}
+2026-11-20T04:33:25Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:33:25Z waiting for machine health before next run: {'gpu_temp_c': 83, 'sm_mhz': 1170, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 3.11}
+2026-11-20T04:34:25Z machine health at run start: {'gpu_temp_c': 70, 'sm_mhz': 1425, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.66}
+2026-11-20T04:34:46Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:34:46Z machine health at run start: {'gpu_temp_c': 74, 'sm_mhz': 1455, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.26}
+2026-11-20T04:35:12Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:35:12Z waiting for machine health before next run: {'gpu_temp_c': 80, 'sm_mhz': 2032, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.8}
+2026-11-20T04:36:12Z machine health at run start: {'gpu_temp_c': 68, 'sm_mhz': 1162, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.45}
+2026-11-20T04:36:33Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:36:33Z waiting for machine health before next run: {'gpu_temp_c': 75, 'sm_mhz': 2040, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.33}
+2026-11-20T04:37:33Z machine health at run start: {'gpu_temp_c': 69, 'sm_mhz': 1567, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.56}
+2026-11-20T04:37:48Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:37:48Z machine health at run start: {'gpu_temp_c': 73, 'sm_mhz': 2047, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 1.54}
+2026-11-20T04:38:25Z harness --max-runs 1 rc=0 executed=1
+2026-11-20T04:38:25Z waiting for machine health before next run: {'gpu_temp_c': 81, 'sm_mhz': 2025, 'sm_max_mhz': 2100, 'thermal_throttle': False, 'ram_free_gb': 2.39}

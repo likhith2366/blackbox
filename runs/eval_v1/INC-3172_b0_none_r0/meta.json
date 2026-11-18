@@ -1,0 +1,73 @@
+{
+  "git_head": "4dd96c0b640531427864e6ad1653e75e5e9bee5d",
+  "git_dirty": true,
+  "model": "qwen3:4b",
+  "model_digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+  "model_details": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "qwen3",
+    "families": [
+      "qwen3"
+    ],
+    "parameter_size": "4.0B",
+    "quantization_level": "Q4_K_M"
+  },
+  "model_modified_at": "2026-08-20T15:04:21.1533075-04:00",
+  "run_config_file": "configs/frozen_v1.yaml",
+  "run_config_sha256": "a6e7152858527b8fc48ceded1845a04798a04dde37a3ba3600f306cfa2da66df",
+  "python": "3.11.9",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "batch": "eval_v1",
+  "matrix_sha256": "0718a2b8b976e4f727a6357a6c5d28beed2810c3b74a9784ed8a60210d309046",
+  "run_id": "INC-3172_b0_none_r0",
+  "stub": false,
+  "phase": "eval",
+  "status": "timeout",
+  "seed": 7,
+  "prompt_version": "{\"single_call\": \"baseline_v1@049b7a8933\"}",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false
+  },
+  "run_config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "",
+    "code_revision": "4dd96c0b640531427864e6ad1653e75e5e9bee5d-dirty"
+  },
+  "answer_key_sha256": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+  "snapshot_manifest_sha256": "9d82ee7e975e6a6d642484f44e6838196f87f6e0e5c451f259a914e8b17474ec",
+  "snapshot_incident_sha256": "a5b4c2421697f57805ac62b44ab73159abdf9f9823fdcce4a6ef99d83a91ff96",
+  "start_time": "2026-11-20T03:31:07.125Z",
+  "end_time": "2026-11-20T03:35:15.418Z",
+  "wall_seconds": 248.29,
+  "exception": null,
+  "system_error": "model timeout after 240s",
+  "prompt_versions": {
+    "single_call": "baseline_v1@049b7a8933"
+  },
+  "exceeded_run_timeout": false
+}

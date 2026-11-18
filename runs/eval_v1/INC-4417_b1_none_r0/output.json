@@ -1,0 +1,207 @@
+{
+  "schema_version": "1.0",
+  "system": "b1",
+  "incident_id": "INC-4417",
+  "ablation": "none",
+  "status": "completed",
+  "error": null,
+  "report": {
+    "incident_id": "INC-4417",
+    "system": "b1",
+    "status": "diagnosis",
+    "headline": "Most likely cause: checkout-svc - request rate spike due to payment-svc latency",
+    "ranked_causes": [
+      {
+        "rank": 1,
+        "component": "checkout-svc",
+        "mechanism": "request rate spike due to payment-svc latency",
+        "confidence": "high",
+        "evidence_ids": [
+          "metric:97faf26904"
+        ]
+      },
+      {
+        "rank": 2,
+        "component": "payment-svc",
+        "mechanism": "request rate spike due to internal processing",
+        "confidence": "medium",
+        "evidence_ids": [
+          "metric:709f0f13a6"
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "checkout-svc request rate spiked to 21 requests per second at 03:09:09Z",
+        "kind": "factual",
+        "evidence_ids": [
+          "metric:97faf26904"
+        ]
+      },
+      {
+        "claim_id": "c2",
+        "text": "payment-svc request rate spiked to 21 requests per second at 03:09:09Z",
+        "kind": "factual",
+        "evidence_ids": [
+          "metric:709f0f13a6"
+        ]
+      },
+      {
+        "claim_id": "c3",
+        "text": "Both services experienced a spike in request rates at the same time, suggesting a coordinated issue",
+        "kind": "causal",
+        "evidence_ids": [
+          "metric:97faf26904",
+          "metric:709f0f13a6"
+        ]
+      }
+    ],
+    "unresolved_questions": [
+      "Why did both services spike at the same time?"
+    ],
+    "next_check": "Check for payment-svc latency spikes in the same time window",
+    "suggested_fix": null,
+    "invalid_citations": [],
+    "normalized_citations": [],
+    "citation_audit": [
+      {
+        "where": "cause1",
+        "raw": "metric:97faf26904",
+        "resolved": "metric:97faf26904",
+        "method": "exact"
+      },
+      {
+        "where": "cause2",
+        "raw": "metric:709f0f13a6",
+        "resolved": "metric:709f0f13a6",
+        "method": "exact"
+      },
+      {
+        "where": "claim c1",
+        "raw": "metric:97faf26904",
+        "resolved": "metric:97faf26904",
+        "method": "exact"
+      },
+      {
+        "where": "claim c2",
+        "raw": "metric:709f0f13a6",
+        "resolved": "metric:709f0f13a6",
+        "method": "exact"
+      },
+      {
+        "where": "claim c3",
+        "raw": "metric:97faf26904",
+        "resolved": "metric:97faf26904",
+        "method": "exact"
+      },
+      {
+        "where": "claim c3",
+        "raw": "metric:709f0f13a6",
+        "resolved": "metric:709f0f13a6",
+        "method": "exact"
+      }
+    ]
+  },
+  "steps": [],
+  "evidence_seen": [
+    {
+      "evidence_id": "metric:97faf26904",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:07:38.266Z",
+      "available_time": "2026-11-20T03:10:15.423Z",
+      "version": null,
+      "title": "checkout-svc requests_per_s",
+      "content": "checkout-svc requests_per_s (5.0s points, 2026-11-20T03:07:38.266Z .. 2026-11-20T03:10:15.423Z): min=1.8 max=21 last=4.8\n03:07:38 2.2; 03:07:43 4.2; 03:07:48 3.8; 03:07:53 6.4; 03:07:58 5.4; 03:08:03 4.4; 03:08:08 5.6; 03:08:13 5.4; 03:08:18 5.6; 03:08:23 7; 03:08:25 1.8; 03:08:34 9.6; 03:08:39 4.6; 03:08:44 5; 03:08:49 6.2; 03:08:54 4.2; 03:08:59 5.6; 03:09:04 7.4; 03:09:09 21; 03:09:14 14; 03:09:20 13.8; 03:09:25 17.2; 03:09:30 17.6; 03:09:35 12.4; 03:09:40 14; 03:09:45 16.6; 03:09:50 11; 03:09:55 6; 03:10:00 4.8; 03:10:05 4.6; 03:10:10 4.6; 03:10:15 4.8",
+      "content_ref": "metrics.jsonl#checkout-svc/requests_per_s",
+      "attributes": {
+        "metric": "requests_per_s",
+        "points": 32,
+        "min": 1.8,
+        "max": 21.0,
+        "last": 4.8
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:709f0f13a6",
+      "source": "metrics",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T03:07:34.327Z",
+      "available_time": "2026-11-20T03:10:15.467Z",
+      "version": null,
+      "title": "payment-svc requests_per_s",
+      "content": "payment-svc requests_per_s (5.0s points, 2026-11-20T03:07:34.327Z .. 2026-11-20T03:10:15.467Z): min=0.2 max=21 last=4.8\n03:07:34 0.2; 03:07:39 3.6; 03:07:44 3.2; 03:07:49 4.6; 03:07:54 5.8; 03:07:59 5; 03:08:04 5; 03:08:09 6; 03:08:14 5.2; 03:08:19 6.2; 03:08:24 5.6; 03:08:29 1.4; 03:08:34 9.6; 03:08:39 4.6; 03:08:44 5; 03:08:49 6.2; 03:08:54 4.2; 03:08:59 5.6; 03:09:04 7.4; 03:09:09 21; 03:09:14 14; 03:09:20 13.8; 03:09:25 17.2; 03:09:30 17.6; 03:09:35 12.4; 03:09:40 14; 03:09:45 16.6; 03:09:50 11; 03:09:55 6; 03:10:00 4.8; 03:10:05 4.6; 03:10:10 4.6; 03:10:15 4.8",
+      "content_ref": "metrics.jsonl#payment-svc/requests_per_s",
+      "attributes": {
+        "metric": "requests_per_s",
+        "points": 33,
+        "min": 0.2,
+        "max": 21.0,
+        "last": 4.8
+      },
+      "truncated": false,
+      "fixture": false
+    }
+  ],
+  "usage": {
+    "model_calls": 1,
+    "prompt_tokens": 1659,
+    "completion_tokens": 376,
+    "model_seconds": 7.612679400015622
+  },
+  "wall_seconds": 17.87,
+  "rounds_used": 0,
+  "tool_calls_used": 0,
+  "budget_violations": 0,
+  "unauthorized_attempts": [],
+  "unauthorized_executed": 0,
+  "evidence_budget": {
+    "context_tokens": 8192,
+    "reserved_tokens": 2400,
+    "evidence_token_budget": 5792,
+    "evidence_tokens_total": 1154,
+    "included_ids": [
+      "metric:97faf26904",
+      "metric:709f0f13a6"
+    ],
+    "omitted_ids": [],
+    "omitted_tokens": 0,
+    "matched": true
+  },
+  "context": {
+    "num_ctx": 8192,
+    "num_predict": 1100,
+    "prompt_tokens_est": 1664,
+    "prompt_tokens_actual": 1659
+  },
+  "config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "baseline_v1@049b7a8933",
+    "code_revision": "4dd96c0b640531427864e6ad1653e75e5e9bee5d-dirty"
+  },
+  "prompt_versions": {
+    "single_call": "baseline_v1@049b7a8933"
+  }
+}
