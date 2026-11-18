@@ -1,0 +1,7 @@
+{
+  "incident_id": "INC-0000",
+  "mode": "live",
+  "problem_description": "Checkout errors spiked shortly after a release.",
+  "window_start": null,
+  "window_end": null
+}

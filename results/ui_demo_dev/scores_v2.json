@@ -1,0 +1,77 @@
+{
+  "family": "development",
+  "rows": [
+    {
+      "run": "20261120T034855-a3febe",
+      "incident_id": "INC-9001",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "ff6c0998390ab9e58182380644e6f0c7d9944536f624b8f6df825b9559c0e6df",
+      "answer_key_recorded_at_run": null,
+      "decisive_total": 4,
+      "retrieved_v1": 1,
+      "retrieved_v2": 1,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:d142601": null,
+        "deploy:d-576": null,
+        "metric:03d4f590b8": null,
+        "log:4f9f142c0b": "equivalent:log:3bf4f24e33"
+      },
+      "cited_detail": {
+        "commit:d142601": null,
+        "deploy:d-576": null,
+        "metric:03d4f590b8": null,
+        "log:4f9f142c0b": null
+      }
+    },
+    {
+      "run": "20261120T035254-b72b2e",
+      "incident_id": "INC-9002",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "6f53fddc179e353989b49e27cac8330e6f232ac55bfa98879576dbe2cb0b98ae",
+      "answer_key_recorded_at_run": null,
+      "decisive_total": 4,
+      "retrieved_v1": 1,
+      "retrieved_v2": 1,
+      "cited_v2": 1,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:0d6ba14": null,
+        "deploy:d-581": null,
+        "metric:858412a4f1": null,
+        "log:7db2506518": "exact"
+      },
+      "cited_detail": {
+        "commit:0d6ba14": null,
+        "deploy:d-581": null,
+        "metric:858412a4f1": null,
+        "log:7db2506518": "exact"
+      }
+    }
+  ],
+  "notes": [],
+  "name": "ui_demo_dev",
+  "scoring_version": "v2",
+  "answer_keys_dir": "A:\\subjects\\genAI\\final_project\\blackbox\\evaluator_private\\answer_keys",
+  "generated": "2026-11-20T03:56:48Z",
+  "code": {
+    "scoring_v1": {
+      "file": "eval/metrics.py",
+      "sha256": "906d4b9ca8a8e47d6cd0616ae395a7f5dde410329682cf877ad5c000e2c44d6e"
+    },
+    "scoring_v2": {
+      "file": "scripts/score_v2.py",
+      "sha256": "97e16197b9b86955d888a0d00c69a912f08085f2f655db894e7652b95250d57e"
+    },
+    "git_head": "4dd96c0b640531427864e6ad1653e75e5e9bee5d"
+  }
+}

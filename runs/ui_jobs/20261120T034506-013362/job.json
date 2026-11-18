@@ -1,0 +1,19 @@
+{
+  "job_id": "20261120T034506-013362",
+  "status": "cancelled",
+  "created": "2026-11-20T03:45:06Z",
+  "started": null,
+  "ended": "2026-11-20T03:45:13Z",
+  "run_id": null,
+  "error": "cancelled before it started",
+  "request": {
+    "incident_id": "INC-0000",
+    "mode": "snapshot",
+    "followup_of": null,
+    "problem_description": "cancel/retry test - no inference expected",
+    "window_start": null,
+    "window_end": null
+  },
+  "meta": null,
+  "retry_of": "20261120T034458-217f12"
+}

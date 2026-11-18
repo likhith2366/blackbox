@@ -1,0 +1,1852 @@
+{
+  "schema_version": "1.0",
+  "system": "blackbox",
+  "incident_id": "INC-0000",
+  "ablation": "none",
+  "status": "completed",
+  "error": null,
+  "report": {
+    "incident_id": "INC-0000",
+    "system": "blackbox",
+    "status": "diagnosis",
+    "headline": "Most likely cause: checkout-svc - payment call timeout",
+    "ranked_causes": [
+      {
+        "rank": 1,
+        "component": "checkout-svc",
+        "mechanism": "payment call timeout",
+        "confidence": "high",
+        "evidence_ids": [
+          "log:7ad0f221b0",
+          "log:492b1afbce",
+          "log:52f758cf6c",
+          "log:fd4c7a9dd1",
+          "log:202ecded7d",
+          "log:1322fad604"
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "checkout-svc payment calls timed out after 250ms",
+        "kind": "factual",
+        "evidence_ids": [
+          "log:7ad0f221b0",
+          "log:492b1afbce",
+          "log:52f758cf6c",
+          "log:fd4c7a9dd1"
+        ]
+      },
+      {
+        "claim_id": "c2",
+        "text": "checkout-svc payment calls timed out after 250ms",
+        "kind": "factual",
+        "evidence_ids": [
+          "log:202ecded7d",
+          "log:1322fad604"
+        ]
+      }
+    ],
+    "unresolved_questions": [
+      "Why did payment-svc take 5558ms to process a charge?"
+    ],
+    "next_check": "Check payment-svc logs for the 5558ms charge failure",
+    "suggested_fix": null,
+    "invalid_citations": [],
+    "normalized_citations": [],
+    "citation_audit": [
+      {
+        "where": "cause1",
+        "raw": "log:7ad0f221b0",
+        "resolved": "log:7ad0f221b0",
+        "method": "exact"
+      },
+      {
+        "where": "cause1",
+        "raw": "log:492b1afbce",
+        "resolved": "log:492b1afbce",
+        "method": "exact"
+      },
+      {
+        "where": "cause1",
+        "raw": "log:52f758cf6c",
+        "resolved": "log:52f758cf6c",
+        "method": "exact"
+      },
+      {
+        "where": "cause1",
+        "raw": "log:fd4c7a9dd1",
+        "resolved": "log:fd4c7a9dd1",
+        "method": "exact"
+      },
+      {
+        "where": "cause1",
+        "raw": "log:202ecded7d",
+        "resolved": "log:202ecded7d",
+        "method": "exact"
+      },
+      {
+        "where": "cause1",
+        "raw": "log:1322fad604",
+        "resolved": "log:1322fad604",
+        "method": "exact"
+      },
+      {
+        "where": "claim c1",
+        "raw": "log:7ad0f221b0",
+        "resolved": "log:7ad0f221b0",
+        "method": "exact"
+      },
+      {
+        "where": "claim c1",
+        "raw": "log:492b1afbce",
+        "resolved": "log:492b1afbce",
+        "method": "exact"
+      },
+      {
+        "where": "claim c1",
+        "raw": "log:52f758cf6c",
+        "resolved": "log:52f758cf6c",
+        "method": "exact"
+      },
+      {
+        "where": "claim c1",
+        "raw": "log:fd4c7a9dd1",
+        "resolved": "log:fd4c7a9dd1",
+        "method": "exact"
+      },
+      {
+        "where": "claim c2",
+        "raw": "log:202ecded7d",
+        "resolved": "log:202ecded7d",
+        "method": "exact"
+      },
+      {
+        "where": "claim c2",
+        "raw": "log:1322fad604",
+        "resolved": "log:1322fad604",
+        "method": "exact"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "round": 1,
+      "prompt_tokens": 1085,
+      "completion_tokens": 110,
+      "model_seconds": 10.091071099974215,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"level\": \"ERROR\",\n        \"limit\": 15\n      }\n    }\n  ],\n  \"decision\": \"continue\",\n  \"rationale\": \"Start by checking recent error logs for checkout-svc to identify potential error patterns or causes. The alert indicates a high error rate, so examining logs will help find the root cause.\"\n}",
+      "model_decision": "continue",
+      "hypotheses_before": [],
+      "hypotheses_after": [],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r1c1",
+          "round": 1,
+          "tool": "search_logs",
+          "args": {
+            "service": "checkout-svc",
+            "level": "ERROR",
+            "limit": 15
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r1c1",
+          "tool": "search_logs",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "log:7ad0f221b0",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.342Z",
+              "available_time": "2026-11-20T02:38:57.342Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:57.342Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"0c13fc60dad783621a3c7b8c8c29d9ab\",\"span_id\":\"6a85e8d8c80a8d4a\",\"order_id\":\"ord-0300446\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#900",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 900,
+                "level": "ERROR",
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:492b1afbce",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.605Z",
+              "available_time": "2026-11-20T02:38:57.605Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:57.605Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"4cbb35c5f87d87185d98fd1666bdef38\",\"span_id\":\"472f2ca402c82c90\",\"order_id\":\"ord-0300447\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#902",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 902,
+                "level": "ERROR",
+                "trace_id": "4cbb35c5f87d87185d98fd1666bdef38"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:52f758cf6c",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.683Z",
+              "available_time": "2026-11-20T02:38:57.683Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:57.683Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"a1c39eddf626c2ac66e819c0dd1ef741\",\"span_id\":\"9bc7ba523d9f270f\",\"order_id\":\"ord-0300448\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#903",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 903,
+                "level": "ERROR",
+                "trace_id": "a1c39eddf626c2ac66e819c0dd1ef741"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:fd4c7a9dd1",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.823Z",
+              "available_time": "2026-11-20T02:38:57.823Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:57.823Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"c3bb97166a0c4eaf87f1b7e6e0db1f01\",\"span_id\":\"a91b68e5228d85fd\",\"order_id\":\"ord-0300449\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#904",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 904,
+                "level": "ERROR",
+                "trace_id": "c3bb97166a0c4eaf87f1b7e6e0db1f01"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:202ecded7d",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.964Z",
+              "available_time": "2026-11-20T02:38:57.964Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:57.964Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"a53c27123c7d1139a10aa09fdb3ca8ea\",\"span_id\":\"59148735093de07b\",\"order_id\":\"ord-0300450\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#907",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 907,
+                "level": "ERROR",
+                "trace_id": "a53c27123c7d1139a10aa09fdb3ca8ea"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:1322fad604",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:58.446Z",
+              "available_time": "2026-11-20T02:38:58.446Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:58.446Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"02825f33e504615d93419f80a348bcd0\",\"span_id\":\"9d6ca3c0549a78de\",\"order_id\":\"ord-0300451\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#911",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 911,
+                "level": "ERROR",
+                "trace_id": "02825f33e504615d93419f80a348bcd0"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:7573efdf85",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:58.508Z",
+              "available_time": "2026-11-20T02:38:58.508Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:58.508Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"38397ca7e0259981a4abdb3293bd2940\",\"span_id\":\"668031ed85f79db4\",\"order_id\":\"ord-0300452\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#912",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 912,
+                "level": "ERROR",
+                "trace_id": "38397ca7e0259981a4abdb3293bd2940"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:e2e66cace7",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:58.850Z",
+              "available_time": "2026-11-20T02:38:58.850Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:58.850Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"09fdb43f09b9b96d138e94d8b21cd95f\",\"span_id\":\"4f058f6847d66239\",\"order_id\":\"ord-0300453\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#915",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 915,
+                "level": "ERROR",
+                "trace_id": "09fdb43f09b9b96d138e94d8b21cd95f"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:89fb8bf0d0",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:59.193Z",
+              "available_time": "2026-11-20T02:38:59.193Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:59.193Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"5a2cb1b60cb2f028bbad64eb8a111d92\",\"span_id\":\"47159d81eac5621f\",\"order_id\":\"ord-0300454\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#917",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 917,
+                "level": "ERROR",
+                "trace_id": "5a2cb1b60cb2f028bbad64eb8a111d92"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:ae32c12fad",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:59.222Z",
+              "available_time": "2026-11-20T02:38:59.222Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:59.222Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"5eedfb2601d7ffcf7460d7a79bf902d8\",\"span_id\":\"554e37961f1594f9\",\"order_id\":\"ord-0300455\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#918",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 918,
+                "level": "ERROR",
+                "trace_id": "5eedfb2601d7ffcf7460d7a79bf902d8"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:9fe67bc03a",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:59.502Z",
+              "available_time": "2026-11-20T02:38:59.502Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:59.502Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"56754d87500d9bd11319c52c1419a61a\",\"span_id\":\"670ecfe9c6d7b3ba\",\"order_id\":\"ord-0300456\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#920",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 920,
+                "level": "ERROR",
+                "trace_id": "56754d87500d9bd11319c52c1419a61a"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:9830adba07",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:59.717Z",
+              "available_time": "2026-11-20T02:38:59.717Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:59.717Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"1673537b2f148799c50ca64ba7f4a19c\",\"span_id\":\"611fd2fe33783360\",\"order_id\":\"ord-0300457\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#923",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 923,
+                "level": "ERROR",
+                "trace_id": "1673537b2f148799c50ca64ba7f4a19c"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:a2dac6fc30",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:59.747Z",
+              "available_time": "2026-11-20T02:38:59.747Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:59.747Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"d658ea6b45c571fc0b1036ba8da4a1b3\",\"span_id\":\"f8ea329ea5aee351\",\"order_id\":\"ord-0300458\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#924",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 924,
+                "level": "ERROR",
+                "trace_id": "d658ea6b45c571fc0b1036ba8da4a1b3"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:33ddb861ac",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:59.855Z",
+              "available_time": "2026-11-20T02:38:59.855Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:59.855Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"8aa0b5ee4354911ad5eeb00744fcf0f7\",\"span_id\":\"54dc2d9a3a81eec3\",\"order_id\":\"ord-0300459\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#925",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 925,
+                "level": "ERROR",
+                "trace_id": "8aa0b5ee4354911ad5eeb00744fcf0f7"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:0d5aef4f32",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:59.903Z",
+              "available_time": "2026-11-20T02:38:59.903Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms",
+              "content": "{\"ts\":\"2026-11-20T02:38:59.903Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"fe5ac4c03e95a48e774d613f3b217f67\",\"span_id\":\"6f281746c0225bd6\",\"order_id\":\"ord-0300460\",\"attempts\":5}",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#927",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-20T03:36:06.346Z",
+                "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+                "line": 927,
+                "level": "ERROR",
+                "trace_id": "fe5ac4c03e95a48e774d613f3b217f67"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 213,
+          "truncated": true,
+          "error": null,
+          "elapsed_ms": 195.23680000565946,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [],
+      "orchestration_rules": [
+        "first-tool rule: no evidence yet, so >=1 tool call required and decision limited to 'continue' (orchestration, not model behaviour)"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1116,
+        "fixed_part_cut": false,
+        "prompt_tokens_est": 1090,
+        "prompt_tokens_actual": 1085,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": ""
+    },
+    {
+      "round": 2,
+      "prompt_tokens": 3762,
+      "completion_tokens": 427,
+      "model_seconds": 64.44391889998224,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"payment call timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"high\",\n      \"supporting\": [\n        \"log:7ad0f221b0\",\n        \"log:492b1afbce\",\n        \"log:52f758cf6c\",\n        \"log:fd4c7a9dd1\",\n        \"log:202ecded7d\",\n        \"log:1322fad604\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"slow response\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"log:7ad0f221b0\",\n        \"log:492b1afbce\",\n        \"log:52f758cf6c\",\n        \"log:fd4c7a9dd1\",\n        \"log:202ecded7d\",\n        \"log:1322fad604\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_trace\",\n      \"args\": {\n        \"trace_id\": \"0c13fc60dad783621a3c7b8c8c29d9ab\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The logs show multiple checkout-svc errors with payment call timeouts. The error rate is high, indicating payment-svc is slow or checkout-svc is timing out. The trace_id from the first log shows a specific trace that can be checked to see if payment-svc is the cause.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "payment call timeout",
+          "status": "active",
+          "confidence": "high",
+          "supporting": [
+            "log:7ad0f221b0",
+            "log:492b1afbce",
+            "log:52f758cf6c",
+            "log:fd4c7a9dd1",
+            "log:202ecded7d",
+            "log:1322fad604"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "payment-svc",
+          "mechanism": "slow response",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "log:7ad0f221b0",
+            "log:492b1afbce",
+            "log:52f758cf6c",
+            "log:fd4c7a9dd1",
+            "log:202ecded7d",
+            "log:1322fad604"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [
+        "+ h1 [active/high] checkout-svc: payment call timeout",
+        "+ h2 [active/medium] payment-svc: slow response"
+      ],
+      "tool_requests": [
+        {
+          "call_id": "r2c1",
+          "round": 2,
+          "tool": "get_trace",
+          "args": {
+            "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r2c1",
+          "tool": "get_trace",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "span:6a85e8d8c80a8d4a",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:56.008Z",
+              "available_time": "2026-11-20T02:38:57.342Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1334.86ms error",
+              "content": "span 6a85e8d8c80a8d4a parent=- trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.008Z checkout-svc POST /orders 1334.86ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-0300446\",\"http.status_code\":504} resource={\"service.version\":\"1.9.0\"}",
+              "content_ref": "spans.jsonl#6a85e8d8c80a8d4a",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": null,
+                "kind": "server",
+                "duration_ms": 1334.86,
+                "status": "error"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:8c36ef2ea835c409",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:56.009Z",
+              "available_time": "2026-11-20T02:38:56.271Z",
+              "version": null,
+              "title": "checkout-svc POST /charge 261.84ms error",
+              "content": "span 8c36ef2ea835c409 parent=6a85e8d8c80a8d4a trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.009Z checkout-svc POST /charge 261.84ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":250} resource={\"service.version\":\"1.9.0\"}",
+              "content_ref": "spans.jsonl#8c36ef2ea835c409",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "6a85e8d8c80a8d4a",
+                "kind": "client",
+                "duration_ms": 261.84,
+                "status": "error"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:14f6b062b3ba69ce",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:38:56.021Z",
+              "available_time": "2026-11-20T02:38:56.333Z",
+              "version": null,
+              "title": "payment-svc risk.score 311.47ms ok",
+              "content": "span 14f6b062b3ba69ce parent=289f1856dc917f3f trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.021Z payment-svc risk.score 311.47ms ok {\"amount\":807.71} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#14f6b062b3ba69ce",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "289f1856dc917f3f",
+                "kind": "internal",
+                "duration_ms": 311.47,
+                "status": "ok"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:289f1856dc917f3f",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:38:56.021Z",
+              "available_time": "2026-11-20T02:39:01.898Z",
+              "version": null,
+              "title": "payment-svc POST /charge 5876.62ms error",
+              "content": "span 289f1856dc917f3f parent=8c36ef2ea835c409 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.021Z payment-svc POST /charge 5876.62ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) {\"http.route\":\"/charge\",\"order.id\":\"ord-0300446\"} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#289f1856dc917f3f",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "8c36ef2ea835c409",
+                "kind": "server",
+                "duration_ms": 5876.62,
+                "status": "error"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:5397656d90f92ee8",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:38:56.021Z",
+              "available_time": "2026-11-20T02:38:56.021Z",
+              "version": null,
+              "title": "payment-svc db.pool.acquire 0.0ms ok",
+              "content": "span 5397656d90f92ee8 parent=289f1856dc917f3f trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.021Z payment-svc db.pool.acquire 0.0ms ok {\"db.pool.wait_ms\":0.0} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#5397656d90f92ee8",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "289f1856dc917f3f",
+                "kind": "internal",
+                "duration_ms": 0.0,
+                "status": "ok"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:0d045d5eb341f195",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:56.271Z",
+              "available_time": "2026-11-20T02:38:56.549Z",
+              "version": null,
+              "title": "checkout-svc POST /charge 278.2ms error",
+              "content": "span 0d045d5eb341f195 parent=6a85e8d8c80a8d4a trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.271Z checkout-svc POST /charge 278.2ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":2,\"http.timeout_ms\":250} resource={\"service.version\":\"1.9.0\"}",
+              "content_ref": "spans.jsonl#0d045d5eb341f195",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "6a85e8d8c80a8d4a",
+                "kind": "client",
+                "duration_ms": 278.2,
+                "status": "error"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:5e04982907a8fcd9",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:38:56.286Z",
+              "available_time": "2026-11-20T02:39:01.857Z",
+              "version": null,
+              "title": "payment-svc POST /charge 5570.74ms error",
+              "content": "span 5e04982907a8fcd9 parent=0d045d5eb341f195 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.286Z payment-svc POST /charge 5570.74ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) {\"http.route\":\"/charge\",\"order.id\":\"ord-0300446\"} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#5e04982907a8fcd9",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "0d045d5eb341f195",
+                "kind": "server",
+                "duration_ms": 5570.74,
+                "status": "error"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:fa6d7160c82d6d90",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:38:56.286Z",
+              "available_time": "2026-11-20T02:38:56.286Z",
+              "version": null,
+              "title": "payment-svc db.pool.acquire 0.0ms ok",
+              "content": "span fa6d7160c82d6d90 parent=5e04982907a8fcd9 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.286Z payment-svc db.pool.acquire 0.0ms ok {\"db.pool.wait_ms\":0.0} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#fa6d7160c82d6d90",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "5e04982907a8fcd9",
+                "kind": "internal",
+                "duration_ms": 0.0,
+                "status": "ok"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:50078377939dfd61",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:38:56.287Z",
+              "available_time": "2026-11-20T02:39:01.844Z",
+              "version": null,
+              "title": "payment-svc risk.score 5557.3ms ok",
+              "content": "span 50078377939dfd61 parent=5e04982907a8fcd9 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.287Z payment-svc risk.score 5557.3ms ok {\"amount\":807.71} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#50078377939dfd61",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "5e04982907a8fcd9",
+                "kind": "internal",
+                "duration_ms": 5557.3,
+                "status": "ok"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:e65c0977696d79aa",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:38:56.333Z",
+              "available_time": "2026-11-20T02:38:56.334Z",
+              "version": null,
+              "title": "payment-svc db.query 1.02ms ok",
+              "content": "span e65c0977696d79aa parent=289f1856dc917f3f trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.333Z payment-svc db.query 1.02ms ok {\"db.statement\":\"velocity\"} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#e65c0977696d79aa",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "289f1856dc917f3f",
+                "kind": "internal",
+                "duration_ms": 1.02,
+                "status": "ok"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:6aab0c746bede6f9",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:38:56.334Z",
+              "available_time": "2026-11-20T02:38:56.334Z",
+              "version": null,
+              "title": "payment-svc db.query 0.0ms ok",
+              "content": "span 6aab0c746bede6f9 parent=289f1856dc917f3f trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.334Z payment-svc db.query 0.0ms ok {\"db.statement\":\"recent_duplicate\"} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#6aab0c746bede6f9",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "289f1856dc917f3f",
+                "kind": "internal",
+                "duration_ms": 0.0,
+                "status": "ok"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:af6d905476fb680f",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:38:56.334Z",
+              "available_time": "2026-11-20T02:39:01.892Z",
+              "version": null,
+              "title": "payment-svc db.query 5558.08ms error",
+              "content": "span af6d905476fb680f parent=289f1856dc917f3f trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.334Z payment-svc db.query 5558.08ms error (IntegrityError: UNIQUE constraint failed: payments.order_id) {\"db.statement\":\"insert_payment\"} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#af6d905476fb680f",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "289f1856dc917f3f",
+                "kind": "internal",
+                "duration_ms": 5558.08,
+                "status": "error"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:9ec4c69abb6d1320",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:56.550Z",
+              "available_time": "2026-11-20T02:38:56.815Z",
+              "version": null,
+              "title": "checkout-svc POST /charge 264.62ms error",
+              "content": "span 9ec4c69abb6d1320 parent=6a85e8d8c80a8d4a trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.550Z checkout-svc POST /charge 264.62ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":3,\"http.timeout_ms\":250} resource={\"service.version\":\"1.9.0\"}",
+              "content_ref": "spans.jsonl#9ec4c69abb6d1320",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "6a85e8d8c80a8d4a",
+                "kind": "client",
+                "duration_ms": 264.62,
+                "status": "error"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:848f471ce337f469",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:56.816Z",
+              "available_time": "2026-11-20T02:38:57.078Z",
+              "version": null,
+              "title": "checkout-svc POST /charge 262.13ms error",
+              "content": "span 848f471ce337f469 parent=6a85e8d8c80a8d4a trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.816Z checkout-svc POST /charge 262.13ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":4,\"http.timeout_ms\":250} resource={\"service.version\":\"1.9.0\"}",
+              "content_ref": "spans.jsonl#848f471ce337f469",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "6a85e8d8c80a8d4a",
+                "kind": "client",
+                "duration_ms": 262.13,
+                "status": "error"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:49e5fed6d035daf0",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.078Z",
+              "available_time": "2026-11-20T02:38:57.341Z",
+              "version": null,
+              "title": "checkout-svc POST /charge 263.19ms error",
+              "content": "span 49e5fed6d035daf0 parent=6a85e8d8c80a8d4a trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:57.078Z checkout-svc POST /charge 263.19ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":5,\"http.timeout_ms\":250} resource={\"service.version\":\"1.9.0\"}",
+              "content_ref": "spans.jsonl#49e5fed6d035daf0",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "6a85e8d8c80a8d4a",
+                "kind": "client",
+                "duration_ms": 263.19,
+                "status": "error"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:55d728aad4aa2b6c",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:39:01.845Z",
+              "available_time": "2026-11-20T02:39:01.845Z",
+              "version": null,
+              "title": "payment-svc db.query 0.0ms ok",
+              "content": "span 55d728aad4aa2b6c parent=5e04982907a8fcd9 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:39:01.845Z payment-svc db.query 0.0ms ok {\"db.statement\":\"velocity\"} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#55d728aad4aa2b6c",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "5e04982907a8fcd9",
+                "kind": "internal",
+                "duration_ms": 0.0,
+                "status": "ok"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:1ed7bd63a3e6dd4d",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:39:01.848Z",
+              "available_time": "2026-11-20T02:39:01.848Z",
+              "version": null,
+              "title": "payment-svc db.query 0.0ms ok",
+              "content": "span 1ed7bd63a3e6dd4d parent=5e04982907a8fcd9 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:39:01.848Z payment-svc db.query 0.0ms ok {\"db.statement\":\"recent_duplicate\"} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#1ed7bd63a3e6dd4d",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "5e04982907a8fcd9",
+                "kind": "internal",
+                "duration_ms": 0.0,
+                "status": "ok"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:877a8cd91c6decbd",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:39:01.850Z",
+              "available_time": "2026-11-20T02:39:01.883Z",
+              "version": null,
+              "title": "payment-svc POST /charge 32.99ms error",
+              "content": "span 877a8cd91c6decbd parent=9ec4c69abb6d1320 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:39:01.850Z payment-svc POST /charge 32.99ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) {\"http.route\":\"/charge\",\"order.id\":\"ord-0300446\"} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#877a8cd91c6decbd",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "9ec4c69abb6d1320",
+                "kind": "server",
+                "duration_ms": 32.99,
+                "status": "error"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:cba8a6e7e3bb57e4",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:39:01.850Z",
+              "available_time": "2026-11-20T02:39:01.878Z",
+              "version": null,
+              "title": "payment-svc db.pool.acquire 27.96ms ok",
+              "content": "span cba8a6e7e3bb57e4 parent=877a8cd91c6decbd trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:39:01.850Z payment-svc db.pool.acquire 27.96ms ok {\"db.pool.wait_ms\":27.96} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#cba8a6e7e3bb57e4",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "877a8cd91c6decbd",
+                "kind": "internal",
+                "duration_ms": 27.96,
+                "status": "ok"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "span:6656054f1b8558b1",
+              "source": "traces",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:39:01.852Z",
+              "available_time": "2026-11-20T02:39:01.853Z",
+              "version": null,
+              "title": "payment-svc db.query 1.0ms ok",
+              "content": "span 6656054f1b8558b1 parent=5e04982907a8fcd9 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:39:01.852Z payment-svc db.query 1.0ms ok {\"db.statement\":\"insert_payment\"} resource={\"service.version\":\"2.4.1\"}",
+              "content_ref": "spans.jsonl#6656054f1b8558b1",
+              "attributes": {
+                "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+                "parent_span_id": "5e04982907a8fcd9",
+                "kind": "internal",
+                "duration_ms": 1.0,
+                "status": "ok"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 20,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 4.668000037781894,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "log:7ad0f221b0",
+          "resolved": "log:7ad0f221b0",
+          "method": "exact"
+        },
+        {
+          "where": "h1.supporting",
+          "raw": "log:492b1afbce",
+          "resolved": "log:492b1afbce",
+          "method": "exact"
+        },
+        {
+          "where": "h1.supporting",
+          "raw": "log:52f758cf6c",
+          "resolved": "log:52f758cf6c",
+          "method": "exact"
+        },
+        {
+          "where": "h1.supporting",
+          "raw": "log:fd4c7a9dd1",
+          "resolved": "log:fd4c7a9dd1",
+          "method": "exact"
+        },
+        {
+          "where": "h1.supporting",
+          "raw": "log:202ecded7d",
+          "resolved": "log:202ecded7d",
+          "method": "exact"
+        },
+        {
+          "where": "h1.supporting",
+          "raw": "log:1322fad604",
+          "resolved": "log:1322fad604",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "log:7ad0f221b0",
+          "resolved": "log:7ad0f221b0",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "log:492b1afbce",
+          "resolved": "log:492b1afbce",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "log:52f758cf6c",
+          "resolved": "log:52f758cf6c",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "log:fd4c7a9dd1",
+          "resolved": "log:fd4c7a9dd1",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "log:202ecded7d",
+          "resolved": "log:202ecded7d",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "log:1322fad604",
+          "resolved": "log:1322fad604",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1134,
+        "fixed_part_cut": false,
+        "notebook_budget": 6008,
+        "notebook_tokens": 2664,
+        "records_retrieved": 15,
+        "records_full": 15,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 3767,
+        "prompt_tokens_actual": 3762,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "stop_diagnosis",
+      "stop_reason": "h1 supported by 6 ids (6 runtime)"
+    }
+  ],
+  "evidence_seen": [
+    {
+      "evidence_id": "log:7ad0f221b0",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:57.342Z",
+      "available_time": "2026-11-20T02:38:57.342Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:57.342Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"0c13fc60dad783621a3c7b8c8c29d9ab\",\"span_id\":\"6a85e8d8c80a8d4a\",\"order_id\":\"ord-0300446\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#900",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 900,
+        "level": "ERROR",
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:492b1afbce",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:57.605Z",
+      "available_time": "2026-11-20T02:38:57.605Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:57.605Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"4cbb35c5f87d87185d98fd1666bdef38\",\"span_id\":\"472f2ca402c82c90\",\"order_id\":\"ord-0300447\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#902",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 902,
+        "level": "ERROR",
+        "trace_id": "4cbb35c5f87d87185d98fd1666bdef38"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:52f758cf6c",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:57.683Z",
+      "available_time": "2026-11-20T02:38:57.683Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:57.683Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"a1c39eddf626c2ac66e819c0dd1ef741\",\"span_id\":\"9bc7ba523d9f270f\",\"order_id\":\"ord-0300448\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#903",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 903,
+        "level": "ERROR",
+        "trace_id": "a1c39eddf626c2ac66e819c0dd1ef741"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:fd4c7a9dd1",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:57.823Z",
+      "available_time": "2026-11-20T02:38:57.823Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:57.823Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"c3bb97166a0c4eaf87f1b7e6e0db1f01\",\"span_id\":\"a91b68e5228d85fd\",\"order_id\":\"ord-0300449\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#904",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 904,
+        "level": "ERROR",
+        "trace_id": "c3bb97166a0c4eaf87f1b7e6e0db1f01"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:202ecded7d",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:57.964Z",
+      "available_time": "2026-11-20T02:38:57.964Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:57.964Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"a53c27123c7d1139a10aa09fdb3ca8ea\",\"span_id\":\"59148735093de07b\",\"order_id\":\"ord-0300450\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#907",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 907,
+        "level": "ERROR",
+        "trace_id": "a53c27123c7d1139a10aa09fdb3ca8ea"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:1322fad604",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:58.446Z",
+      "available_time": "2026-11-20T02:38:58.446Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:58.446Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"02825f33e504615d93419f80a348bcd0\",\"span_id\":\"9d6ca3c0549a78de\",\"order_id\":\"ord-0300451\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#911",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 911,
+        "level": "ERROR",
+        "trace_id": "02825f33e504615d93419f80a348bcd0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:7573efdf85",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:58.508Z",
+      "available_time": "2026-11-20T02:38:58.508Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:58.508Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"38397ca7e0259981a4abdb3293bd2940\",\"span_id\":\"668031ed85f79db4\",\"order_id\":\"ord-0300452\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#912",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 912,
+        "level": "ERROR",
+        "trace_id": "38397ca7e0259981a4abdb3293bd2940"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:e2e66cace7",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:58.850Z",
+      "available_time": "2026-11-20T02:38:58.850Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:58.850Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"09fdb43f09b9b96d138e94d8b21cd95f\",\"span_id\":\"4f058f6847d66239\",\"order_id\":\"ord-0300453\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#915",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 915,
+        "level": "ERROR",
+        "trace_id": "09fdb43f09b9b96d138e94d8b21cd95f"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:89fb8bf0d0",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:59.193Z",
+      "available_time": "2026-11-20T02:38:59.193Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:59.193Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"5a2cb1b60cb2f028bbad64eb8a111d92\",\"span_id\":\"47159d81eac5621f\",\"order_id\":\"ord-0300454\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#917",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 917,
+        "level": "ERROR",
+        "trace_id": "5a2cb1b60cb2f028bbad64eb8a111d92"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:ae32c12fad",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:59.222Z",
+      "available_time": "2026-11-20T02:38:59.222Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:59.222Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"5eedfb2601d7ffcf7460d7a79bf902d8\",\"span_id\":\"554e37961f1594f9\",\"order_id\":\"ord-0300455\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#918",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 918,
+        "level": "ERROR",
+        "trace_id": "5eedfb2601d7ffcf7460d7a79bf902d8"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:9fe67bc03a",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:59.502Z",
+      "available_time": "2026-11-20T02:38:59.502Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:59.502Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"56754d87500d9bd11319c52c1419a61a\",\"span_id\":\"670ecfe9c6d7b3ba\",\"order_id\":\"ord-0300456\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#920",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 920,
+        "level": "ERROR",
+        "trace_id": "56754d87500d9bd11319c52c1419a61a"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:9830adba07",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:59.717Z",
+      "available_time": "2026-11-20T02:38:59.717Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:59.717Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"1673537b2f148799c50ca64ba7f4a19c\",\"span_id\":\"611fd2fe33783360\",\"order_id\":\"ord-0300457\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#923",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 923,
+        "level": "ERROR",
+        "trace_id": "1673537b2f148799c50ca64ba7f4a19c"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:a2dac6fc30",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:59.747Z",
+      "available_time": "2026-11-20T02:38:59.747Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:59.747Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"d658ea6b45c571fc0b1036ba8da4a1b3\",\"span_id\":\"f8ea329ea5aee351\",\"order_id\":\"ord-0300458\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#924",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 924,
+        "level": "ERROR",
+        "trace_id": "d658ea6b45c571fc0b1036ba8da4a1b3"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:33ddb861ac",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:59.855Z",
+      "available_time": "2026-11-20T02:38:59.855Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:59.855Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"8aa0b5ee4354911ad5eeb00744fcf0f7\",\"span_id\":\"54dc2d9a3a81eec3\",\"order_id\":\"ord-0300459\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#925",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 925,
+        "level": "ERROR",
+        "trace_id": "8aa0b5ee4354911ad5eeb00744fcf0f7"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:0d5aef4f32",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:59.903Z",
+      "available_time": "2026-11-20T02:38:59.903Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms",
+      "content": "{\"ts\":\"2026-11-20T02:38:59.903Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 250ms\",\"trace_id\":\"fe5ac4c03e95a48e774d613f3b217f67\",\"span_id\":\"6f281746c0225bd6\",\"order_id\":\"ord-0300460\",\"attempts\":5}",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl#927",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-20T03:36:06.346Z",
+        "path": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\captures\\INC-0000\\telemetry\\logs\\checkout-svc.jsonl",
+        "line": 927,
+        "level": "ERROR",
+        "trace_id": "fe5ac4c03e95a48e774d613f3b217f67"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:6a85e8d8c80a8d4a",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:56.008Z",
+      "available_time": "2026-11-20T02:38:57.342Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1334.86ms error",
+      "content": "span 6a85e8d8c80a8d4a parent=- trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.008Z checkout-svc POST /orders 1334.86ms error (HTTP 504) {\"http.route\":\"/orders\",\"order.id\":\"ord-0300446\",\"http.status_code\":504} resource={\"service.version\":\"1.9.0\"}",
+      "content_ref": "spans.jsonl#6a85e8d8c80a8d4a",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": null,
+        "kind": "server",
+        "duration_ms": 1334.86,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:8c36ef2ea835c409",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:56.009Z",
+      "available_time": "2026-11-20T02:38:56.271Z",
+      "version": null,
+      "title": "checkout-svc POST /charge 261.84ms error",
+      "content": "span 8c36ef2ea835c409 parent=6a85e8d8c80a8d4a trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.009Z checkout-svc POST /charge 261.84ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":250} resource={\"service.version\":\"1.9.0\"}",
+      "content_ref": "spans.jsonl#8c36ef2ea835c409",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "6a85e8d8c80a8d4a",
+        "kind": "client",
+        "duration_ms": 261.84,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:14f6b062b3ba69ce",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:38:56.021Z",
+      "available_time": "2026-11-20T02:38:56.333Z",
+      "version": null,
+      "title": "payment-svc risk.score 311.47ms ok",
+      "content": "span 14f6b062b3ba69ce parent=289f1856dc917f3f trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.021Z payment-svc risk.score 311.47ms ok {\"amount\":807.71} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#14f6b062b3ba69ce",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "289f1856dc917f3f",
+        "kind": "internal",
+        "duration_ms": 311.47,
+        "status": "ok"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:289f1856dc917f3f",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:38:56.021Z",
+      "available_time": "2026-11-20T02:39:01.898Z",
+      "version": null,
+      "title": "payment-svc POST /charge 5876.62ms error",
+      "content": "span 289f1856dc917f3f parent=8c36ef2ea835c409 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.021Z payment-svc POST /charge 5876.62ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) {\"http.route\":\"/charge\",\"order.id\":\"ord-0300446\"} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#289f1856dc917f3f",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "8c36ef2ea835c409",
+        "kind": "server",
+        "duration_ms": 5876.62,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:5397656d90f92ee8",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:38:56.021Z",
+      "available_time": "2026-11-20T02:38:56.021Z",
+      "version": null,
+      "title": "payment-svc db.pool.acquire 0.0ms ok",
+      "content": "span 5397656d90f92ee8 parent=289f1856dc917f3f trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.021Z payment-svc db.pool.acquire 0.0ms ok {\"db.pool.wait_ms\":0.0} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#5397656d90f92ee8",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "289f1856dc917f3f",
+        "kind": "internal",
+        "duration_ms": 0.0,
+        "status": "ok"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:0d045d5eb341f195",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:56.271Z",
+      "available_time": "2026-11-20T02:38:56.549Z",
+      "version": null,
+      "title": "checkout-svc POST /charge 278.2ms error",
+      "content": "span 0d045d5eb341f195 parent=6a85e8d8c80a8d4a trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.271Z checkout-svc POST /charge 278.2ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":2,\"http.timeout_ms\":250} resource={\"service.version\":\"1.9.0\"}",
+      "content_ref": "spans.jsonl#0d045d5eb341f195",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "6a85e8d8c80a8d4a",
+        "kind": "client",
+        "duration_ms": 278.2,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:5e04982907a8fcd9",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:38:56.286Z",
+      "available_time": "2026-11-20T02:39:01.857Z",
+      "version": null,
+      "title": "payment-svc POST /charge 5570.74ms error",
+      "content": "span 5e04982907a8fcd9 parent=0d045d5eb341f195 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.286Z payment-svc POST /charge 5570.74ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) {\"http.route\":\"/charge\",\"order.id\":\"ord-0300446\"} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#5e04982907a8fcd9",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "0d045d5eb341f195",
+        "kind": "server",
+        "duration_ms": 5570.74,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:fa6d7160c82d6d90",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:38:56.286Z",
+      "available_time": "2026-11-20T02:38:56.286Z",
+      "version": null,
+      "title": "payment-svc db.pool.acquire 0.0ms ok",
+      "content": "span fa6d7160c82d6d90 parent=5e04982907a8fcd9 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.286Z payment-svc db.pool.acquire 0.0ms ok {\"db.pool.wait_ms\":0.0} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#fa6d7160c82d6d90",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "5e04982907a8fcd9",
+        "kind": "internal",
+        "duration_ms": 0.0,
+        "status": "ok"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:50078377939dfd61",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:38:56.287Z",
+      "available_time": "2026-11-20T02:39:01.844Z",
+      "version": null,
+      "title": "payment-svc risk.score 5557.3ms ok",
+      "content": "span 50078377939dfd61 parent=5e04982907a8fcd9 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.287Z payment-svc risk.score 5557.3ms ok {\"amount\":807.71} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#50078377939dfd61",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "5e04982907a8fcd9",
+        "kind": "internal",
+        "duration_ms": 5557.3,
+        "status": "ok"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:e65c0977696d79aa",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:38:56.333Z",
+      "available_time": "2026-11-20T02:38:56.334Z",
+      "version": null,
+      "title": "payment-svc db.query 1.02ms ok",
+      "content": "span e65c0977696d79aa parent=289f1856dc917f3f trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.333Z payment-svc db.query 1.02ms ok {\"db.statement\":\"velocity\"} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#e65c0977696d79aa",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "289f1856dc917f3f",
+        "kind": "internal",
+        "duration_ms": 1.02,
+        "status": "ok"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:6aab0c746bede6f9",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:38:56.334Z",
+      "available_time": "2026-11-20T02:38:56.334Z",
+      "version": null,
+      "title": "payment-svc db.query 0.0ms ok",
+      "content": "span 6aab0c746bede6f9 parent=289f1856dc917f3f trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.334Z payment-svc db.query 0.0ms ok {\"db.statement\":\"recent_duplicate\"} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#6aab0c746bede6f9",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "289f1856dc917f3f",
+        "kind": "internal",
+        "duration_ms": 0.0,
+        "status": "ok"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:af6d905476fb680f",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:38:56.334Z",
+      "available_time": "2026-11-20T02:39:01.892Z",
+      "version": null,
+      "title": "payment-svc db.query 5558.08ms error",
+      "content": "span af6d905476fb680f parent=289f1856dc917f3f trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.334Z payment-svc db.query 5558.08ms error (IntegrityError: UNIQUE constraint failed: payments.order_id) {\"db.statement\":\"insert_payment\"} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#af6d905476fb680f",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "289f1856dc917f3f",
+        "kind": "internal",
+        "duration_ms": 5558.08,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:9ec4c69abb6d1320",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:56.550Z",
+      "available_time": "2026-11-20T02:38:56.815Z",
+      "version": null,
+      "title": "checkout-svc POST /charge 264.62ms error",
+      "content": "span 9ec4c69abb6d1320 parent=6a85e8d8c80a8d4a trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.550Z checkout-svc POST /charge 264.62ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":3,\"http.timeout_ms\":250} resource={\"service.version\":\"1.9.0\"}",
+      "content_ref": "spans.jsonl#9ec4c69abb6d1320",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "6a85e8d8c80a8d4a",
+        "kind": "client",
+        "duration_ms": 264.62,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:848f471ce337f469",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:56.816Z",
+      "available_time": "2026-11-20T02:38:57.078Z",
+      "version": null,
+      "title": "checkout-svc POST /charge 262.13ms error",
+      "content": "span 848f471ce337f469 parent=6a85e8d8c80a8d4a trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:56.816Z checkout-svc POST /charge 262.13ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":4,\"http.timeout_ms\":250} resource={\"service.version\":\"1.9.0\"}",
+      "content_ref": "spans.jsonl#848f471ce337f469",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "6a85e8d8c80a8d4a",
+        "kind": "client",
+        "duration_ms": 262.13,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:49e5fed6d035daf0",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:57.078Z",
+      "available_time": "2026-11-20T02:38:57.341Z",
+      "version": null,
+      "title": "checkout-svc POST /charge 263.19ms error",
+      "content": "span 49e5fed6d035daf0 parent=6a85e8d8c80a8d4a trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:38:57.078Z checkout-svc POST /charge 263.19ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":5,\"http.timeout_ms\":250} resource={\"service.version\":\"1.9.0\"}",
+      "content_ref": "spans.jsonl#49e5fed6d035daf0",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "6a85e8d8c80a8d4a",
+        "kind": "client",
+        "duration_ms": 263.19,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:55d728aad4aa2b6c",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:39:01.845Z",
+      "available_time": "2026-11-20T02:39:01.845Z",
+      "version": null,
+      "title": "payment-svc db.query 0.0ms ok",
+      "content": "span 55d728aad4aa2b6c parent=5e04982907a8fcd9 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:39:01.845Z payment-svc db.query 0.0ms ok {\"db.statement\":\"velocity\"} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#55d728aad4aa2b6c",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "5e04982907a8fcd9",
+        "kind": "internal",
+        "duration_ms": 0.0,
+        "status": "ok"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:1ed7bd63a3e6dd4d",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:39:01.848Z",
+      "available_time": "2026-11-20T02:39:01.848Z",
+      "version": null,
+      "title": "payment-svc db.query 0.0ms ok",
+      "content": "span 1ed7bd63a3e6dd4d parent=5e04982907a8fcd9 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:39:01.848Z payment-svc db.query 0.0ms ok {\"db.statement\":\"recent_duplicate\"} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#1ed7bd63a3e6dd4d",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "5e04982907a8fcd9",
+        "kind": "internal",
+        "duration_ms": 0.0,
+        "status": "ok"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:877a8cd91c6decbd",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:39:01.850Z",
+      "available_time": "2026-11-20T02:39:01.883Z",
+      "version": null,
+      "title": "payment-svc POST /charge 32.99ms error",
+      "content": "span 877a8cd91c6decbd parent=9ec4c69abb6d1320 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:39:01.850Z payment-svc POST /charge 32.99ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) {\"http.route\":\"/charge\",\"order.id\":\"ord-0300446\"} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#877a8cd91c6decbd",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "9ec4c69abb6d1320",
+        "kind": "server",
+        "duration_ms": 32.99,
+        "status": "error"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:cba8a6e7e3bb57e4",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:39:01.850Z",
+      "available_time": "2026-11-20T02:39:01.878Z",
+      "version": null,
+      "title": "payment-svc db.pool.acquire 27.96ms ok",
+      "content": "span cba8a6e7e3bb57e4 parent=877a8cd91c6decbd trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:39:01.850Z payment-svc db.pool.acquire 27.96ms ok {\"db.pool.wait_ms\":27.96} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#cba8a6e7e3bb57e4",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "877a8cd91c6decbd",
+        "kind": "internal",
+        "duration_ms": 27.96,
+        "status": "ok"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "span:6656054f1b8558b1",
+      "source": "traces",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:39:01.852Z",
+      "available_time": "2026-11-20T02:39:01.853Z",
+      "version": null,
+      "title": "payment-svc db.query 1.0ms ok",
+      "content": "span 6656054f1b8558b1 parent=5e04982907a8fcd9 trace=0c13fc60dad783621a3c7b8c8c29d9ab start=2026-11-20T02:39:01.852Z payment-svc db.query 1.0ms ok {\"db.statement\":\"insert_payment\"} resource={\"service.version\":\"2.4.1\"}",
+      "content_ref": "spans.jsonl#6656054f1b8558b1",
+      "attributes": {
+        "trace_id": "0c13fc60dad783621a3c7b8c8c29d9ab",
+        "parent_span_id": "5e04982907a8fcd9",
+        "kind": "internal",
+        "duration_ms": 1.0,
+        "status": "ok"
+      },
+      "truncated": false,
+      "fixture": false
+    }
+  ],
+  "usage": {
+    "model_calls": 3,
+    "prompt_tokens": 8477,
+    "completion_tokens": 895,
+    "model_seconds": 229.54458789993078
+  },
+  "wall_seconds": 259.29,
+  "rounds_used": 2,
+  "tool_calls_used": 2,
+  "budget_violations": 0,
+  "unauthorized_attempts": [],
+  "unauthorized_executed": 0,
+  "evidence_budget": null,
+  "context": {
+    "report_call": {
+      "num_ctx": 8192,
+      "notebook_budget": 6283,
+      "notebook_tokens": 2838,
+      "records_retrieved": 35,
+      "records_full": 6,
+      "records_one_line": 29,
+      "records_omitted": 0,
+      "prompt_tokens_est": 3635,
+      "prompt_tokens_actual": 3630
+    }
+  },
+  "config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "investigator_v2@efd3f21bee+report_v1@035e5ce0d8",
+    "code_revision": "60366b5"
+  },
+  "prompt_versions": {
+    "round": "investigator_v2@efd3f21bee",
+    "report": "report_v1@035e5ce0d8"
+  }
+}

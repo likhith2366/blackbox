@@ -1,0 +1,8 @@
+{
+  "incident_id": "INC-9002",
+  "mode": "snapshot",
+  "followup_of": null,
+  "problem_description": "Checkout orders started failing with payment errors.",
+  "window_start": null,
+  "window_end": null
+}
