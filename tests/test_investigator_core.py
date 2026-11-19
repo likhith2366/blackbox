@@ -269,3 +269,21 @@ def test_coverage_hint_lists_only_unqueried_available_sources():
                             "rationale": ""}, {**REPORT, "status": "insufficient_evidence", "ranked_causes": []}])
     Coordinator(FakeBackend(), RunConfig(coverage_hint=False), adapter=off).run()
     assert all("SOURCES NOT YET QUERIED" not in p for p in off.prompts)
+
+
+def test_cancel_stops_at_a_round_boundary_without_a_report():
+    calls = {"n": 0}
+
+    def should_cancel():
+        calls["n"] += 1
+        return calls["n"] >= 2          # allow round 1, cancel before round 2
+
+    c = Coordinator(FakeBackend(), RunConfig(), adapter=ScriptedAdapter([
+        {"hypotheses": [H()], "tool_calls": [{"tool": "search_logs", "args": {}}], "decision": "continue", "rationale": ""},
+        {"hypotheses": [H(sup=["log:a1", "log:a2"])], "tool_calls": [], "decision": "diagnose", "rationale": ""},
+        REPORT,
+    ]), should_cancel=should_cancel)
+    out = c.run()
+    assert out.status == "cancelled" and out.report is None
+    assert out.rounds_used == 1 and out.steps[-1].stop_decision == "stop_cancelled"
+    assert out.tool_calls_used == 1                     # round 1's work is kept, nothing after it ran
