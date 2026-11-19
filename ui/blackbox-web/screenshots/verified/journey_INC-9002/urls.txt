@@ -1,0 +1,14 @@
+# URL of each screenshot. 01-09: hash routes the journey's real clicks navigated to (from the
+# click targets and the job id reported by the app; not re-read from location.href at capture time).
+# 10a/10b: recorded live from location.href by step10.py.
+01_overview_incident_list.png	http://127.0.0.1:5173/#/overview
+02_incident_timeline.png	http://127.0.0.1:5173/#/incidents/INC-9002
+03_start_form_filled.png	http://127.0.0.1:5173/#/start?incident=INC-9002
+04_job_submitted.png	http://127.0.0.1:5173/#/jobs/20261120T035254-b72b2e
+05_job_running_rounds.png	http://127.0.0.1:5173/#/jobs/20261120T035254-b72b2e
+06_job_finished.png	http://127.0.0.1:5173/#/jobs/20261120T035254-b72b2e
+07_final_report.png	http://127.0.0.1:5173/#/runs/ui_jobs~20261120T035254-b72b2e
+08_cited_record_and_source.png	http://127.0.0.1:5173/#/runs/ui_jobs~20261120T035254-b72b2e
+09_results_history.png	http://127.0.0.1:5173/#/runs
+10a_history_before_click.png	http://127.0.0.1:5173/#/runs
+10b_reopened_after_click.png	http://127.0.0.1:5173/#/runs/ui_jobs~20261120T035254-b72b2e?from=history
