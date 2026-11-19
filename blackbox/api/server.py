@@ -126,6 +126,41 @@ def list_incidents() -> list[dict]:
     return out
 
 
+@app.get("/api/incidents/{incident_id}/timeline")
+def incident_timeline(incident_id: str) -> dict:
+    """Deploy, build, commit and ERROR-log events of one incident, read through the evidence backend so
+    the investigation cutoff applies. For people browsing the incident; never shown to the model."""
+    from blackbox.evidence.backend import load_backend
+    if not (SNAPSHOTS / incident_id / "incident.json").exists():
+        raise HTTPException(404, f"unknown incident {incident_id}")
+    b = load_backend(incident_id)
+    inc = b.incident()
+    events: list[dict] = [{"time": inc.alert.fired_at, "kind": "alert", "id": inc.alert.alert_id,
+                           "service": inc.alert.service, "text": f"{inc.alert.title} ({inc.alert.condition})"}]
+    notes: list[str] = []
+
+    def add(res, kind, text_of):
+        if res.status not in ("ok", "empty"):
+            notes.append(f"{kind}: {res.status} {res.error or ''}".strip())
+            return
+        for r in res.records:
+            events.append({"time": r.event_time or r.available_time, "kind": kind, "id": r.evidence_id,
+                           "service": r.service, "text": text_of(r)})
+
+    add(b.list_deployments(), "deploy", lambda r: r.title or r.content[:160])
+    add(b.search_commits(limit=15), "commit", lambda r: r.title or r.content[:160])
+    add(b.search_logs(level="ERROR", limit=30), "error_log", lambda r: r.title)
+    for d in [e for e in events if e["kind"] == "deploy"]:
+        rec = next((x for x in b.list_deployments().records if x.evidence_id == d["id"]), None)
+        build = (rec.attributes or {}).get("build_id") if rec else None
+        if build:
+            add(b.get_build(build), "build", lambda r: r.title or r.content[:160])
+    events = [e for e in events if e["time"]]
+    events.sort(key=lambda e: e["time"])
+    return {"incident_id": incident_id, "window_start": inc.window_start, "investigation_cutoff": inc.investigation_cutoff,
+            "events": events, "notes": notes}
+
+
 @app.get("/api/project")
 def project() -> dict:
     sources: list[dict] = []
@@ -180,6 +215,7 @@ def health() -> dict:
 class InvestigationRequest(BaseModel):
     incident_id: str
     mode: str = "snapshot"
+    followup_of: Optional[str] = None   # run id this investigation follows up (new job, new run id)
     problem_description: Optional[str] = None
     window_start: Optional[str] = None
     window_end: Optional[str] = None
@@ -223,6 +259,8 @@ def submit(req: InvestigationRequest, retry_of: Optional[str] = None) -> dict:
         raise HTTPException(404, f"unknown incident {req.incident_id}")
     if req.mode not in ("snapshot", "live"):
         raise HTTPException(400, "mode must be snapshot or live")
+    if req.followup_of:
+        _run_dir(req.followup_of)   # 404 if the parent run does not exist
     inc = json.loads(snap.read_text(encoding="utf-8"))
     lo, hi = _parse(inc["window_start"]), _parse(inc["investigation_cutoff"])
     for name in ("window_start", "window_end"):
