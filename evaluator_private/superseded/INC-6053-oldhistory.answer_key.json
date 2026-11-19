@@ -1,0 +1,97 @@
+{
+  "incident_id": "INC-6053",
+  "scenario_number": 6,
+  "scenario_type": "insufficient_evidence",
+  "is_primary": true,
+  "diagnosable": false,
+  "variant_of": null,
+  "expected_status": "insufficient_evidence",
+  "component": "payment-svc database (dropped index)",
+  "mechanism": "ground truth: dropped index makes payment queries slow; equally plausible from the visible evidence: checkout's new retry-on-timeout/5xx policy amplifying load. Server-side payment latency (traces, payment metrics, payment logs) that would distinguish them is withheld",
+  "accepted_components": [
+    "payment-svc",
+    "checkout-svc"
+  ],
+  "accepted_mechanisms": [
+    "missing index",
+    "retry amplification"
+  ],
+  "decisive_evidence_ids": [
+    "commit:b614012",
+    "commit:981dc7c"
+  ],
+  "distractor_evidence_ids": [],
+  "injected_fault": {
+    "faults": [
+      {
+        "change_id": "index-migration",
+        "family": "missing_index",
+        "kind": "commit",
+        "at": "2026-11-20T02:32:45.027Z",
+        "commit": "b61401257428db9029758a976705f17dee930f9d",
+        "builds": [
+          "b-1213"
+        ],
+        "deployments": [
+          "d-532"
+        ],
+        "env": null
+      }
+    ],
+    "all_changes": [
+      {
+        "change_id": "d-checkout-retry-5xx",
+        "family": "decoy_retry_policy",
+        "kind": "commit",
+        "at": "2026-11-20T02:32:41.028Z",
+        "commit": "981dc7c047a7ad0be14b88923a6cec8f5f45bd0c",
+        "builds": [
+          "b-1212"
+        ],
+        "deployments": [
+          "d-531"
+        ],
+        "env": null
+      },
+      {
+        "change_id": "index-migration",
+        "family": "missing_index",
+        "kind": "commit",
+        "at": "2026-11-20T02:32:45.027Z",
+        "commit": "b61401257428db9029758a976705f17dee930f9d",
+        "builds": [
+          "b-1213"
+        ],
+        "deployments": [
+          "d-532"
+        ],
+        "env": null
+      }
+    ],
+    "decisive_equivalents": {},
+    "withheld": {
+      "sources": [
+        "traces"
+      ],
+      "log_services": [
+        "payment-svc"
+      ],
+      "metrics": {
+        "payment-svc": "*"
+      }
+    },
+    "connector_runtime": {}
+  },
+  "available_sources": [
+    "logs",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "remaining_evidence_sufficient": null,
+  "notes": "Two simultaneous releases (checkout retry policy, payment index drop). Correct output is insufficient_evidence naming both candidates and asking for payment-side latency.",
+  "frozen_at": null
+}

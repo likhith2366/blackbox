@@ -1,0 +1,561 @@
+[
+ {
+  "key": "DEMO-3",
+  "summary": "Velocity check is slow for customers with long history",
+  "type": "Bug",
+  "components": [
+   "payment-svc"
+  ],
+  "labels": [],
+  "reporter": "Maya Chen",
+  "assignee": "Priya Nair",
+  "created": "2026-09-12T09:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-09-12T09:00:00.000Z",
+    "text": "payment-svc velocity check (count/sum of a customer's last 30 days) takes >200ms for customers with many payments. Add an index that covers customer_id + created_at."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-09-12T09:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-09-15T10:40:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Priya Nair",
+    "at": "2026-09-15T10:35:00.000Z",
+    "body": "Added idx_payments_customer_created; velocity query is ~1ms now."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-7",
+  "summary": "Shared client: propagate trace context and retry connection errors",
+  "type": "Story",
+  "components": [
+   "libs/httpclient"
+  ],
+  "labels": [],
+  "reporter": "Rafael Ortiz",
+  "assignee": "Rafael Ortiz",
+  "created": "2026-09-28T14:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-09-28T14:00:00.000Z",
+    "text": "All internal calls should carry a traceparent header. Retry once on connection errors (not on timeouts) so a restarting dependency does not fail requests."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-09-28T14:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-10-01T17:00:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Rafael Ortiz",
+    "at": "2026-10-01T16:50:00.000Z",
+    "body": "Shipped in httpclient 3.1.0."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-12",
+  "summary": "Support cannot find orders by customer note",
+  "type": "Story",
+  "components": [
+   "checkout-svc"
+  ],
+  "labels": [],
+  "reporter": "Maya Chen",
+  "assignee": null,
+  "created": "2026-10-24T11:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-10-24T11:00:00.000Z",
+    "text": "Support asks to have the free-text order note in checkout logs so they can search for orders customers describe by their note."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-10-24T11:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-10-28T14:00:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Maya Chen",
+    "at": "2026-10-28T13:40:00.000Z",
+    "body": "Notes are logged (truncated to 400 chars)."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-15",
+  "summary": "Requests hang for seconds when payment DB pool is busy",
+  "type": "Bug",
+  "components": [
+   "payment-svc"
+  ],
+  "labels": [],
+  "reporter": "Lena Hoffmann",
+  "assignee": "Priya Nair",
+  "created": "2026-11-03T08:30:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-11-03T08:30:00.000Z",
+    "text": "With a 3s acquire timeout, callers wait too long. Fail fast after 1s and return 503."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-03T08:30:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-06T11:30:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-18",
+  "summary": "Duplicate payments when checkout retries a charge",
+  "type": "Bug",
+  "components": [
+   "payment-svc"
+  ],
+  "labels": [],
+  "reporter": "Maya Chen",
+  "assignee": "Lena Hoffmann",
+  "created": "2026-11-10T10:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-11-10T10:00:00.000Z",
+    "text": "A retried /charge for the same order_id creates a second payment row. Make /charge idempotent on order_id."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-10T10:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-12T16:00:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-20",
+  "summary": "Support EUR orders in checkout",
+  "type": "Story",
+  "components": [
+   "checkout-svc"
+  ],
+  "labels": [],
+  "reporter": "Tom Becker",
+  "assignee": null,
+  "created": "2026-11-04T09:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-11-04T09:00:00.000Z",
+    "text": "Accept currency=EUR and convert for reporting. Not started."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-04T09:00:00.000Z",
+    "status": "Open"
+   }
+  ],
+  "comments": [],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-22",
+  "summary": "Flaky test: order validation rejects qty=0 intermittently",
+  "type": "Bug",
+  "components": [
+   "checkout-svc"
+  ],
+  "labels": [],
+  "reporter": "Maya Chen",
+  "assignee": "Maya Chen",
+  "created": "2026-11-13T15:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-11-13T15:00:00.000Z",
+    "text": "test_order_validation fails about 1 in 30 CI runs. Probably test data ordering."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-13T15:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-14T10:00:00.000Z",
+    "status": "In Progress"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Maya Chen",
+    "at": "2026-11-14T10:05:00.000Z",
+    "body": "Looks like the fixture seeds random qty values."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "OPS-5",
+  "summary": "Rotate TLS certificates on demo-local hosts",
+  "type": "Task",
+  "components": [
+   "infra"
+  ],
+  "labels": [],
+  "reporter": "Tom Becker",
+  "assignee": "Tom Becker",
+  "created": "2026-10-20T09:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-10-20T09:00:00.000Z",
+    "text": "Quarterly certificate rotation."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-10-20T09:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-10-21T12:00:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-58",
+  "summary": "Route checkout to payment-svc through the sidecar port",
+  "type": "Task",
+  "components": [
+   "checkout-svc"
+  ],
+  "labels": [],
+  "reporter": "Tom Becker",
+  "assignee": "Tom Becker",
+  "created": "2026-11-18T02:20:32.364Z",
+  "description_versions": [
+   {
+    "at": "2026-11-18T02:20:32.364Z",
+    "text": "Once the payment sidecar (OPS-12) is live, checkout should call payment on port 18112."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-18T02:20:32.364Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-20T02:20:02.364Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Tom Becker",
+    "at": "2026-11-20T02:19:52.364Z",
+    "body": "Config change merged and released."
+   }
+  ],
+  "links": [
+   "OPS-12"
+  ],
+  "fixture": true
+ },
+ {
+  "key": "OPS-12",
+  "summary": "Deploy payment-svc sidecar listening on 18112",
+  "type": "Task",
+  "components": [
+   "infra",
+   "payment-svc"
+  ],
+  "labels": [],
+  "reporter": "Tom Becker",
+  "assignee": "Lena Hoffmann",
+  "created": "2026-11-14T02:20:32.364Z",
+  "description_versions": [
+   {
+    "at": "2026-11-14T02:20:32.364Z",
+    "text": "Introduce a local sidecar in front of payment-svc on port 18112 (TLS termination, metrics). payment-svc itself keeps listening on 18102."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-14T02:20:32.364Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-19T02:20:32.364Z",
+    "status": "In Progress"
+   },
+   {
+    "at": "2026-11-20T05:21:50.527Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Lena Hoffmann",
+    "at": "2026-11-19T02:20:32.364Z",
+    "body": "Sidecar image built; rollout planned for next week."
+   },
+   {
+    "id": "c2",
+    "author": "Lena Hoffmann",
+    "at": "2026-11-20T05:21:50.527Z",
+    "body": "Sidecar rolled out; 18112 is now serving."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-61",
+  "summary": "Include currency in charge approval log",
+  "type": "Task",
+  "components": [
+   "payment-svc"
+  ],
+  "labels": [],
+  "reporter": "Priya Nair",
+  "assignee": "Lena Hoffmann",
+  "created": "2026-11-19T02:20:32.364Z",
+  "description_versions": [
+   {
+    "at": "2026-11-19T02:20:32.364Z",
+    "text": "Finance wants currency on the approval log line."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-19T02:20:32.364Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-20T02:20:52.364Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-47",
+  "summary": "Checkout -> payment reliability: what should we change?",
+  "type": "Epic",
+  "components": [
+   "checkout-svc",
+   "payment-svc",
+   "libs/httpclient"
+  ],
+  "labels": [],
+  "reporter": "Maya Chen",
+  "assignee": "Maya Chen",
+  "created": "2026-11-11T02:20:32.364Z",
+  "description_versions": [
+   {
+    "at": "2026-11-11T02:20:32.364Z",
+    "text": "Umbrella ticket for intermittent checkout payment failures. Collect hypotheses and evidence; decide on one plan."
+   },
+   {
+    "at": "2026-11-20T04:21:50.527Z",
+    "text": "Umbrella ticket for intermittent checkout payment failures. UPDATE after incident: see incident review."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-11T02:20:32.364Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-15T02:20:32.364Z",
+    "status": "In Progress"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Maya Chen",
+    "at": "2026-11-11T02:20:32.364Z",
+    "body": "Opening this to collect ideas. Over the last weeks we have seen short bursts of failed orders where checkout gets errors back from payment. Each burst lasted a few minutes and then cleared by itself. We do not have a clear reproduction. I would like one owner and one plan, but first let us list hypotheses here so we stop discussing it in five different chat threads."
+   },
+   {
+    "id": "c2",
+    "author": "Rafael Ortiz",
+    "at": "2026-11-11T04:20:32.364Z",
+    "body": "My bet is the client timeout. 2000ms is generous but when payment does the full risk review for large charges it can take most of a second, and with a bit of queueing we hit the timeout. I would raise DEFAULT_TIMEOUT_MS to 5000 in libs/httpclient and be done with it."
+   },
+   {
+    "id": "c3",
+    "author": "Lena Hoffmann",
+    "at": "2026-11-11T07:20:32.364Z",
+    "body": "Raising the timeout just hides the problem and ties up checkout threads. The bursts line up with payment restarts, I think: when payment restarts, in-flight requests are cut. We should add proper connection draining to payment-svc instead."
+   },
+   {
+    "id": "c4",
+    "author": "Priya Nair",
+    "at": "2026-11-12T02:20:32.364Z",
+    "body": "I looked at the DB side. Velocity checks are fast with the customer index, so I do not think it is the database. That said, the payments table grows ~40k rows/day and we should keep an eye on insert latency. Not the cause today in my opinion."
+   },
+   {
+    "id": "c5",
+    "author": "Tom Becker",
+    "at": "2026-11-12T05:20:32.364Z",
+    "body": "From the infra side: we are going to put a sidecar in front of payment-svc (OPS-12) for TLS and metrics. Once that is live, checkout should call the sidecar port 18112 instead of 18102. That would also give us connection-level metrics to settle this argument. I can prepare the checkout config change now so it is ready."
+   },
+   {
+    "id": "c6",
+    "author": "Lena Hoffmann",
+    "at": "2026-11-13T02:20:32.364Z",
+    "body": "Please do not switch the port before OPS-12 is actually done; nothing listens on 18112 until the sidecar ships. The rollout is planned for next week."
+   },
+   {
+    "id": "c7",
+    "author": "Rafael Ortiz",
+    "at": "2026-11-14T02:20:32.364Z",
+    "body": "Alternative: retry 5xx and timeouts in the shared client. Retries would have hidden every burst we saw. I have a branch that retries up to 4 times."
+   },
+   {
+    "id": "c8",
+    "author": "Priya Nair",
+    "at": "2026-11-14T06:20:32.364Z",
+    "body": "Retrying timeouts against a slow dependency multiplies its load. I would rather not. If anything we should lower the pool acquire timeout further so payment fails fast."
+   },
+   {
+    "id": "c9",
+    "author": "Maya Chen",
+    "at": "2026-11-15T02:20:32.364Z",
+    "body": "Summary so far, no agreement: (1) raise client timeout, (2) add draining to payment, (3) wait for the sidecar and move checkout to 18112, (4) retry more in the client, (5) tune the DB pool. I will ask each owner to add evidence, not opinions."
+   },
+   {
+    "id": "c10",
+    "author": "Tom Becker",
+    "at": "2026-11-18T02:20:32.364Z",
+    "body": "Checkout config change for the sidecar port is ready (DEMO-58). We can merge whenever."
+   },
+   {
+    "id": "c11",
+    "author": "Lena Hoffmann",
+    "at": "2026-11-18T03:20:32.364Z",
+    "body": "Again: only after OPS-12 is closed. Today 18112 refuses connections."
+   },
+   {
+    "id": "c12",
+    "author": "Rafael Ortiz",
+    "at": "2026-11-19T02:20:32.364Z",
+    "body": "I still think the timeout is the real issue. We keep going around in circles."
+   },
+   {
+    "id": "c13",
+    "author": "Maya Chen",
+    "at": "2026-11-20T04:21:50.527Z",
+    "body": "Incident review scheduled; summary of today's failures will be added there."
+   }
+  ],
+  "links": [
+   "DEMO-58",
+   "OPS-12"
+  ],
+  "fixture": true
+ },
+ {
+  "key": "OPS-33",
+  "summary": "[alert] checkout-svc error rate high",
+  "type": "Incident",
+  "components": [
+   "checkout-svc"
+  ],
+  "labels": [],
+  "reporter": "alertmanager",
+  "assignee": "Tom Becker",
+  "created": "2026-11-20T02:21:30.527Z",
+  "description_versions": [
+   {
+    "at": "2026-11-20T02:21:30.527Z",
+    "text": "Auto-created from alert 'checkout-svc error rate high' on checkout-svc. On-call investigating."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-20T02:21:30.527Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-20T02:21:45.527Z",
+    "status": "In Progress"
+   },
+   {
+    "at": "2026-11-20T02:46:50.527Z",
+    "status": "Resolved"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Tom Becker",
+    "at": "2026-11-20T02:21:40.527Z",
+    "body": "Ack, looking at dashboards."
+   },
+   {
+    "id": "c2",
+    "author": "Tom Becker",
+    "at": "2026-11-20T02:45:50.527Z",
+    "body": "Mitigated; details go into the incident review. Closing the alert ticket."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ }
+]

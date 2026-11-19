@@ -1,0 +1,31 @@
+{
+  "incident_id": "INC-5408",
+  "alert": {
+    "alert_id": "ALR-3102",
+    "title": "checkout-svc p95 latency high",
+    "service": "checkout-svc",
+    "signal": "p95_latency_ms",
+    "condition": "latency_p95_ms > 1500 for 15s",
+    "observed_value": 2050.86,
+    "fired_at": "2026-11-20T02:16:22.067Z"
+  },
+  "window_start": "2026-11-20T02:14:39.637Z",
+  "window_end": "2026-11-20T02:17:22.067Z",
+  "investigation_cutoff": "2026-11-20T02:17:22.067Z",
+  "environment": "demo-local",
+  "services": [
+    "checkout-svc",
+    "payment-svc"
+  ],
+  "available_sources": [
+    "logs",
+    "traces",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "notes": "Alert fired in demo-local. Investigate using the available evidence sources."
+}

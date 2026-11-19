@@ -1,0 +1,7 @@
+{
+ "failures": [],
+ "coverage": {
+  "logs": "logs available for: checkout-svc",
+  "metrics": "metrics available for: checkout-svc"
+ }
+}

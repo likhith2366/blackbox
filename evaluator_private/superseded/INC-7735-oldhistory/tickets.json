@@ -1,0 +1,388 @@
+[
+ {
+  "key": "DEMO-3",
+  "summary": "Velocity check is slow for customers with long history",
+  "type": "Bug",
+  "components": [
+   "payment-svc"
+  ],
+  "labels": [],
+  "reporter": "Maya Chen",
+  "assignee": "Priya Nair",
+  "created": "2026-09-12T09:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-09-12T09:00:00.000Z",
+    "text": "payment-svc velocity check (count/sum of a customer's last 30 days) takes >200ms for customers with many payments. Add an index that covers customer_id + created_at."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-09-12T09:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-09-15T10:40:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Priya Nair",
+    "at": "2026-09-15T10:35:00.000Z",
+    "body": "Added idx_payments_customer_created; velocity query is ~1ms now."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-7",
+  "summary": "Shared client: propagate trace context and retry connection errors",
+  "type": "Story",
+  "components": [
+   "libs/httpclient"
+  ],
+  "labels": [],
+  "reporter": "Rafael Ortiz",
+  "assignee": "Rafael Ortiz",
+  "created": "2026-09-28T14:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-09-28T14:00:00.000Z",
+    "text": "All internal calls should carry a traceparent header. Retry once on connection errors (not on timeouts) so a restarting dependency does not fail requests."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-09-28T14:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-10-01T17:00:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Rafael Ortiz",
+    "at": "2026-10-01T16:50:00.000Z",
+    "body": "Shipped in httpclient 3.1.0."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-12",
+  "summary": "Support cannot find orders by customer note",
+  "type": "Story",
+  "components": [
+   "checkout-svc"
+  ],
+  "labels": [],
+  "reporter": "Maya Chen",
+  "assignee": null,
+  "created": "2026-10-24T11:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-10-24T11:00:00.000Z",
+    "text": "Support asks to have the free-text order note in checkout logs so they can search for orders customers describe by their note."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-10-24T11:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-10-28T14:00:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Maya Chen",
+    "at": "2026-10-28T13:40:00.000Z",
+    "body": "Notes are logged (truncated to 400 chars)."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-15",
+  "summary": "Requests hang for seconds when payment DB pool is busy",
+  "type": "Bug",
+  "components": [
+   "payment-svc"
+  ],
+  "labels": [],
+  "reporter": "Lena Hoffmann",
+  "assignee": "Priya Nair",
+  "created": "2026-11-03T08:30:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-11-03T08:30:00.000Z",
+    "text": "With a 3s acquire timeout, callers wait too long. Fail fast after 1s and return 503."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-03T08:30:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-06T11:30:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-18",
+  "summary": "Duplicate payments when checkout retries a charge",
+  "type": "Bug",
+  "components": [
+   "payment-svc"
+  ],
+  "labels": [],
+  "reporter": "Maya Chen",
+  "assignee": "Lena Hoffmann",
+  "created": "2026-11-10T10:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-11-10T10:00:00.000Z",
+    "text": "A retried /charge for the same order_id creates a second payment row. Make /charge idempotent on order_id."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-10T10:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-12T16:00:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-20",
+  "summary": "Support EUR orders in checkout",
+  "type": "Story",
+  "components": [
+   "checkout-svc"
+  ],
+  "labels": [],
+  "reporter": "Tom Becker",
+  "assignee": null,
+  "created": "2026-11-04T09:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-11-04T09:00:00.000Z",
+    "text": "Accept currency=EUR and convert for reporting. Not started."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-04T09:00:00.000Z",
+    "status": "Open"
+   }
+  ],
+  "comments": [],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-22",
+  "summary": "Flaky test: order validation rejects qty=0 intermittently",
+  "type": "Bug",
+  "components": [
+   "checkout-svc"
+  ],
+  "labels": [],
+  "reporter": "Maya Chen",
+  "assignee": "Maya Chen",
+  "created": "2026-11-13T15:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-11-13T15:00:00.000Z",
+    "text": "test_order_validation fails about 1 in 30 CI runs. Probably test data ordering."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-13T15:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-14T10:00:00.000Z",
+    "status": "In Progress"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Maya Chen",
+    "at": "2026-11-14T10:05:00.000Z",
+    "body": "Looks like the fixture seeds random qty values."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "OPS-5",
+  "summary": "Rotate TLS certificates on demo-local hosts",
+  "type": "Task",
+  "components": [
+   "infra"
+  ],
+  "labels": [],
+  "reporter": "Tom Becker",
+  "assignee": "Tom Becker",
+  "created": "2026-10-20T09:00:00.000Z",
+  "description_versions": [
+   {
+    "at": "2026-10-20T09:00:00.000Z",
+    "text": "Quarterly certificate rotation."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-10-20T09:00:00.000Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-10-21T12:00:00.000Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "DEMO-66",
+  "summary": "Add item to order completed log line",
+  "type": "Task",
+  "components": [
+   "checkout-svc"
+  ],
+  "labels": [],
+  "reporter": "Maya Chen",
+  "assignee": "Rafael Ortiz",
+  "created": "2026-11-19T02:24:41.813Z",
+  "description_versions": [
+   {
+    "at": "2026-11-19T02:24:41.813Z",
+    "text": "Support wants the SKU on the completion log line."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-19T02:24:41.813Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-20T02:25:11.813Z",
+    "status": "Done"
+   }
+  ],
+  "comments": [],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "OPS-14",
+  "summary": "Payment host OS patching",
+  "type": "Task",
+  "components": [
+   "infra",
+   "payment-svc"
+  ],
+  "labels": [],
+  "reporter": "Tom Becker",
+  "assignee": null,
+  "created": "2026-11-17T02:23:16.260Z",
+  "description_versions": [
+   {
+    "at": "2026-11-17T02:23:16.260Z",
+    "text": "Monthly patching of the payment host. Window to be agreed."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-17T02:23:16.260Z",
+    "status": "Open"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Tom Becker",
+    "at": "2026-11-18T02:23:16.260Z",
+    "body": "Proposed window: next Thursday 06:00 UTC."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ },
+ {
+  "key": "OPS-34",
+  "summary": "[alert] checkout-svc error rate high",
+  "type": "Incident",
+  "components": [
+   "checkout-svc"
+  ],
+  "labels": [],
+  "reporter": "alertmanager",
+  "assignee": "Tom Becker",
+  "created": "2026-11-20T02:25:32.532Z",
+  "description_versions": [
+   {
+    "at": "2026-11-20T02:25:32.532Z",
+    "text": "Auto-created from alert 'checkout-svc error rate high' on checkout-svc. On-call investigating."
+   }
+  ],
+  "status_history": [
+   {
+    "at": "2026-11-20T02:25:32.532Z",
+    "status": "Open"
+   },
+   {
+    "at": "2026-11-20T02:25:47.532Z",
+    "status": "In Progress"
+   },
+   {
+    "at": "2026-11-20T02:50:52.532Z",
+    "status": "Resolved"
+   }
+  ],
+  "comments": [
+   {
+    "id": "c1",
+    "author": "Tom Becker",
+    "at": "2026-11-20T02:25:42.532Z",
+    "body": "Ack, looking at dashboards."
+   },
+   {
+    "id": "c2",
+    "author": "Tom Becker",
+    "at": "2026-11-20T02:49:52.532Z",
+    "body": "Mitigated; details go into the incident review. Closing the alert ticket."
+   }
+  ],
+  "links": [],
+  "fixture": true
+ }
+]

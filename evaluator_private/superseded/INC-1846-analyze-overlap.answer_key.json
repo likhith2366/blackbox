@@ -1,0 +1,96 @@
+{
+  "incident_id": "INC-1846",
+  "scenario_number": 5,
+  "scenario_type": "insufficient_evidence",
+  "is_primary": true,
+  "diagnosable": false,
+  "variant_of": null,
+  "expected_status": "insufficient_evidence",
+  "component": "payment-svc (runtime DB pool configuration)",
+  "mechanism": "ground truth: payment-svc was restarted (same build) with an operator environment override PAYMENT_DB_POOL_SIZE=1, so charges queue for the single connection and time out (503). Seconds earlier a real ANALYZE was run on the payments DB (OPS-16), and the ticket presents the restart as part of that maintenance",
+  "accepted_components": [
+    "payment-svc"
+  ],
+  "accepted_mechanisms": [
+    "db pool size reduced by runtime override"
+  ],
+  "decisive_evidence_ids": [
+    "deploy:d-552"
+  ],
+  "distractor_evidence_ids": [
+    "jira:OPS-16"
+  ],
+  "injected_fault": {
+    "faults": [
+      {
+        "change_id": "pool-override",
+        "family": "config_override_pool_size",
+        "kind": "restart_env",
+        "at": "2026-11-20T03:00:05.985Z",
+        "commit": null,
+        "builds": null,
+        "deployments": [
+          "d-552"
+        ],
+        "env": {
+          "PAYMENT_DB_POOL_SIZE": "1"
+        }
+      }
+    ],
+    "all_changes": [
+      {
+        "change_id": "ops-analyze",
+        "family": "harmless",
+        "kind": "db_maintenance",
+        "at": "2026-11-20T02:59:50.230Z",
+        "commit": null,
+        "builds": null,
+        "deployments": null,
+        "env": null
+      },
+      {
+        "change_id": "pool-override",
+        "family": "config_override_pool_size",
+        "kind": "restart_env",
+        "at": "2026-11-20T03:00:05.985Z",
+        "commit": null,
+        "builds": null,
+        "deployments": [
+          "d-552"
+        ],
+        "env": {
+          "PAYMENT_DB_POOL_SIZE": "1"
+        }
+      }
+    ],
+    "decisive_equivalents": {},
+    "withheld": {
+      "sources": [
+        "traces",
+        "configs"
+      ],
+      "log_services": [
+        "payment-svc"
+      ],
+      "metrics": {
+        "payment-svc": [
+          "db_pool_wait_p95_ms",
+          "db_query_p95_ms",
+          "db_pool_in_use"
+        ]
+      }
+    },
+    "connector_runtime": {}
+  },
+  "available_sources": [
+    "logs",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "tickets"
+  ],
+  "remaining_evidence_sufficient": null,
+  "notes": "Why the visible evidence cannot separate the causes: after the cutoff the model can see checkout errors (payment 503 'service unavailable'), payment request/error/latency metrics, a payment-svc restart with the SAME build/version/commit, a constant 8 rps load, no code or config commits, and OPS-16 saying planner statistics were refreshed and the service restarted. Several causes fit all of this equally well: (a) a changed runtime setting at restart (pool size, timeouts, DB path), which is the truth; (b) new planner statistics changing query plans (ANALYZE really ran); (c) DB/host contention around the maintenance. Telling them apart needs payment logs (pool acquire timeouts vs slow queries), pool/query metrics, traces or the effective runtime config, and all of these are withheld or never recorded (deploy records do not store env overrides). Correct output: insufficient_evidence, naming payment-svc's restart/maintenance as the window and asking for payment logs/pool metrics/runtime config.",
+  "frozen_at": null
+}
