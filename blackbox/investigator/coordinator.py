@@ -22,7 +22,8 @@ _CONF_RANK = {"high": 3, "medium": 2, "low": 1}
 
 class Coordinator:
     def __init__(self, backend: EvidenceBackend, config: RunConfig, adapter: Optional[OllamaAdapter] = None,
-                 on_event=None):
+                 on_event=None, should_cancel=None):
+        self.should_cancel = should_cancel  # optional: checked only between rounds (a safe boundary)
         self.on_event = on_event          # optional observer: called with (type, payload); never changes behaviour
         self.backend = backend
         self.cfg = config
@@ -173,7 +174,8 @@ class Coordinator:
     TOOL_SOURCE = {"search_logs": "logs", "search_traces": "traces", "get_trace": "traces",
                    "get_metrics": "metrics", "list_deployments": "deployments", "get_build": "builds",
                    "search_commits": "commits", "get_commit": "commits", "get_config": "configs",
-                   "search_tickets": "tickets", "get_ticket": "tickets"}
+                   "search_tickets": "tickets", "get_ticket": "tickets", "list_workflow_runs": "builds",
+                   "get_workflow_run": "builds", "get_job_log": "builds", "list_run_artifacts": "builds"}
 
     def _unchecked_sources(self) -> list[str]:
         """Available sources with no executed call yet. Derived only from source_status and the
@@ -195,7 +197,7 @@ class Coordinator:
                             ensure_ascii=False) if self.ledger else "[] (none yet)"
         head = "\n\n".join([
             "INCIDENT\n" + incident_text,
-            "TOOLS (read-only; arguments with ? are optional; times are ISO-8601 UTC)\n" + tool_catalog()
+            "TOOLS (read-only; arguments with ? are optional; times are ISO-8601 UTC)\n" + tool_catalog(tools=self.runner.tools)
             + '\nExample tool_calls entry: {"tool": "search_logs", "args": {"service": "<a service above>", '
               '"level": "ERROR", "limit": 15}}',
             f"BUDGET\nRound {rnd} of {self.cfg.max_rounds}. Tool calls used {self.calls_used} of "
@@ -233,6 +235,11 @@ class Coordinator:
         no_progress = parse_failures = 0
 
         for rnd in range(1, self.cfg.max_rounds + 1):
+            if self.should_cancel is not None and self.should_cancel():
+                stop, stop_reason = "stop_cancelled", f"cancelled by the user before round {rnd}"
+                if self.steps:
+                    self.steps[-1].stop_decision, self.steps[-1].stop_reason = stop, stop_reason
+                break
             if time.perf_counter() - t0 > self.cfg.run_timeout_s:
                 stop, stop_reason = "stop_timeout", f"run exceeded {self.cfg.run_timeout_s:.0f}s"
                 break
@@ -309,7 +316,7 @@ class Coordinator:
                     step.tool_results.append(res)
                     self.feedback.append(f"{req.call_id} {tool} -> invalid_args: {res.error}")
                     continue
-                if not ToolRunner.is_allowed(tool):
+                if not self.runner.is_allowed(tool):
                     self.unauthorized.append(req)
                     res = ToolResult(call_id=req.call_id, tool=tool, status="denied",
                                      error=f"'{tool}' is not an available tool; request refused")
@@ -387,6 +394,16 @@ class Coordinator:
             if self.steps:
                 self.steps[-1].stop_decision, self.steps[-1].stop_reason = stop, stop_reason
 
+        if stop == "stop_cancelled":   # no report call: a cancelled run is not a conclusion
+            self.runner.close()
+            return SystemOutput(
+                system="blackbox", incident_id=incident.incident_id, ablation=self.backend.ablation,
+                status="cancelled", error=stop_reason, report=None, steps=self.steps,
+                evidence_seen=list(self.seen.values()), usage=self.usage,
+                wall_seconds=round(time.perf_counter() - t0, 2), rounds_used=len(self.steps),
+                tool_calls_used=self.calls_used, budget_violations=self.violations,
+                unauthorized_attempts=self.unauthorized, unauthorized_executed=0, config=self.cfg,
+                prompt_versions={"round": self.v_round, "report": self.v_report})
         if stop == "stop_error":
             # the model never decided; do not turn its unfinished ledger into a diagnosis (QA-F02)
             report, report_error = self._ledger_report(incident.incident_id, "failed"), None

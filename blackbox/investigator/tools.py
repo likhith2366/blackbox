@@ -103,9 +103,44 @@ TOOLS: dict[str, tuple[type[_Args], str, str]] = {
 }
 
 
-def tool_catalog(available_sources: Optional[set[str]] = None) -> str:
+class ListWorkflowRuns(_Args):
+    limit: int = Field(default=5, ge=1, le=10)
+    status: Optional[str] = None
+
+
+class GetWorkflowRun(_Args):
+    run_id: int
+
+
+class GetJobLog(_Args):
+    job_id: int
+    failed_only: bool = True
+
+
+class ListRunArtifacts(_Args):
+    run_id: int
+
+
+# Read-only GitHub Actions tools, offered ONLY when the backend is a live backend that implements
+# them. Snapshot mode (and so the frozen evaluation) keeps exactly TOOLS.
+LIVE_TOOLS: dict[str, tuple[type[_Args], str, str]] = {
+    "list_workflow_runs": (ListWorkflowRuns, "list_workflow_runs",
+                           "GitHub Actions CI runs: status, conclusion and the head commit they built."),
+    "get_workflow_run": (GetWorkflowRun, "get_workflow_run", "One CI run: its jobs, steps and their conclusions."),
+    "get_job_log": (GetJobLog, "get_job_log", "Tail of one CI job's log (failed jobs only unless failed_only=false)."),
+    "list_run_artifacts": (ListRunArtifacts, "list_run_artifacts", "Artifact metadata of one CI run (never downloaded)."),
+}
+
+
+def tools_for(backend) -> dict[str, tuple[type[_Args], str, str]]:
+    if getattr(backend, "mode", "") == "live" and all(hasattr(backend, m) for _, m, _ in LIVE_TOOLS.values()):
+        return {**TOOLS, **LIVE_TOOLS}
+    return dict(TOOLS)
+
+
+def tool_catalog(available_sources: Optional[set[str]] = None, tools: Optional[dict] = None) -> str:
     lines = []
-    for name, (model, _, desc) in TOOLS.items():
+    for name, (model, _, desc) in (tools or TOOLS).items():
         fields = []
         for fname, f in model.model_fields.items():
             req = f.is_required()
@@ -119,15 +154,15 @@ class ToolRunner:
 
     def __init__(self, backend: EvidenceBackend, timeout_s: float):
         self.backend = backend
+        self.tools = tools_for(backend)
         self.timeout_s = timeout_s
         self._pool = ThreadPoolExecutor(max_workers=4)  # a hung call must not block the next one
 
     def close(self) -> None:
         self._pool.shutdown(wait=False, cancel_futures=True)
 
-    @staticmethod
-    def is_allowed(tool: str) -> bool:
-        return tool in TOOLS
+    def is_allowed(self, tool: str) -> bool:
+        return tool in self.tools
 
     def run(self, req: ToolRequest) -> ToolResult:
         start = time.perf_counter()
@@ -136,9 +171,9 @@ class ToolRunner:
             return ToolResult(call_id=req.call_id, tool=req.tool, status=status,
                               elapsed_ms=(time.perf_counter() - start) * 1000, **kw)
 
-        if req.tool not in TOOLS:
-            return done("denied", error=f"tool '{req.tool}' is not permitted; allowed: {', '.join(TOOLS)}")
-        model, method_name, _ = TOOLS[req.tool]
+        if req.tool not in self.tools:
+            return done("denied", error=f"tool '{req.tool}' is not permitted; allowed: {', '.join(self.tools)}")
+        model, method_name, _ = self.tools[req.tool]
         try:
             args = model.model_validate(req.args or {})
         except ValidationError as exc:

@@ -198,12 +198,26 @@ def _event(job: dict, kind: str, **payload: Any) -> None:
         fh.write(json.dumps(ev, default=str) + "\n")
 
 
+PUBLIC = ("job_id", "status", "created", "started", "ended", "run_id", "error", "request", "meta", "retry_of")
+
+
 def _public(job: dict) -> dict:
-    return {k: job[k] for k in ("job_id", "status", "created", "started", "ended", "run_id", "error", "request")}
+    return {k: job.get(k) for k in PUBLIC}
+
+
+def _save(job: dict) -> None:
+    """Jobs survive an API restart: state is written to runs/ui_jobs/<id>/job.json on every change."""
+    (Path(job["dir"]) / "job.json").write_text(json.dumps(_public(job), indent=2, default=str), encoding="utf-8")
+
+
+def _set(job: dict, **fields: Any) -> None:
+    with JOBS_LOCK:
+        job.update(fields)
+    _save(job)
 
 
 @app.post("/api/investigations", status_code=202)
-def submit(req: InvestigationRequest) -> dict:
+def submit(req: InvestigationRequest, retry_of: Optional[str] = None) -> dict:
     snap = SNAPSHOTS / req.incident_id / "incident.json"
     if not snap.exists():
         raise HTTPException(404, f"unknown incident {req.incident_id}")
@@ -219,11 +233,13 @@ def submit(req: InvestigationRequest) -> dict:
     d = JOBS_DIR / job_id
     d.mkdir(parents=True, exist_ok=True)
     job = {"job_id": job_id, "status": "queued", "created": _now(), "started": None, "ended": None,
-           "run_id": None, "error": None, "request": req.model_dump(), "events": [], "dir": str(d)}
+           "run_id": None, "error": None, "request": req.model_dump(), "events": [], "dir": str(d),
+           "meta": None, "retry_of": retry_of, "cancel": False}
     (d / "request.json").write_text(json.dumps(req.model_dump(), indent=2), encoding="utf-8")
     with JOBS_LOCK:
         JOBS[job_id] = job
         position = sum(1 for j in JOBS.values() if j["status"] in ("queued", "waiting_gpu"))
+    _save(job)
     _event(job, "queued", position=position)
     WORK.put(job_id)
     return {"job_id": job_id, "status": "queued", "position": position}
@@ -270,6 +286,70 @@ def job_events(job_id: str):
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 
+@app.post("/api/jobs/{job_id}/cancel")
+def cancel_job(job_id: str) -> dict:
+    """Queued jobs are cancelled at once; a running job stops before its next round (a safe boundary)."""
+    with JOBS_LOCK:
+        job = JOBS.get(job_id)
+    if job is None:
+        raise HTTPException(404, f"no job {job_id}")
+    if job["status"] in ("queued", "waiting_gpu"):
+        _set(job, status="cancelled", ended=_now(), error="cancelled before it started")
+        _event(job, "cancelled", when="before start")
+    elif job["status"] == "running":
+        _set(job, cancel=True)
+        _event(job, "cancel_requested", note="will stop before the next round")
+    else:
+        raise HTTPException(409, f"job is {job['status']}; nothing to cancel")
+    return _public(job)
+
+
+@app.post("/api/jobs/{job_id}/retry", status_code=202)
+def retry_job(job_id: str) -> dict:
+    with JOBS_LOCK:
+        job = JOBS.get(job_id)
+    if job is None:
+        raise HTTPException(404, f"no job {job_id}")
+    if job["status"] not in ("failed", "cancelled"):
+        raise HTTPException(409, f"only failed or cancelled jobs can be retried (job is {job['status']})")
+    return submit(InvestigationRequest(**job["request"]), retry_of=job_id)
+
+
+SNAPSHOT_FILES = {"logs.jsonl", "spans.jsonl", "metrics.jsonl", "deployments.jsonl", "builds.jsonl",
+                  "commits.jsonl", "configs.jsonl", "tickets.json", "incident.json"}
+
+
+@app.get("/api/runs/{run_id}/evidence/{evidence_id:path}")
+def evidence_source(run_id: str, evidence_id: str) -> dict:
+    """A cited record and where it came from. Only records this run actually saw can be opened."""
+    out = json.loads((_run_dir(run_id) / "output.json").read_text(encoding="utf-8"))
+    rec = next((e for e in out.get("evidence_seen", []) if e.get("evidence_id") == evidence_id), None)
+    if rec is None:
+        raise HTTPException(404, f"{evidence_id} was not retrieved in run {run_id}")
+    ref = rec.get("content_ref") or ""
+    attrs = rec.get("attributes") or {}
+    source: dict[str, Any] = {"kind": "unknown", "ref": ref}
+    if ref.startswith("http"):
+        source = {"kind": "github" if "github.com" in ref else "url", "url": ref}
+    elif "#" in ref and ref.split("#")[0] in SNAPSHOT_FILES:
+        fname, line = ref.split("#", 1)
+        raw = None
+        f = SNAPSHOTS / out.get("incident_id", "") / fname
+        if f.exists() and line.isdigit() and fname.endswith(".jsonl"):
+            for row in f.read_text(encoding="utf-8").splitlines():
+                try:
+                    obj = json.loads(row)
+                except json.JSONDecodeError:
+                    continue
+                if obj.get("evidence_id") == evidence_id or str(obj.get("line")) == line:
+                    raw = obj
+                    break
+        source = {"kind": "snapshot", "file": fname, "line": line, "raw": raw}
+    elif attrs.get("path"):
+        source = {"kind": "local_log_file", "path": attrs.get("path"), "line": attrs.get("line")}
+    return {"record": rec, "source": source}
+
+
 class _WithUserContext:
     """Adds the user's problem description and window to the model-visible incident, labelled as user input."""
 
@@ -300,18 +380,23 @@ def _worker() -> None:
     while True:
         job_id = WORK.get()
         job = JOBS[job_id]
+        if job["status"] == "cancelled":
+            continue
         req = InvestigationRequest(**job["request"])
         announced = False
         while not gpu_lock.try_acquire(f"BlackBox UI job {job_id}"):
             if not announced:
-                with JOBS_LOCK:
-                    job["status"] = "waiting_gpu"
+                _set(job, status="waiting_gpu")
                 _event(job, "waiting_gpu", holder=(gpu_lock.holder() or {}).get("owner"))
                 announced = True
             time.sleep(5)
+            if job["status"] == "cancelled":
+                break
+        if job["status"] == "cancelled":
+            gpu_lock.release()
+            continue
         try:
-            with JOBS_LOCK:
-                job["status"], job["started"] = "running", _now()
+            _set(job, status="running", started=_now())
             _event(job, "started", mode=req.mode)
             if req.mode == "live":
                 from blackbox.evidence.live import load_live_backend
@@ -324,26 +409,53 @@ def _worker() -> None:
             else:
                 base = load_backend(req.incident_id)
             cfg = RunConfig(**(yaml.safe_load(CONFIG.read_text(encoding="utf-8")) or {}))
+            import hashlib
+            from blackbox.systems import code_revision as _rev
+            man = SNAPSHOTS / req.incident_id / "manifest.json"
+            _set(job, meta={"mode": req.mode, "config_file": str(CONFIG.relative_to(REPO)),
+                            "model": cfg.model_dump(include={"model", "temperature", "seed", "num_ctx", "num_predict",
+                                                              "max_rounds", "max_tool_calls", "round_prompt",
+                                                              "report_prompt", "coverage_hint"}),
+                            "code_revision": _rev(), "snapshot": req.incident_id,
+                            "snapshot_manifest_sha256": hashlib.sha256(man.read_bytes()).hexdigest() if man.exists() else None})
             out = run_system("blackbox", _WithUserContext(base, req), cfg,
-                             on_event=lambda kind, payload: _event(job, kind, data=payload))
+                             on_event=lambda kind, payload: _event(job, kind, data=payload),
+                             should_cancel=lambda: bool(job.get("cancel")))
             d = Path(job["dir"])
             (d / "output.json").write_text(out.model_dump_json(indent=2), encoding="utf-8")
-            (d / "meta.json").write_text(json.dumps({"phase": "BlackBox UI job (not evaluation)", "mode": req.mode,
-                                                    "config_file": str(CONFIG.relative_to(REPO)),
-                                                    "code_revision": out.config.code_revision,
-                                                    "request": req.model_dump(), "status": out.status}, indent=2),
-                                         encoding="utf-8")
-            with JOBS_LOCK:
-                job["status"], job["run_id"] = "completed", _run_id(d / "output.json")
-            _event(job, "completed", run_id=job["run_id"], status=out.status)
+            (d / "meta.json").write_text(json.dumps({"phase": "BlackBox UI job (not evaluation)", **(job["meta"] or {}),
+                                                    "request": req.model_dump(), "status": out.status,
+                                                    "retry_of": job.get("retry_of")}, indent=2), encoding="utf-8")
+            final = "cancelled" if out.status == "cancelled" else "completed"
+            _set(job, status=final, run_id=_run_id(d / "output.json"))
+            _event(job, final, run_id=job["run_id"], status=out.status)
         except Exception as exc:
-            with JOBS_LOCK:
-                job["status"], job["error"] = "failed", f"{type(exc).__name__}: {str(exc)[:300]}"
+            _set(job, status="failed", error=f"{type(exc).__name__}: {str(exc)[:300]}")
             _event(job, "failed", error=job["error"])
         finally:
             gpu_lock.release()
-            with JOBS_LOCK:
-                job["ended"] = _now()
+            _set(job, ended=_now())
 
 
+def _reload_jobs() -> None:
+    """Restore jobs after an API restart. Queued jobs are re-queued; a job that was running when
+    the API stopped is marked failed (its inference was interrupted) and can be retried."""
+    for f in sorted(JOBS_DIR.glob("*/job.json")):
+        try:
+            job = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        job["dir"], job["cancel"] = str(f.parent), False
+        ev = f.parent / "events.jsonl"
+        job["events"] = [json.loads(x) for x in ev.read_text(encoding="utf-8").splitlines()] if ev.exists() else []
+        JOBS[job["job_id"]] = job
+        if job["status"] == "running":
+            _set(job, status="failed", error="interrupted: the API restarted while this job was running", ended=_now())
+            _event(job, "failed", error=job["error"])
+        elif job["status"] in ("queued", "waiting_gpu"):
+            _set(job, status="queued")
+            WORK.put(job["job_id"])
+
+
+_reload_jobs()
 threading.Thread(target=_worker, daemon=True, name="gpu-job-worker").start()

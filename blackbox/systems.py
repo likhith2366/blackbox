@@ -31,13 +31,14 @@ def prompt_version(system: SystemName, config: RunConfig) -> str:
 
 
 def run_system(system: SystemName, backend: EvidenceBackend, config: RunConfig,
-               b1_evidence: Optional[list[EvidenceRecord]] = None, on_event=None) -> SystemOutput:
+               b1_evidence: Optional[list[EvidenceRecord]] = None, on_event=None,
+               should_cancel=None) -> SystemOutput:
     cfg = config.model_copy(update={
         "code_revision": config.code_revision or code_revision(),
         "prompt_version": prompt_version(system, config),
     })
     if system == "blackbox":
-        return Coordinator(backend, cfg, on_event=on_event).run()
+        return Coordinator(backend, cfg, on_event=on_event, should_cancel=should_cancel).run()
     if system in ("b0", "b1"):
         return run_single_call(system, backend, cfg, b1_evidence=b1_evidence)
     raise ValueError(f"unknown system {system!r}")

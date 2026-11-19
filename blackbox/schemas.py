@@ -125,7 +125,7 @@ class Hypothesis(BaseModel):
 
 StopDecision = Literal[
     "continue", "stop_diagnosis", "stop_insufficient", "stop_no_fault",
-    "stop_budget", "stop_rounds", "stop_error", "stop_timeout",
+    "stop_budget", "stop_rounds", "stop_error", "stop_timeout", "stop_cancelled",
 ]
 
 
@@ -242,7 +242,7 @@ class SystemOutput(BaseModel):
     system: SystemName
     incident_id: str
     ablation: Ablation = "none"
-    status: Literal["completed", "failed", "timeout"]
+    status: Literal["completed", "failed", "timeout", "cancelled"]
     error: Optional[str] = None
     report: Optional[FinalReport] = None
     steps: list[InvestigationStep] = Field(default_factory=list)
