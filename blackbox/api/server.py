@@ -316,7 +316,11 @@ def _worker() -> None:
             if req.mode == "live":
                 from blackbox.evidence.live import load_live_backend
                 from blackbox.connectors.capture import capture_dir_for
-                base = load_live_backend(req.incident_id, DEFAULT_REPO, capture_dir=capture_dir_for(f"ui-{job_id}"))
+                # the incident's own captured application logs, read live from the files the services wrote;
+                # never the demo's current telemetry, which belongs to whatever is running now
+                tel = REPO / "demo" / ".runtime" / "captures" / req.incident_id / "telemetry"
+                base = load_live_backend(req.incident_id, DEFAULT_REPO, telemetry_dir=tel if tel.exists() else None,
+                                         capture_dir=capture_dir_for(f"ui-{job_id}"))
             else:
                 base = load_backend(req.incident_id)
             cfg = RunConfig(**(yaml.safe_load(CONFIG.read_text(encoding="utf-8")) or {}))
