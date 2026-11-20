@@ -2,6 +2,368 @@
   "family": "formal",
   "rows": [
     {
+      "run": "INC-1846_b0_none_r0",
+      "incident_id": "INC-1846",
+      "system": "b0",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "d5f1f18802f9be739b0e985a662239ee0bedc14adeda84c928bb14feb586f308",
+      "answer_key_recorded_at_run": "d5f1f18802f9be739b0e985a662239ee0bedc14adeda84c928bb14feb586f308",
+      "decisive_total": 0,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": null,
+      "retrieved_detail": {},
+      "cited_detail": {}
+    },
+    {
+      "run": "INC-1846_b1_none_r0",
+      "incident_id": "INC-1846",
+      "system": "b1",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "no_fault_observed",
+      "answer_key_sha256": "d5f1f18802f9be739b0e985a662239ee0bedc14adeda84c928bb14feb586f308",
+      "answer_key_recorded_at_run": "d5f1f18802f9be739b0e985a662239ee0bedc14adeda84c928bb14feb586f308",
+      "decisive_total": 0,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": null,
+      "retrieved_detail": {},
+      "cited_detail": {}
+    },
+    {
+      "run": "INC-1846_blackbox_none_r0",
+      "incident_id": "INC-1846",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "d5f1f18802f9be739b0e985a662239ee0bedc14adeda84c928bb14feb586f308",
+      "answer_key_recorded_at_run": "d5f1f18802f9be739b0e985a662239ee0bedc14adeda84c928bb14feb586f308",
+      "decisive_total": 0,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": null,
+      "retrieved_detail": {},
+      "cited_detail": {}
+    },
+    {
+      "run": "INC-2264_b0_none_r0",
+      "incident_id": "INC-2264",
+      "system": "b0",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "05a3a9df4963afa75f9c2bfaadf1f3c67c8a45e413f18c623b0f3eefa21eb8cc",
+      "answer_key_recorded_at_run": "05a3a9df4963afa75f9c2bfaadf1f3c67c8a45e413f18c623b0f3eefa21eb8cc",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:0b16cdf": null,
+        "deploy:d-569": null,
+        "metric:5572eac327": null,
+        "log:ce22a1f004": null
+      },
+      "cited_detail": {
+        "commit:0b16cdf": null,
+        "deploy:d-569": null,
+        "metric:5572eac327": null,
+        "log:ce22a1f004": null
+      }
+    },
+    {
+      "run": "INC-2264_b1_none_r0",
+      "incident_id": "INC-2264",
+      "system": "b1",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "no_fault_observed",
+      "answer_key_sha256": "05a3a9df4963afa75f9c2bfaadf1f3c67c8a45e413f18c623b0f3eefa21eb8cc",
+      "answer_key_recorded_at_run": "05a3a9df4963afa75f9c2bfaadf1f3c67c8a45e413f18c623b0f3eefa21eb8cc",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:0b16cdf": null,
+        "deploy:d-569": null,
+        "metric:5572eac327": null,
+        "log:ce22a1f004": null
+      },
+      "cited_detail": {
+        "commit:0b16cdf": null,
+        "deploy:d-569": null,
+        "metric:5572eac327": null,
+        "log:ce22a1f004": null
+      }
+    },
+    {
+      "run": "INC-2264_blackbox_none_r0",
+      "incident_id": "INC-2264",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "05a3a9df4963afa75f9c2bfaadf1f3c67c8a45e413f18c623b0f3eefa21eb8cc",
+      "answer_key_recorded_at_run": "05a3a9df4963afa75f9c2bfaadf1f3c67c8a45e413f18c623b0f3eefa21eb8cc",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:0b16cdf": null,
+        "deploy:d-569": null,
+        "metric:5572eac327": null,
+        "log:ce22a1f004": null
+      },
+      "cited_detail": {
+        "commit:0b16cdf": null,
+        "deploy:d-569": null,
+        "metric:5572eac327": null,
+        "log:ce22a1f004": null
+      }
+    },
+    {
+      "run": "INC-2691_b0_none_r0",
+      "incident_id": "INC-2691",
+      "system": "b0",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "answer_key_recorded_at_run": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      },
+      "cited_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      }
+    },
+    {
+      "run": "INC-2691_b1_none_r0",
+      "incident_id": "INC-2691",
+      "system": "b1",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "answer_key_recorded_at_run": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      },
+      "cited_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      }
+    },
+    {
+      "run": "INC-2691_blackbox_no_jira_r0",
+      "incident_id": "INC-2691",
+      "system": "blackbox",
+      "ablation": "no_jira",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "answer_key_recorded_at_run": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      },
+      "cited_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      }
+    },
+    {
+      "run": "INC-2691_blackbox_no_provenance_r0",
+      "incident_id": "INC-2691",
+      "system": "blackbox",
+      "ablation": "no_provenance",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "answer_key_recorded_at_run": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      },
+      "cited_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      }
+    },
+    {
+      "run": "INC-2691_blackbox_no_traces_r0",
+      "incident_id": "INC-2691",
+      "system": "blackbox",
+      "ablation": "no_traces",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "answer_key_recorded_at_run": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      },
+      "cited_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      }
+    },
+    {
+      "run": "INC-2691_blackbox_none_r0",
+      "incident_id": "INC-2691",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "answer_key_recorded_at_run": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      },
+      "cited_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      }
+    },
+    {
+      "run": "INC-2691_blackbox_none_r1",
+      "incident_id": "INC-2691",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "answer_key_recorded_at_run": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      },
+      "cited_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      }
+    },
+    {
+      "run": "INC-2691_blackbox_none_r2",
+      "incident_id": "INC-2691",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "answer_key_recorded_at_run": "47a0d46d7b439dbe4d81d96f79ddd5fd88a9f9ca4050a33962765da21a50df3b",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      },
+      "cited_detail": {
+        "config:checkout-svc@7595162": null,
+        "commit:7595162": null,
+        "deploy:d-545": null,
+        "log:df9fe83f35": null
+      }
+    },
+    {
       "run": "INC-3172_b0_none_r0",
       "incident_id": "INC-3172",
       "system": "b0",
@@ -58,6 +420,90 @@
       }
     },
     {
+      "run": "INC-3172_blackbox_no_jira_r0",
+      "incident_id": "INC-3172",
+      "system": "blackbox",
+      "ablation": "no_jira",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "answer_key_recorded_at_run": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      }
+    },
+    {
+      "run": "INC-3172_blackbox_no_provenance_r0",
+      "incident_id": "INC-3172",
+      "system": "blackbox",
+      "ablation": "no_provenance",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "answer_key_recorded_at_run": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      }
+    },
+    {
+      "run": "INC-3172_blackbox_no_traces_r0",
+      "incident_id": "INC-3172",
+      "system": "blackbox",
+      "ablation": "no_traces",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "answer_key_recorded_at_run": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      }
+    },
+    {
       "run": "INC-3172_blackbox_none_r0",
       "incident_id": "INC-3172",
       "system": "blackbox",
@@ -84,13 +530,693 @@
         "metric:c18d485552": null,
         "log:a1639073d8": null
       }
+    },
+    {
+      "run": "INC-3172_blackbox_none_r1",
+      "incident_id": "INC-3172",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "answer_key_recorded_at_run": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      }
+    },
+    {
+      "run": "INC-3172_blackbox_none_r2",
+      "incident_id": "INC-3172",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "answer_key_recorded_at_run": "a313c77b33239d22d0c504c6b559e6f1210875df8f24f0b75c70653a3ec51c71",
+      "decisive_total": 4,
+      "retrieved_v1": 1,
+      "retrieved_v2": 1,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": "exact"
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:c18d485552": null,
+        "log:a1639073d8": null
+      }
+    },
+    {
+      "run": "INC-4417_b0_none_r0",
+      "incident_id": "INC-4417",
+      "system": "b0",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "b9e151187b8be3b7a4e430f89cdb3e1b0a2b0e28a4e715a1343530301cf57e88",
+      "answer_key_recorded_at_run": "b9e151187b8be3b7a4e430f89cdb3e1b0a2b0e28a4e715a1343530301cf57e88",
+      "decisive_total": 0,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": null,
+      "retrieved_detail": {},
+      "cited_detail": {}
+    },
+    {
+      "run": "INC-4417_b1_none_r0",
+      "incident_id": "INC-4417",
+      "system": "b1",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "b9e151187b8be3b7a4e430f89cdb3e1b0a2b0e28a4e715a1343530301cf57e88",
+      "answer_key_recorded_at_run": "b9e151187b8be3b7a4e430f89cdb3e1b0a2b0e28a4e715a1343530301cf57e88",
+      "decisive_total": 0,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": null,
+      "retrieved_detail": {},
+      "cited_detail": {}
+    },
+    {
+      "run": "INC-4417_blackbox_none_r0",
+      "incident_id": "INC-4417",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "b9e151187b8be3b7a4e430f89cdb3e1b0a2b0e28a4e715a1343530301cf57e88",
+      "answer_key_recorded_at_run": "b9e151187b8be3b7a4e430f89cdb3e1b0a2b0e28a4e715a1343530301cf57e88",
+      "decisive_total": 0,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": null,
+      "retrieved_detail": {},
+      "cited_detail": {}
+    },
+    {
+      "run": "INC-5408_b0_none_r0",
+      "incident_id": "INC-5408",
+      "system": "b0",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "answer_key_recorded_at_run": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      },
+      "cited_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      }
+    },
+    {
+      "run": "INC-5408_b1_none_r0",
+      "incident_id": "INC-5408",
+      "system": "b1",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "no_fault_observed",
+      "answer_key_sha256": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "answer_key_recorded_at_run": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      },
+      "cited_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      }
+    },
+    {
+      "run": "INC-5408_blackbox_no_jira_r0",
+      "incident_id": "INC-5408",
+      "system": "blackbox",
+      "ablation": "no_jira",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "answer_key_recorded_at_run": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      },
+      "cited_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      }
+    },
+    {
+      "run": "INC-5408_blackbox_no_provenance_r0",
+      "incident_id": "INC-5408",
+      "system": "blackbox",
+      "ablation": "no_provenance",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "answer_key_recorded_at_run": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      },
+      "cited_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      }
+    },
+    {
+      "run": "INC-5408_blackbox_no_traces_r0",
+      "incident_id": "INC-5408",
+      "system": "blackbox",
+      "ablation": "no_traces",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "answer_key_recorded_at_run": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      },
+      "cited_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      }
+    },
+    {
+      "run": "INC-5408_blackbox_none_r0",
+      "incident_id": "INC-5408",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "answer_key_recorded_at_run": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      },
+      "cited_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      }
+    },
+    {
+      "run": "INC-5408_blackbox_none_r1",
+      "incident_id": "INC-5408",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "answer_key_recorded_at_run": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      },
+      "cited_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      }
+    },
+    {
+      "run": "INC-5408_blackbox_none_r2",
+      "incident_id": "INC-5408",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "answer_key_recorded_at_run": "02f69aecf5b30c77fd1062af917d89e29e818010e60354aa3b4ad0c76a13d1ad",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      },
+      "cited_detail": {
+        "commit:5d2e089": null,
+        "deploy:d-542": null,
+        "metric:1a92f537d4": null,
+        "log:e694d3cc24": null
+      }
+    },
+    {
+      "run": "INC-6053_b0_none_r0",
+      "incident_id": "INC-6053",
+      "system": "b0",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "6d5bef485a99e4874a304494540be40d835a27020f12acc863432ac85fedddd5",
+      "answer_key_recorded_at_run": "6d5bef485a99e4874a304494540be40d835a27020f12acc863432ac85fedddd5",
+      "decisive_total": 0,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": null,
+      "retrieved_detail": {},
+      "cited_detail": {}
+    },
+    {
+      "run": "INC-6053_b1_none_r0",
+      "incident_id": "INC-6053",
+      "system": "b1",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "no_fault_observed",
+      "answer_key_sha256": "6d5bef485a99e4874a304494540be40d835a27020f12acc863432ac85fedddd5",
+      "answer_key_recorded_at_run": "6d5bef485a99e4874a304494540be40d835a27020f12acc863432ac85fedddd5",
+      "decisive_total": 0,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": null,
+      "retrieved_detail": {},
+      "cited_detail": {}
+    },
+    {
+      "run": "INC-6053_blackbox_none_r0",
+      "incident_id": "INC-6053",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "6d5bef485a99e4874a304494540be40d835a27020f12acc863432ac85fedddd5",
+      "answer_key_recorded_at_run": "6d5bef485a99e4874a304494540be40d835a27020f12acc863432ac85fedddd5",
+      "decisive_total": 0,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": null,
+      "retrieved_detail": {},
+      "cited_detail": {}
+    },
+    {
+      "run": "INC-7735_b0_none_r0",
+      "incident_id": "INC-7735",
+      "system": "b0",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "answer_key_recorded_at_run": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "decisive_total": 3,
+      "retrieved_v1": 1,
+      "retrieved_v2": 1,
+      "cited_v2": 1,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": "equivalent:log:eb879d864c"
+      },
+      "cited_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": "equivalent:log:eb879d864c"
+      }
+    },
+    {
+      "run": "INC-7735_b1_none_r0",
+      "incident_id": "INC-7735",
+      "system": "b1",
+      "ablation": "none",
+      "run_status": "failed",
+      "report_status": null,
+      "answer_key_sha256": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "answer_key_recorded_at_run": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "decisive_total": 3,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      },
+      "cited_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      }
+    },
+    {
+      "run": "INC-7735_blackbox_no_jira_r0",
+      "incident_id": "INC-7735",
+      "system": "blackbox",
+      "ablation": "no_jira",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "answer_key_recorded_at_run": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "decisive_total": 3,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      },
+      "cited_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      }
+    },
+    {
+      "run": "INC-7735_blackbox_no_provenance_r0",
+      "incident_id": "INC-7735",
+      "system": "blackbox",
+      "ablation": "no_provenance",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "answer_key_recorded_at_run": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "decisive_total": 3,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      },
+      "cited_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      }
+    },
+    {
+      "run": "INC-7735_blackbox_no_traces_r0",
+      "incident_id": "INC-7735",
+      "system": "blackbox",
+      "ablation": "no_traces",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "answer_key_recorded_at_run": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "decisive_total": 3,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      },
+      "cited_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      }
+    },
+    {
+      "run": "INC-7735_blackbox_none_r0",
+      "incident_id": "INC-7735",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "answer_key_recorded_at_run": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "decisive_total": 3,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      },
+      "cited_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      }
+    },
+    {
+      "run": "INC-7735_blackbox_none_r1",
+      "incident_id": "INC-7735",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "answer_key_recorded_at_run": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "decisive_total": 3,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      },
+      "cited_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      }
+    },
+    {
+      "run": "INC-7735_blackbox_none_r2",
+      "incident_id": "INC-7735",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "insufficient_evidence",
+      "answer_key_sha256": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "answer_key_recorded_at_run": "4303268930d7548716353b6edfd287a2666d93a3162bda6b4e6c084354755b98",
+      "decisive_total": 3,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      },
+      "cited_detail": {
+        "log:82f28b3a83": null,
+        "metric:69f8313e77": null,
+        "log:a5d221e561": null
+      }
+    },
+    {
+      "run": "INC-8290_b0_none_r0",
+      "incident_id": "INC-8290",
+      "system": "b0",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "3378ec1190b0ac2c2556fba1f4bd7e60b7c5193ae96cc5744c2cbcae160f2c8e",
+      "answer_key_recorded_at_run": "3378ec1190b0ac2c2556fba1f4bd7e60b7c5193ae96cc5744c2cbcae160f2c8e",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:ee2607ab50": null,
+        "trace:6576afa64a1ff91179331c85d63aa05c": null
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:ee2607ab50": null,
+        "trace:6576afa64a1ff91179331c85d63aa05c": null
+      }
+    },
+    {
+      "run": "INC-8290_b1_none_r0",
+      "incident_id": "INC-8290",
+      "system": "b1",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "3378ec1190b0ac2c2556fba1f4bd7e60b7c5193ae96cc5744c2cbcae160f2c8e",
+      "answer_key_recorded_at_run": "3378ec1190b0ac2c2556fba1f4bd7e60b7c5193ae96cc5744c2cbcae160f2c8e",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:ee2607ab50": null,
+        "trace:6576afa64a1ff91179331c85d63aa05c": null
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:ee2607ab50": null,
+        "trace:6576afa64a1ff91179331c85d63aa05c": null
+      }
+    },
+    {
+      "run": "INC-8290_blackbox_none_r0",
+      "incident_id": "INC-8290",
+      "system": "blackbox",
+      "ablation": "none",
+      "run_status": "completed",
+      "report_status": "diagnosis",
+      "answer_key_sha256": "3378ec1190b0ac2c2556fba1f4bd7e60b7c5193ae96cc5744c2cbcae160f2c8e",
+      "answer_key_recorded_at_run": "3378ec1190b0ac2c2556fba1f4bd7e60b7c5193ae96cc5744c2cbcae160f2c8e",
+      "decisive_total": 4,
+      "retrieved_v1": 0,
+      "retrieved_v2": 0,
+      "cited_v2": 0,
+      "changed": false,
+      "top1_auto_v1": false,
+      "retrieved_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:ee2607ab50": null,
+        "trace:6576afa64a1ff91179331c85d63aa05c": null
+      },
+      "cited_detail": {
+        "commit:44c654c": null,
+        "deploy:d-538": null,
+        "metric:ee2607ab50": null,
+        "trace:6576afa64a1ff91179331c85d63aa05c": null
+      }
     }
   ],
   "notes": [],
   "name": "eval_v1",
   "scoring_version": "v2",
   "answer_keys_dir": "A:\\subjects\\genAI\\final_project\\blackbox\\evaluator_private\\answer_keys",
-  "generated": "2026-11-20T03:57:03Z",
+  "generated": "2026-11-20T05:39:34Z",
   "code": {
     "scoring_v1": {
       "file": "eval/metrics.py",
