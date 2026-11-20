@@ -1,0 +1,50 @@
+{
+  "incident_id": "INC-6053",
+  "snapshot_dir": "A:\\subjects\\genAI\\final_project\\blackbox\\scenarios\\snapshots\\INC-6053",
+  "backend_checked": true,
+  "ablations_checked": [
+    "none",
+    "no_jira",
+    "no_provenance",
+    "no_traces"
+  ],
+  "schema": {
+    "failures": [],
+    "warnings": [],
+    "info": []
+  },
+  "completeness": {
+    "failures": [],
+    "warnings": [],
+    "info": [
+      "manifest: entry present, scenario 6 (insufficient_evidence), frozen=False, superseded=False",
+      "source logs: available=True healthy=True (snapshot replay of JSON logs captured from the demo services; logs available for: checkout-svc)",
+      "source traces: available=False healthy=False (not captured for this incident)",
+      "source metrics: available=True healthy=True (snapshot replay of metric points captured from the demo services; metrics available for: checkout-svc)",
+      "source deployments: available=True healthy=True (snapshot replay of records written by the demo deploy tooling)",
+      "source builds: available=True healthy=True (snapshot replay of manifests written by the demo build tooling)",
+      "source commits: available=True healthy=True (snapshot of the demo company git repo (team-authored fixture history))",
+      "source configs: available=True healthy=True (config file versions from the demo company git repo (team-authored fixture))",
+      "source tickets: available=True healthy=True (team-authored Jira-style ticket fixtures (not a live Jira integration))",
+      "incident.available_sources: ['logs', 'metrics', 'deployments', 'builds', 'commits', 'configs', 'tickets']",
+      "answer key available_sources: ['logs', 'metrics', 'deployments', 'builds', 'commits', 'configs', 'tickets']; expected status insufficient_evidence; diagnosable=False",
+      "decisive commit:b614012: retrievable via get_commit, search_commits",
+      "decisive commit:981dc7c: retrievable via get_commit, search_commits"
+    ]
+  },
+  "cutoff": {
+    "failures": [],
+    "warnings": [],
+    "info": []
+  },
+  "leakage": {
+    "failures": [],
+    "warnings": [],
+    "info": []
+  },
+  "needles_checked": {
+    "strong": 52,
+    "weak": 0
+  },
+  "ok": true
+}

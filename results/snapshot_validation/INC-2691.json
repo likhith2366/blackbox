@@ -1,0 +1,49 @@
+{
+  "incident_id": "INC-2691",
+  "snapshot_dir": "A:\\subjects\\genAI\\final_project\\blackbox\\scenarios\\snapshots\\INC-2691",
+  "backend_checked": true,
+  "ablations_checked": [
+    "none",
+    "no_jira",
+    "no_provenance",
+    "no_traces"
+  ],
+  "schema": {
+    "failures": [
+      "answer key missing: A:\\subjects\\genAI\\final_project\\blackbox\\evaluator_private\\answer_keys\\INC-2691.json"
+    ],
+    "warnings": [],
+    "info": []
+  },
+  "completeness": {
+    "failures": [],
+    "warnings": [],
+    "info": [
+      "manifest: entry present, scenario 3 (unrelated_change), frozen=False, superseded=False",
+      "source logs: available=True healthy=True (snapshot replay of JSON logs captured from the demo services)",
+      "source traces: available=True healthy=True (snapshot replay of spans captured from the demo services)",
+      "source metrics: available=True healthy=True (snapshot replay of metric points captured from the demo services)",
+      "source deployments: available=True healthy=True (snapshot replay of records written by the demo deploy tooling)",
+      "source builds: available=True healthy=True (snapshot replay of manifests written by the demo build tooling)",
+      "source commits: available=True healthy=True (snapshot of the demo company git repo (team-authored fixture history))",
+      "source configs: available=True healthy=True (config file versions from the demo company git repo (team-authored fixture))",
+      "source tickets: available=True healthy=True (team-authored Jira-style ticket fixtures (not a live Jira integration))",
+      "incident.available_sources: ['logs', 'traces', 'metrics', 'deployments', 'builds', 'commits', 'configs', 'tickets']"
+    ]
+  },
+  "cutoff": {
+    "failures": [],
+    "warnings": [],
+    "info": []
+  },
+  "leakage": {
+    "failures": [],
+    "warnings": [],
+    "info": []
+  },
+  "needles_checked": {
+    "strong": 41,
+    "weak": 0
+  },
+  "ok": false
+}
