@@ -11,5 +11,5 @@ Only B1 runs whose evidence fitted the prompt (`evidence_budget.matched == True`
 | INC-1846 | 5 | yes | 0 | completed | yes | no | yes | 0 | 0 |
 | INC-6053 | 6 | yes | 0 | completed | yes | no | yes | 0 | 0 |
 | INC-4417 | 7 | yes | 0 | completed | yes | no | no | 0 | 0 |
-| INC-8290 | 8 | N/A | N/A | N/A | EXCLUDED | no | no | 0 | 0 |
-| INC-2264 | 9 | N/A | N/A | N/A | EXCLUDED | no | no | 0 | 0 |
+| INC-8290 | 8 | yes | 0 | completed | yes | no | no | 0 | 0 |
+| INC-2264 | 9 | yes | 0 | completed | yes | no | no | 0 | 0 |

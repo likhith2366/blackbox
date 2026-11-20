@@ -4,10 +4,10 @@ Diagnosable primary cases: 4. Passes found: [0, 1, 2]. Correctness is (provision
 
 | incident_id | passes | statuses | status_agree | top1_agree | top1_correct_per_pass |
 |---|---|---|---|---|---|
-| INC-2691 | 3 | diagnosis, not_run, not_run | no | no | no, no, no |
-| INC-3172 | 3 | insufficient_evidence, not_run, not_run | no | yes | no, no, no |
-| INC-5408 | 3 | insufficient_evidence, not_run, not_run | no | yes | no, no, no |
-| INC-7735 | 3 | insufficient_evidence, not_run, not_run | no | yes | no, no, no |
+| INC-2691 | 3 | diagnosis, insufficient_evidence, diagnosis | no | no | no, no, no |
+| INC-3172 | 3 | insufficient_evidence, diagnosis, diagnosis | no | no | no, no, no |
+| INC-5408 | 3 | insufficient_evidence, insufficient_evidence, insufficient_evidence | yes | yes | no, no, no |
+| INC-7735 | 3 | insufficient_evidence, insufficient_evidence, insufficient_evidence | yes | yes | no, no, no |
 
 
 Top-1 accuracy per pass (provisional, automated): pass 0: 0.00, pass 1: 0.00, pass 2: 0.00
