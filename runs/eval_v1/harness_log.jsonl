@@ -54,3 +54,43 @@
 {"t": "2026-11-20T04:37:47.570Z", "event": "end", "run_id": "INC-2264_b1_none_r0", "status": "completed", "wall": 10.588}
 {"t": "2026-11-20T04:37:52.180Z", "event": "start", "run_id": "INC-2264_b0_none_r0"}
 {"t": "2026-11-20T04:38:24.466Z", "event": "end", "run_id": "INC-2264_b0_none_r0", "status": "completed", "wall": 32.283}
+{"t": "2026-11-20T04:39:28.985Z", "event": "start", "run_id": "INC-3172_blackbox_none_r1"}
+{"t": "2026-11-20T04:40:14.673Z", "event": "end", "run_id": "INC-3172_blackbox_none_r1", "status": "completed", "wall": 45.686}
+{"t": "2026-11-20T04:41:20.455Z", "event": "start", "run_id": "INC-3172_blackbox_none_r2"}
+{"t": "2026-11-20T04:42:38.181Z", "event": "end", "run_id": "INC-3172_blackbox_none_r2", "status": "completed", "wall": 77.724}
+{"t": "2026-11-20T04:43:42.511Z", "event": "start", "run_id": "INC-5408_blackbox_none_r1"}
+{"t": "2026-11-20T04:43:58.931Z", "event": "end", "run_id": "INC-5408_blackbox_none_r1", "status": "completed", "wall": 16.419}
+{"t": "2026-11-20T04:45:05.650Z", "event": "start", "run_id": "INC-5408_blackbox_none_r2"}
+{"t": "2026-11-20T04:45:21.921Z", "event": "end", "run_id": "INC-5408_blackbox_none_r2", "status": "completed", "wall": 16.27}
+{"t": "2026-11-20T04:52:30.196Z", "event": "start", "run_id": "INC-2691_blackbox_none_r1"}
+{"t": "2026-11-20T04:54:09.704Z", "event": "end", "run_id": "INC-2691_blackbox_none_r1", "status": "completed", "wall": 99.506}
+{"t": "2026-11-20T04:56:17.879Z", "event": "start", "run_id": "INC-2691_blackbox_none_r2"}
+{"t": "2026-11-20T04:57:38.140Z", "event": "end", "run_id": "INC-2691_blackbox_none_r2", "status": "completed", "wall": 80.26}
+{"t": "2026-11-20T04:59:49.565Z", "event": "start", "run_id": "INC-7735_blackbox_none_r1"}
+{"t": "2026-11-20T05:02:28.050Z", "event": "end", "run_id": "INC-7735_blackbox_none_r1", "status": "completed", "wall": 158.484}
+{"t": "2026-11-20T05:04:36.747Z", "event": "start", "run_id": "INC-7735_blackbox_none_r2"}
+{"t": "2026-11-20T05:06:28.223Z", "event": "end", "run_id": "INC-7735_blackbox_none_r2", "status": "completed", "wall": 111.474}
+{"t": "2026-11-20T05:08:36.010Z", "event": "start", "run_id": "INC-3172_blackbox_no_jira_r0"}
+{"t": "2026-11-20T05:10:45.041Z", "event": "end", "run_id": "INC-3172_blackbox_no_jira_r0", "status": "completed", "wall": 129.029}
+{"t": "2026-11-20T05:12:53.102Z", "event": "start", "run_id": "INC-3172_blackbox_no_provenance_r0"}
+{"t": "2026-11-20T05:15:26.889Z", "event": "end", "run_id": "INC-3172_blackbox_no_provenance_r0", "status": "completed", "wall": 153.785}
+{"t": "2026-11-20T05:16:35.682Z", "event": "start", "run_id": "INC-3172_blackbox_no_traces_r0"}
+{"t": "2026-11-20T05:18:21.377Z", "event": "end", "run_id": "INC-3172_blackbox_no_traces_r0", "status": "completed", "wall": 105.694}
+{"t": "2026-11-20T05:19:33.110Z", "event": "start", "run_id": "INC-5408_blackbox_no_jira_r0"}
+{"t": "2026-11-20T05:20:28.848Z", "event": "end", "run_id": "INC-5408_blackbox_no_jira_r0", "status": "completed", "wall": 55.736}
+{"t": "2026-11-20T05:21:36.850Z", "event": "start", "run_id": "INC-5408_blackbox_no_provenance_r0"}
+{"t": "2026-11-20T05:21:51.035Z", "event": "end", "run_id": "INC-5408_blackbox_no_provenance_r0", "status": "completed", "wall": 14.184}
+{"t": "2026-11-20T05:21:58.103Z", "event": "start", "run_id": "INC-5408_blackbox_no_traces_r0"}
+{"t": "2026-11-20T05:22:12.556Z", "event": "end", "run_id": "INC-5408_blackbox_no_traces_r0", "status": "completed", "wall": 14.45}
+{"t": "2026-11-20T05:23:19.816Z", "event": "start", "run_id": "INC-2691_blackbox_no_jira_r0"}
+{"t": "2026-11-20T05:24:07.811Z", "event": "end", "run_id": "INC-2691_blackbox_no_jira_r0", "status": "completed", "wall": 47.994}
+{"t": "2026-11-20T05:25:15.034Z", "event": "start", "run_id": "INC-2691_blackbox_no_provenance_r0"}
+{"t": "2026-11-20T05:26:00.577Z", "event": "end", "run_id": "INC-2691_blackbox_no_provenance_r0", "status": "completed", "wall": 45.541}
+{"t": "2026-11-20T05:27:08.267Z", "event": "start", "run_id": "INC-2691_blackbox_no_traces_r0"}
+{"t": "2026-11-20T05:28:25.467Z", "event": "end", "run_id": "INC-2691_blackbox_no_traces_r0", "status": "completed", "wall": 77.198}
+{"t": "2026-11-20T05:29:33.337Z", "event": "start", "run_id": "INC-7735_blackbox_no_jira_r0"}
+{"t": "2026-11-20T05:31:00.698Z", "event": "end", "run_id": "INC-7735_blackbox_no_jira_r0", "status": "completed", "wall": 87.36}
+{"t": "2026-11-20T05:32:09.287Z", "event": "start", "run_id": "INC-7735_blackbox_no_provenance_r0"}
+{"t": "2026-11-20T05:33:32.233Z", "event": "end", "run_id": "INC-7735_blackbox_no_provenance_r0", "status": "completed", "wall": 82.945}
+{"t": "2026-11-20T05:34:40.301Z", "event": "start", "run_id": "INC-7735_blackbox_no_traces_r0"}
+{"t": "2026-11-20T05:36:02.191Z", "event": "end", "run_id": "INC-7735_blackbox_no_traces_r0", "status": "completed", "wall": 81.888}

@@ -3,7 +3,7 @@
   "phase": "eval",
   "stub": false,
   "created_at": "2026-11-20T03:21:28.350Z",
-  "last_started_at": "2026-11-20T04:37:52.150Z",
+  "last_started_at": "2026-11-20T05:39:09.814Z",
   "matrix_path": "A:\\subjects\\genAI\\final_project\\blackbox\\eval\\matrix.yaml",
   "matrix_sha256": "0718a2b8b976e4f727a6357a6c5d28beed2810c3b74a9784ed8a60210d309046",
   "manifest_path": "A:\\subjects\\genAI\\final_project\\blackbox\\evaluator_private\\scenario_manifest.json",
@@ -68,5 +68,5 @@
   "gpu_lock": "acquired by eval.harness",
   "model_digest_end": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
   "model_changed_during_batch": false,
-  "last_finished_at": "2026-11-20T04:38:24.478Z"
+  "last_finished_at": "2026-11-20T05:39:09.874Z"
 }
