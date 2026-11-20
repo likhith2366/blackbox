@@ -78,15 +78,12 @@ def test_bad_arguments_are_an_error_not_an_exception(tdir):
     assert ll.LocalLogs(tdir).search(start="not-a-time").status == "error"
 
 
-@pytest.mark.xfail(strict=True, reason="QA-F10 (Evidence, LOW): local_logs query tokens match substrings ('out' "
-                   "matches 'checkout-svc'), unlike the snapshot backend which Integration changed to whole words")
 def test_query_matches_whole_words_like_the_snapshot_backend(tdir):
-    res = ll.LocalLogs(tdir).search(query="out", limit=100)
-    assert res.status == "empty"
+    # QA-F10: "heckout" is inside "checkout-svc" but is not a word; "out" is a word in "timed out"
+    assert ll.LocalLogs(tdir).search(query="heckout", limit=100).status == "empty"
+    assert ll.LocalLogs(tdir).search(query="out", limit=100).status == "ok"
 
 
-@pytest.mark.xfail(strict=True, reason="QA-F11 (Evidence, LOW): one log line with an unparseable 'ts' makes the "
-                   "whole search return status=error instead of skipping that line")
 def test_one_bad_timestamp_does_not_fail_the_search(tdir):
     with open(tdir / "logs" / "payment-svc.jsonl", "a", encoding="utf-8") as fh:
         fh.write('{"ts":"garbage","level":"INFO","service":"payment-svc","msg":"QA FIXTURE bad ts"}\n')

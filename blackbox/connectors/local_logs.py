@@ -114,12 +114,16 @@ class LocalLogs:
                     rec = json.loads(line)
                 except ValueError:
                     continue  # a line still being written
-                t = _ts(rec.get("ts"))
+                try:
+                    t = _ts(rec.get("ts"))
+                except (TypeError, ValueError):
+                    continue  # QA-F11: one unparseable timestamp skips that line, not the whole search
                 if t is None or (s is not None and t < s) or (e is not None and t > e):
                     continue
                 if lv and str(rec.get("level", "")).upper() != lv:
                     continue
-                score = sum(1 for tok in toks if tok in line.lower()) if toks else 0
+                low = line.lower()   # QA-F10: whole-word matching, like the snapshot backend
+                score = sum(1 for tok in toks if re.search(rf"(?<![a-z0-9]){re.escape(tok)}(?![a-z0-9])", low)) if toks else 0
                 if toks and score == 0:
                     continue
                 out.append((score, t, n, p, line, rec))
