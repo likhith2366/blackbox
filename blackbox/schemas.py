@@ -125,7 +125,7 @@ class Hypothesis(BaseModel):
 
 StopDecision = Literal[
     "continue", "stop_diagnosis", "stop_insufficient", "stop_no_fault",
-    "stop_budget", "stop_rounds", "stop_error", "stop_timeout",
+    "stop_budget", "stop_rounds", "stop_error", "stop_timeout", "stop_cancelled",
 ]
 
 
@@ -211,6 +211,11 @@ class RunConfig(BaseModel):
     reserve_output_tokens: int = 1100
     reserve_instruction_tokens: int = 1300
     coverage_hint: bool = False     # experiment flag: tell the model which available sources it has not queried
+    change_check: bool = False      # v2: refuse any conclusion until deployments and commits have been queried
+    refuse_repeats: bool = False    # v2: refuse identical repeat calls without using budget (v1 serves them from cache)
+    multi_call_example: bool = False  # v2: prompt example shows two calls in one round
+    rationale_first: bool = False   # experiment: rationale before hypotheses, and reconcile the hypotheses with it
+    diagnosis_gate: Literal["v1", "causal"] = "v1"  # experiment: "causal" = change/mechanism/effect roles
     round_prompt: str = "investigator_v2"      # prompt files under blackbox/investigator/prompts/
     report_prompt: str = "report_v1"
     baseline_prompt: str = "baseline_v1"
@@ -242,7 +247,7 @@ class SystemOutput(BaseModel):
     system: SystemName
     incident_id: str
     ablation: Ablation = "none"
-    status: Literal["completed", "failed", "timeout"]
+    status: Literal["completed", "failed", "timeout", "cancelled"]
     error: Optional[str] = None
     report: Optional[FinalReport] = None
     steps: list[InvestigationStep] = Field(default_factory=list)

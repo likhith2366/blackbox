@@ -128,6 +128,34 @@ class LiveBackend:
                                  error=f"deployed version of {service} is unknown; pass a commit sha to read its config")
         return self.github.get_file(path, ref)
 
+    # ------------------------------------------------------------ CI (live GitHub Actions, read-only)
+    def _before_cutoff(self, res: BackendResult) -> BackendResult:
+        keep = [r for r in res.records if not r.available_time or r.available_time <= self._cutoff]
+        if res.status != "ok" or len(keep) == len(res.records):
+            return res
+        return BackendResult(status="ok" if keep else "empty", records=keep, total_matches=len(keep),
+                             truncated=res.truncated, error="CI records after the investigation cutoff were removed")
+
+    def list_workflow_runs(self, limit=5, status=None) -> BackendResult:
+        if self.github is None:
+            return BackendResult(status="unavailable", error="GitHub Actions is not configured")
+        return self._before_cutoff(self.github.list_workflow_runs(limit=limit, status=status))
+
+    def get_workflow_run(self, run_id) -> BackendResult:
+        if self.github is None:
+            return BackendResult(status="unavailable", error="GitHub Actions is not configured")
+        return self._before_cutoff(self.github.get_run(run_id))
+
+    def get_job_log(self, job_id, failed_only=True) -> BackendResult:
+        if self.github is None:
+            return BackendResult(status="unavailable", error="GitHub Actions is not configured")
+        return self._before_cutoff(self.github.get_job_log(job_id, failed_only=failed_only))
+
+    def list_run_artifacts(self, run_id) -> BackendResult:
+        if self.github is None:
+            return BackendResult(status="unavailable", error="GitHub Actions is not configured")
+        return self._before_cutoff(self.github.list_run_artifacts(run_id))
+
     # ------------------------------------------------------------ everything else: snapshot
     def __getattr__(self, name):
         if name in ("search_traces", "get_trace", "get_metrics", "list_deployments", "get_build",
