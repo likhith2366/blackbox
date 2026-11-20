@@ -31,6 +31,9 @@ def test_models_validate(inc_id):
 
 def test_manifest_lists_every_snapshot():
     man = json.loads(MANIFEST.read_text(encoding="utf-8"))["incidents"]
+    demo = MANIFEST.parent / "demo_manifest.json"     # UI demo incidents (development only) live here
+    if demo.exists():
+        man = {**man, **json.loads(demo.read_text(encoding="utf-8"))["incidents"]}
     for inc_id in INCIDENTS:
         assert inc_id in man
         if man[inc_id].get("variant_of"):
