@@ -1,4 +1,4 @@
-"""Record / replay of live connector HTTP traffic (CONTRACT.md s10c). Owner: Agent 4.
+"""Record / replay of live connector HTTP traffic (CONTRACT.md s10c). Owner: QA.
 
     rec = RecordingSession(capture_dir_for("LC-0001"), repo="owner/name")
     GitHubConnector("owner/name", session=rec)          # live pilot: responses saved verbatim

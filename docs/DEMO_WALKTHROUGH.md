@@ -1,6 +1,6 @@
 # Demo walkthrough (live demonstration: not an evaluation result)
 
-Owner: Agent 3. Last updated 2026-11-20. Commands are run from the repo root unless a step says
+Owner: Evaluation. Last updated 2026-11-20. Commands are run from the repo root unless a step says
 otherwise. UI labels are taken from verified screenshots of the running interfaces
 (`ui/blackbox-web/screenshots/verified/`, `demo/web/screenshots/verified/`).
 
@@ -54,7 +54,7 @@ Investigations need an incident: alert, window and cutoff.
   - It is never part of the evaluation.
   - It needs the alert condition in the captured metrics (checkout error_rate > 0.10 or p95 > 1500 ms
     for 15 s).
-  - Status: being completed by Agent 2 (KNOWN_DEFECTS D6).
+  - Status: being completed by Evidence (KNOWN_DEFECTS D6).
 - **Route B (works today):** investigate the existing snapshot incident whose fault matches, e.g.
   **INC-0000** for `retry-policy`. Say explicitly that the incident context comes from a saved snapshot.
 

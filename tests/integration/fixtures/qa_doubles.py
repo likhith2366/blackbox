@@ -1,4 +1,4 @@
-"""TEST FIXTURE (Agent 4, QA). Test doubles only: not evidence, not a model, not a result.
+"""TEST FIXTURE (QA, QA). Test doubles only: not evidence, not a model, not a result.
 
 - ScriptedAdapter: replays canned model outputs (dict, raw string, or an Exception to raise).
   It records the exact messages it was sent so tests can re-count prompt tokens.

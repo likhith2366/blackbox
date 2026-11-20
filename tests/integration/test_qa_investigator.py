@@ -1,7 +1,7 @@
-"""Agent 4 QA: investigator guardrails under adversarial scripted models and broken backends.
+"""QA QA: investigator guardrails under adversarial scripted models and broken backends.
 
 Test doubles only (tests/integration/fixtures/qa_doubles.py, labelled TEST FIXTURE).
-Ollama is blocked by conftest.py. xfail(strict=True) tests document defects in Agent 1's
+Ollama is blocked by conftest.py. xfail(strict=True) tests document defects in Integration's
 files; patches are proposed in docs/QA_FINDINGS.md (finding ids QA-Fnn).
 """
 from __future__ import annotations
@@ -31,13 +31,13 @@ def executed(out):
 
 # ======================================================================= citations
 def test_padded_or_extended_id_is_not_recovered():
-    """Regression for QA-F01 (fixed by Agent 1 with an id-boundary check)."""
+    """Regression for QA-F01 (fixed by Integration with an id-boundary check)."""
     assert resolve_citation("log:12", {"log:1"}) == (None, "invalid")
     assert resolve_citation("log:9f2c41ff", {"log:9f2c41"})[0] is None
     assert resolve_citation("metric:m1x", {"metric:m1"})[0] is None
 
 
-# regression for QA-F01b (fixed by Agent 1 at 9335b82)
+# regression for QA-F01b (fixed by Integration at 9335b82)
 def test_two_ids_where_one_prefixes_the_other_are_ambiguous():
     assert resolve_citation("log:a1, log:a12", {"log:a1", "log:a12"}) == (None, "ambiguous")
 
@@ -135,7 +135,7 @@ def test_connector_without_method_is_an_error_not_a_crash():
 
 
 @pytest.mark.parametrize("mode", ["none", "dict", "bad_record"])
-# regression for QA-F03 (fixed by Agent 1 at 9335b82)
+# regression for QA-F03 (fixed by Integration at 9335b82)
 def test_malformed_backend_result_is_an_error_observation(mode):
     out, _, _ = run([ROUND([("search_logs", {})]), ROUND([], decision="insufficient_evidence"), REPORT_INSUFF],
                     backend=QABackend(mode=mode))
@@ -147,13 +147,13 @@ def test_malformed_backend_result_is_an_error_observation(mode):
     {"hypotheses": [H()], "tool_calls": "search_logs", "decision": "continue", "rationale": ""},
     {"hypotheses": [H()], "tool_calls": ["search_logs"], "decision": "continue", "rationale": ""},
 ])
-# regression for QA-F04 (fixed by Agent 1 at 9335b82)
+# regression for QA-F04 (fixed by Integration at 9335b82)
 def test_wrongly_typed_model_json_does_not_crash(bad):
     out, _, _ = run([bad, ROUND([("search_logs", {})]), ROUND([], decision="insufficient_evidence"), REPORT_INSUFF])
     assert out.status in ("completed", "failed")
 
 
-# regression for QA-F04 (fixed by Agent 1 at 9335b82)
+# regression for QA-F04 (fixed by Integration at 9335b82)
 def test_non_object_args_are_invalid_not_rewritten():
     out, _, _ = run([{"hypotheses": [H()], "tool_calls": [{"tool": "search_logs", "args": "payment-svc"}],
                       "decision": "continue", "rationale": ""},
@@ -166,7 +166,7 @@ def test_transport_error_in_first_round_fails_the_run():
     assert out.status == "failed" and out.steps[0].stop_decision == "stop_error"
 
 
-# regression for QA-F02 (fixed by Agent 1 at 9335b82)
+# regression for QA-F02 (fixed by Integration at 9335b82)
 def test_transport_error_mid_run_is_not_a_completed_diagnosis():
     out, _, _ = run([ROUND([("search_logs", {}), ("get_metrics", {"service": "payment-svc"})]),
                      ROUND([("list_deployments", {})], hyps=[H(sup=["log:qa1", "metric:qa1"])]),
@@ -240,7 +240,7 @@ def test_notebook_degrades_to_fit_small_context():
     assert any(s.context.get("records_one_line", 0) or s.context.get("records_omitted", 0) for s in out.steps)
 
 
-# regression for QA-F05 (fixed by Agent 1 at 9335b82)
+# regression for QA-F05 (fixed by Integration at 9335b82)
 def test_prompt_never_exceeds_window_even_with_large_fixed_part():
     notes = "QA FIXTURE long operator notes. " * 700
     out, _, _ = run([ROUND([("search_logs", {})]), ROUND([], decision="insufficient_evidence"), REPORT_INSUFF],

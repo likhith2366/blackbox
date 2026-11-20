@@ -136,7 +136,7 @@ committed (d3a930c on live-integration).
 - `pytest -q`: 370 passed, 3 skipped (the opt-in live test and two tests waiting for a harness change),
   2 expected failures (open defects QA-F10 and QA-F11), 0 failed.
 - A leakage test added afterwards for D15, run on its own: 11 passed, 1 expected failure (INC-2691).
-- Integration QA (Agent 4): 120 passed, 2 expected failures. The UI builds with 12 lint warnings and
+- Integration QA (QA): 120 passed, 2 expected failures. The UI builds with 12 lint warnings and
   has no UI unit tests.
 
 ## 4. What failed and why

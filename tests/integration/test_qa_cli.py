@@ -1,4 +1,4 @@
-"""Agent 4 QA: `python -m blackbox.cli` argument and config handling (in-process, no model).
+"""QA QA: `python -m blackbox.cli` argument and config handling (in-process, no model).
 
 blackbox.systems.run_system is replaced by a sentinel that raises, so no test can start an
 investigation; the conftest also blocks Ollama.
@@ -59,13 +59,13 @@ def test_valid_b1_source_reaches_run_system(mini_snapshot, tmp_path):
         main(inv(mini_snapshot, "--system", "b1", "--b1-from", _base(tmp_path)))
 
 
-# QA-F09 fixed at 963c2ee (merged 59e3c0d); marker removed by Agent 1 while Agent 4 is inactive
+# QA-F09 fixed at 963c2ee (merged 59e3c0d); marker removed by Integration while QA is inactive
 def test_b1_with_ablation_is_refused(mini_snapshot, tmp_path):
     with pytest.raises(SystemExit):
         main(inv(mini_snapshot, "--system", "b1", "--ablation", "no_jira", "--b1-from", _base(tmp_path)))
 
 
-# QA-F09 fixed at 963c2ee (merged 59e3c0d); marker removed by Agent 1 while Agent 4 is inactive
+# QA-F09 fixed at 963c2ee (merged 59e3c0d); marker removed by Integration while QA is inactive
 def test_config_typo_is_rejected(tmp_path):
     p = tmp_path / "c.yaml"
     p.write_text("num_ctxx: 4096\n", encoding="utf-8")
@@ -74,7 +74,7 @@ def test_config_typo_is_rejected(tmp_path):
 
 
 @pytest.mark.parametrize("argv_kind", ["missing_incident", "bad_yaml", "missing_b1_file", "show_missing"])
-# QA-F09 fixed at 963c2ee (merged 59e3c0d); marker removed by Agent 1 while Agent 4 is inactive
+# QA-F09 fixed at 963c2ee (merged 59e3c0d); marker removed by Integration while QA is inactive
 def test_user_errors_give_clean_exit(mini_snapshot, tmp_path, argv_kind):
     bad = tmp_path / "bad.yaml"
     bad.write_text("num_ctx: [unclosed\n", encoding="utf-8")

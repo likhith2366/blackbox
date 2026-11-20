@@ -2,7 +2,7 @@
 
 Source design: `docs/milestone2.md` (as submitted) and
 `../BlackBox_Detailed_Project_Overview.pdf`. Do not redesign; implement it.
-Owner of this file: Agent 1 (integration lead). Others request changes in
+Owner of this file: Integration (integration lead). Others request changes in
 `coordination/requests.md`.
 
 ## 0. Ground rules (all agents)
@@ -11,19 +11,19 @@ Owner of this file: Agent 1 (integration lead). Others request changes in
   history authored for the demo) are allowed only when labelled `fixture: true` and
   described as fixtures, never as live integrations.
 - **Stay in your files** (section 2). Do not edit another agent's files; request it.
-- **Only Agent 1 runs `git commit`.** Others never commit, stash, reset or checkout.
-- **GPU discipline.** Agent 1 alone schedules inference. Agents 2-4 never call Ollama;
-  they request model runs in `coordination/requests.md` and Agent 1 runs them (directly or
-  through Agent 3's harness). One inference job at a time.
-- **Four agents** (Agent 4 = independent integration QA and usability). Issues in another
-  agent's files go to the owner as a failing test or a proposed patch, never a concurrent edit. Agent 2 never calls the model. Do not run the demo
+- **Only Integration runs `git commit`.** Others never commit, stash, reset or checkout.
+- **GPU discipline.** Integration alone schedules inference. the other modules never call Ollama;
+  they request model runs in `coordination/requests.md` and Integration runs them (directly or
+  through Evaluation's harness). One inference job at a time.
+- **Four agents** (QA = independent integration QA and usability). Issues in another
+  agent's files go to the owner as a failing test or a proposed patch, never a concurrent edit. Evidence never calls the model. Do not run the demo
   load generator while an evaluation batch is running.
 - Python 3.11, run everything from the repo root with `python -m ...`.
   Available: pydantic 2, requests, fastapi, uvicorn, pyyaml, jsonschema, pytest,
   pandas, opentelemetry. Ask before adding a dependency.
 - Windows host: use `pathlib`, avoid shell-specific tricks, keep paths short (MAX_PATH).
 
-## 1. Measured hardware/model facts (Agent 1, 2026-11-19)
+## 1. Measured hardware/model facts (Integration, 2026-11-19)
 - RTX 3060 Laptop 6 GB, 15.7 GB RAM, i5. Ollama 0.34.0 at http://127.0.0.1:11434.
 - Model `qwen3:4b` (Q4_K_M, tools+thinking capable). `num_ctx=8192` fits fully in
   VRAM (3.87 GB): ~480 tok/s prefill, ~15 tok/s generation. `num_ctx=16384` spills
@@ -34,50 +34,50 @@ Owner of this file: Agent 1 (integration lead). Others request changes in
 ## 2. File ownership
 | Path | Owner |
 |---|---|
-| `CONTRACT.md`, `README.md`, `requirements.txt`, `configs/` | Agent 1 |
-| `blackbox/schemas.py`, `blackbox/evidence/interface.py` | Agent 1 (shared, read-only for others) |
-| `blackbox/model/`, `blackbox/investigator/`, `blackbox/baselines/`, `blackbox/systems.py`, `blackbox/cli.py` | Agent 1 |
-| `tests/test_investigator_*.py`, `tests/test_baselines_*.py` | Agent 1 |
-| `demo/` (services, deploy tooling, fault controller, load generator) | Agent 2 |
-| `blackbox/evidence/` (backend; written by Agent 2, transferred to Agent 1 on 2026-11-20) | Agent 1 |
-| `scenarios/` (snapshot builder, frozen snapshots, README) | Agent 2 |
-| `evaluator_private/` (answer keys, scenario manifest, controller state) | Agent 2 writes, Agent 3 reads |
-| `tests/test_evidence_*.py`, `tests/test_scenarios_*.py` | Agent 2 |
-| `eval/` (harness, metrics, worksheets, reports), `runs/`, `results/` | Agent 3 |
-| `tests/test_eval_*.py`, `tests/test_leakage_*.py` | Agent 3 |
-| `tests/integration/` (QA tests, labelled fixtures in `tests/integration/fixtures/`) | Agent 4 |
-| `blackbox/connectors/__init__.py`, `blackbox/connectors/github_api.py` (live read-only GitHub REST) | Agent 4 |
-| `blackbox/connectors/local_logs.py` (live reader of the app's actual JSONL logs) | Agent 2 |
-| `blackbox/evidence/live.py` (composes snapshot backend + live connectors; mode live/snapshot) | Agent 1 |
-| `tests/test_connectors_*.py`, captured live responses under `scenarios/live_captures/` | Agent 3 |
-| `blackbox/api/` (thin HTTP API, job queue, GPU lock), `runs/_gpu.lock` protocol | Agent 1 |
-| `ui/blackbox-web/` (React + TS + Vite BlackBox UI) | Agent 5 (frontend) |
-| `demo/web/` (React + TS + Vite shop UI) | Agent 6 (frontend) |
-| `demo/control_api.py` (local demo-control API) | Agent 2 |
-| `viewer/` (saved-run viewer, read-only over `runs/`), `docs/REPRODUCE.md`, `docs/EVIDENCE_CHECKLIST.md`, `docs/QA_FINDINGS.md` | Agent 4 |
+| `CONTRACT.md`, `README.md`, `requirements.txt`, `configs/` | Integration |
+| `blackbox/schemas.py`, `blackbox/evidence/interface.py` | Integration (shared, read-only for others) |
+| `blackbox/model/`, `blackbox/investigator/`, `blackbox/baselines/`, `blackbox/systems.py`, `blackbox/cli.py` | Integration |
+| `tests/test_investigator_*.py`, `tests/test_baselines_*.py` | Integration |
+| `demo/` (services, deploy tooling, fault controller, load generator) | Evidence |
+| `blackbox/evidence/` (backend; written by Evidence, transferred to Integration on 2026-11-20) | Integration |
+| `scenarios/` (snapshot builder, frozen snapshots, README) | Evidence |
+| `evaluator_private/` (answer keys, scenario manifest, controller state) | Evidence writes, Evaluation reads |
+| `tests/test_evidence_*.py`, `tests/test_scenarios_*.py` | Evidence |
+| `eval/` (harness, metrics, worksheets, reports), `runs/`, `results/` | Evaluation |
+| `tests/test_eval_*.py`, `tests/test_leakage_*.py` | Evaluation |
+| `tests/integration/` (QA tests, labelled fixtures in `tests/integration/fixtures/`) | QA |
+| `blackbox/connectors/__init__.py`, `blackbox/connectors/github_api.py` (live read-only GitHub REST) | QA |
+| `blackbox/connectors/local_logs.py` (live reader of the app's actual JSONL logs) | Evidence |
+| `blackbox/evidence/live.py` (composes snapshot backend + live connectors; mode live/snapshot) | Integration |
+| `tests/test_connectors_*.py`, captured live responses under `scenarios/live_captures/` | Evaluation |
+| `blackbox/api/` (thin HTTP API, job queue, GPU lock), `runs/_gpu.lock` protocol | Integration |
+| `ui/blackbox-web/` (React + TS + Vite BlackBox UI) | Frontend (frontend) |
+| `demo/web/` (React + TS + Vite shop UI) | Frontend (frontend) |
+| `demo/control_api.py` (local demo-control API) | Evidence |
+| `viewer/` (saved-run viewer, read-only over `runs/`), `docs/REPRODUCE.md`, `docs/EVIDENCE_CHECKLIST.md`, `docs/QA_FINDINGS.md` | QA |
 | `coordination/agent{1,2,3}_log.md` | each agent its own |
 | `coordination/requests.md` | append-only, everyone |
 
 ## 3. Module boundaries
 ```
-demo/            -> runs the app, injects faults, captures raw telemetry      (Agent 2)
-scenarios/       -> turns a capture into a frozen, model-visible snapshot     (Agent 2)
-evaluator_private/ -> answer keys + manifest, invisible to blackbox/          (Agent 2)
-blackbox/evidence/ -> EvidenceBackend over one snapshot (+ ablation, cutoff,  (Agent 1)
+demo/            -> runs the app, injects faults, captures raw telemetry      (Evidence)
+scenarios/       -> turns a capture into a frozen, model-visible snapshot     (Evidence)
+evaluator_private/ -> answer keys + manifest, invisible to blackbox/          (Evidence)
+blackbox/evidence/ -> EvidenceBackend over one snapshot (+ ablation, cutoff,  (Integration)
                       connector-failure simulation)
-blackbox/investigator, baselines, model -> systems b0 / b1 / blackbox          (Agent 1)
-eval/            -> runs systems, stores run records, scores, reports         (Agent 3)
+blackbox/investigator, baselines, model -> systems b0 / b1 / blackbox          (Integration)
+eval/            -> runs systems, stores run records, scores, reports         (Evaluation)
 ```
 `blackbox/` must never import from `demo/`, `scenarios/` (except snapshot data via the
-backend), `evaluator_private/` or `eval/`. Agent 3 adds a test that enforces this.
+backend), `evaluator_private/` or `eval/`. Evaluation adds a test that enforces this.
 
 ## 4. Entry points (signatures are the contract)
 ```python
-# Agent 2 — blackbox/evidence/backend.py
+# Evidence — blackbox/evidence/backend.py
 load_backend(incident_id: str, ablation: Ablation = "none", snapshot_root: Path | None = None) -> EvidenceBackend
 list_incidents(snapshot_root: Path | None = None) -> list[str]
 
-# Agent 1 — blackbox/systems.py
+# Integration — blackbox/systems.py
 run_system(system: SystemName, backend: EvidenceBackend, config: RunConfig,
            b1_evidence: list[EvidenceRecord] | None = None) -> SystemOutput
 # b1 requires b1_evidence = SystemOutput.evidence_seen of the *initial* BlackBox run
@@ -86,23 +86,23 @@ run_system(system: SystemName, backend: EvidenceBackend, config: RunConfig,
 
 ## 5. Commands
 ```
-# Agent 2
+# Evidence
 python -m demo.run --healthy                      # start services + healthy load, print health
 python -m demo.controller inject <fault_id>       # apply a fault (private ids)
 python -m demo.controller reset                   # restore healthy state
 python -m scenarios.build <scenario_slug>         # run capture -> snapshot + answer key
 python -m scenarios.build --all                   # build pilot + nine scenarios
 python -m scenarios.verify                        # schema, cutoff, leakage, ablation checks
-# Agent 1
+# Integration
 python -m blackbox.cli investigate --incident INC-XXXX --system blackbox|b0|b1 [--ablation no_jira] [--b1-from runs/.../output.json] --out <dir>
-# Agent 3
+# Evaluation
 python -m eval.harness run --phase pilot|eval --matrix eval/matrix.yaml --batch <name>
 python -m eval.score --batch <name>               # objective metrics + review worksheets
 python -m eval.report --batch <name>              # tables, failure catalogue, summary
 pytest -q
 ```
 
-## 6. Snapshot layout (Agent 2 decides internals; these are fixed)
+## 6. Snapshot layout (Evidence decides internals; these are fixed)
 - Model-visible: `scenarios/snapshots/<incident_id>/` with an `incident.json` that
   validates as `Incident`. Incident IDs are opaque (`INC-` + 4 digits); the pilot may be
   `INC-0000`. No file or directory name inside a snapshot may hint at the fault.
@@ -118,7 +118,7 @@ pytest -q
 - Every record carries `available_time`. The backend drops anything later than
   `investigation_cutoff`; scenarios include one post-cutoff ticket update to prove it.
 
-## 8. Ablations (backend-level, Agent 2 implements, Agent 3 verifies no leakage)
+## 8. Ablations (backend-level, Evidence implements, Evaluation verifies no leakage)
 - `no_jira`: no tickets anywhere; also drop ticket keys from commit messages/PR text.
 - `no_provenance`: remove deployment->artifact->build->commit mappings. Deployment
   events may keep time + service but lose version/build/commit/digest; builds are gone;
@@ -126,12 +126,12 @@ pytest -q
 - `no_traces`: no spans/traces; trace ids stay in logs only as opaque strings.
 - Everything else identical. `source_status()` reports the ablated source unavailable.
 
-## 9. Investigation limits (Agent 1)
+## 9. Investigation limits (Integration)
 6 rounds, 12 tool calls total, at most 3 per round. Tools are an allowlist enforced in
 code; a request for anything else is recorded in `unauthorized_attempts`, refused, and
 `unauthorized_executed` stays 0. Retrieved text is evidence, never instructions.
 
-## 10. Scenario requirements (Agent 2) — from Milestone 2 section 4
+## 10. Scenario requirements (Evidence) — from Milestone 2 section 4
 Pilot (development only) + nine evaluation scenarios on one application:
 1-2 misleading symptoms; 3-4 genuine fault plus an unrelated newer change;
 5-6 insufficient evidence (one has two equally plausible causes with the
@@ -141,7 +141,7 @@ investigation (replay of a diagnosable case, `remaining_evidence_sufficient` pre
 Also: one lengthy Jira discussion with conflicting suggestions, one post-cutoff ticket
 update, a README with reproduce/reset per fault. Variants are labelled as variants.
 
-## 10b. Development rules recorded so far (Agent 1)
+## 10b. Development rules recorded so far (Integration)
 - First-tool rule (orchestration intervention, not a model improvement): until any tool call
   has been made, the response grammar requires >=1 tool call and allows only "continue".
   It lifts after the first call even if that call failed, so abstention stays possible.
@@ -170,7 +170,7 @@ update, a README with reproduce/reset per fault. Variants are labelled as varian
 
 ## 12. UI and HTTP contracts (2026-11-20)
 
-### BlackBox API (Agent 1) — FastAPI, `python -m blackbox.api` -> http://127.0.0.1:8700
+### BlackBox API (Integration) — FastAPI, `python -m blackbox.api` -> http://127.0.0.1:8700
 All JSON. Read-only except POST /api/investigations. No tokens, answer keys, scores,
 scenario types or controller state are ever returned.
 - `GET /api/health` -> `{ok, model, gpu: {busy, holder, since}, queue: {queued, running}}`
@@ -197,7 +197,7 @@ Jobs run one at a time and only when the GPU lock is free (below); they never st
 removed after. A lock whose pid is not alive is stale and may be removed. The API, the eval harness and
 experiment runners all acquire it.
 
-### Demo shop (Agent 2)
+### Demo shop (Evidence)
 - Shop UI `demo/web/` -> Vite dev server http://127.0.0.1:5174, proxying to checkout-svc (`POST /orders`,
   `GET /health`) — no invented inventory/payment/order capabilities; any catalog is a labelled static demo list.
 - Demo control API `demo/control_api.py` -> http://127.0.0.1:8710, bound to 127.0.0.1 only: service health,
@@ -205,10 +205,10 @@ experiment runners all acquire it.
   inject/reset while a scenario capture holds the demo lock. Never reachable from BlackBox tools; BlackBox API
   never calls it and never reads controller state.
 
-### BlackBox UI (Agent 5) — `ui/blackbox-web/`, Vite dev server http://127.0.0.1:5173, proxy `/api` -> 8700.
+### BlackBox UI (Frontend) — `ui/blackbox-web/`, Vite dev server http://127.0.0.1:5173, proxy `/api` -> 8700.
 
 ## 11. Coordination protocol
 - Log progress and blockers in your own `coordination/agentN_log.md` (timestamped).
-- Ask for interface changes in `coordination/requests.md`; Agent 1 answers there.
-- Deliver early: Agent 2 ships the pilot snapshot + working `load_backend` before the
+- Ask for interface changes in `coordination/requests.md`; Integration answers there.
+- Deliver early: Evidence ships the pilot snapshot + working `load_backend` before the
   other scenarios, because Agents 1 and 3 integrate against it.

@@ -1,4 +1,4 @@
-"""Scenario snapshot integrity (Agent 2). Runs over every built snapshot on disk."""
+"""Scenario snapshot integrity (Evidence). Runs over every built snapshot on disk."""
 from __future__ import annotations
 
 import json

@@ -1,4 +1,4 @@
-"""Contract tests for the evidence backend over real built snapshots (Agent 2).
+"""Contract tests for the evidence backend over real built snapshots (Evidence).
 
 Uses only the public API (load_backend / list_incidents / EvidenceBackend methods).
 Tests that need a specific snapshot are skipped when it has not been built yet.

@@ -14,7 +14,7 @@ WIDE = {"start": "1970-01-01T00:00:00Z", "end": "2100-01-01T00:00:00Z"}
 BIG = 1000
 # no_provenance: sources whose records may legitimately contain a deployed commit sha.
 # commits stay searchable (CONTRACT s8); configs are repository versions keyed by commit
-# (config:<svc>@<sha7>; scenarios 3/6 deploy a config commit) - approved by Agent 1
+# (config:<svc>@<sha7>; scenarios 3/6 deploy a config commit) - approved by Integration
 # 2026-11-20; tickets are team discussion (reported as a warning, not a failure).
 DEPLOYED_SHA_ALLOWED_SOURCES = ("commits", "configs", "tickets")
 # where a deployed sha / build id / digest must never survive under no_provenance

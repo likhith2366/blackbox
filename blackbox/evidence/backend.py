@@ -1,4 +1,4 @@
-"""Snapshot-backed EvidenceBackend (written by Agent 2, owned by Agent 1 since the handoff). Implements blackbox/evidence/interface.py.
+"""Snapshot-backed EvidenceBackend (written by Evidence, owned by Integration since the handoff). Implements blackbox/evidence/interface.py.
 
 Reads only scenarios/snapshots/<incident_id>/ (or `snapshot_root`). Never reads
 evaluator_private/ or demo/ controller files. Every rule is enforced here in code:

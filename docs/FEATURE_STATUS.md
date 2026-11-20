@@ -1,6 +1,6 @@
 # Feature status
 
-Owner: Agent 3. Last updated 2026-11-20.
+Owner: Evaluation. Last updated 2026-11-20.
 
 - **Verified**: shown working by a passing test or a real run record. The evidence is named.
 - **Implemented, unverified**: the code exists, but nothing on record shows it working end to end.
@@ -25,7 +25,7 @@ Results are kept separate: pilot (development), formal evaluation (eval_v1) and 
 ## Evidence, snapshots and isolation
 | Feature | Status | Evidence |
 |---|---|---|
-| Captured logs/spans/metrics/deployments/builds from running services | Verified | Agent 2 capture logs; `scenarios/snapshots/*` |
+| Captured logs/spans/metrics/deployments/builds from running services | Verified | Evidence capture logs; `scenarios/snapshots/*` |
 | Frozen snapshots + private answer keys | Verified | manifest: all nine eval snapshots frozen; `scenarios.verify` |
 | Investigation cutoff | Verified | `tests/test_leakage_ablation.py::test_no_post_cutoff_records`; `eval.validate_snapshot` |
 | Ablations no_jira / no_provenance / no_traces | Verified (leakage) | `tests/test_leakage_ablation.py`, passing on all snapshots present. Limitation D11 |
@@ -48,7 +48,7 @@ Results are kept separate: pilot (development), formal evaluation (eval_v1) and 
 ## Live integrations (development and demo only; never in evaluation)
 | Feature | Status | Evidence |
 |---|---|---|
-| GitHub connector: commits, diffs, files pinned to a commit | Verified (connector level) | Agent 4 smoke test on likhith2366/blackbox-demo-shop @063397d; `tests/test_connectors_contract.py` (recorded fixtures) |
+| GitHub connector: commits, diffs, files pinned to a commit | Verified (connector level) | QA smoke test on likhith2366/blackbox-demo-shop @063397d; `tests/test_connectors_contract.py` (recorded fixtures) |
 | GitHub connector used in an investigation | **Incomplete** | live UI job 20261120T032323-52d9fe chose no GitHub tool; 0 `gh:` records |
 | GitHub Actions connector | Implemented, unverified in an investigation | contract tests pass; the repository has 1 workflow with 2 runs |
 | Local-log connector | Verified | live UI job: `search_logs` returned 15 live records; contract tests. Defects D3, D4 |

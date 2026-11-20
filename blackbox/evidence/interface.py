@@ -1,6 +1,6 @@
-"""The boundary between the investigator (Agent 1) and the evidence layer (Agent 2).
+"""The boundary between the investigator (Integration) and the evidence layer (Evidence).
 
-Agent 1 owns this file. Agent 2 implements it in blackbox/evidence/backend.py and
+Integration owns this file. Evidence implements it in blackbox/evidence/backend.py and
 exposes `load_backend`. The investigator only ever reaches evidence through these
 methods, so every rule below is enforced in the backend, not in prompts:
 
@@ -72,7 +72,7 @@ class EvidenceBackend(Protocol):
                     end: Optional[str] = None) -> list[EvidenceRecord]: ...
 
 
-# Implemented by Agent 2 in blackbox/evidence/backend.py:
+# Implemented by Evidence in blackbox/evidence/backend.py:
 #   def load_backend(incident_id: str, ablation: Ablation = "none",
 #                    snapshot_root: Path | None = None) -> EvidenceBackend
 #   def list_incidents(snapshot_root: Path | None = None) -> list[str]

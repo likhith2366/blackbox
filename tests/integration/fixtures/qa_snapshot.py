@@ -1,4 +1,4 @@
-"""TEST FIXTURE (Agent 4, QA): a tiny synthetic snapshot in the on-disk format written by
+"""TEST FIXTURE (QA, QA): a tiny synthetic snapshot in the on-disk format written by
 scenarios/build.py, used to exercise blackbox/evidence/backend.py before (and independently
 of) the real pilot. Nothing here is captured telemetry; every text says "QA FIXTURE".
 

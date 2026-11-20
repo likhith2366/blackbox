@@ -1,4 +1,4 @@
-"""Agent 4 integration QA. Shared setup for tests/integration.
+"""QA integration QA. Shared setup for tests/integration.
 
 Safety: every test in this directory runs with Ollama blocked. OllamaAdapter.chat and
 blackbox.model.adapter.requests.post raise immediately, so no test can trigger inference

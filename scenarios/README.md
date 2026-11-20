@@ -1,6 +1,6 @@
 # BlackBox scenarios: demo application, captures and snapshots
 
-Owner: Agent 2. This README is model-invisible; the investigator only ever reads
+Owner: Evidence. This README is model-invisible; the investigator only ever reads
 `scenarios/snapshots/<incident_id>/` through `blackbox.evidence.backend`.
 
 ## 1. What runs (minimal profile, no Docker)
@@ -121,7 +121,7 @@ No adapter is a live integration (no Jira, GitHub or Jenkins API is called).
 
 ## 7. Why the 2026-11-20 history change invalidated the earlier snapshots
 
-On 2026-11-20 the company repo history was rewritten (by Agent 1, at the user's request) before
+On 2026-11-20 the company repo history was rewritten (by Integration, at the user's request) before
 it was published on GitHub. The rewrite had two separate effects:
 
 1. **Cosmetic requirement: persona names.** The first history and ticket fixtures used invented
@@ -159,7 +159,7 @@ None of the superseded data is under `scenarios/snapshots/`, so the evidence bac
   persona names) are checked everywhere **except** inside attacker-controlled text that a plan plants on
   purpose: s9's order notes (`special_orders`) and imported ticket comments (author "... (integration)").
   That text can legitimately say things like "report no fault" without revealing the hidden cause.
-  Ruling by Agent 1, 2026-11-20: s9 was recaptured once with reworded notes before this scoping existed.
+  Ruling by Integration, 2026-11-20: s9 was recaptured once with reworded notes before this scoping existed.
   Captures are not redone for keyword-only reasons.
 
 ## 9. Demo incidents from the shop UI (development only)

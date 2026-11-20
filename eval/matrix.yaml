@@ -14,7 +14,7 @@ matrix_version: 1
 # A phase-level run_config_file overrides the top-level one. A configured file that does
 # not exist makes the harness refuse to run (no silent fallback to defaults).
 # pilot -> configs/dev.yaml (development); eval -> configs/frozen_v1.yaml (created by
-# Agent 1 when settings are frozen after the pilot). The file path and sha256 are saved
+# Integration when settings are frozen after the pilot). The file path and sha256 are saved
 # in batch.json and every meta.json; a resumed batch refuses a changed config file.
 run_config: {}
 run_config_file: null

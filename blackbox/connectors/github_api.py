@@ -1,4 +1,4 @@
-"""Read-only GitHub REST connector (CONTRACT.md s10c). Owner: Agent 4.
+"""Read-only GitHub REST connector (CONTRACT.md s10c). Owner: QA.
 
     python -m blackbox.connectors.github_api smoke --repo owner/name [--sha SHA] [--file PATH] [--issue N]
 

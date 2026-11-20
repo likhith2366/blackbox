@@ -4,11 +4,11 @@ Evidence-grounded incident investigation on a local demo system. Design: `docs/m
 Contract, ownership and commands: `CONTRACT.md`.
 
 ## Layout
-- `demo/` local services, build/deploy tooling, fault controller (Agent 2)
-- `scenarios/` frozen evidence snapshots and how to rebuild them (Agent 2)
+- `demo/` local services, build/deploy tooling, fault controller (Evidence)
+- `scenarios/` frozen evidence snapshots and how to rebuild them (Evidence)
 - `evaluator_private/` answer keys and manifest; never read by `blackbox/`
 - `blackbox/` investigator (BlackBox), baselines B0/B1, model adapter, evidence backend
-- `eval/` harness, metrics, worksheets, reports (Agent 3); outputs in `runs/` and `results/`
+- `eval/` harness, metrics, worksheets, reports (Evaluation); outputs in `runs/` and `results/`
 
 ## Quick start
 ```
@@ -27,7 +27,7 @@ only frozen snapshots; the harness refuses live backends. A separate live demo m
 (commits, configs at a pinned commit SHA, Actions runs/logs) through a read-only REST connector and the
 services' own log files; no investigation has yet used GitHub evidence. Jira is snapshot-only.
 
-## Reproducing the evaluation (section maintained by Agent 3)
+## Reproducing the evaluation (section maintained by Evaluation)
 Run from the repo root. Commands that need the GPU take `runs/_gpu.lock`; nothing here calls the
 model except step 4.
 1. `pytest -q`: expect 0 failed. Strict xfails are open defects listed in `docs/KNOWN_DEFECTS.md`.

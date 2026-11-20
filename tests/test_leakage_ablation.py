@@ -14,7 +14,7 @@ Every returned byte (records, errors, exception text) is scanned.
   deployments, builds, logs, spans/traces or metrics records, nor in the summaries
   (incident() / incident.json, source_status). Exempt from the deployed-sha check only:
   commits (stay searchable, CONTRACT s8), configs (repository versions keyed by commit,
-  config:<svc>@<sha7>; scenarios 3/6 deploy a config commit; approved by Agent 1
+  config:<svc>@<sha7>; scenarios 3/6 deploy a config commit; approved by Integration
   2026-11-20) and tickets (team discussion; reported as a warning). Source lists live in
   eval/probe.py (DEPLOYED_SHA_ALLOWED_SOURCES, PROVENANCE_STRICT_SOURCES); builds not available.
 - no_traces: no span/trace records, no span:/trace: evidence ids (trace ids may stay in
@@ -22,7 +22,7 @@ Every returned byte (records, errors, exception text) is scanned.
 - metric and config evidence ids are identical to the un-ablated snapshot ("everything
   else identical").
 - every ablation incl. "none": no record after the cutoff; every record has available_time.
-Skips with a reason until Agent 2's backend and snapshots exist.
+Skips with a reason until Evidence's backend and snapshots exist.
 """
 import json
 import warnings
@@ -38,7 +38,7 @@ ABLATIONS = ("no_jira", "no_provenance", "no_traces")
 ABLATED_SOURCE = {"no_jira": "tickets", "no_provenance": "builds", "no_traces": "traces"}
 
 try:
-    from blackbox.evidence.backend import list_incidents, load_backend  # Agent 2
+    from blackbox.evidence.backend import list_incidents, load_backend  # Evidence
     INCIDENTS = list(list_incidents())
     _SKIP = None if INCIDENTS else "no snapshots under scenarios/snapshots yet"
 except Exception as e:  # backend not implemented yet

@@ -1,4 +1,4 @@
-"""Local demo-control API for the shop UI (Agent 2). Binds to 127.0.0.1:8710 only.
+"""Local demo-control API for the shop UI (Evidence). Binds to 127.0.0.1:8710 only.
 
     python -m demo.control_api            # http://127.0.0.1:8710
 

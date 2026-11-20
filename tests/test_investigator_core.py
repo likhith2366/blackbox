@@ -246,7 +246,7 @@ def test_report_audit_separates_raw_and_recovered_citations():
 
 
 def test_embedded_rule_rejects_padded_or_extended_ids():
-    # Agent 4 QA finding: substring matching turned fabricated ids into valid citations
+    # QA QA finding: substring matching turned fabricated ids into valid citations
     from blackbox.investigator.common import resolve_citation
     assert resolve_citation("log:12", {"log:1"}) == (None, "invalid")
     assert resolve_citation("log:9f2c41ff", {"log:9f2c41"}) == (None, "invalid")

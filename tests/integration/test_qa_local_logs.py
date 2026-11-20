@@ -1,4 +1,4 @@
-"""Agent 4 QA: blackbox/connectors/local_logs.py (Agent 2) on a TEST FIXTURE telemetry dir.
+"""QA QA: blackbox/connectors/local_logs.py (Evidence) on a TEST FIXTURE telemetry dir.
 
 Runs without the demo: the fixture directory is written into tmp_path in the same layout the
 demo services use (<dir>/logs/<service>.jsonl). Every line says "QA FIXTURE".
@@ -78,14 +78,14 @@ def test_bad_arguments_are_an_error_not_an_exception(tdir):
     assert ll.LocalLogs(tdir).search(start="not-a-time").status == "error"
 
 
-@pytest.mark.xfail(strict=True, reason="QA-F10 (Agent 2, LOW): local_logs query tokens match substrings ('out' "
-                   "matches 'checkout-svc'), unlike the snapshot backend which Agent 1 changed to whole words")
+@pytest.mark.xfail(strict=True, reason="QA-F10 (Evidence, LOW): local_logs query tokens match substrings ('out' "
+                   "matches 'checkout-svc'), unlike the snapshot backend which Integration changed to whole words")
 def test_query_matches_whole_words_like_the_snapshot_backend(tdir):
     res = ll.LocalLogs(tdir).search(query="out", limit=100)
     assert res.status == "empty"
 
 
-@pytest.mark.xfail(strict=True, reason="QA-F11 (Agent 2, LOW): one log line with an unparseable 'ts' makes the "
+@pytest.mark.xfail(strict=True, reason="QA-F11 (Evidence, LOW): one log line with an unparseable 'ts' makes the "
                    "whole search return status=error instead of skipping that line")
 def test_one_bad_timestamp_does_not_fail_the_search(tdir):
     with open(tdir / "logs" / "payment-svc.jsonl", "a", encoding="utf-8") as fh:

@@ -1,4 +1,4 @@
-"""Shared data contract for BlackBox. Owned by Agent 1; Agents 2 and 3 import, never edit.
+"""Shared data contract for BlackBox. Owned by Integration; the evidence and evaluation modules import, never edit.
 
 Request a change by writing to coordination/requests.md. Every persisted artefact
 (snapshots, run records, reports) is produced from these models, so a field added

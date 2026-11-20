@@ -1,4 +1,4 @@
-"""Agent 4: viewer/build.py renders saved runs read-only (hand-built TEST FIXTURE runs)."""
+"""QA: viewer/build.py renders saved runs read-only (hand-built TEST FIXTURE runs)."""
 from __future__ import annotations
 
 import json

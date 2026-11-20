@@ -1,4 +1,4 @@
-"""Single entry point for the three systems. Used by the CLI and by eval/ (Agent 3)."""
+"""Single entry point for the three systems. Used by the CLI and by eval/ (Evaluation)."""
 from __future__ import annotations
 
 import subprocess

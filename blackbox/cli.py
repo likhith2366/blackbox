@@ -107,7 +107,7 @@ def _main(argv: list[str] | None = None) -> int:
         print(trace(out))
         return 0
 
-    from blackbox.evidence.backend import load_backend  # Agent 2
+    from blackbox.evidence.backend import load_backend  # Evidence
     from blackbox.systems import run_system
 
     cfg = load_config(args.config)

@@ -484,8 +484,8 @@ class _Skip(Exception):
 
 # --------------------------------------------------------------------------- CLI
 def _real_fns(snapshot_root: Optional[Path]):
-    from blackbox.evidence.backend import load_backend  # Agent 2
-    from blackbox.systems import run_system              # Agent 1
+    from blackbox.evidence.backend import load_backend  # Evidence
+    from blackbox.systems import run_system              # Integration
 
     def backend_fn(iid, abl):
         return load_backend(iid, ablation=abl, snapshot_root=snapshot_root)
@@ -531,7 +531,7 @@ def main(argv: Optional[list[str]] = None) -> int:
         manifest_path = Path(a.manifest) if a.manifest else DEFAULT_MANIFEST
         keys_dir = Path(a.answer_keys) if a.answer_keys else DEFAULT_ANSWER_KEYS
     if not manifest_path.exists():
-        print(f"manifest not found: {manifest_path} (Agent 2 has not built scenarios yet)",
+        print(f"manifest not found: {manifest_path} (Evidence has not built scenarios yet)",
               file=sys.stderr)
         return 2
     manifest = load_manifest(manifest_path)

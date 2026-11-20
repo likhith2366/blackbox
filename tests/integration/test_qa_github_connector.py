@@ -1,4 +1,4 @@
-"""Agent 4: offline tests for blackbox/connectors/github_api.py (no network).
+"""QA: offline tests for blackbox/connectors/github_api.py (no network).
 
 A fake requests session (TEST FIXTURE) answers by URL. The token used here is a fake
 string; the tests check it never appears in any record, error or repr.

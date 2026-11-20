@@ -17,7 +17,7 @@ history with identical commit SHAs.
 ## 1. Tests (no model, no network)
 ```
 pytest -q                                # all unit, contract and QA tests
-pytest -q tests/integration              # Agent 4 QA suite only (xfail = known open defect, see docs/QA_FINDINGS.md)
+pytest -q tests/integration              # QA QA suite only (xfail = known open defect, see docs/QA_FINDINGS.md)
 ```
 
 ## 2. Demo application and scenarios (no model)

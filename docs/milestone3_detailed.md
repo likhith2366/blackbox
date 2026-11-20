@@ -1,6 +1,6 @@
 # BlackBox: Milestone 3 report (DRAFT v3, 2026-11-20)
 
-Factual status only (draft owner: Agent 3). **PENDING** = no measured result yet. Every number
+Factual status only (draft owner: Evaluation). **PENDING** = no measured result yet. Every number
 comes from a run record on disk. Automated diagnosis and claim judgements are **provisional**
 until two human reviewers confirm them.
 

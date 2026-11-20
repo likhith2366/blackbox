@@ -1,6 +1,6 @@
 """Shared paths and loaders for the evaluation package.
 
-The scenario manifest format is owned by Agent 2. CONTRACT.md s6 fixes its content
+The scenario manifest format is owned by Evidence. CONTRACT.md s6 fixes its content
 (incident_id -> scenario number, type, variant_of, frozen flag, build command, capture
 time) but not its exact shape, so `load_manifest` accepts the plausible shapes:
   {"INC-0001": {...}, ...}

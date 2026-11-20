@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
-// BlackBox UI dev server: http://127.0.0.1:5173, /api proxied to the BlackBox API (Agent 1) on 8700.
+// BlackBox UI dev server: http://127.0.0.1:5173, /api proxied to the BlackBox API (Integration) on 8700.
 export default defineConfig({
   plugins: [react()],
   server: {

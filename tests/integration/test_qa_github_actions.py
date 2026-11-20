@@ -1,4 +1,4 @@
-"""Agent 4: offline tests for the read-only GitHub Actions methods (no network).
+"""QA: offline tests for the read-only GitHub Actions methods (no network).
 
 The fake session (TEST FIXTURE, from test_qa_github_connector.py) answers by URL suffix. The failed-job
 path is exercised here only. Live verification so far covered a successful run, so failed-job log

@@ -1,4 +1,4 @@
-"""Agent 4: offline tests for blackbox/connectors/capture.py (record/replay). No network.
+"""QA: offline tests for blackbox/connectors/capture.py (record/replay). No network.
 
 Uses the fake HTTP session from test_qa_github_connector.py (TEST FIXTURE) and a fake token.
 """

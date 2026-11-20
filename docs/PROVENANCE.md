@@ -1,6 +1,6 @@
 # Demo company repo provenance (blackbox-demo-shop)
 
-Recorded 2026-11-20 ~04:05Z by Agent 2. Commands used: `git rev-parse` (local) and
+Recorded 2026-11-20 ~04:05Z by Evidence. Commands used: `git rev-parse` (local) and
 `git ls-remote origin` (read-only; nothing pushed, no remote tag changed).
 
 - Local repo: `A:\subjects\genAI\final_project\blackbox-demo-shop`

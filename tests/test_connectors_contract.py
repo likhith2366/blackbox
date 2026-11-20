@@ -1,7 +1,7 @@
 """Contract tests for live connectors (CONTRACT.md 10c).
 
-Targets: blackbox/connectors/github_api.py (Agent 4) and blackbox/connectors/local_logs.py
-(Agent 2). Each module is tested once it exists; until then the tests skip with a reason.
+Targets: blackbox/connectors/github_api.py (QA) and blackbox/connectors/local_logs.py
+(Evidence). Each module is tested once it exists; until then the tests skip with a reason.
 
 Discovery (so the tests do not fix method names): a module-level `make_connector(**kw)`
 if present, else the first class defined in the module whose name ends in Connector,
@@ -11,7 +11,7 @@ methods with required parameters the factory cannot fill are reported, not calle
 
 HTTP: FIXTURES. Unit tests never touch the network: requests' HTTPAdapter.send is
 replaced by recorded/mocked GitHub-shaped responses (labelled fixtures, written by
-Agent 3), raw sockets are blocked, and `gh auth token` is blocked so a real token on this
+Evaluation), raw sockets are blocked, and `gh auth token` is blocked so a real token on this
 machine can never be read. One opt-in test marked `live` hits the real API and skips
 unless BLACKBOX_LIVE_TESTS=1 and the network is reachable.
 
@@ -447,7 +447,7 @@ LOG_LINES = [
 
 @pytest.fixture
 def log_dir(tmp_path):
-    """FIXTURE: two log lines in the demo telemetry JSONL format (written by Agent 3)."""
+    """FIXTURE: two log lines in the demo telemetry JSONL format (written by Evaluation)."""
     d = tmp_path / "logs"
     d.mkdir()
     (d / "checkout-svc.jsonl").write_text("\n".join(json.dumps(x) for x in LOG_LINES) + "\n",

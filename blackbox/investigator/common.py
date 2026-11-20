@@ -201,7 +201,7 @@ def resolve_citation(cited: str, seen: set[str]) -> tuple[Optional[str], str]:
     if c in seen:
         return c, "exact"
     # the id must stand alone: "log:1" inside "log:12" or "log:9f2c41" inside "log:9f2c41ff" is
-    # a different (possibly fabricated) id, not a copy of the real one (found by Agent 4 QA)
+    # a different (possibly fabricated) id, not a copy of the real one (found by QA QA)
     spans = [(m.start(), m.end(), i) for i in seen
              for m in re.finditer(r"(?<![A-Za-z0-9_])" + re.escape(i) + r"(?![A-Za-z0-9_])", c)]
     # a match lying inside a longer match is part of that id ("jira:DEMO-12" in "jira:DEMO-12#c3");

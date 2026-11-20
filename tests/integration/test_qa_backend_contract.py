@@ -1,4 +1,4 @@
-"""Agent 4 QA: blackbox/evidence/backend.py (Agent 2) against interface.py and CONTRACT.md.
+"""QA QA: blackbox/evidence/backend.py (Evidence) against interface.py and CONTRACT.md.
 
 Runs on the labelled QA fixture snapshot (tests/integration/fixtures/qa_snapshot.py), so it
 needs no pilot. Skips if the backend module does not exist yet.
@@ -157,7 +157,7 @@ def test_log_grouping_representative_depends_on_query_window(mini_snapshot):
     assert whole[0].evidence_id == "log:qa0002" and late[0].evidence_id == "log:qa0004"
 
 
-# regression for QA-F07 (fixed by Agent 1 at 9335b82)
+# regression for QA-F07 (fixed by Integration at 9335b82)
 def test_search_logs_truncated_only_when_limit_cut_results(mini_snapshot):
     b = backend_mod.load_backend("INC-9001", snapshot_root=mini_snapshot)
     res = b.search_logs(query="timed out", limit=20)

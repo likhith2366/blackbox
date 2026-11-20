@@ -1,4 +1,4 @@
-"""Agent 4 QA: eval/ (Agent 3) against what the builder and backend actually produce.
+"""QA QA: eval/ (Evaluation) against what the builder and backend actually produce.
 
 Hand-built SystemOutput / AnswerKey objects only (TEST FIXTURE data, ids say "qa").
 """
@@ -30,7 +30,7 @@ def test_exact_decisive_ids_are_counted():
     assert row["decisive_retrieved"] == 2
 
 
-# regression for QA-F08 (fixed by Agent 3: eval/metrics.py decisive_equivalents)
+# regression for QA-F08 (fixed by Evaluation: eval/metrics.py decisive_equivalents)
 def test_decisive_coverage_uses_recorded_equivalents():
     key = _key(injected_fault={"decisive_equivalents": {"log:qa-first": ["log:qa-later", "log:qa-last"]}})
     row = metrics.score_run(_out(["log:qa-later", "metric:qa1"]), key, run_status="completed", system="blackbox")
