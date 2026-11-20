@@ -1,0 +1,908 @@
+{
+  "schema_version": "1.0",
+  "system": "blackbox",
+  "incident_id": "INC-3172",
+  "ablation": "no_traces",
+  "status": "completed",
+  "error": null,
+  "report": {
+    "incident_id": "INC-3172",
+    "system": "blackbox",
+    "status": "insufficient_evidence",
+    "headline": "No reliable root cause identified.",
+    "ranked_causes": [],
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "checkout-svc error rate spiked to 1.0 at 2026-11-20T02:42:58Z",
+        "kind": "factual",
+        "evidence_ids": [
+          "metric:debeee110b"
+        ]
+      },
+      {
+        "claim_id": "c2",
+        "text": "payment-svc error rate is not available for analysis",
+        "kind": "factual",
+        "evidence_ids": [
+          "metric:a31ce3d8fe"
+        ]
+      }
+    ],
+    "unresolved_questions": [
+      "Why did checkout-svc error rate spike at 2026-11-20T02:42:58Z?"
+    ],
+    "next_check": "Check payment-svc error rate metrics for the same time window to see if there was a timeout event",
+    "suggested_fix": null,
+    "invalid_citations": [],
+    "normalized_citations": [],
+    "citation_audit": [
+      {
+        "where": "claim c1",
+        "raw": "metric:debeee110b",
+        "resolved": "metric:debeee110b",
+        "method": "exact"
+      },
+      {
+        "where": "claim c2",
+        "raw": "metric:a31ce3d8fe",
+        "resolved": "metric:a31ce3d8fe",
+        "method": "exact"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "round": 1,
+      "prompt_tokens": 987,
+      "completion_tokens": 168,
+      "model_seconds": 4.111562800011598,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-20T02:41:07.834Z\",\n        \"end\": \"2026-11-20T02:44:03.942Z\"\n      }\n    }\n  ],\n  \"decision\": \"continue\",\n  \"rationale\": \"To verify the error rate metric directly, as the alert is based on error_rate > 0.1 for 15s. This will confirm if the metric is indeed high in the observed window.\"\n}",
+      "model_decision": "continue",
+      "hypotheses_before": [],
+      "hypotheses_after": [],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r1c1",
+          "round": 1,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "error_rate",
+            "start": "2026-11-20T02:41:07.834Z",
+            "end": "2026-11-20T02:44:03.942Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r1c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:debeee110b",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:41:23.665Z",
+              "available_time": "2026-11-20T02:43:59.145Z",
+              "version": null,
+              "title": "checkout-svc error_rate",
+              "content": "checkout-svc error_rate (5.0s points, 2026-11-20T02:41:23.665Z .. 2026-11-20T02:43:59.145Z): min=0 max=1 last=1\n02:41:23 0; 02:41:28 0; 02:41:33 0; 02:41:38 0; 02:41:43 0; 02:41:48 0; 02:41:53 0; 02:41:58 0; 02:42:03 0; 02:42:08 0; 02:42:13 0; 02:42:18 0; 02:42:23 0; 02:42:28 0; 02:42:33 0; 02:42:38 0; 02:42:43 0; 02:42:48 0; 02:42:53 0.6667; 02:42:58 1; 02:43:03 1; 02:43:08 1; 02:43:13 1; 02:43:18 1; 02:43:24 1; 02:43:29 1; 02:43:34 1; 02:43:39 1; 02:43:44 1; 02:43:49 1; 02:43:54 1; 02:43:59 1",
+              "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 32,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 1.6596000641584396,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [],
+      "orchestration_rules": [
+        "first-tool rule: no evidence yet, so >=1 tool call required and decision limited to 'continue' (orchestration, not model behaviour)"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1018,
+        "fixed_part_cut": false,
+        "prompt_tokens_est": 992,
+        "prompt_tokens_actual": 987,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": ""
+    },
+    {
+      "round": 2,
+      "prompt_tokens": 1500,
+      "completion_tokens": 265,
+      "model_seconds": 5.377805200056173,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"error rate spike due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:debeee110b\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-20T02:41:07.834Z\",\n        \"end\": \"2026-11-20T02:44:03.942Z\"\n      }\n    }\n  ],\n  \"decision\": \"continue\",\n  \"rationale\": \"The error rate in checkout-svc spiked at 02:42:53 to 0.6667 and then reached 1.0. This could be due to payment-svc timeouts. Need to check payment-svc error rate to confirm.\"\n}",
+      "model_decision": "continue",
+      "hypotheses_before": [],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:debeee110b"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [
+        "+ h1 [active/medium] checkout-svc: error rate spike due to payment-svc timeout"
+      ],
+      "tool_requests": [
+        {
+          "call_id": "r2c1",
+          "round": 2,
+          "tool": "get_metrics",
+          "args": {
+            "service": "payment-svc",
+            "metric": "error_rate",
+            "start": "2026-11-20T02:41:07.834Z",
+            "end": "2026-11-20T02:44:03.942Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r2c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:a31ce3d8fe",
+              "source": "metrics",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:41:20.747Z",
+              "available_time": "2026-11-20T02:44:02.881Z",
+              "version": null,
+              "title": "payment-svc error_rate",
+              "content": "payment-svc error_rate (5.0s points, 2026-11-20T02:41:20.747Z .. 2026-11-20T02:44:02.881Z): min=0 max=1 last=1\n02:41:20 0; 02:41:25 0; 02:41:30 0; 02:41:35 0; 02:41:40 0; 02:41:45 0; 02:41:50 0; 02:41:55 0; 02:42:00 0; 02:42:05 0; 02:42:10 0; 02:42:15 0; 02:42:20 0; 02:42:25 0; 02:42:30 0; 02:42:37 0; 02:42:42 0; 02:42:47 0; 02:42:52 0.3077; 02:42:57 1; 02:43:02 1; 02:43:07 1; 02:43:12 1; 02:43:17 1; 02:43:22 1; 02:43:27 1; 02:43:32 1; 02:43:37 1; 02:43:42 1; 02:43:47 1; 02:43:52 1; 02:43:57 1; 02:44:02 1",
+              "content_ref": "metrics.jsonl#payment-svc/error_rate",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 33,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.6423000013455749,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:debeee110b",
+          "resolved": "metric:debeee110b",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1027,
+        "fixed_part_cut": false,
+        "notebook_budget": 6115,
+        "notebook_tokens": 508,
+        "records_retrieved": 1,
+        "records_full": 1,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 1505,
+        "prompt_tokens_actual": 1500,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": ""
+    },
+    {
+      "round": 3,
+      "prompt_tokens": 2087,
+      "completion_tokens": 346,
+      "model_seconds": 14.917881599976681,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"error rate spike due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:debeee110b\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-20T02:41:07.834Z\",\n        \"end\": \"2026-11-20T02:44:03.942Z\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate metric for checkout-svc shows a spike starting at 02:42:53 with a value of 0.6667 and reaching 1 by 02:43:03. The payment-svc error rate metric shows a similar spike starting at 02:42:52 with a value of 0.3077 and reaching 1 by 02:43:02. This temporal alignment suggests that the payment-svc timeout is causing the checkout-svc error rate spike. The hypothesis h1 is supported by the metric data and the timing correlation between the two services.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:debeee110b"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:debeee110b"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r3c1",
+          "round": 3,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "error_rate",
+            "start": "2026-11-20T02:41:07.834Z",
+            "end": "2026-11-20T02:44:03.942Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r3c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:debeee110b",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:41:23.665Z",
+              "available_time": "2026-11-20T02:43:59.145Z",
+              "version": null,
+              "title": "checkout-svc error_rate",
+              "content": "checkout-svc error_rate (5.0s points, 2026-11-20T02:41:23.665Z .. 2026-11-20T02:43:59.145Z): min=0 max=1 last=1\n02:41:23 0; 02:41:28 0; 02:41:33 0; 02:41:38 0; 02:41:43 0; 02:41:48 0; 02:41:53 0; 02:41:58 0; 02:42:03 0; 02:42:08 0; 02:42:13 0; 02:42:18 0; 02:42:23 0; 02:42:28 0; 02:42:33 0; 02:42:38 0; 02:42:43 0; 02:42:48 0; 02:42:53 0.6667; 02:42:58 1; 02:43:03 1; 02:43:08 1; 02:43:13 1; 02:43:18 1; 02:43:24 1; 02:43:29 1; 02:43:34 1; 02:43:39 1; 02:43:44 1; 02:43:49 1; 02:43:54 1; 02:43:59 1",
+              "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 32,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r3c1==r1c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:debeee110b",
+          "resolved": "metric:debeee110b",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1092,
+        "fixed_part_cut": false,
+        "notebook_budget": 6050,
+        "notebook_tokens": 1029,
+        "records_retrieved": 2,
+        "records_full": 2,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 2092,
+        "prompt_tokens_actual": 2087,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 4,
+      "prompt_tokens": 1656,
+      "completion_tokens": 301,
+      "model_seconds": 14.560988700017333,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"error rate spike due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:debeee110b\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-20T02:41:20.747Z\",\n        \"end\": \"2026-11-20T02:44:03.942Z\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"Hypothesis h1 requires evidence that payment-svc timeout caused checkout-svc error rate spike. The metric:debeee110b shows checkout-svc error rate spiked to 1 at 02:43:03. To validate h1, we need payment-svc error rate data during the same window. The get_metrics tool call for payment-svc error_rate in the relevant time range will provide this evidence.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:debeee110b"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:debeee110b"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r4c1",
+          "round": 4,
+          "tool": "get_metrics",
+          "args": {
+            "service": "payment-svc",
+            "metric": "error_rate",
+            "start": "2026-11-20T02:41:20.747Z",
+            "end": "2026-11-20T02:44:03.942Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r4c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:a31ce3d8fe",
+              "source": "metrics",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:41:20.747Z",
+              "available_time": "2026-11-20T02:44:02.881Z",
+              "version": null,
+              "title": "payment-svc error_rate",
+              "content": "payment-svc error_rate (5.0s points, 2026-11-20T02:41:20.747Z .. 2026-11-20T02:44:02.881Z): min=0 max=1 last=1\n02:41:20 0; 02:41:25 0; 02:41:30 0; 02:41:35 0; 02:41:40 0; 02:41:45 0; 02:41:50 0; 02:41:55 0; 02:42:00 0; 02:42:05 0; 02:42:10 0; 02:42:15 0; 02:42:20 0; 02:42:25 0; 02:42:30 0; 02:42:37 0; 02:42:42 0; 02:42:47 0; 02:42:52 0.3077; 02:42:57 1; 02:43:02 1; 02:43:07 1; 02:43:12 1; 02:43:17 1; 02:43:22 1; 02:43:27 1; 02:43:32 1; 02:43:37 1; 02:43:42 1; 02:43:47 1; 02:43:52 1; 02:43:57 1; 02:44:02 1",
+              "content_ref": "metrics.jsonl#payment-svc/error_rate",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 33,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.7272999500855803,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:debeee110b",
+          "resolved": "metric:debeee110b",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1135,
+        "fixed_part_cut": false,
+        "notebook_budget": 6007,
+        "notebook_tokens": 555,
+        "records_retrieved": 2,
+        "records_full": 1,
+        "records_one_line": 1,
+        "records_omitted": 0,
+        "prompt_tokens_est": 1661,
+        "prompt_tokens_actual": 1656,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 5,
+      "prompt_tokens": 2114,
+      "completion_tokens": 390,
+      "model_seconds": 20.051663500024006,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"error rate spike due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:debeee110b\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-20T02:41:07.834Z\",\n        \"end\": \"2026-11-20T02:44:03.942Z\"\n      }\n    },\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-20T02:41:07.834Z\",\n        \"end\": \"2026-11-20T02:44:03.942Z\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate spike in checkout-svc (h1) is supported by metric:debeee110b. The payment-svc error rate metric shows a similar spike starting at 02:42:52, which aligns with the checkout-svc spike at 02:42:53. This confirms the mechanism where payment-svc timeouts cause checkout-svc errors.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:debeee110b"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:debeee110b"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r5c1",
+          "round": 5,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "error_rate",
+            "start": "2026-11-20T02:41:07.834Z",
+            "end": "2026-11-20T02:44:03.942Z"
+          }
+        },
+        {
+          "call_id": "r5c2",
+          "round": 5,
+          "tool": "get_metrics",
+          "args": {
+            "service": "payment-svc",
+            "metric": "error_rate",
+            "start": "2026-11-20T02:41:07.834Z",
+            "end": "2026-11-20T02:44:03.942Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r5c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:debeee110b",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:41:23.665Z",
+              "available_time": "2026-11-20T02:43:59.145Z",
+              "version": null,
+              "title": "checkout-svc error_rate",
+              "content": "checkout-svc error_rate (5.0s points, 2026-11-20T02:41:23.665Z .. 2026-11-20T02:43:59.145Z): min=0 max=1 last=1\n02:41:23 0; 02:41:28 0; 02:41:33 0; 02:41:38 0; 02:41:43 0; 02:41:48 0; 02:41:53 0; 02:41:58 0; 02:42:03 0; 02:42:08 0; 02:42:13 0; 02:42:18 0; 02:42:23 0; 02:42:28 0; 02:42:33 0; 02:42:38 0; 02:42:43 0; 02:42:48 0; 02:42:53 0.6667; 02:42:58 1; 02:43:03 1; 02:43:08 1; 02:43:13 1; 02:43:18 1; 02:43:24 1; 02:43:29 1; 02:43:34 1; 02:43:39 1; 02:43:44 1; 02:43:49 1; 02:43:54 1; 02:43:59 1",
+              "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 32,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        },
+        {
+          "call_id": "r5c2",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:a31ce3d8fe",
+              "source": "metrics",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:41:20.747Z",
+              "available_time": "2026-11-20T02:44:02.881Z",
+              "version": null,
+              "title": "payment-svc error_rate",
+              "content": "payment-svc error_rate (5.0s points, 2026-11-20T02:41:20.747Z .. 2026-11-20T02:44:02.881Z): min=0 max=1 last=1\n02:41:20 0; 02:41:25 0; 02:41:30 0; 02:41:35 0; 02:41:40 0; 02:41:45 0; 02:41:50 0; 02:41:55 0; 02:42:00 0; 02:42:05 0; 02:42:10 0; 02:42:15 0; 02:42:20 0; 02:42:25 0; 02:42:30 0; 02:42:37 0; 02:42:42 0; 02:42:47 0; 02:42:52 0.3077; 02:42:57 1; 02:43:02 1; 02:43:07 1; 02:43:12 1; 02:43:17 1; 02:43:22 1; 02:43:27 1; 02:43:32 1; 02:43:37 1; 02:43:42 1; 02:43:47 1; 02:43:52 1; 02:43:57 1; 02:44:02 1",
+              "content_ref": "metrics.jsonl#payment-svc/error_rate",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 33,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r5c1==r1c1",
+        "r5c2==r2c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:debeee110b",
+          "resolved": "metric:debeee110b",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1119,
+        "fixed_part_cut": false,
+        "notebook_budget": 6023,
+        "notebook_tokens": 1029,
+        "records_retrieved": 2,
+        "records_full": 2,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 2119,
+        "prompt_tokens_actual": 2114,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 6,
+      "prompt_tokens": 2157,
+      "completion_tokens": 426,
+      "model_seconds": 21.96611210005358,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"error rate spike due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:debeee110b\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-20T02:41:07.834Z\",\n        \"end\": \"2026-11-20T02:44:03.942Z\"\n      }\n    },\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-20T02:41:07.834Z\",\n        \"end\": \"2026-11-20T02:44:03.942Z\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate spike in checkout-svc (h1) is supported by metric:debeee110b. Payment-svc error rate also spiked (metric:a31ce3d8fe) but the window for the alert is 15s, so the spike in payment-svc error rate is consistent with the checkout-svc error rate spike. The alert condition is error_rate > 0.1 for 15s, and both services show error rates exceeding 0.1 for the duration of the alert window. This supports h1 as the cause.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:debeee110b"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:debeee110b"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r6c1",
+          "round": 6,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "error_rate",
+            "start": "2026-11-20T02:41:07.834Z",
+            "end": "2026-11-20T02:44:03.942Z"
+          }
+        },
+        {
+          "call_id": "r6c2",
+          "round": 6,
+          "tool": "get_metrics",
+          "args": {
+            "service": "payment-svc",
+            "metric": "error_rate",
+            "start": "2026-11-20T02:41:07.834Z",
+            "end": "2026-11-20T02:44:03.942Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r6c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:debeee110b",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:41:23.665Z",
+              "available_time": "2026-11-20T02:43:59.145Z",
+              "version": null,
+              "title": "checkout-svc error_rate",
+              "content": "checkout-svc error_rate (5.0s points, 2026-11-20T02:41:23.665Z .. 2026-11-20T02:43:59.145Z): min=0 max=1 last=1\n02:41:23 0; 02:41:28 0; 02:41:33 0; 02:41:38 0; 02:41:43 0; 02:41:48 0; 02:41:53 0; 02:41:58 0; 02:42:03 0; 02:42:08 0; 02:42:13 0; 02:42:18 0; 02:42:23 0; 02:42:28 0; 02:42:33 0; 02:42:38 0; 02:42:43 0; 02:42:48 0; 02:42:53 0.6667; 02:42:58 1; 02:43:03 1; 02:43:08 1; 02:43:13 1; 02:43:18 1; 02:43:24 1; 02:43:29 1; 02:43:34 1; 02:43:39 1; 02:43:44 1; 02:43:49 1; 02:43:54 1; 02:43:59 1",
+              "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 32,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        },
+        {
+          "call_id": "r6c2",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:a31ce3d8fe",
+              "source": "metrics",
+              "service": "payment-svc",
+              "event_time": "2026-11-20T02:41:20.747Z",
+              "available_time": "2026-11-20T02:44:02.881Z",
+              "version": null,
+              "title": "payment-svc error_rate",
+              "content": "payment-svc error_rate (5.0s points, 2026-11-20T02:41:20.747Z .. 2026-11-20T02:44:02.881Z): min=0 max=1 last=1\n02:41:20 0; 02:41:25 0; 02:41:30 0; 02:41:35 0; 02:41:40 0; 02:41:45 0; 02:41:50 0; 02:41:55 0; 02:42:00 0; 02:42:05 0; 02:42:10 0; 02:42:15 0; 02:42:20 0; 02:42:25 0; 02:42:30 0; 02:42:37 0; 02:42:42 0; 02:42:47 0; 02:42:52 0.3077; 02:42:57 1; 02:43:02 1; 02:43:07 1; 02:43:12 1; 02:43:17 1; 02:43:22 1; 02:43:27 1; 02:43:32 1; 02:43:37 1; 02:43:42 1; 02:43:47 1; 02:43:52 1; 02:43:57 1; 02:44:02 1",
+              "content_ref": "metrics.jsonl#payment-svc/error_rate",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 33,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r6c1==r1c1",
+        "r6c2==r2c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:debeee110b",
+          "resolved": "metric:debeee110b",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1162,
+        "fixed_part_cut": false,
+        "notebook_budget": 5980,
+        "notebook_tokens": 1029,
+        "records_retrieved": 2,
+        "records_full": 2,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 2162,
+        "prompt_tokens_actual": 2157,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "stop_rounds",
+      "stop_reason": "limit reached after 6 rounds and 8 tool calls"
+    }
+  ],
+  "evidence_seen": [
+    {
+      "evidence_id": "metric:debeee110b",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:41:23.665Z",
+      "available_time": "2026-11-20T02:43:59.145Z",
+      "version": null,
+      "title": "checkout-svc error_rate",
+      "content": "checkout-svc error_rate (5.0s points, 2026-11-20T02:41:23.665Z .. 2026-11-20T02:43:59.145Z): min=0 max=1 last=1\n02:41:23 0; 02:41:28 0; 02:41:33 0; 02:41:38 0; 02:41:43 0; 02:41:48 0; 02:41:53 0; 02:41:58 0; 02:42:03 0; 02:42:08 0; 02:42:13 0; 02:42:18 0; 02:42:23 0; 02:42:28 0; 02:42:33 0; 02:42:38 0; 02:42:43 0; 02:42:48 0; 02:42:53 0.6667; 02:42:58 1; 02:43:03 1; 02:43:08 1; 02:43:13 1; 02:43:18 1; 02:43:24 1; 02:43:29 1; 02:43:34 1; 02:43:39 1; 02:43:44 1; 02:43:49 1; 02:43:54 1; 02:43:59 1",
+      "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 32,
+        "min": 0.0,
+        "max": 1.0,
+        "last": 1.0
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:a31ce3d8fe",
+      "source": "metrics",
+      "service": "payment-svc",
+      "event_time": "2026-11-20T02:41:20.747Z",
+      "available_time": "2026-11-20T02:44:02.881Z",
+      "version": null,
+      "title": "payment-svc error_rate",
+      "content": "payment-svc error_rate (5.0s points, 2026-11-20T02:41:20.747Z .. 2026-11-20T02:44:02.881Z): min=0 max=1 last=1\n02:41:20 0; 02:41:25 0; 02:41:30 0; 02:41:35 0; 02:41:40 0; 02:41:45 0; 02:41:50 0; 02:41:55 0; 02:42:00 0; 02:42:05 0; 02:42:10 0; 02:42:15 0; 02:42:20 0; 02:42:25 0; 02:42:30 0; 02:42:37 0; 02:42:42 0; 02:42:47 0; 02:42:52 0.3077; 02:42:57 1; 02:43:02 1; 02:43:07 1; 02:43:12 1; 02:43:17 1; 02:43:22 1; 02:43:27 1; 02:43:32 1; 02:43:37 1; 02:43:42 1; 02:43:47 1; 02:43:52 1; 02:43:57 1; 02:44:02 1",
+      "content_ref": "metrics.jsonl#payment-svc/error_rate",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 33,
+        "min": 0.0,
+        "max": 1.0,
+        "last": 1.0
+      },
+      "truncated": false,
+      "fixture": false
+    }
+  ],
+  "usage": {
+    "model_calls": 7,
+    "prompt_tokens": 11657,
+    "completion_tokens": 2120,
+    "model_seconds": 93.1462893000571
+  },
+  "wall_seconds": 105.57,
+  "rounds_used": 6,
+  "tool_calls_used": 8,
+  "budget_violations": 0,
+  "unauthorized_attempts": [],
+  "unauthorized_executed": 0,
+  "evidence_budget": null,
+  "context": {
+    "report_call": {
+      "num_ctx": 8192,
+      "notebook_budget": 6474,
+      "notebook_tokens": 555,
+      "records_retrieved": 2,
+      "records_full": 1,
+      "records_one_line": 1,
+      "records_omitted": 0,
+      "prompt_tokens_est": 1161,
+      "prompt_tokens_actual": 1156
+    }
+  },
+  "config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "investigator_v2@efd3f21bee+report_v1@035e5ce0d8",
+    "code_revision": "4dd96c0b640531427864e6ad1653e75e5e9bee5d-dirty"
+  },
+  "prompt_versions": {
+    "round": "investigator_v2@efd3f21bee",
+    "report": "report_v1@035e5ce0d8"
+  }
+}
