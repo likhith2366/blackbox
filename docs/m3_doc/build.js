@@ -3,7 +3,7 @@
 const fs = require("fs");
 const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, ShadingType,
-  AlignmentType, LevelFormat, BorderStyle, HeadingLevel, Footer, PageNumber,
+  AlignmentType, LevelFormat, BorderStyle, HeadingLevel, Footer, PageNumber, ExternalHyperlink,
 } = require("docx");
 
 const data = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
@@ -15,8 +15,10 @@ const SMALL = 16;     // 8 pt in tables
 const W = 12240 - 2 * 936;
 
 function runs(text, size = BODY) {
-  return text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/).filter(Boolean).map(t =>
-    t.startsWith("**") ? new TextRun({ text: t.slice(2, -2), bold: true, size, font: FONT })
+  return text.split(/(\[\[[^\]]+\]\]|\*\*[^*]+\*\*|\*[^*]+\*)/).filter(Boolean).map(t =>
+    t.startsWith("[[") ? new ExternalHyperlink({ link: "https://" + t.slice(2, -2),
+      children: [new TextRun({ text: t.slice(2, -2), size, font: FONT, color: "1F4E9A", underline: {} })] })
+    : t.startsWith("**") ? new TextRun({ text: t.slice(2, -2), bold: true, size, font: FONT })
     : t.startsWith("*") && t.endsWith("*") && t.length > 2 ? new TextRun({ text: t.slice(1, -1), italics: true, size, font: FONT })
     : new TextRun({ text: t, size, font: FONT }));
 }
@@ -119,6 +121,7 @@ const children = [
   N("**Interface.** The React BlackBox app streams each round live, shows the final report, opens every cited record at its source, and keeps a history (with cancel/retry)."),
   N("**Evaluation.** A harness runs B0, B1 and BlackBox on the 9 frozen cases, one run at a time on the single GPU, records hashes of code, config, model and answer key, and scores the outputs against the keys."),
   P("**Integration status.** Verified end to end: shop UI and operator controls (2 faults), telemetry capture, alerts and snapshot builder (12 snapshots valid), BlackBox API and UI, harness and scorer. Built and tested but **not yet used by the model in an investigation**: the read-only GitHub connector (commits, files at a pinned commit, GitHub Actions; it read 3 real CI runs). Live reading of the services' own log files worked in one live run (15 records). Jira and Jenkins are not connected: tickets are team-written fixtures and builds use our own tool."),
+  P("**Code and data.** BlackBox, evaluation, results and screenshots: [[github.com/likhith2366/blackbox]] (branch main holds the frozen evaluation code and all results; branch live-integration holds the later API and UI additions, kept off main so the running evaluation uses unchanged code). Demo company: [[github.com/likhith2366/blackbox-demo-shop]]. Start everything with python scripts/start_demo.py; docs/DEMO_WALKTHROUGH.md lists the demo steps."),
   P("**How the test cases were made.** All nine cases are custom faults on this shop (listed in the table in Section 3), following the Milestone 2 plan: two misleading-symptom, two unrelated-change, two insufficient-evidence, one healthy, one connector failure and one prompt injection. Snapshots and keys were frozen before any evaluation run, and no prompt was tuned on them."),
 
   H("2. Baseline results"),
@@ -128,7 +131,7 @@ const children = [
   P(`**${data.done} of 47 planned runs are complete** (${trioTxt}). Verdicts come from an automated matcher and are provisional until the two-person review. “Evidence x/4” means decisive records retrieved.`),
   table([40, 8, 18, 17, 17], evalRows, evalShade),
   gap(),
-  P(`Correct top-1 diagnoses on the solvable cases: BlackBox **${solv("blackbox")}**, B1 **${solv("b1")}**, B0 **${solv("b0")}**. BlackBox retrieved ${bb.dec_ret} of ${bb.dec_tot} decisive records, and ${data.bb_redundant} of its ${data.bb_calls} tool calls (${pct}%) were identical repeats. The two s1 baseline timeouts occurred while the GPU was overheating (96 °C, clock 307 of 2,100 MHz); runs on a cool GPU took 11–40 s.`),
+  P(`Correct top-1 diagnoses on the four solvable primary cases (s1–s4): BlackBox **${solv("blackbox")}**, B1 **${solv("b1")}**, B0 **${solv("b0")}**. BlackBox retrieved ${bb.dec_ret} of ${bb.dec_tot} decisive records, and ${data.bb_redundant} of its ${data.bb_calls} tool calls (${pct}%) were identical repeats. The two s1 baseline timeouts occurred while the GPU was overheating (96 °C, clock 307 of 2,100 MHz); runs on a cool GPU took 11–40 s.`),
 
   H("4. Experiments and comparisons completed"),
   B("**Prompt change (before/after, pilot incident, 2 runs each).** Adding a note that listed the sources not yet queried changed the outcome from abstaining (0/4 evidence) to a **wrong diagnosis that passed the gate** in both runs. We rejected the note; it is not in the frozen setup."),
@@ -167,7 +170,7 @@ const children = [
 
   H("9. Remaining gaps, and what we are still waiting for"),
   P(`**Why the evaluation is not finished.** The 47 runs (9 cases × 3 systems, 8 BlackBox repeats, 12 ablations) share one 6 GB GPU and must run one at a time. To avoid the overheating timeouts we saw, the scheduler waits between runs until the GPU is below 80 °C and 1.5 GB of memory is free, so each run takes about 1–3 minutes of wall time. **${47 - data.done} runs remain**; they are running now and will finish well before the final evaluation week. After that come the two-person review of every verdict and claim, and the repeat and ablation comparisons.`),
-  P(`**Gaps against our Milestone 2 success criteria.** Success was defined as a reproducible evaluation (achieved), with accuracy left open. Still open: top-1/top-3 accuracy (currently ${solv("blackbox")} for BlackBox); ${abst.length < 2 ? "correct-abstention results until s5 and s6 finish; " : ""}the healthy, connector-failure and injection cases (s7–s9) until they finish; the unsupported-claim rate, which needs the human review; repeat agreement and the three ablations; and use of GitHub evidence by the model.`),
+  P(`**Gaps against our Milestone 2 success criteria.** Success was defined as a reproducible evaluation (achieved), with accuracy left open. Still open: top-1/top-3 accuracy (currently ${solv("blackbox")} for BlackBox); ${data.trios.length < 9 ? "the remaining main cases until they finish; " : ""} the unsupported-claim rate, which needs the human review; repeat agreement and the three ablations; and use of GitHub evidence by the model.`),
 
   H("10. Prioritized plan for the final two weeks"),
   N("**Finish all 47 frozen runs (by Nov 21)**, plus a separately labelled rerun of the timed-out cells; originals stay.", true),

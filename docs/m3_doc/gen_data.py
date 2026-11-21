@@ -72,7 +72,7 @@ num = {iid: n for iid, n, _ in CASES}
 stats = {}
 for sysname in ("blackbox", "b1", "b0"):
     rs = [r for r in done if r["system"] == sysname and r["ablation"] == "none" and r["repeat"] == "0"
-          and r["expected_status"] == "diagnosis"]
+          and r["expected_status"] == "diagnosis" and num[r["incident_id"]] <= 4]
     stats[sysname] = {"solvable_run": len(rs),
                       "correct": sum(1 for r in rs if r.get("top1_auto") in ("yes", "True", "true", "1")),
                       "top3": sum(1 for r in rs if r.get("top3_auto") in ("yes", "True", "true", "1")),
