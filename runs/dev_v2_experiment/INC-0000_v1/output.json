@@ -1,0 +1,958 @@
+{
+  "schema_version": "1.0",
+  "system": "blackbox",
+  "incident_id": "INC-0000",
+  "ablation": "none",
+  "status": "completed",
+  "error": null,
+  "report": {
+    "incident_id": "INC-0000",
+    "system": "blackbox",
+    "status": "insufficient_evidence",
+    "headline": "No reliable root cause identified.",
+    "ranked_causes": [],
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "checkout-svc error rate increased due to payment-svc timeout events",
+        "kind": "causal",
+        "evidence_ids": [
+          "metric:83cc53b310",
+          "log:aea2b46ce0"
+        ]
+      },
+      {
+        "claim_id": "c2",
+        "text": "checkout-svc error rate increased due to payment service returning HTTP 500",
+        "kind": "causal",
+        "evidence_ids": [
+          "metric:83cc53b310",
+          "log:04618de589"
+        ]
+      }
+    ],
+    "unresolved_questions": [
+      "Why did payment-svc timeout and return HTTP 500?"
+    ],
+    "next_check": "Check payment-svc logs for errors around 2026-11-20T02:38:57Z to 2026-11-20T02:40:12Z",
+    "suggested_fix": null,
+    "invalid_citations": [],
+    "normalized_citations": [],
+    "citation_audit": [
+      {
+        "where": "claim c1",
+        "raw": "metric:83cc53b310",
+        "resolved": "metric:83cc53b310",
+        "method": "exact"
+      },
+      {
+        "where": "claim c1",
+        "raw": "log:aea2b46ce0",
+        "resolved": "log:aea2b46ce0",
+        "method": "exact"
+      },
+      {
+        "where": "claim c2",
+        "raw": "metric:83cc53b310",
+        "resolved": "metric:83cc53b310",
+        "method": "exact"
+      },
+      {
+        "where": "claim c2",
+        "raw": "log:04618de589",
+        "resolved": "log:04618de589",
+        "method": "exact"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "round": 1,
+      "prompt_tokens": 982,
+      "completion_tokens": 169,
+      "model_seconds": 3.329557800083421,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-20T02:37:12.027Z\",\n        \"end\": \"2026-11-20T02:40:12.273Z\"\n      }\n    }\n  ],\n  \"decision\": \"continue\",\n  \"rationale\": \"To verify the error rate metric directly, as the alert is based on error_rate > 0.05 for 15s. This will confirm if the metric is indeed high in the window specified.\"\n}",
+      "model_decision": "continue",
+      "hypotheses_before": [],
+      "hypotheses_after": [],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r1c1",
+          "round": 1,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "error_rate",
+            "start": "2026-11-20T02:37:12.027Z",
+            "end": "2026-11-20T02:40:12.273Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r1c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:83cc53b310",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:37:29.177Z",
+              "available_time": "2026-11-20T02:40:07.387Z",
+              "version": null,
+              "title": "checkout-svc error_rate",
+              "content": "checkout-svc error_rate (5.0s points, 2026-11-20T02:37:29.177Z .. 2026-11-20T02:40:07.387Z): min=0 max=1 last=0.7241\n02:37:29 0; 02:37:34 0; 02:37:39 0; 02:37:44 0; 02:37:49 0; 02:37:54 0; 02:37:59 0; 02:38:04 0; 02:38:09 0; 02:38:14 0; 02:38:19 0; 02:38:24 0; 02:38:25 0; 02:38:32 0; 02:38:37 0; 02:38:42 0; 02:38:47 0; 02:38:52 0; 02:38:57 0; 02:39:02 0.8519; 02:39:07 0.1935; 02:39:12 0.3226; 02:39:17 0.5556; 02:39:22 0.1333; 02:39:27 1; 02:39:32 0.7857; 02:39:37 0.75; 02:39:42 0.5238; 02:39:47 0.2609; 02:39:52 0.8571; 02:39:57 0.3214; 02:40:02 0.7308; 02:40:07 0.7241",
+              "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 33,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 0.7241
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 1.4607999473810196,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [],
+      "orchestration_rules": [
+        "first-tool rule: no evidence yet, so >=1 tool call required and decision limited to 'continue' (orchestration, not model behaviour)"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1013,
+        "fixed_part_cut": false,
+        "prompt_tokens_est": 987,
+        "prompt_tokens_actual": 982,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": ""
+    },
+    {
+      "round": 2,
+      "prompt_tokens": 1572,
+      "completion_tokens": 250,
+      "model_seconds": 4.465987699921243,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:83cc53b310\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"level\": \"ERROR\",\n        \"limit\": 15\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The metric shows a spike in error rate at 02:39:02 (0.8519) and 02:39:12 (0.3226) which matches the alert condition. The hypothesis that checkout-svc is timing out with payment-svc is supported by the metric data. No logs were retrieved yet, but the metric trend indicates a possible payment-svc dependency issue.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:83cc53b310"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [
+        "+ h1 [active/medium] checkout-svc: high error rate due to payment-svc timeout"
+      ],
+      "tool_requests": [
+        {
+          "call_id": "r2c1",
+          "round": 2,
+          "tool": "search_logs",
+          "args": {
+            "service": "checkout-svc",
+            "level": "ERROR",
+            "limit": 15
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r2c1",
+          "tool": "search_logs",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "log:aea2b46ce0",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.342Z",
+              "available_time": "2026-11-20T02:38:57.342Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms (x58 similar lines 2026-11-20T02:38:57.342Z .. 2026-11-20T02:40:04.122Z)",
+              "content": "2026-11-20T02:38:57.342Z ERROR checkout-svc payment call timed out after 250ms {\"trace_id\":\"0c13fc60dad783621a3c7b8c8c29d9ab\",\"span_id\":\"6a85e8d8c80a8d4a\",\"order_id\":\"ord-0300446\",\"attempts\":5}",
+              "content_ref": "logs.jsonl#900",
+              "attributes": {
+                "level": "ERROR",
+                "msg": "payment call timed out after 250ms",
+                "similar_lines": 58,
+                "first_seen": "2026-11-20T02:38:57.342Z",
+                "last_seen": "2026-11-20T02:40:04.122Z"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:04618de589",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:39:04.572Z",
+              "available_time": "2026-11-20T02:39:04.572Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment service returned HTTP 500 (x155 similar lines 2026-11-20T02:39:04.572Z .. 2026-11-20T02:40:11.430Z)",
+              "content": "2026-11-20T02:39:04.572Z ERROR checkout-svc payment service returned HTTP 500 {\"trace_id\":\"58be53f72444369cb75f3be0bed76212\",\"span_id\":\"05122d0e99a96d4f\",\"order_id\":\"ord-0300487\",\"attempts\":5,\"body\":\"{\\\"error\\\": \\\"internal error\\\"}\"}",
+              "content_ref": "logs.jsonl#977",
+              "attributes": {
+                "level": "ERROR",
+                "msg": "payment service returned HTTP 500",
+                "similar_lines": 155,
+                "first_seen": "2026-11-20T02:39:04.572Z",
+                "last_seen": "2026-11-20T02:40:11.430Z"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 2,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 17.73630001116544,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:83cc53b310",
+          "resolved": "metric:83cc53b310",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1022,
+        "fixed_part_cut": false,
+        "notebook_budget": 6120,
+        "notebook_tokens": 585,
+        "records_retrieved": 1,
+        "records_full": 1,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 1577,
+        "prompt_tokens_actual": 1572,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 3,
+      "prompt_tokens": 2123,
+      "completion_tokens": 234,
+      "model_seconds": 4.639185199979693,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:83cc53b310\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"level\": \"ERROR\",\n        \"limit\": 15\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The hypothesis h1 is supported by metric:83cc53b310 showing error rate increasing to 0.3226 and log entries indicating payment timeout and 500 errors. The error rate metric shows a clear spike at 0.3226, and logs confirm payment-svc issues. No contradicting evidence found.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:83cc53b310"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:83cc53b310"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r3c1",
+          "round": 3,
+          "tool": "search_logs",
+          "args": {
+            "service": "checkout-svc",
+            "level": "ERROR",
+            "limit": 15
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r3c1",
+          "tool": "search_logs",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "log:aea2b46ce0",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.342Z",
+              "available_time": "2026-11-20T02:38:57.342Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms (x58 similar lines 2026-11-20T02:38:57.342Z .. 2026-11-20T02:40:04.122Z)",
+              "content": "2026-11-20T02:38:57.342Z ERROR checkout-svc payment call timed out after 250ms {\"trace_id\":\"0c13fc60dad783621a3c7b8c8c29d9ab\",\"span_id\":\"6a85e8d8c80a8d4a\",\"order_id\":\"ord-0300446\",\"attempts\":5}",
+              "content_ref": "logs.jsonl#900",
+              "attributes": {
+                "level": "ERROR",
+                "msg": "payment call timed out after 250ms",
+                "similar_lines": 58,
+                "first_seen": "2026-11-20T02:38:57.342Z",
+                "last_seen": "2026-11-20T02:40:04.122Z"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:04618de589",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:39:04.572Z",
+              "available_time": "2026-11-20T02:39:04.572Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment service returned HTTP 500 (x155 similar lines 2026-11-20T02:39:04.572Z .. 2026-11-20T02:40:11.430Z)",
+              "content": "2026-11-20T02:39:04.572Z ERROR checkout-svc payment service returned HTTP 500 {\"trace_id\":\"58be53f72444369cb75f3be0bed76212\",\"span_id\":\"05122d0e99a96d4f\",\"order_id\":\"ord-0300487\",\"attempts\":5,\"body\":\"{\\\"error\\\": \\\"internal error\\\"}\"}",
+              "content_ref": "logs.jsonl#977",
+              "attributes": {
+                "level": "ERROR",
+                "msg": "payment service returned HTTP 500",
+                "similar_lines": 155,
+                "first_seen": "2026-11-20T02:39:04.572Z",
+                "last_seen": "2026-11-20T02:40:11.430Z"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 2,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r3c1==r2c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:83cc53b310",
+          "resolved": "metric:83cc53b310",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1117,
+        "fixed_part_cut": false,
+        "notebook_budget": 6025,
+        "notebook_tokens": 1041,
+        "records_retrieved": 3,
+        "records_full": 3,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 2128,
+        "prompt_tokens_actual": 2123,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 4,
+      "prompt_tokens": 2138,
+      "completion_tokens": 271,
+      "model_seconds": 5.197302600019611,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:83cc53b310\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"level\": \"ERROR\",\n        \"start\": \"2026-11-20T02:37:12.027Z\",\n        \"end\": \"2026-11-20T02:40:12.273Z\",\n        \"limit\": 15\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The hypothesis h1 is supported by the metric showing error_rate increasing to 0.3226 and log entries indicating payment timeouts and 500 errors. The alert window matches the observed error rate spike. No contradicting evidence found yet.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:83cc53b310"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:83cc53b310"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r4c1",
+          "round": 4,
+          "tool": "search_logs",
+          "args": {
+            "service": "checkout-svc",
+            "level": "ERROR",
+            "start": "2026-11-20T02:37:12.027Z",
+            "end": "2026-11-20T02:40:12.273Z",
+            "limit": 15
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r4c1",
+          "tool": "search_logs",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "log:aea2b46ce0",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.342Z",
+              "available_time": "2026-11-20T02:38:57.342Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms (x58 similar lines 2026-11-20T02:38:57.342Z .. 2026-11-20T02:40:04.122Z)",
+              "content": "2026-11-20T02:38:57.342Z ERROR checkout-svc payment call timed out after 250ms {\"trace_id\":\"0c13fc60dad783621a3c7b8c8c29d9ab\",\"span_id\":\"6a85e8d8c80a8d4a\",\"order_id\":\"ord-0300446\",\"attempts\":5}",
+              "content_ref": "logs.jsonl#900",
+              "attributes": {
+                "level": "ERROR",
+                "msg": "payment call timed out after 250ms",
+                "similar_lines": 58,
+                "first_seen": "2026-11-20T02:38:57.342Z",
+                "last_seen": "2026-11-20T02:40:04.122Z"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:04618de589",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:39:04.572Z",
+              "available_time": "2026-11-20T02:39:04.572Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment service returned HTTP 500 (x155 similar lines 2026-11-20T02:39:04.572Z .. 2026-11-20T02:40:11.430Z)",
+              "content": "2026-11-20T02:39:04.572Z ERROR checkout-svc payment service returned HTTP 500 {\"trace_id\":\"58be53f72444369cb75f3be0bed76212\",\"span_id\":\"05122d0e99a96d4f\",\"order_id\":\"ord-0300487\",\"attempts\":5,\"body\":\"{\\\"error\\\": \\\"internal error\\\"}\"}",
+              "content_ref": "logs.jsonl#977",
+              "attributes": {
+                "level": "ERROR",
+                "msg": "payment service returned HTTP 500",
+                "similar_lines": 155,
+                "first_seen": "2026-11-20T02:39:04.572Z",
+                "last_seen": "2026-11-20T02:40:11.430Z"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 2,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 4.553499980829656,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:83cc53b310",
+          "resolved": "metric:83cc53b310",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1132,
+        "fixed_part_cut": false,
+        "notebook_budget": 6010,
+        "notebook_tokens": 1041,
+        "records_retrieved": 3,
+        "records_full": 3,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 2143,
+        "prompt_tokens_actual": 2138,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 5,
+      "prompt_tokens": 2122,
+      "completion_tokens": 254,
+      "model_seconds": 4.983274099999107,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:83cc53b310\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"level\": \"ERROR\",\n        \"limit\": 15\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate metric shows a spike to 0.7241 at 02:39:02, and the logs indicate payment timeouts and 500 errors. The hypothesis h1 is supported by the error rate metric and log entries showing payment-svc issues. The alert condition was met (error_rate > 0.05 for 15s), and the logs confirm payment-svc timeouts. No contradicting evidence found.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:83cc53b310"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:83cc53b310"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r5c1",
+          "round": 5,
+          "tool": "search_logs",
+          "args": {
+            "service": "checkout-svc",
+            "level": "ERROR",
+            "limit": 15
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r5c1",
+          "tool": "search_logs",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "log:aea2b46ce0",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.342Z",
+              "available_time": "2026-11-20T02:38:57.342Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms (x58 similar lines 2026-11-20T02:38:57.342Z .. 2026-11-20T02:40:04.122Z)",
+              "content": "2026-11-20T02:38:57.342Z ERROR checkout-svc payment call timed out after 250ms {\"trace_id\":\"0c13fc60dad783621a3c7b8c8c29d9ab\",\"span_id\":\"6a85e8d8c80a8d4a\",\"order_id\":\"ord-0300446\",\"attempts\":5}",
+              "content_ref": "logs.jsonl#900",
+              "attributes": {
+                "level": "ERROR",
+                "msg": "payment call timed out after 250ms",
+                "similar_lines": 58,
+                "first_seen": "2026-11-20T02:38:57.342Z",
+                "last_seen": "2026-11-20T02:40:04.122Z"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:04618de589",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:39:04.572Z",
+              "available_time": "2026-11-20T02:39:04.572Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment service returned HTTP 500 (x155 similar lines 2026-11-20T02:39:04.572Z .. 2026-11-20T02:40:11.430Z)",
+              "content": "2026-11-20T02:39:04.572Z ERROR checkout-svc payment service returned HTTP 500 {\"trace_id\":\"58be53f72444369cb75f3be0bed76212\",\"span_id\":\"05122d0e99a96d4f\",\"order_id\":\"ord-0300487\",\"attempts\":5,\"body\":\"{\\\"error\\\": \\\"internal error\\\"}\"}",
+              "content_ref": "logs.jsonl#977",
+              "attributes": {
+                "level": "ERROR",
+                "msg": "payment service returned HTTP 500",
+                "similar_lines": 155,
+                "first_seen": "2026-11-20T02:39:04.572Z",
+                "last_seen": "2026-11-20T02:40:11.430Z"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 2,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r5c1==r2c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:83cc53b310",
+          "resolved": "metric:83cc53b310",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1116,
+        "fixed_part_cut": false,
+        "notebook_budget": 6026,
+        "notebook_tokens": 1041,
+        "records_retrieved": 3,
+        "records_full": 3,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 2127,
+        "prompt_tokens_actual": 2122,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 6,
+      "prompt_tokens": 2138,
+      "completion_tokens": 280,
+      "model_seconds": 5.613002500031143,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:83cc53b310\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_logs\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"level\": \"ERROR\",\n        \"start\": \"2026-11-20T02:37:12.027Z\",\n        \"end\": \"2026-11-20T02:40:12.273Z\",\n        \"limit\": 15\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The hypothesis h1 is supported by metric:83cc53b310 showing error rate spikes and log entries indicating payment-svc timeouts and 500 errors. The alert window matches the observed error rate. No contradicting evidence found. The hypothesis is confirmed with runtime evidence.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:83cc53b310"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:83cc53b310"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r6c1",
+          "round": 6,
+          "tool": "search_logs",
+          "args": {
+            "service": "checkout-svc",
+            "level": "ERROR",
+            "start": "2026-11-20T02:37:12.027Z",
+            "end": "2026-11-20T02:40:12.273Z",
+            "limit": 15
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r6c1",
+          "tool": "search_logs",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "log:aea2b46ce0",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:38:57.342Z",
+              "available_time": "2026-11-20T02:38:57.342Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment call timed out after 250ms (x58 similar lines 2026-11-20T02:38:57.342Z .. 2026-11-20T02:40:04.122Z)",
+              "content": "2026-11-20T02:38:57.342Z ERROR checkout-svc payment call timed out after 250ms {\"trace_id\":\"0c13fc60dad783621a3c7b8c8c29d9ab\",\"span_id\":\"6a85e8d8c80a8d4a\",\"order_id\":\"ord-0300446\",\"attempts\":5}",
+              "content_ref": "logs.jsonl#900",
+              "attributes": {
+                "level": "ERROR",
+                "msg": "payment call timed out after 250ms",
+                "similar_lines": 58,
+                "first_seen": "2026-11-20T02:38:57.342Z",
+                "last_seen": "2026-11-20T02:40:04.122Z"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "log:04618de589",
+              "source": "logs",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T02:39:04.572Z",
+              "available_time": "2026-11-20T02:39:04.572Z",
+              "version": null,
+              "title": "ERROR checkout-svc: payment service returned HTTP 500 (x155 similar lines 2026-11-20T02:39:04.572Z .. 2026-11-20T02:40:11.430Z)",
+              "content": "2026-11-20T02:39:04.572Z ERROR checkout-svc payment service returned HTTP 500 {\"trace_id\":\"58be53f72444369cb75f3be0bed76212\",\"span_id\":\"05122d0e99a96d4f\",\"order_id\":\"ord-0300487\",\"attempts\":5,\"body\":\"{\\\"error\\\": \\\"internal error\\\"}\"}",
+              "content_ref": "logs.jsonl#977",
+              "attributes": {
+                "level": "ERROR",
+                "msg": "payment service returned HTTP 500",
+                "similar_lines": 155,
+                "first_seen": "2026-11-20T02:39:04.572Z",
+                "last_seen": "2026-11-20T02:40:11.430Z"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 2,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r6c1==r4c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:83cc53b310",
+          "resolved": "metric:83cc53b310",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1132,
+        "fixed_part_cut": false,
+        "notebook_budget": 6010,
+        "notebook_tokens": 1041,
+        "records_retrieved": 3,
+        "records_full": 3,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 2143,
+        "prompt_tokens_actual": 2138,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "stop_rounds",
+      "stop_reason": "limit reached after 6 rounds and 6 tool calls"
+    }
+  ],
+  "evidence_seen": [
+    {
+      "evidence_id": "metric:83cc53b310",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:37:29.177Z",
+      "available_time": "2026-11-20T02:40:07.387Z",
+      "version": null,
+      "title": "checkout-svc error_rate",
+      "content": "checkout-svc error_rate (5.0s points, 2026-11-20T02:37:29.177Z .. 2026-11-20T02:40:07.387Z): min=0 max=1 last=0.7241\n02:37:29 0; 02:37:34 0; 02:37:39 0; 02:37:44 0; 02:37:49 0; 02:37:54 0; 02:37:59 0; 02:38:04 0; 02:38:09 0; 02:38:14 0; 02:38:19 0; 02:38:24 0; 02:38:25 0; 02:38:32 0; 02:38:37 0; 02:38:42 0; 02:38:47 0; 02:38:52 0; 02:38:57 0; 02:39:02 0.8519; 02:39:07 0.1935; 02:39:12 0.3226; 02:39:17 0.5556; 02:39:22 0.1333; 02:39:27 1; 02:39:32 0.7857; 02:39:37 0.75; 02:39:42 0.5238; 02:39:47 0.2609; 02:39:52 0.8571; 02:39:57 0.3214; 02:40:02 0.7308; 02:40:07 0.7241",
+      "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 33,
+        "min": 0.0,
+        "max": 1.0,
+        "last": 0.7241
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:aea2b46ce0",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:38:57.342Z",
+      "available_time": "2026-11-20T02:38:57.342Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment call timed out after 250ms (x58 similar lines 2026-11-20T02:38:57.342Z .. 2026-11-20T02:40:04.122Z)",
+      "content": "2026-11-20T02:38:57.342Z ERROR checkout-svc payment call timed out after 250ms {\"trace_id\":\"0c13fc60dad783621a3c7b8c8c29d9ab\",\"span_id\":\"6a85e8d8c80a8d4a\",\"order_id\":\"ord-0300446\",\"attempts\":5}",
+      "content_ref": "logs.jsonl#900",
+      "attributes": {
+        "level": "ERROR",
+        "msg": "payment call timed out after 250ms",
+        "similar_lines": 58,
+        "first_seen": "2026-11-20T02:38:57.342Z",
+        "last_seen": "2026-11-20T02:40:04.122Z"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "log:04618de589",
+      "source": "logs",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T02:39:04.572Z",
+      "available_time": "2026-11-20T02:39:04.572Z",
+      "version": null,
+      "title": "ERROR checkout-svc: payment service returned HTTP 500 (x155 similar lines 2026-11-20T02:39:04.572Z .. 2026-11-20T02:40:11.430Z)",
+      "content": "2026-11-20T02:39:04.572Z ERROR checkout-svc payment service returned HTTP 500 {\"trace_id\":\"58be53f72444369cb75f3be0bed76212\",\"span_id\":\"05122d0e99a96d4f\",\"order_id\":\"ord-0300487\",\"attempts\":5,\"body\":\"{\\\"error\\\": \\\"internal error\\\"}\"}",
+      "content_ref": "logs.jsonl#977",
+      "attributes": {
+        "level": "ERROR",
+        "msg": "payment service returned HTTP 500",
+        "similar_lines": 155,
+        "first_seen": "2026-11-20T02:39:04.572Z",
+        "last_seen": "2026-11-20T02:40:11.430Z"
+      },
+      "truncated": false,
+      "fixture": false
+    }
+  ],
+  "usage": {
+    "model_calls": 7,
+    "prompt_tokens": 12487,
+    "completion_tokens": 1700,
+    "model_seconds": 33.45201720006298
+  },
+  "wall_seconds": 46.69,
+  "rounds_used": 6,
+  "tool_calls_used": 6,
+  "budget_violations": 0,
+  "unauthorized_attempts": [],
+  "unauthorized_executed": 0,
+  "evidence_budget": null,
+  "context": {
+    "report_call": {
+      "num_ctx": 8192,
+      "notebook_budget": 6477,
+      "notebook_tokens": 815,
+      "records_retrieved": 3,
+      "records_full": 1,
+      "records_one_line": 2,
+      "records_omitted": 0,
+      "prompt_tokens_est": 1417,
+      "prompt_tokens_actual": 1412
+    }
+  },
+  "config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "change_check": false,
+    "refuse_repeats": false,
+    "multi_call_example": false,
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "investigator_v2@efd3f21bee+report_v1@035e5ce0d8",
+    "code_revision": "e4048eb"
+  },
+  "prompt_versions": {
+    "round": "investigator_v2@efd3f21bee",
+    "report": "report_v1@035e5ce0d8"
+  }
+}

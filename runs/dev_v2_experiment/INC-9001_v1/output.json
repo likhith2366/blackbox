@@ -1,0 +1,1801 @@
+{
+  "schema_version": "1.0",
+  "system": "blackbox",
+  "incident_id": "INC-9001",
+  "ablation": "none",
+  "status": "completed",
+  "error": null,
+  "report": {
+    "incident_id": "INC-9001",
+    "system": "blackbox",
+    "status": "insufficient_evidence",
+    "headline": "No reliable root cause identified.",
+    "ranked_causes": [],
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "checkout-svc error rate increased due to payment-svc timeout",
+        "kind": "tentative",
+        "evidence_ids": [
+          "metric:4d19b12fad"
+        ]
+      }
+    ],
+    "unresolved_questions": [
+      "Why did payment-svc timeout?"
+    ],
+    "next_check": "Check payment-svc logs for timeout patterns",
+    "suggested_fix": null,
+    "invalid_citations": [],
+    "normalized_citations": [],
+    "citation_audit": [
+      {
+        "where": "claim c1",
+        "raw": "metric:4d19b12fad",
+        "resolved": "metric:4d19b12fad",
+        "method": "exact"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "round": 1,
+      "prompt_tokens": 978,
+      "completion_tokens": 168,
+      "model_seconds": 5.899017600109801,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-20T03:43:42.797Z\",\n        \"end\": \"2026-11-20T03:45:11.174Z\"\n      }\n    }\n  ],\n  \"decision\": \"continue\",\n  \"rationale\": \"To verify the error rate metric directly, as the alert is based on error_rate > 0.1 for 15s. This will confirm if the metric is indeed high in the observed window.\"\n}",
+      "model_decision": "continue",
+      "hypotheses_before": [],
+      "hypotheses_after": [],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r1c1",
+          "round": 1,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "error_rate",
+            "start": "2026-11-20T03:43:42.797Z",
+            "end": "2026-11-20T03:45:11.174Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r1c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:4d19b12fad",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:43:59.549Z",
+              "available_time": "2026-11-20T03:45:09.695Z",
+              "version": null,
+              "title": "checkout-svc error_rate",
+              "content": "checkout-svc error_rate (5.0s points, 2026-11-20T03:43:59.549Z .. 2026-11-20T03:45:09.695Z): min=0 max=1 last=1\n03:43:59 0; 03:44:04 0; 03:44:09 0; 03:44:14 0; 03:44:19 0.0741; 03:44:24 1; 03:44:29 1; 03:44:34 1; 03:44:39 1; 03:44:44 1; 03:44:49 1; 03:44:54 1; 03:44:59 1; 03:45:04 1; 03:45:09 1",
+              "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 15,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 1.5799000393599272,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [],
+      "orchestration_rules": [
+        "first-tool rule: no evidence yet, so >=1 tool call required and decision limited to 'continue' (orchestration, not model behaviour)"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1009,
+        "fixed_part_cut": false,
+        "prompt_tokens_est": 983,
+        "prompt_tokens_actual": 978,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": ""
+    },
+    {
+      "round": 2,
+      "prompt_tokens": 1288,
+      "completion_tokens": 267,
+      "model_seconds": 8.335852799937129,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:4d19b12fad\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-20T03:43:42.797Z\",\n        \"end\": \"2026-11-20T03:45:11.174Z\",\n        \"status\": \"error\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The metric shows checkout-svc error rate spiked to 1.0 at 03:44:24, which matches the alert condition. To confirm if payment-svc timeout caused this, we need trace data for checkout-svc errors during the window.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:4d19b12fad"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [
+        "+ h1 [active/medium] checkout-svc: high error rate due to payment-svc timeout"
+      ],
+      "tool_requests": [
+        {
+          "call_id": "r2c1",
+          "round": 2,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-20T03:43:42.797Z",
+            "end": "2026-11-20T03:45:11.174Z",
+            "status": "error"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r2c1",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:84bc7633414fe8cfa17bf6eedc1547b8",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:18.550Z",
+              "available_time": "2026-11-20T03:44:19.579Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1029.22ms error",
+              "content": "trace 84bc7633414fe8cfa17bf6eedc1547b8 root=checkout-svc POST /orders start=2026-11-20T03:44:18.550Z duration=1029.22ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1029.22ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700066\",\"http.status_code\":502}\n - checkout-svc POST /charge 1027.03ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=84bc7633414fe8cfa17bf6eedc1547b8",
+              "attributes": {
+                "trace_id": "84bc7633414fe8cfa17bf6eedc1547b8",
+                "duration_ms": 1029.22,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:4c39319cf48b5a6dcf2010e167df5f58",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:18.566Z",
+              "available_time": "2026-11-20T03:44:19.579Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013.54ms error",
+              "content": "trace 4c39319cf48b5a6dcf2010e167df5f58 root=checkout-svc POST /orders start=2026-11-20T03:44:18.566Z duration=1013.54ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.54ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700067\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.36ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1007.57ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700067\",\"http.status_code\":503}\n - ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=4c39319cf48b5a6dcf2010e167df5f58",
+              "attributes": {
+                "trace_id": "4c39319cf48b5a6dcf2010e167df5f58",
+                "duration_ms": 1013.54,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:f27d2900e024abf6d7edf6f299ee214e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.158Z",
+              "available_time": "2026-11-20T03:44:20.171Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013.7ms error",
+              "content": "trace f27d2900e024abf6d7edf6f299ee214e root=checkout-svc POST /orders start=2026-11-20T03:44:19.158Z duration=1013.7ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.7ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700068\",\"http.status_code\":502}\n - checkout-svc POST /charge 1010.7ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1007.31ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 1008. ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=f27d2900e024abf6d7edf6f299ee214e",
+              "attributes": {
+                "trace_id": "f27d2900e024abf6d7edf6f299ee214e",
+                "duration_ms": 1013.7,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:533b4e1e02dc51144bd0158d24bf5c17",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.235Z",
+              "available_time": "2026-11-20T03:44:20.246Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010.14ms error",
+              "content": "trace 533b4e1e02dc51144bd0158d24bf5c17 root=checkout-svc POST /orders start=2026-11-20T03:44:19.235Z duration=1010.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700069\",\"http.status_code\":502}\n - checkout-svc POST /charge 1007.93ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1004.92ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=533b4e1e02dc51144bd0158d24bf5c17",
+              "attributes": {
+                "trace_id": "533b4e1e02dc51144bd0158d24bf5c17",
+                "duration_ms": 1010.14,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e700f0ac3a5aa6f9d3777c3a0d9b946f",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.251Z",
+              "available_time": "2026-11-20T03:44:20.279Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1027.14ms error",
+              "content": "trace e700f0ac3a5aa6f9d3777c3a0d9b946f root=checkout-svc POST /orders start=2026-11-20T03:44:19.251Z duration=1027.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1027.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700070\",\"http.status_code\":502}\n - checkout-svc POST /charge 1024.14ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1011.14ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700070\",\"http.status_code\":503}\n - ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=e700f0ac3a5aa6f9d3777c3a0d9b946f",
+              "attributes": {
+                "trace_id": "e700f0ac3a5aa6f9d3777c3a0d9b946f",
+                "duration_ms": 1027.14,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:44104609f50dc1bb5d3203089563bdc6",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.409Z",
+              "available_time": "2026-11-20T03:44:20.419Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010.78ms error",
+              "content": "trace 44104609f50dc1bb5d3203089563bdc6 root=checkout-svc POST /orders start=2026-11-20T03:44:19.409Z duration=1010.78ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.78ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700071\",\"http.status_code\":502}\n - checkout-svc POST /charge 1008.78ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1005.29ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=44104609f50dc1bb5d3203089563bdc6",
+              "attributes": {
+                "trace_id": "44104609f50dc1bb5d3203089563bdc6",
+                "duration_ms": 1010.78,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:8f84e51594a7a60b84e723fa1af22ded",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.562Z",
+              "available_time": "2026-11-20T03:44:20.576Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1014.44ms error",
+              "content": "trace 8f84e51594a7a60b84e723fa1af22ded root=checkout-svc POST /orders start=2026-11-20T03:44:19.562Z duration=1014.44ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1014.44ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700072\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.23ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1008.22ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=8f84e51594a7a60b84e723fa1af22ded",
+              "attributes": {
+                "trace_id": "8f84e51594a7a60b84e723fa1af22ded",
+                "duration_ms": 1014.44,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e3fe705c209c65a582aa820692232b20",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.744Z",
+              "available_time": "2026-11-20T03:44:20.763Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1018.85ms error",
+              "content": "trace e3fe705c209c65a582aa820692232b20 root=checkout-svc POST /orders start=2026-11-20T03:44:19.744Z duration=1018.85ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1018.85ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700073\",\"http.status_code\":502}\n - checkout-svc POST /charge 1015.81ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=e3fe705c209c65a582aa820692232b20",
+              "attributes": {
+                "trace_id": "e3fe705c209c65a582aa820692232b20",
+                "duration_ms": 1018.85,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            }
+          ],
+          "total_matches": 308,
+          "truncated": true,
+          "error": null,
+          "elapsed_ms": 1.3467000098899007,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:4d19b12fad",
+          "resolved": "metric:4d19b12fad",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1018,
+        "fixed_part_cut": false,
+        "notebook_budget": 6124,
+        "notebook_tokens": 305,
+        "records_retrieved": 1,
+        "records_full": 1,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 1293,
+        "prompt_tokens_actual": 1288,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 3,
+      "prompt_tokens": 4005,
+      "completion_tokens": 316,
+      "model_seconds": 15.51481310010422,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:4d19b12fad\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-20T03:44:18.550Z\",\n        \"end\": \"2026-11-20T03:44:19.744Z\",\n        \"status\": \"error\",\n        \"min_duration_ms\": 1000,\n        \"limit\": 10\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate metric shows a spike at 03:44:24 with value 1, and multiple traces indicate payment-svc db pool timeouts (PoolTimeout: db pool acquire timed out after 1000ms). This confirms the mechanism: checkout-svc errors due to payment-svc timeouts. The traces show consistent patterns across multiple requests, supporting h1. No contradicting evidence found.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:4d19b12fad"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:4d19b12fad"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r3c1",
+          "round": 3,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-20T03:44:18.550Z",
+            "end": "2026-11-20T03:44:19.744Z",
+            "status": "error",
+            "min_duration_ms": 1000,
+            "limit": 10
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r3c1",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:84bc7633414fe8cfa17bf6eedc1547b8",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:18.550Z",
+              "available_time": "2026-11-20T03:44:19.579Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1029.22ms error",
+              "content": "trace 84bc7633414fe8cfa17bf6eedc1547b8 root=checkout-svc POST /orders start=2026-11-20T03:44:18.550Z duration=1029.22ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1029.22ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700066\",\"http.status_code\":502}\n - checkout-svc POST /charge 1027.03ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=84bc7633414fe8cfa17bf6eedc1547b8",
+              "attributes": {
+                "trace_id": "84bc7633414fe8cfa17bf6eedc1547b8",
+                "duration_ms": 1029.22,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:4c39319cf48b5a6dcf2010e167df5f58",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:18.566Z",
+              "available_time": "2026-11-20T03:44:19.579Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013.54ms error",
+              "content": "trace 4c39319cf48b5a6dcf2010e167df5f58 root=checkout-svc POST /orders start=2026-11-20T03:44:18.566Z duration=1013.54ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.54ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700067\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.36ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1007.57ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700067\",\"http.status_code\":503}\n - ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=4c39319cf48b5a6dcf2010e167df5f58",
+              "attributes": {
+                "trace_id": "4c39319cf48b5a6dcf2010e167df5f58",
+                "duration_ms": 1013.54,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:f27d2900e024abf6d7edf6f299ee214e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.158Z",
+              "available_time": "2026-11-20T03:44:20.171Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013.7ms error",
+              "content": "trace f27d2900e024abf6d7edf6f299ee214e root=checkout-svc POST /orders start=2026-11-20T03:44:19.158Z duration=1013.7ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.7ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700068\",\"http.status_code\":502}\n - checkout-svc POST /charge 1010.7ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1007.31ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 1008. ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=f27d2900e024abf6d7edf6f299ee214e",
+              "attributes": {
+                "trace_id": "f27d2900e024abf6d7edf6f299ee214e",
+                "duration_ms": 1013.7,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:533b4e1e02dc51144bd0158d24bf5c17",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.235Z",
+              "available_time": "2026-11-20T03:44:20.246Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010.14ms error",
+              "content": "trace 533b4e1e02dc51144bd0158d24bf5c17 root=checkout-svc POST /orders start=2026-11-20T03:44:19.235Z duration=1010.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700069\",\"http.status_code\":502}\n - checkout-svc POST /charge 1007.93ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1004.92ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=533b4e1e02dc51144bd0158d24bf5c17",
+              "attributes": {
+                "trace_id": "533b4e1e02dc51144bd0158d24bf5c17",
+                "duration_ms": 1010.14,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e700f0ac3a5aa6f9d3777c3a0d9b946f",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.251Z",
+              "available_time": "2026-11-20T03:44:20.279Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1027.14ms error",
+              "content": "trace e700f0ac3a5aa6f9d3777c3a0d9b946f root=checkout-svc POST /orders start=2026-11-20T03:44:19.251Z duration=1027.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1027.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700070\",\"http.status_code\":502}\n - checkout-svc POST /charge 1024.14ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1011.14ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700070\",\"http.status_code\":503}\n - ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=e700f0ac3a5aa6f9d3777c3a0d9b946f",
+              "attributes": {
+                "trace_id": "e700f0ac3a5aa6f9d3777c3a0d9b946f",
+                "duration_ms": 1027.14,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:44104609f50dc1bb5d3203089563bdc6",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.409Z",
+              "available_time": "2026-11-20T03:44:20.419Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010.78ms error",
+              "content": "trace 44104609f50dc1bb5d3203089563bdc6 root=checkout-svc POST /orders start=2026-11-20T03:44:19.409Z duration=1010.78ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.78ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700071\",\"http.status_code\":502}\n - checkout-svc POST /charge 1008.78ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1005.29ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=44104609f50dc1bb5d3203089563bdc6",
+              "attributes": {
+                "trace_id": "44104609f50dc1bb5d3203089563bdc6",
+                "duration_ms": 1010.78,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:8f84e51594a7a60b84e723fa1af22ded",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.562Z",
+              "available_time": "2026-11-20T03:44:20.576Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1014.44ms error",
+              "content": "trace 8f84e51594a7a60b84e723fa1af22ded root=checkout-svc POST /orders start=2026-11-20T03:44:19.562Z duration=1014.44ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1014.44ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700072\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.23ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1008.22ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=8f84e51594a7a60b84e723fa1af22ded",
+              "attributes": {
+                "trace_id": "8f84e51594a7a60b84e723fa1af22ded",
+                "duration_ms": 1014.44,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e3fe705c209c65a582aa820692232b20",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.744Z",
+              "available_time": "2026-11-20T03:44:20.763Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1018.85ms error",
+              "content": "trace e3fe705c209c65a582aa820692232b20 root=checkout-svc POST /orders start=2026-11-20T03:44:19.744Z duration=1018.85ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1018.85ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700073\",\"http.status_code\":502}\n - checkout-svc POST /charge 1015.81ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=e3fe705c209c65a582aa820692232b20",
+              "attributes": {
+                "trace_id": "e3fe705c209c65a582aa820692232b20",
+                "duration_ms": 1018.85,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            }
+          ],
+          "total_matches": 8,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 1.7564999870955944,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:4d19b12fad",
+          "resolved": "metric:4d19b12fad",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1121,
+        "fixed_part_cut": false,
+        "notebook_budget": 6021,
+        "notebook_tokens": 2919,
+        "records_retrieved": 9,
+        "records_full": 9,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 4010,
+        "prompt_tokens_actual": 4005,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 4,
+      "prompt_tokens": 3996,
+      "completion_tokens": 348,
+      "model_seconds": 19.30361499998253,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:4d19b12fad\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-20T03:44:18.550Z\",\n        \"end\": \"2026-11-20T03:44:19.744Z\",\n        \"status\": \"error\",\n        \"min_duration_ms\": 1000,\n        \"limit\": 10\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate metric shows a spike at 0.1 (100% error rate) starting at 03:44:19. The traces show multiple checkout-svc POST /orders requests failing with HTTP 502 and 503 errors, all involving payment-svc db.pool.acquire timeouts (PoolTimeout: db pool acquire timed out after 1000ms). This confirms the hypothesis that checkout-svc errors are caused by payment-svc timeouts. The error rate metric and trace data align with the mechanism described in h1.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:4d19b12fad"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:4d19b12fad"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r4c1",
+          "round": 4,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-20T03:44:18.550Z",
+            "end": "2026-11-20T03:44:19.744Z",
+            "status": "error",
+            "min_duration_ms": 1000,
+            "limit": 10
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r4c1",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:84bc7633414fe8cfa17bf6eedc1547b8",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:18.550Z",
+              "available_time": "2026-11-20T03:44:19.579Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1029.22ms error",
+              "content": "trace 84bc7633414fe8cfa17bf6eedc1547b8 root=checkout-svc POST /orders start=2026-11-20T03:44:18.550Z duration=1029.22ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1029.22ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700066\",\"http.status_code\":502}\n - checkout-svc POST /charge 1027.03ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=84bc7633414fe8cfa17bf6eedc1547b8",
+              "attributes": {
+                "trace_id": "84bc7633414fe8cfa17bf6eedc1547b8",
+                "duration_ms": 1029.22,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:4c39319cf48b5a6dcf2010e167df5f58",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:18.566Z",
+              "available_time": "2026-11-20T03:44:19.579Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013.54ms error",
+              "content": "trace 4c39319cf48b5a6dcf2010e167df5f58 root=checkout-svc POST /orders start=2026-11-20T03:44:18.566Z duration=1013.54ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.54ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700067\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.36ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1007.57ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700067\",\"http.status_code\":503}\n - ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=4c39319cf48b5a6dcf2010e167df5f58",
+              "attributes": {
+                "trace_id": "4c39319cf48b5a6dcf2010e167df5f58",
+                "duration_ms": 1013.54,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:f27d2900e024abf6d7edf6f299ee214e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.158Z",
+              "available_time": "2026-11-20T03:44:20.171Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013.7ms error",
+              "content": "trace f27d2900e024abf6d7edf6f299ee214e root=checkout-svc POST /orders start=2026-11-20T03:44:19.158Z duration=1013.7ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.7ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700068\",\"http.status_code\":502}\n - checkout-svc POST /charge 1010.7ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1007.31ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 1008. ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=f27d2900e024abf6d7edf6f299ee214e",
+              "attributes": {
+                "trace_id": "f27d2900e024abf6d7edf6f299ee214e",
+                "duration_ms": 1013.7,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:533b4e1e02dc51144bd0158d24bf5c17",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.235Z",
+              "available_time": "2026-11-20T03:44:20.246Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010.14ms error",
+              "content": "trace 533b4e1e02dc51144bd0158d24bf5c17 root=checkout-svc POST /orders start=2026-11-20T03:44:19.235Z duration=1010.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700069\",\"http.status_code\":502}\n - checkout-svc POST /charge 1007.93ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1004.92ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=533b4e1e02dc51144bd0158d24bf5c17",
+              "attributes": {
+                "trace_id": "533b4e1e02dc51144bd0158d24bf5c17",
+                "duration_ms": 1010.14,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e700f0ac3a5aa6f9d3777c3a0d9b946f",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.251Z",
+              "available_time": "2026-11-20T03:44:20.279Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1027.14ms error",
+              "content": "trace e700f0ac3a5aa6f9d3777c3a0d9b946f root=checkout-svc POST /orders start=2026-11-20T03:44:19.251Z duration=1027.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1027.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700070\",\"http.status_code\":502}\n - checkout-svc POST /charge 1024.14ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1011.14ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700070\",\"http.status_code\":503}\n - ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=e700f0ac3a5aa6f9d3777c3a0d9b946f",
+              "attributes": {
+                "trace_id": "e700f0ac3a5aa6f9d3777c3a0d9b946f",
+                "duration_ms": 1027.14,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:44104609f50dc1bb5d3203089563bdc6",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.409Z",
+              "available_time": "2026-11-20T03:44:20.419Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010.78ms error",
+              "content": "trace 44104609f50dc1bb5d3203089563bdc6 root=checkout-svc POST /orders start=2026-11-20T03:44:19.409Z duration=1010.78ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.78ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700071\",\"http.status_code\":502}\n - checkout-svc POST /charge 1008.78ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1005.29ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=44104609f50dc1bb5d3203089563bdc6",
+              "attributes": {
+                "trace_id": "44104609f50dc1bb5d3203089563bdc6",
+                "duration_ms": 1010.78,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:8f84e51594a7a60b84e723fa1af22ded",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.562Z",
+              "available_time": "2026-11-20T03:44:20.576Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1014.44ms error",
+              "content": "trace 8f84e51594a7a60b84e723fa1af22ded root=checkout-svc POST /orders start=2026-11-20T03:44:19.562Z duration=1014.44ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1014.44ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700072\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.23ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1008.22ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=8f84e51594a7a60b84e723fa1af22ded",
+              "attributes": {
+                "trace_id": "8f84e51594a7a60b84e723fa1af22ded",
+                "duration_ms": 1014.44,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e3fe705c209c65a582aa820692232b20",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.744Z",
+              "available_time": "2026-11-20T03:44:20.763Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1018.85ms error",
+              "content": "trace e3fe705c209c65a582aa820692232b20 root=checkout-svc POST /orders start=2026-11-20T03:44:19.744Z duration=1018.85ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1018.85ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700073\",\"http.status_code\":502}\n - checkout-svc POST /charge 1015.81ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=e3fe705c209c65a582aa820692232b20",
+              "attributes": {
+                "trace_id": "e3fe705c209c65a582aa820692232b20",
+                "duration_ms": 1018.85,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            }
+          ],
+          "total_matches": 8,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r4c1==r3c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:4d19b12fad",
+          "resolved": "metric:4d19b12fad",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1112,
+        "fixed_part_cut": false,
+        "notebook_budget": 6030,
+        "notebook_tokens": 2919,
+        "records_retrieved": 9,
+        "records_full": 9,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 4001,
+        "prompt_tokens_actual": 3996,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 5,
+      "prompt_tokens": 4012,
+      "completion_tokens": 330,
+      "model_seconds": 18.973920200020075,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:4d19b12fad\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-20T03:44:18.550Z\",\n        \"end\": \"2026-11-20T03:44:20Z\",\n        \"status\": \"error\",\n        \"min_duration_ms\": 1000,\n        \"limit\": 10\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate metric shows a spike at 03:44:24 with value 1.0, and multiple traces show checkout-svc POST /orders errors with HTTP 502 and 503 status codes, indicating payment-svc timeouts. The traces consistently show payment-svc db.pool.acquire errors with PoolTimeout: db pool acquire timed out after 1000ms. This confirms the hypothesis that checkout-svc error rate is high due to payment-svc timeout.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:4d19b12fad"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:4d19b12fad"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r5c1",
+          "round": 5,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-20T03:44:18.550Z",
+            "end": "2026-11-20T03:44:20Z",
+            "status": "error",
+            "min_duration_ms": 1000,
+            "limit": 10
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r5c1",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:84bc7633414fe8cfa17bf6eedc1547b8",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:18.550Z",
+              "available_time": "2026-11-20T03:44:19.579Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1029.22ms error",
+              "content": "trace 84bc7633414fe8cfa17bf6eedc1547b8 root=checkout-svc POST /orders start=2026-11-20T03:44:18.550Z duration=1029.22ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1029.22ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700066\",\"http.status_code\":502}\n - checkout-svc POST /charge 1027.03ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=84bc7633414fe8cfa17bf6eedc1547b8",
+              "attributes": {
+                "trace_id": "84bc7633414fe8cfa17bf6eedc1547b8",
+                "duration_ms": 1029.22,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:4c39319cf48b5a6dcf2010e167df5f58",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:18.566Z",
+              "available_time": "2026-11-20T03:44:19.579Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013.54ms error",
+              "content": "trace 4c39319cf48b5a6dcf2010e167df5f58 root=checkout-svc POST /orders start=2026-11-20T03:44:18.566Z duration=1013.54ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.54ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700067\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.36ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1007.57ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700067\",\"http.status_code\":503}\n - ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=4c39319cf48b5a6dcf2010e167df5f58",
+              "attributes": {
+                "trace_id": "4c39319cf48b5a6dcf2010e167df5f58",
+                "duration_ms": 1013.54,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:f27d2900e024abf6d7edf6f299ee214e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.158Z",
+              "available_time": "2026-11-20T03:44:20.171Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013.7ms error",
+              "content": "trace f27d2900e024abf6d7edf6f299ee214e root=checkout-svc POST /orders start=2026-11-20T03:44:19.158Z duration=1013.7ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.7ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700068\",\"http.status_code\":502}\n - checkout-svc POST /charge 1010.7ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1007.31ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 1008. ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=f27d2900e024abf6d7edf6f299ee214e",
+              "attributes": {
+                "trace_id": "f27d2900e024abf6d7edf6f299ee214e",
+                "duration_ms": 1013.7,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:533b4e1e02dc51144bd0158d24bf5c17",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.235Z",
+              "available_time": "2026-11-20T03:44:20.246Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010.14ms error",
+              "content": "trace 533b4e1e02dc51144bd0158d24bf5c17 root=checkout-svc POST /orders start=2026-11-20T03:44:19.235Z duration=1010.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700069\",\"http.status_code\":502}\n - checkout-svc POST /charge 1007.93ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1004.92ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=533b4e1e02dc51144bd0158d24bf5c17",
+              "attributes": {
+                "trace_id": "533b4e1e02dc51144bd0158d24bf5c17",
+                "duration_ms": 1010.14,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e700f0ac3a5aa6f9d3777c3a0d9b946f",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.251Z",
+              "available_time": "2026-11-20T03:44:20.279Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1027.14ms error",
+              "content": "trace e700f0ac3a5aa6f9d3777c3a0d9b946f root=checkout-svc POST /orders start=2026-11-20T03:44:19.251Z duration=1027.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1027.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700070\",\"http.status_code\":502}\n - checkout-svc POST /charge 1024.14ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1011.14ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700070\",\"http.status_code\":503}\n - ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=e700f0ac3a5aa6f9d3777c3a0d9b946f",
+              "attributes": {
+                "trace_id": "e700f0ac3a5aa6f9d3777c3a0d9b946f",
+                "duration_ms": 1027.14,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:44104609f50dc1bb5d3203089563bdc6",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.409Z",
+              "available_time": "2026-11-20T03:44:20.419Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010.78ms error",
+              "content": "trace 44104609f50dc1bb5d3203089563bdc6 root=checkout-svc POST /orders start=2026-11-20T03:44:19.409Z duration=1010.78ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.78ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700071\",\"http.status_code\":502}\n - checkout-svc POST /charge 1008.78ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1005.29ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=44104609f50dc1bb5d3203089563bdc6",
+              "attributes": {
+                "trace_id": "44104609f50dc1bb5d3203089563bdc6",
+                "duration_ms": 1010.78,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:8f84e51594a7a60b84e723fa1af22ded",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.562Z",
+              "available_time": "2026-11-20T03:44:20.576Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1014.44ms error",
+              "content": "trace 8f84e51594a7a60b84e723fa1af22ded root=checkout-svc POST /orders start=2026-11-20T03:44:19.562Z duration=1014.44ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1014.44ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700072\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.23ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1008.22ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=8f84e51594a7a60b84e723fa1af22ded",
+              "attributes": {
+                "trace_id": "8f84e51594a7a60b84e723fa1af22ded",
+                "duration_ms": 1014.44,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e3fe705c209c65a582aa820692232b20",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.744Z",
+              "available_time": "2026-11-20T03:44:20.763Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1018.85ms error",
+              "content": "trace e3fe705c209c65a582aa820692232b20 root=checkout-svc POST /orders start=2026-11-20T03:44:19.744Z duration=1018.85ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1018.85ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700073\",\"http.status_code\":502}\n - checkout-svc POST /charge 1015.81ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=e3fe705c209c65a582aa820692232b20",
+              "attributes": {
+                "trace_id": "e3fe705c209c65a582aa820692232b20",
+                "duration_ms": 1018.85,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            }
+          ],
+          "total_matches": 8,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 1.0694999946281314,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:4d19b12fad",
+          "resolved": "metric:4d19b12fad",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1128,
+        "fixed_part_cut": false,
+        "notebook_budget": 6014,
+        "notebook_tokens": 2919,
+        "records_retrieved": 9,
+        "records_full": 9,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 4017,
+        "prompt_tokens_actual": 4012,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 6,
+      "prompt_tokens": 3996,
+      "completion_tokens": 307,
+      "model_seconds": 18.264512400026433,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:4d19b12fad\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-20T03:44:18.550Z\",\n        \"end\": \"2026-11-20T03:44:19.744Z\",\n        \"status\": \"error\",\n        \"min_duration_ms\": 1000,\n        \"limit\": 10\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate metric shows a spike at 1.0, and multiple traces indicate payment-svc db pool timeouts (PoolTimeout: db pool acquire timed out after 1000ms). This confirms the mechanism: checkout-svc errors due to payment-svc timeouts. The traces show consistent patterns across multiple requests, supporting h1. No contradicting evidence found.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:4d19b12fad"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:4d19b12fad"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r6c1",
+          "round": 6,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-20T03:44:18.550Z",
+            "end": "2026-11-20T03:44:19.744Z",
+            "status": "error",
+            "min_duration_ms": 1000,
+            "limit": 10
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r6c1",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:84bc7633414fe8cfa17bf6eedc1547b8",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:18.550Z",
+              "available_time": "2026-11-20T03:44:19.579Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1029.22ms error",
+              "content": "trace 84bc7633414fe8cfa17bf6eedc1547b8 root=checkout-svc POST /orders start=2026-11-20T03:44:18.550Z duration=1029.22ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1029.22ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700066\",\"http.status_code\":502}\n - checkout-svc POST /charge 1027.03ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=84bc7633414fe8cfa17bf6eedc1547b8",
+              "attributes": {
+                "trace_id": "84bc7633414fe8cfa17bf6eedc1547b8",
+                "duration_ms": 1029.22,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:4c39319cf48b5a6dcf2010e167df5f58",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:18.566Z",
+              "available_time": "2026-11-20T03:44:19.579Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013.54ms error",
+              "content": "trace 4c39319cf48b5a6dcf2010e167df5f58 root=checkout-svc POST /orders start=2026-11-20T03:44:18.566Z duration=1013.54ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.54ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700067\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.36ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1007.57ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700067\",\"http.status_code\":503}\n - ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=4c39319cf48b5a6dcf2010e167df5f58",
+              "attributes": {
+                "trace_id": "4c39319cf48b5a6dcf2010e167df5f58",
+                "duration_ms": 1013.54,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:f27d2900e024abf6d7edf6f299ee214e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.158Z",
+              "available_time": "2026-11-20T03:44:20.171Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013.7ms error",
+              "content": "trace f27d2900e024abf6d7edf6f299ee214e root=checkout-svc POST /orders start=2026-11-20T03:44:19.158Z duration=1013.7ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.7ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700068\",\"http.status_code\":502}\n - checkout-svc POST /charge 1010.7ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1007.31ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 1008. ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=f27d2900e024abf6d7edf6f299ee214e",
+              "attributes": {
+                "trace_id": "f27d2900e024abf6d7edf6f299ee214e",
+                "duration_ms": 1013.7,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:533b4e1e02dc51144bd0158d24bf5c17",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.235Z",
+              "available_time": "2026-11-20T03:44:20.246Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010.14ms error",
+              "content": "trace 533b4e1e02dc51144bd0158d24bf5c17 root=checkout-svc POST /orders start=2026-11-20T03:44:19.235Z duration=1010.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700069\",\"http.status_code\":502}\n - checkout-svc POST /charge 1007.93ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1004.92ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=533b4e1e02dc51144bd0158d24bf5c17",
+              "attributes": {
+                "trace_id": "533b4e1e02dc51144bd0158d24bf5c17",
+                "duration_ms": 1010.14,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e700f0ac3a5aa6f9d3777c3a0d9b946f",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.251Z",
+              "available_time": "2026-11-20T03:44:20.279Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1027.14ms error",
+              "content": "trace e700f0ac3a5aa6f9d3777c3a0d9b946f root=checkout-svc POST /orders start=2026-11-20T03:44:19.251Z duration=1027.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1027.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700070\",\"http.status_code\":502}\n - checkout-svc POST /charge 1024.14ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1011.14ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700070\",\"http.status_code\":503}\n - ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=e700f0ac3a5aa6f9d3777c3a0d9b946f",
+              "attributes": {
+                "trace_id": "e700f0ac3a5aa6f9d3777c3a0d9b946f",
+                "duration_ms": 1027.14,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:44104609f50dc1bb5d3203089563bdc6",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.409Z",
+              "available_time": "2026-11-20T03:44:20.419Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010.78ms error",
+              "content": "trace 44104609f50dc1bb5d3203089563bdc6 root=checkout-svc POST /orders start=2026-11-20T03:44:19.409Z duration=1010.78ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.78ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700071\",\"http.status_code\":502}\n - checkout-svc POST /charge 1008.78ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1005.29ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=44104609f50dc1bb5d3203089563bdc6",
+              "attributes": {
+                "trace_id": "44104609f50dc1bb5d3203089563bdc6",
+                "duration_ms": 1010.78,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:8f84e51594a7a60b84e723fa1af22ded",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.562Z",
+              "available_time": "2026-11-20T03:44:20.576Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1014.44ms error",
+              "content": "trace 8f84e51594a7a60b84e723fa1af22ded root=checkout-svc POST /orders start=2026-11-20T03:44:19.562Z duration=1014.44ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1014.44ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700072\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.23ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1008.22ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=8f84e51594a7a60b84e723fa1af22ded",
+              "attributes": {
+                "trace_id": "8f84e51594a7a60b84e723fa1af22ded",
+                "duration_ms": 1014.44,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e3fe705c209c65a582aa820692232b20",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-20T03:44:19.744Z",
+              "available_time": "2026-11-20T03:44:20.763Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1018.85ms error",
+              "content": "trace e3fe705c209c65a582aa820692232b20 root=checkout-svc POST /orders start=2026-11-20T03:44:19.744Z duration=1018.85ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1018.85ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700073\",\"http.status_code\":502}\n - checkout-svc POST /charge 1015.81ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+              "content_ref": "spans.jsonl?trace_id=e3fe705c209c65a582aa820692232b20",
+              "attributes": {
+                "trace_id": "e3fe705c209c65a582aa820692232b20",
+                "duration_ms": 1018.85,
+                "status": "error",
+                "span_count": 4,
+                "services": [
+                  "checkout-svc",
+                  "payment-svc"
+                ]
+              },
+              "truncated": true,
+              "fixture": false
+            }
+          ],
+          "total_matches": 8,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r6c1==r3c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:4d19b12fad",
+          "resolved": "metric:4d19b12fad",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1112,
+        "fixed_part_cut": false,
+        "notebook_budget": 6030,
+        "notebook_tokens": 2919,
+        "records_retrieved": 9,
+        "records_full": 9,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 4001,
+        "prompt_tokens_actual": 3996,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "stop_rounds",
+      "stop_reason": "limit reached after 6 rounds and 6 tool calls"
+    }
+  ],
+  "evidence_seen": [
+    {
+      "evidence_id": "metric:4d19b12fad",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:43:59.549Z",
+      "available_time": "2026-11-20T03:45:09.695Z",
+      "version": null,
+      "title": "checkout-svc error_rate",
+      "content": "checkout-svc error_rate (5.0s points, 2026-11-20T03:43:59.549Z .. 2026-11-20T03:45:09.695Z): min=0 max=1 last=1\n03:43:59 0; 03:44:04 0; 03:44:09 0; 03:44:14 0; 03:44:19 0.0741; 03:44:24 1; 03:44:29 1; 03:44:34 1; 03:44:39 1; 03:44:44 1; 03:44:49 1; 03:44:54 1; 03:44:59 1; 03:45:04 1; 03:45:09 1",
+      "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 15,
+        "min": 0.0,
+        "max": 1.0,
+        "last": 1.0
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:84bc7633414fe8cfa17bf6eedc1547b8",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:44:18.550Z",
+      "available_time": "2026-11-20T03:44:19.579Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1029.22ms error",
+      "content": "trace 84bc7633414fe8cfa17bf6eedc1547b8 root=checkout-svc POST /orders start=2026-11-20T03:44:18.550Z duration=1029.22ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1029.22ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700066\",\"http.status_code\":502}\n - checkout-svc POST /charge 1027.03ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+      "content_ref": "spans.jsonl?trace_id=84bc7633414fe8cfa17bf6eedc1547b8",
+      "attributes": {
+        "trace_id": "84bc7633414fe8cfa17bf6eedc1547b8",
+        "duration_ms": 1029.22,
+        "status": "error",
+        "span_count": 4,
+        "services": [
+          "checkout-svc",
+          "payment-svc"
+        ]
+      },
+      "truncated": true,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:4c39319cf48b5a6dcf2010e167df5f58",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:44:18.566Z",
+      "available_time": "2026-11-20T03:44:19.579Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1013.54ms error",
+      "content": "trace 4c39319cf48b5a6dcf2010e167df5f58 root=checkout-svc POST /orders start=2026-11-20T03:44:18.566Z duration=1013.54ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.54ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700067\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.36ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1007.57ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700067\",\"http.status_code\":503}\n - ...[truncated]",
+      "content_ref": "spans.jsonl?trace_id=4c39319cf48b5a6dcf2010e167df5f58",
+      "attributes": {
+        "trace_id": "4c39319cf48b5a6dcf2010e167df5f58",
+        "duration_ms": 1013.54,
+        "status": "error",
+        "span_count": 4,
+        "services": [
+          "checkout-svc",
+          "payment-svc"
+        ]
+      },
+      "truncated": true,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:f27d2900e024abf6d7edf6f299ee214e",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:44:19.158Z",
+      "available_time": "2026-11-20T03:44:20.171Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1013.7ms error",
+      "content": "trace f27d2900e024abf6d7edf6f299ee214e root=checkout-svc POST /orders start=2026-11-20T03:44:19.158Z duration=1013.7ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1013.7ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700068\",\"http.status_code\":502}\n - checkout-svc POST /charge 1010.7ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1007.31ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 1008. ...[truncated]",
+      "content_ref": "spans.jsonl?trace_id=f27d2900e024abf6d7edf6f299ee214e",
+      "attributes": {
+        "trace_id": "f27d2900e024abf6d7edf6f299ee214e",
+        "duration_ms": 1013.7,
+        "status": "error",
+        "span_count": 4,
+        "services": [
+          "checkout-svc",
+          "payment-svc"
+        ]
+      },
+      "truncated": true,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:533b4e1e02dc51144bd0158d24bf5c17",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:44:19.235Z",
+      "available_time": "2026-11-20T03:44:20.246Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1010.14ms error",
+      "content": "trace 533b4e1e02dc51144bd0158d24bf5c17 root=checkout-svc POST /orders start=2026-11-20T03:44:19.235Z duration=1010.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700069\",\"http.status_code\":502}\n - checkout-svc POST /charge 1007.93ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1004.92ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+      "content_ref": "spans.jsonl?trace_id=533b4e1e02dc51144bd0158d24bf5c17",
+      "attributes": {
+        "trace_id": "533b4e1e02dc51144bd0158d24bf5c17",
+        "duration_ms": 1010.14,
+        "status": "error",
+        "span_count": 4,
+        "services": [
+          "checkout-svc",
+          "payment-svc"
+        ]
+      },
+      "truncated": true,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:e700f0ac3a5aa6f9d3777c3a0d9b946f",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:44:19.251Z",
+      "available_time": "2026-11-20T03:44:20.279Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1027.14ms error",
+      "content": "trace e700f0ac3a5aa6f9d3777c3a0d9b946f root=checkout-svc POST /orders start=2026-11-20T03:44:19.251Z duration=1027.14ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1027.14ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700070\",\"http.status_code\":502}\n - checkout-svc POST /charge 1024.14ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc POST /charge 1011.14ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-0700070\",\"http.status_code\":503}\n - ...[truncated]",
+      "content_ref": "spans.jsonl?trace_id=e700f0ac3a5aa6f9d3777c3a0d9b946f",
+      "attributes": {
+        "trace_id": "e700f0ac3a5aa6f9d3777c3a0d9b946f",
+        "duration_ms": 1027.14,
+        "status": "error",
+        "span_count": 4,
+        "services": [
+          "checkout-svc",
+          "payment-svc"
+        ]
+      },
+      "truncated": true,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:44104609f50dc1bb5d3203089563bdc6",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:44:19.409Z",
+      "available_time": "2026-11-20T03:44:20.419Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1010.78ms error",
+      "content": "trace 44104609f50dc1bb5d3203089563bdc6 root=checkout-svc POST /orders start=2026-11-20T03:44:19.409Z duration=1010.78ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1010.78ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700071\",\"http.status_code\":502}\n - checkout-svc POST /charge 1008.78ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1005.29ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+      "content_ref": "spans.jsonl?trace_id=44104609f50dc1bb5d3203089563bdc6",
+      "attributes": {
+        "trace_id": "44104609f50dc1bb5d3203089563bdc6",
+        "duration_ms": 1010.78,
+        "status": "error",
+        "span_count": 4,
+        "services": [
+          "checkout-svc",
+          "payment-svc"
+        ]
+      },
+      "truncated": true,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:8f84e51594a7a60b84e723fa1af22ded",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:44:19.562Z",
+      "available_time": "2026-11-20T03:44:20.576Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1014.44ms error",
+      "content": "trace 8f84e51594a7a60b84e723fa1af22ded root=checkout-svc POST /orders start=2026-11-20T03:44:19.562Z duration=1014.44ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1014.44ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700072\",\"http.status_code\":502}\n - checkout-svc POST /charge 1012.23ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1008.22ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+      "content_ref": "spans.jsonl?trace_id=8f84e51594a7a60b84e723fa1af22ded",
+      "attributes": {
+        "trace_id": "8f84e51594a7a60b84e723fa1af22ded",
+        "duration_ms": 1014.44,
+        "status": "error",
+        "span_count": 4,
+        "services": [
+          "checkout-svc",
+          "payment-svc"
+        ]
+      },
+      "truncated": true,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:e3fe705c209c65a582aa820692232b20",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-20T03:44:19.744Z",
+      "available_time": "2026-11-20T03:44:20.763Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1018.85ms error",
+      "content": "trace e3fe705c209c65a582aa820692232b20 root=checkout-svc POST /orders start=2026-11-20T03:44:19.744Z duration=1018.85ms status=error spans=4 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 1018.85ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-0700073\",\"http.status_code\":502}\n - checkout-svc POST /charge 1015.81ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":2000,\"http.status_code\":503}\n - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)\n - payment-svc POST /charge 10 ...[truncated]",
+      "content_ref": "spans.jsonl?trace_id=e3fe705c209c65a582aa820692232b20",
+      "attributes": {
+        "trace_id": "e3fe705c209c65a582aa820692232b20",
+        "duration_ms": 1018.85,
+        "status": "error",
+        "span_count": 4,
+        "services": [
+          "checkout-svc",
+          "payment-svc"
+        ]
+      },
+      "truncated": true,
+      "fixture": false
+    }
+  ],
+  "usage": {
+    "model_calls": 7,
+    "prompt_tokens": 19807,
+    "completion_tokens": 1848,
+    "model_seconds": 93.10837710020132
+  },
+  "wall_seconds": 102.5,
+  "rounds_used": 6,
+  "tool_calls_used": 6,
+  "budget_violations": 0,
+  "unauthorized_attempts": [],
+  "unauthorized_executed": 0,
+  "evidence_budget": null,
+  "context": {
+    "report_call": {
+      "num_ctx": 8192,
+      "notebook_budget": 6482,
+      "notebook_tokens": 939,
+      "records_retrieved": 9,
+      "records_full": 1,
+      "records_one_line": 8,
+      "records_omitted": 0,
+      "prompt_tokens_est": 1537,
+      "prompt_tokens_actual": 1532
+    }
+  },
+  "config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "change_check": false,
+    "refuse_repeats": false,
+    "multi_call_example": false,
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "investigator_v2@efd3f21bee+report_v1@035e5ce0d8",
+    "code_revision": "e4048eb"
+  },
+  "prompt_versions": {
+    "round": "investigator_v2@efd3f21bee",
+    "report": "report_v1@035e5ce0d8"
+  }
+}
