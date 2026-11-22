@@ -269,3 +269,139 @@ def test_coverage_hint_lists_only_unqueried_available_sources():
                             "rationale": ""}, {**REPORT, "status": "insufficient_evidence", "ranked_causes": []}])
     Coordinator(FakeBackend(), RunConfig(coverage_hint=False), adapter=off).run()
     assert all("SOURCES NOT YET QUERIED" not in p for p in off.prompts)
+
+
+def test_cancel_stops_at_a_round_boundary_without_a_report():
+    calls = {"n": 0}
+
+    def should_cancel():
+        calls["n"] += 1
+        return calls["n"] >= 2          # allow round 1, cancel before round 2
+
+    c = Coordinator(FakeBackend(), RunConfig(), adapter=ScriptedAdapter([
+        {"hypotheses": [H()], "tool_calls": [{"tool": "search_logs", "args": {}}], "decision": "continue", "rationale": ""},
+        {"hypotheses": [H(sup=["log:a1", "log:a2"])], "tool_calls": [], "decision": "diagnose", "rationale": ""},
+        REPORT,
+    ]), should_cancel=should_cancel)
+    out = c.run()
+    assert out.status == "cancelled" and out.report is None
+    assert out.rounds_used == 1 and out.steps[-1].stop_decision == "stop_cancelled"
+    assert out.tool_calls_used == 1                     # round 1's work is kept, nothing after it ran
+
+
+class ChangeBackend(FakeBackend):
+    def list_deployments(self, **kw):
+        self.calls.append("list_deployments")
+        return BackendResult(status="ok", records=[rec("deploy:d-1", "deployments", "payment-svc 2.0 deployed")])
+
+    def search_commits(self, **kw):
+        self.calls.append("search_commits")
+        return BackendResult(status="ok", records=[rec("commit:abc1234", "commits", "fast path skips release")])
+
+
+def test_change_check_refuses_conclusions_until_changes_are_queried():
+    b = ChangeBackend()
+    out = coordinator([
+        {"hypotheses": [H()], "tool_calls": [{"tool": "search_logs", "args": {}}], "decision": "continue", "rationale": ""},
+        {"hypotheses": [H(sup=["log:a1", "log:a2"])], "tool_calls": [], "decision": "diagnose", "rationale": ""},
+        {"hypotheses": [H(sup=["log:a1", "log:a2"])], "tool_calls": [{"tool": "list_deployments", "args": {}},
+         {"tool": "search_commits", "args": {}}], "decision": "diagnose", "rationale": ""},
+        REPORT,
+    ], backend=b, change_check=True).run()
+    assert out.steps[1].stop_decision == "continue" and "change check" in out.steps[1].stop_reason
+    assert any("change check" in r for r in out.steps[1].orchestration_rules)
+    assert out.steps[2].stop_decision == "stop_diagnosis"
+    assert {"list_deployments", "search_commits"} <= set(b.calls)
+
+
+def test_change_check_off_keeps_v1_behaviour():
+    out = coordinator([
+        {"hypotheses": [H()], "tool_calls": [{"tool": "search_logs", "args": {}}], "decision": "continue", "rationale": ""},
+        {"hypotheses": [H(sup=["log:a1", "log:a2"])], "tool_calls": [], "decision": "diagnose", "rationale": ""},
+        REPORT,
+    ], backend=ChangeBackend()).run()
+    assert out.steps[1].stop_decision == "stop_diagnosis"
+
+
+def test_change_check_does_not_block_the_last_round():
+    out = coordinator([
+        {"hypotheses": [H()], "tool_calls": [{"tool": "search_logs", "args": {}}], "decision": "continue", "rationale": ""},
+        {"hypotheses": [H()], "tool_calls": [], "decision": "insufficient_evidence", "rationale": ""},
+        {**REPORT, "status": "insufficient_evidence", "ranked_causes": []},
+    ], backend=ChangeBackend(), change_check=True, max_rounds=2).run()
+    assert out.steps[1].stop_decision == "stop_insufficient"
+
+
+def test_refuse_repeats_spends_no_budget():
+    b = ChangeBackend()
+    out = coordinator([
+        {"hypotheses": [H()], "tool_calls": [{"tool": "search_logs", "args": {"service": "x"}}],
+         "decision": "continue", "rationale": ""},
+        {"hypotheses": [H()], "tool_calls": [{"tool": "search_logs", "args": {"service": "x"}}],
+         "decision": "continue", "rationale": ""},
+        {"hypotheses": [H(sup=["log:a1", "log:a2"])], "tool_calls": [], "decision": "diagnose", "rationale": ""},
+        REPORT,
+    ], backend=b, refuse_repeats=True).run()
+    assert b.calls.count("search_logs") == 1
+    assert out.steps[1].tool_results[0].status == "invalid_args"
+    assert out.tool_calls_used == 1 and out.unauthorized_executed == 0 and not out.unauthorized_attempts
+
+
+def test_multi_call_example_changes_only_the_prompt_example():
+    on = ScriptedAdapter([])
+    Coordinator(FakeBackend(), RunConfig(multi_call_example=True), adapter=on).run()
+    assert "list_deployments" in on.prompts[0] and '"level": "ERROR", "limit": 15' not in on.prompts[0]
+    off = ScriptedAdapter([])
+    Coordinator(FakeBackend(), RunConfig(), adapter=off).run()
+    assert '"level": "ERROR", "limit": 15' in off.prompts[0]
+
+
+class SchemaCapture(ScriptedAdapter):
+    def __init__(self, outputs):
+        super().__init__(outputs)
+        self.schemas = []
+
+    def chat(self, messages, schema=None, num_predict=None):
+        self.schemas.append(schema)
+        return super().chat(messages, schema, num_predict)
+
+
+def _two_rounds():
+    return [{"hypotheses": [H()], "tool_calls": [{"tool": "search_logs", "args": {}}], "decision": "continue", "rationale": ""},
+            {"hypotheses": [H(sup=["log:a1", "log:a2"])], "tool_calls": [], "decision": "diagnose", "rationale": ""},
+            REPORT]
+
+
+def test_rationale_first_is_off_by_default_and_in_the_frozen_config():
+    import yaml
+    from pathlib import Path
+    assert RunConfig().rationale_first is False
+    frozen = yaml.safe_load((Path(__file__).resolve().parents[1] / "configs" / "frozen_v1.yaml").read_text(encoding="utf-8"))
+    assert RunConfig(**frozen).rationale_first is False
+
+
+def test_default_schema_and_prompt_are_unchanged():
+    from blackbox.investigator.common import ROUND_SCHEMA, round_schema
+    for args in [(False, 12, 3), (True, 6, 3), (True, 0, 3)]:
+        s = round_schema(*args)
+        assert list(s["properties"]) == list(ROUND_SCHEMA["properties"]) == ["hypotheses", "tool_calls", "decision", "rationale"]
+        assert s["required"] == ROUND_SCHEMA["required"]
+    a = SchemaCapture(_two_rounds())
+    Coordinator(FakeBackend(), RunConfig(), adapter=a).run()
+    assert all(p.endswith("Update the hypotheses, then request tool calls or decide. JSON only.") for p in a.prompts[:2])
+    assert all("no causal link established" not in p for p in a.prompts)
+    assert list(a.schemas[0]["properties"])[0] == "hypotheses"
+
+
+def test_rationale_first_variant_reorders_schema_and_asks_for_reconciliation():
+    from blackbox.investigator.common import round_schema
+    for args in [(False, 12, 3), (True, 6, 3), (True, 0, 3)]:
+        base, var = round_schema(*args), round_schema(*args, rationale_first=True)
+        assert list(var["properties"]) == var["required"] == ["rationale", "hypotheses", "tool_calls", "decision"]
+        assert {k: base["properties"][k] for k in var["properties"]} == var["properties"]   # same field definitions
+    a = SchemaCapture(_two_rounds())
+    out = Coordinator(FakeBackend(), RunConfig(rationale_first=True), adapter=a).run()
+    assert list(a.schemas[0]["properties"])[0] == "rationale"
+    assert "no causal link established" in a.prompts[0] and "effective deployment time" in a.prompts[0]
+    assert "Update the hypotheses, then request" not in a.prompts[0]
+    assert out.steps[1].stop_decision == "stop_diagnosis"      # the gate is unchanged
