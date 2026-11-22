@@ -79,7 +79,8 @@ REPORT_SCHEMA: dict[str, Any] = {
 }
 
 
-def round_schema(evidence_retrieved: bool, calls_left: int, per_round: int) -> dict[str, Any]:
+def round_schema(evidence_retrieved: bool, calls_left: int, per_round: int,
+                 rationale_first: bool = False) -> dict[str, Any]:
     """Response grammar that follows the investigation state.
 
     Measured on qwen3:4b: with the full schema the model declared insufficient_evidence in
@@ -96,6 +97,10 @@ def round_schema(evidence_retrieved: bool, calls_left: int, per_round: int) -> d
     elif calls_left <= 0:
         props["tool_calls"]["maxItems"] = 0
         props["decision"]["enum"] = ["diagnose", "insufficient_evidence", "no_fault"]
+    if rationale_first:   # experiment variant: the model writes its reasoning before the structured hypotheses
+        order = ["rationale", "hypotheses", "tool_calls", "decision"]
+        schema["properties"] = {k: props[k] for k in order}
+        schema["required"] = order
     return schema
 
 
