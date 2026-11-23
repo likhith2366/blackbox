@@ -1,0 +1,105 @@
+{
+ "incident": "INC-9001",
+ "condition": "no_mechanism",
+ "repeat": 2,
+ "code_revision": "7b4c149",
+ "settings": {
+  "model": "qwen3:4b",
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 7,
+  "num_ctx": 8192,
+  "num_predict": 900,
+  "think": false
+ },
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"hypo1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"checkout-svc failed to handle payment-svc 503 errors due to lack of retry mechanism\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc does not retry on payment-svc 503 errors\",\n          \"evidence_ids\": [\"log:9110a7c06d\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"checkout-svc fails to retry payment-svc 503 errors, leading to cascading failures\",\n          \"evidence_ids\": [\"trace:84bc7633414fe8cfa17bf6eedc1547b8\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate spikes to 1.0\",\n          \"evidence_ids\": [\"metric:4d19b12fad\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypo2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"payment-svc db pool exhaustion due to new fast path for micro-charges\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"payment-svc v2.5.0 introduced fast path for micro-charges that skips risk checks\",\n          \"evidence_ids\": [\"commit:d142601\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment-svc db pool is exhausted by high volume of micro-charges\",\n          \"evidence_ids\": [\"log:3bf4f24e33\"]\n        },\n        \"symptom\": {\n          \"statement\": \"payment-svc error rate spikes to 1.0\",\n          \"evidence_ids\": [\"metric:feb04e3d4a\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypo3\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"payment-svc db pool exhaustion due to increased request volume from checkout-svc\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc v1.8.2 deployment increased request volume to payment-svc\",\n          \"evidence_ids\": [\"deploy:d-575\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment-svc db pool is exhausted by checkout-svc requests\",\n          \"evidence_ids\": [\"metric:075c37e673\"]\n        },\n        \"symptom\": {\n          \"statement\": \"payment-svc error rate spikes to 1.0\",\n          \"evidence_ids\": [\"metric:feb04e3d4a\"]\n        }\n      },\n      \"contradicting\": []\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"hypo2\",\n  \"rationale\": \"The payment-svc v2.5.0 deployment (commit d142601) introduced a fast path for micro-charges that skips risk checks, leading to db pool exhaustion (log:3bf4f24e33) and payment-svc error rate spikes (metric:feb04e3d4a). The checkout-svc error rate spike (metric:4d19b12fad) is directly caused by payment-svc 503 errors (trace:84bc7633414fe8cfa17bf6eedc1547b8). This is supported by the payment-svc error rate spike and the specific log message about db pool timeouts.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "hypo1",
+    "component": "checkout-svc",
+    "mechanism": "checkout-svc failed to handle payment-svc 503 errors due to lack of retry mechanism",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc does not retry on payment-svc 503 errors",
+      "evidence_ids": [
+       "log:9110a7c06d"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "checkout-svc fails to retry payment-svc 503 errors, leading to cascading failures",
+      "evidence_ids": [
+       "trace:84bc7633414fe8cfa17bf6eedc1547b8"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate spikes to 1.0",
+      "evidence_ids": [
+       "metric:4d19b12fad"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypo2",
+    "component": "payment-svc",
+    "mechanism": "payment-svc db pool exhaustion due to new fast path for micro-charges",
+    "chain": {
+     "cause": {
+      "statement": "payment-svc v2.5.0 introduced fast path for micro-charges that skips risk checks",
+      "evidence_ids": [
+       "commit:d142601"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment-svc db pool is exhausted by high volume of micro-charges",
+      "evidence_ids": [
+       "log:3bf4f24e33"
+      ]
+     },
+     "symptom": {
+      "statement": "payment-svc error rate spikes to 1.0",
+      "evidence_ids": [
+       "metric:feb04e3d4a"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypo3",
+    "component": "payment-svc",
+    "mechanism": "payment-svc db pool exhaustion due to increased request volume from checkout-svc",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc v1.8.2 deployment increased request volume to payment-svc",
+      "evidence_ids": [
+       "deploy:d-575"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment-svc db pool is exhausted by checkout-svc requests",
+      "evidence_ids": [
+       "metric:075c37e673"
+      ]
+     },
+     "symptom": {
+      "statement": "payment-svc error rate spikes to 1.0",
+      "evidence_ids": [
+       "metric:feb04e3d4a"
+      ]
+     }
+    },
+    "contradicting": []
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "hypo2",
+  "rationale": "The payment-svc v2.5.0 deployment (commit d142601) introduced a fast path for micro-charges that skips risk checks, leading to db pool exhaustion (log:3bf4f24e33) and payment-svc error rate spikes (metric:feb04e3d4a). The checkout-svc error rate spike (metric:4d19b12fad) is directly caused by payment-svc 503 errors (trace:84bc7633414fe8cfa17bf6eedc1547b8). This is supported by the payment-svc error rate spike and the specific log message about db pool timeouts."
+ },
+ "parse_error": null,
+ "prompt_tokens": 4302,
+ "completion_tokens": 809,
+ "seconds": 35.4
+}

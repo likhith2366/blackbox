@@ -1,0 +1,21 @@
+{
+ "incident": "INC-9001",
+ "condition": "full",
+ "repeat": 1,
+ "code_revision": "7b4c149",
+ "settings": {
+  "model": "qwen3:4b",
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 7,
+  "num_ctx": 8192,
+  "num_predict": 900,
+  "think": false
+ },
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"hypothesis-1\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"New deployment of payment-svc v2.5.0 introduced a bug where micro-charges skip risk checks and write directly to the database, causing database pool timeouts due to increased load from small charges\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Payment-svc v2.5.0 deployment (d-576) introduced a change to handle micro-charges without risk checks\",\n          \"evidence_ids\": [\"commit:d142601\", \"deploy:d-576\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"Micro-charges bypass risk scoring and velocity checks, writing directly to the database without proper queueing\",\n          \"evidence_ids\": [\"commit:d142601\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Checkout-svc reports HTTP 503 errors due to payment-svc database pool timeouts\",\n          \"evidence_ids\": [\"log:9110a7c06d\", \"trace:84bc7633414fe8cfa17bf6eedc1547b8\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypothesis-2\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"Checkout-svc configuration points to payment-svc's local address, causing network issues during high load\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Checkout-svc config points to payment-svc's local address (127.0.0.1:18102)\",\n          \"evidence_ids\": [\"config:checkout-svc@bc913fb\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"Checkout-svc attempts to connect to payment-svc's local address, which may be overloaded or misconfigured\",\n          \"evidence_ids\": [\"config:checkout-svc@bc913fb\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Checkout-svc shows high error rates and timeouts when connecting to payment-svc\",\n          \"evidence_ids\": [\"metric:4d19b12fad\", \"metric:95f388cff1\"]\n        }\n      },\n      \"contradicting\": [\"metric:5478273809\", \"metric:531d143549\"]\n    },\n    {\n      \"id\": \"hypothesis-3\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"Payment-svc's database pool timeout was reduced from 3000ms to 1000ms, causing timeouts during high load\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Payment-svc config changed from acquire_timeout_ms=3000ms to 1000ms in deployment d-576\",\n          \"evidence_ids\": [\"config:payment-svc@b1e5a60\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"Database pool connections are now acquired with a shorter timeout, leading to more timeouts under load\",\n          \"evidence_ids\": [\"config:payment-svc@b1e5a60\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Payment-svc shows high error rates and database pool timeouts\",\n          \"evidence_ids\": [\"metric:feb04e3d4a\", \"metric:5478273809\"]\n        }\n      },\n      \"contradicting\": [\"metric:531d143549\"]\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"hypothesis-1\",\n  \"rationale\": \"The evidence shows payment-svc v2.5.0 (d-576) introduced a change to handle micro-charges without risk checks (commit:d142601), which caused database pool timeouts (log:9110",
+ "parsed": null,
+ "parse_error": "output cut at num_predict (900 tokens): invalid JSON: Expecting ',' delimiter at char 2838",
+ "prompt_tokens": 6536,
+ "completion_tokens": 900,
+ "seconds": 44.4
+}
