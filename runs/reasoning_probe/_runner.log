@@ -1,0 +1,25 @@
+23:42:05 gpu=77, Not Active, Not Active
+INC-0000 full r1: 6801 prompt tok, 871 out, 50s, parsed=True
+23:44:17 gpu=78, Not Active, Not Active
+INC-0000 no_mechanism r1: 4632 prompt tok, 858 out, 35s, parsed=True
+23:45:33 gpu=79, Not Active, Not Active
+INC-9001 full r1: 6536 prompt tok, 900 out, 44s, parsed=False
+23:47:19 gpu=78, Not Active, Not Active
+INC-9001 no_mechanism r1: 4302 prompt tok, 793 out, 32s, parsed=True
+23:49:13 gpu=78, Not Active, Not Active
+INC-9002 full r1: 6694 prompt tok, 900 out, 44s, parsed=False
+23:50:59 gpu=79, Not Active, Not Active
+INC-9002 no_mechanism r1: 4549 prompt tok, 900 out, 38s, parsed=False
+23:52:39 gpu=78, Not Active, Not Active
+INC-0000 full r2: 6801 prompt tok, 871 out, 41s, parsed=True
+23:54:22 gpu=79, Not Active, Not Active
+INC-0000 no_mechanism r2: 4632 prompt tok, 847 out, 41s, parsed=True
+23:56:05 gpu=79, Not Active, Not Active
+INC-9001 full r2: 6536 prompt tok, 900 out, 48s, parsed=False
+23:57:55 gpu=79, Not Active, Not Active
+INC-9001 no_mechanism r2: 4302 prompt tok, 809 out, 35s, parsed=True
+23:59:32 gpu=78, Not Active, Not Active
+INC-9002 full r2: 6694 prompt tok, 900 out, 43s, parsed=False
+00:01:58 gpu=78, Not Active, Not Active
+INC-9002 no_mechanism r2: 4549 prompt tok, 900 out, 47s, parsed=False
+PROBE_DONE

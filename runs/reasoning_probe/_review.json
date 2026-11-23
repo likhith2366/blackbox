@@ -1,0 +1,284 @@
+[
+  {
+    "run": "INC-0000_full_r1",
+    "top_hypothesis": "hypo1",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "yes",
+      "runtime_effect": "partial",
+      "symptom": "partial"
+    },
+    "statement_errors": [
+      "Mechanism field places the increased retries 'in payment-svc'; the retry change is in checkout-svc's shared client (commit:e7a0cc0, libs/httpclient/policy.py).",
+      "runtime_effect cites config:checkout-svc@bc913fb, which contains no retry/timeout values (only a comment pointing to policy.py defaults).",
+      "Symptom says error rate 'spikes to 0.7241': that is the last point of metric:83cc53b310 (max=1; alert observed 0.3226); 'due to payment timeouts' is not shown by that metric."
+    ],
+    "used_mechanism_evidence": true,
+    "abstained": false,
+    "abstention_appropriate": "no",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "partially correct",
+    "notes": "Right component, and the runtime_effect restates the diff values (4 retries, 250ms per attempt, commit:e7a0cc0), but the mechanism field misattributes retries to payment-svc and never says retries multiply payment calls (metric:17f535fce8 attempts 5->28/s and metric:8956e7ef9d payment rps 4.8->22.8, both uncited). Runtime behaviour cited only from the diff plus an irrelevant config; log:aea2b46ce0 (attempts:5) not cited.",
+    "r1_vs_r2": "identical (raw_output byte-identical)"
+  },
+  {
+    "run": "INC-0000_full_r2",
+    "top_hypothesis": "hypo1",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "yes",
+      "runtime_effect": "partial",
+      "symptom": "partial"
+    },
+    "statement_errors": [
+      "Mechanism field places the increased retries 'in payment-svc'; the retry change is in checkout-svc's shared client (commit:e7a0cc0, libs/httpclient/policy.py).",
+      "runtime_effect cites config:checkout-svc@bc913fb, which contains no retry/timeout values (only a comment pointing to policy.py defaults).",
+      "Symptom says error rate 'spikes to 0.7241': that is the last point of metric:83cc53b310 (max=1; alert observed 0.3226); 'due to payment timeouts' is not shown by that metric."
+    ],
+    "used_mechanism_evidence": true,
+    "abstained": false,
+    "abstention_appropriate": "no",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "partially correct",
+    "notes": "Right component, and the runtime_effect restates the diff values (4 retries, 250ms per attempt, commit:e7a0cc0), but the mechanism field misattributes retries to payment-svc and never says retries multiply payment calls (metric:17f535fce8 attempts 5->28/s and metric:8956e7ef9d payment rps 4.8->22.8, both uncited). Runtime behaviour cited only from the diff plus an irrelevant config; log:aea2b46ce0 (attempts:5) not cited.",
+    "r1_vs_r2": "identical (raw_output byte-identical)"
+  },
+  {
+    "run": "INC-0000_no_mechanism_r1",
+    "top_hypothesis": "hypothesis-1",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "partial",
+      "runtime_effect": "yes",
+      "symptom": "yes"
+    },
+    "statement_errors": [
+      "Calls the change a 'timeout bug in payment retry logic'; commit:e7a0cc0's message describes an intentional policy change (retry timeouts/5xx, tighter per-attempt timeout, drop backoff), not a bug.",
+      "Attributes the 250ms value to the 1.9.0 change; 250ms appears only in log:aea2b46ce0, not in any remaining change record (reasonable inference, not shown)."
+    ],
+    "used_mechanism_evidence": false,
+    "abstained": false,
+    "abstention_appropriate": "no",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "partially correct",
+    "notes": "Right component; mechanism captures short timeout + retries (log:aea2b46ce0: 250ms, attempts:5) but not amplification, although payment requests_per_s (metric:8956e7ef9d, 4.8->22.8) remains in the packet. No invented mechanism. Hypothesis-3 ('shared client retry policy, shorter timeouts', commit:e7a0cc0) has a better component label but is still partial. Abstention not appropriate: commit message + logs + payment rps support a diagnosis.",
+    "r1_vs_r2": "hypotheses and decision identical; only the last rationale sentence differs in wording ('as the root cause' vs 'as the most direct cause')"
+  },
+  {
+    "run": "INC-0000_no_mechanism_r2",
+    "top_hypothesis": "hypothesis-1",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "partial",
+      "runtime_effect": "yes",
+      "symptom": "yes"
+    },
+    "statement_errors": [
+      "Calls the change a 'timeout bug in payment retry logic'; commit:e7a0cc0's message describes an intentional policy change (retry timeouts/5xx, tighter per-attempt timeout, drop backoff), not a bug.",
+      "Attributes the 250ms value to the 1.9.0 change; 250ms appears only in log:aea2b46ce0, not in any remaining change record (reasonable inference, not shown)."
+    ],
+    "used_mechanism_evidence": false,
+    "abstained": false,
+    "abstention_appropriate": "no",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "partially correct",
+    "notes": "Right component; mechanism captures short timeout + retries (log:aea2b46ce0: 250ms, attempts:5) but not amplification, although payment requests_per_s (metric:8956e7ef9d, 4.8->22.8) remains in the packet. No invented mechanism. Hypothesis-3 ('shared client retry policy, shorter timeouts', commit:e7a0cc0) has a better component label but is still partial. Abstention not appropriate: commit message + logs + payment rps support a diagnosis.",
+    "r1_vs_r2": "hypotheses and decision identical; only the last rationale sentence differs in wording ('as the root cause' vs 'as the most direct cause')"
+  },
+  {
+    "run": "INC-9001_full_r1",
+    "top_hypothesis": "hypothesis-1",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "yes",
+      "runtime_effect": "partial",
+      "symptom": "yes"
+    },
+    "statement_errors": [
+      "Mechanism blames 'increased load from small charges'; nothing shows a load increase (payment rps metric:075c37e673 ~4.4-7.8/s) and db_query_p95 metric:531d143549 is ~0, which argues against load.",
+      "runtime_effect adds 'without proper queueing', which commit:d142601 does not show.",
+      "Calls skipping risk checks 'a bug'; that is the intended feature per the commit message. The real defect (return 201 on the fast path without releasing conn) is not mentioned."
+    ],
+    "used_mechanism_evidence": true,
+    "abstained": false,
+    "abstention_appropriate": "no",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "partially correct",
+    "notes": "Right component and right changed code (commit:d142601 fast path, deploy:d-576), but the mechanism is load, not the connection leak visible in the diff's early return; pool saturation metric:03d4f590b8 (4/4 held) and pool wait metric:5478273809 are not used in the top chain. Rationale cut at token limit and repeats the same claim.",
+    "r1_vs_r2": "differ: r1 top = micro-charge fast path causing load (partial); r2 top = checkout config localhost address (wrong). r1 hypothesis-3 = acquire timeout 3000->1000; r2 hypothesis-2 is the same idea, r2 hypothesis-3 invents checkout 1.8.2 retries."
+  },
+  {
+    "run": "INC-9001_full_r2",
+    "top_hypothesis": "hypothesis-1",
+    "component_correct": false,
+    "mechanism_correct": "no",
+    "chain_support": {
+      "cause": "partial",
+      "runtime_effect": "partial",
+      "symptom": "partial"
+    },
+    "statement_errors": [
+      "Cause is checkout-svc config base_url 127.0.0.1:18102 (config:checkout-svc@bc913fb, committed 2026-09-02, unchanged) - a normal local address in demo-local, not a fault; written as '127.0.0.0.1'.",
+      "Says checkout 'was deployed with' this config as if new; the record shows a two-month-old config of d-575.",
+      "Symptom claims pool timeouts but cites only metric:4d19b12fad (checkout error rate).",
+      "Mentions the skip-risk-checks change in the mechanism text but cites neither commit:d142601 nor deploy:d-576."
+    ],
+    "used_mechanism_evidence": false,
+    "abstained": false,
+    "abstention_appropriate": "no",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "wrong",
+    "notes": "Component field says payment-svc but the hypothesized fault is the checkout-svc config (loopback address), which is not a fault; scored component incorrect in meaning. Ignores the diff (commit:d142601) and pool metric:03d4f590b8. No hypothesis is the leak: hypothesis-2 is the acquire-timeout change, hypothesis-3 invents retries (trace/log show attempts:1).",
+    "r1_vs_r2": "see INC-9001_full_r1"
+  },
+  {
+    "run": "INC-9001_no_mechanism_r1",
+    "top_hypothesis": "hypo2",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "yes",
+      "runtime_effect": "partial",
+      "symptom": "yes"
+    },
+    "statement_errors": [
+      "Runtime effect claims a 'high volume of micro-charges' exhausts the pool; log:3bf4f24e33 shows only pool acquire timeouts, and payment rps metric:075c37e673 (~4-8/s) shows no surge.",
+      "Symptom link uses payment-svc error rate (metric:feb04e3d4a) rather than the alerted checkout-svc error rate (metric:4d19b12fad)."
+    ],
+    "used_mechanism_evidence": false,
+    "abstained": false,
+    "abstention_appropriate": "defensible: component is supported by commit:d142601 timing + log:3bf4f24e33, but the leak mechanism is not visible in the remaining evidence",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "partially correct",
+    "notes": "Right component, right change (commit:d142601 message) and pool exhaustion, but it invents a volume explanation not shown in the remaining evidence (invented mechanism: yes, mild). The leak cannot be read from this packet, so insufficient_evidence or a component-only claim would have been more honest.",
+    "r1_vs_r2": "top hypothesis and decision identical in substance ('database' vs 'db' wording); hypo3 differs (r1 hypo3: pool size too low, cause link cites no evidence); rationale wording differs"
+  },
+  {
+    "run": "INC-9001_no_mechanism_r2",
+    "top_hypothesis": "hypo2",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "yes",
+      "runtime_effect": "partial",
+      "symptom": "yes"
+    },
+    "statement_errors": [
+      "Runtime effect claims a 'high volume of micro-charges' exhausts the pool; log:3bf4f24e33 shows only pool acquire timeouts, and payment rps metric:075c37e673 (~4-8/s) shows no surge.",
+      "Symptom link uses payment-svc error rate (metric:feb04e3d4a) rather than the alerted checkout-svc error rate (metric:4d19b12fad)."
+    ],
+    "used_mechanism_evidence": false,
+    "abstained": false,
+    "abstention_appropriate": "defensible: component is supported by commit:d142601 timing + log:3bf4f24e33, but the leak mechanism is not visible in the remaining evidence",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "partially correct",
+    "notes": "Right component, right change (commit:d142601 message) and pool exhaustion, but it invents a volume explanation not shown in the remaining evidence (invented mechanism: yes, mild). The leak cannot be read from this packet, so insufficient_evidence or a component-only claim would have been more honest.",
+    "r1_vs_r2": "top hypothesis and decision identical in substance ('database' vs 'db' wording); hypo3 differs (r2 hypo3: checkout 1.8.2 increased request volume (deploy:d-575, metric:075c37e673)); rationale wording differs"
+  },
+  {
+    "run": "INC-9002_full_r1",
+    "top_hypothesis": "hypo1",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "yes",
+      "runtime_effect": "partial",
+      "symptom": "yes"
+    },
+    "statement_errors": [
+      "runtime_effect cites config:checkout-svc@bc913fb, which contains no retry/backoff values.",
+      "Mechanism says retries cause 'timeouts'; the 250ms per-attempt timeout (commit:0d6ba14 diff, DEFAULT_TIMEOUT_MS 2000->250) causes the timeouts and is omitted from the top hypothesis.",
+      "Non-top hypo3 states the wrong direction: timeout 'increased from 2000ms to 250ms'."
+    ],
+    "used_mechanism_evidence": true,
+    "abstained": false,
+    "abstention_appropriate": "no",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "partially correct",
+    "notes": "Right component (deploy:d-581, commit:0d6ba14) and the retry half of the mechanism (4 retries, 0ms backoff from the diff), but omits the 250ms per-attempt timeout and retry-on-timeout/5xx, and never says payment calls multiply (metric:858412a4f1 attempts up to 27.6/s and metric:2fbc297412 payment rps up to 24.6 not cited in the top chain). Rationale cut at token limit; same content.",
+    "r1_vs_r2": "top hypothesis identical except r2 symptom adds '0.3667'; hypo2 cites build:b-1214 (r1) vs deploy:d-579 (r2); hypo3 differs (r1: timeout 'increased' 2000->250 citing metric:858412a4f1; r2: localhost base_url)"
+  },
+  {
+    "run": "INC-9002_full_r2",
+    "top_hypothesis": "hypothesis-1",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "yes",
+      "runtime_effect": "partial",
+      "symptom": "yes"
+    },
+    "statement_errors": [
+      "runtime_effect cites config:checkout-svc@bc913fb, which contains no retry/backoff values.",
+      "Mechanism says retries cause 'timeouts'; the 250ms per-attempt timeout (commit:0d6ba14 diff, DEFAULT_TIMEOUT_MS 2000->250) causes the timeouts and is omitted from the top hypothesis.",
+      "Non-top hypothesis-3 calls the 127.0.0.1:18102 base_url unreachable; logs/traces show payment-svc answering."
+    ],
+    "used_mechanism_evidence": true,
+    "abstained": false,
+    "abstention_appropriate": "no",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "partially correct",
+    "notes": "Right component (deploy:d-581, commit:0d6ba14) and the retry half of the mechanism (4 retries, 0ms backoff from the diff), but omits the 250ms per-attempt timeout and retry-on-timeout/5xx, and never says payment calls multiply (metric:858412a4f1 attempts up to 27.6/s and metric:2fbc297412 payment rps up to 24.6 not cited in the top chain). Rationale cut at token limit; same content.",
+    "r1_vs_r2": "top hypothesis identical except r2 symptom adds '0.3667'; hypo2 cites build:b-1214 (r1) vs deploy:d-579 (r2); hypo3 differs (r1: timeout 'increased' 2000->250 citing metric:858412a4f1; r2: localhost base_url)"
+  },
+  {
+    "run": "INC-9002_no_mechanism_r1",
+    "top_hypothesis": "hypothesis-1",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "partial",
+      "runtime_effect": "yes",
+      "symptom": "yes"
+    },
+    "statement_errors": [
+      "Cause says d-581 'introduced a 250ms timeout'; commit:0d6ba14's message does not state 250ms (only log:7db2506518 does)."
+    ],
+    "used_mechanism_evidence": false,
+    "abstained": false,
+    "abstention_appropriate": "no",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "same",
+    "verdict": "partially correct",
+    "notes": "Right component; mechanism is only the short-timeout half and treats retries as merely 'failing quickly', missing retry amplification even though commit:0d6ba14's message (retry timeouts/5xx, no backoff), log:7db2506518 (attempts:5) and payment rps metric:2fbc297412 (up to 24.6 vs checkout ~6/s) remain. No invented mechanism. Abstention not appropriate.",
+    "r1_vs_r2": "top hypothesis and decision identical; hypothesis-2 cites build:b-1214 (r1) vs commit:b7ae74f (r2); hypothesis-3 differs (r1 hypothesis-3: 'bug in retry logic ... excessive retries'); rationale wording differs"
+  },
+  {
+    "run": "INC-9002_no_mechanism_r2",
+    "top_hypothesis": "hypothesis-1",
+    "component_correct": true,
+    "mechanism_correct": "partial",
+    "chain_support": {
+      "cause": "partial",
+      "runtime_effect": "yes",
+      "symptom": "yes"
+    },
+    "statement_errors": [
+      "Cause says d-581 'introduced a 250ms timeout'; commit:0d6ba14's message does not state 250ms (only log:7db2506518 does).",
+      "Rationale says commit 0d6ba14 'explicitly adds a 250ms timeout'; the commit message only says 'tighten the per-attempt timeout' (250ms appears only in log:7db2506518)."
+    ],
+    "used_mechanism_evidence": false,
+    "abstained": false,
+    "abstention_appropriate": "no",
+    "any_hypothesis_correct": false,
+    "rationale_vs_structured": "rationale worse",
+    "verdict": "partially correct",
+    "notes": "Right component; mechanism is only the short-timeout half and treats retries as merely 'failing quickly', missing retry amplification even though commit:0d6ba14's message (retry timeouts/5xx, no backoff), log:7db2506518 (attempts:5) and payment rps metric:2fbc297412 (up to 24.6 vs checkout ~6/s) remain. No invented mechanism. Abstention not appropriate.",
+    "r1_vs_r2": "top hypothesis and decision identical; hypothesis-2 cites build:b-1214 (r1) vs commit:b7ae74f (r2); hypothesis-3 differs (r2 hypothesis-3: 'retries up to 5 times with short timeouts' - closest to the accepted 'aggressive retries with short timeout', still no amplification); rationale wording differs"
+  }
+]
