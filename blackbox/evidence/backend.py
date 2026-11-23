@@ -677,6 +677,13 @@ class SnapshotBackend:
         return self._done("get_commit", self._result([self._st.commit_record(hits[0], full=True)]))
 
     def get_config(self, service: str, version=None) -> BackendResult:
+        """Config of a service, with deployment-relative provenance.
+
+        The config shown for a deployment is the version reachable from the deployed commit through commit
+        parents (never by commit time). It is compared with the config of the PREVIOUS deployment of the same
+        service, chosen by deployment start time from the deployment records. When either side cannot be
+        established, the record says so and shows no comparison; uncertainty is never reported as "unchanged".
+        """
         g = self._gate("get_config")
         if g:
             return g
@@ -685,56 +692,132 @@ class SnapshotBackend:
         if not vers:
             return self._done("get_config", BackendResult(status="empty", total_matches=0,
                                                           error=f"no config versions for {service}"))
-        chosen, note = None, ""
+        deps = [d for d in st.deployments if d["service"] == service and d.get("status", "succeeded") == "succeeded"]
+        provenance = self.ablation != "no_provenance" and "deployments" not in st.unavailable
+        chosen, note, comparison, target = None, "", "", None
         if version:
             v = str(version).split(":", 1)[-1].split("@")[-1].strip().lower()
-            for c in vers:
-                if len(v) >= 4 and c["commit"].startswith(v):
-                    chosen, note = c, f"config at commit {c['commit'][:7]}"
-            if chosen is None and self.ablation != "no_provenance":
-                for d in st.deployments:
-                    if d["service"] == service and d["version"].lower() == v:
-                        chosen = self._config_for_commit(vers, d["commit"])
-                        note = f"config shipped with {service} {d['version']} ({d['deploy_id']})"
-            if chosen is None and len(v) >= 4:
-                c = next((c for c in st.commits if c["sha"].startswith(v)), None)
-                if c:
-                    chosen = self._config_for_commit(vers, c["sha"])
-                    note = f"config in effect at commit {c['sha'][:7]}"
-            if chosen is None:
-                return self._done("get_config", BackendResult(status="empty", total_matches=0,
-                                                              error=f"no config for {service} at {version}"))
-        elif self.ablation == "no_provenance" or "deployments" in st.unavailable:
-            chosen, note = vers[-1], "latest repository version at the cutoff (deployed version unknown)"
-        else:
-            deps = [d for d in st.deployments if d["service"] == service]
-            if deps:
-                chosen = self._config_for_commit(vers, deps[-1]["commit"])
-                note = f"config of the running deployment {deps[-1]['deploy_id']} (commit {deps[-1]['commit'][:7]})"
-            else:
-                chosen, note = vers[-1], "latest repository version at the cutoff"
-        diff = ""
-        if chosen.get("previous"):
-            diff = "".join(difflib.unified_diff(chosen["previous"].splitlines(True), chosen["content"].splitlines(True),
-                                                "previous", chosen["commit"][:7], n=1))
+            if provenance:
+                same = [d for d in deps if d["version"].lower() == v or d["deploy_id"].lower() == v]
+                if same:
+                    target = same[-1]
+            if target is None:
+                cfg_hit = next((c for c in vers if len(v) >= 4 and c["commit"].startswith(v)), None)
+                commit_hit = next((c["sha"] for c in st.commits if len(v) >= 4 and c["sha"].startswith(v)), None)
+                if cfg_hit:
+                    chosen, note = cfg_hit, f"config at commit {cfg_hit['commit'][:7]} (requested by commit)"
+                elif commit_hit:
+                    chosen, why = self._config_at(vers, commit_hit)
+                    if chosen is None:
+                        return self._done("get_config", BackendResult(
+                            status="empty", total_matches=0, error=f"no config for {service} at {version}: {why}"))
+                    note = f"config in effect at commit {commit_hit[:7]} (by commit ancestry; requested by commit)"
+                else:
+                    return self._done("get_config", BackendResult(status="empty", total_matches=0,
+                                                                  error=f"no config for {service} at {version}"))
+                comparison = "comparison with a previous deployment: not applicable (no deployment was requested)"
+        elif provenance and deps:
+            target = deps[-1]
+        if target is not None:
+            chosen, comparison, note = self._deployment_config(vers, deps, target)
+            if chosen is None:              # this deployment's config could not be established
+                chosen = vers[-1]
+        elif chosen is None:
+            chosen = vers[-1]
+            why = ("deployment provenance is not available in this snapshot" if not provenance
+                   else f"no deployment of {service} in the available deployment records")
+            note = f"latest repository version at the cutoff; deployed version unknown ({why})"
+            comparison = "comparison with a previous deployment: not possible (deployed version unknown)"
         text = (f"{chosen['path']} @ {chosen['commit'][:7]} (committed {_norm_iso(chosen['committed_at'])}); {note}\n"
-                f"{chosen['content']}" + (f"\nchange vs previous version:\n{diff}" if diff else ""))
+                f"{chosen['content']}\n{comparison}")
         text, cut = _clip(st.scrub(text), GET_CHARS)
         rec = EvidenceRecord(
             evidence_id=f"config:{service}@{chosen['commit'][:7]}", source="configs", service=service,
             event_time=_norm_iso(chosen["committed_at"]), available_time=_norm_iso(chosen["committed_at"]),
             version=chosen["commit"][:7], title=f"{chosen['path']} @ {chosen['commit'][:7]}", content=text,
             truncated=cut, content_ref=f"configs.jsonl#{service}@{chosen['commit']}", fixture=True,
-            attributes={"versions": [c["commit"][:7] for c in vers], "path": chosen["path"]})
+            attributes={"versions": [c["commit"][:7] for c in vers], "path": chosen["path"],
+                        "deployment": target["deploy_id"] if target else None})
         return self._done("get_config", self._result([rec]))
 
-    def _config_for_commit(self, vers, sha):
-        cm = next((c for c in self._st.commits if c["sha"] == sha), None)
-        if cm is None:
-            return vers[-1]
-        t = _ts(cm["committer_date"])
-        older = [c for c in vers if _ts(c["committed_at"]) <= t]
-        return older[-1] if older else vers[0]
+    @staticmethod
+    def _dep_label(d: dict) -> str:
+        return (f"{d['deploy_id']} ({d['service']} {d['version']}, started {_norm_iso(d['started_at'])}, "
+                f"commit {d['commit'][:7]})")
+
+    def _provenance_conflict(self, d: dict) -> str:
+        b = self._st.builds.get(d.get("build_id"))
+        if b and b["commit"] != d["commit"]:
+            return (f"deployment {d['deploy_id']} lists commit {d['commit'][:7]} but its build {b['build_id']} "
+                    f"lists commit {b['commit'][:7]}")
+        return ""
+
+    def _deployment_config(self, vers, deps, target):
+        """(config of `target` or None, comparison text, note)."""
+        label = self._dep_label(target)
+        conflict = self._provenance_conflict(target)
+        if conflict:
+            return (None, f"comparison with the previous deployment: not shown (provenance conflict: {conflict})",
+                    f"config of deployment {label} could not be established (provenance conflict); "
+                    f"showing the latest repository version")
+        cur, why = self._config_at(vers, target["commit"])
+        if cur is None:
+            return (None, "comparison with the previous deployment: not possible (config of this deployment unknown)",
+                    f"config of deployment {label} could not be established ({why}); "
+                    f"showing the latest repository version")
+        note = (f"config of the running deployment {label}" if target is deps[-1]
+                else f"config of deployment {label}")
+        t0 = _ts(target["started_at"])
+        earlier = [d for d in deps if _ts(d["started_at"]) < t0]
+        if not earlier:
+            return cur, (f"comparison with the previous deployment: not possible (no earlier deployment of "
+                         f"{target['service']} in the available deployment records)"), note
+        prev = earlier[-1]
+        ties = [d for d in earlier if d["started_at"] == prev["started_at"] and d["deploy_id"] != prev["deploy_id"]]
+        if ties:
+            return cur, (f"comparison with the previous deployment: not shown (provenance conflict: deployments "
+                         f"{prev['deploy_id']} and {ties[0]['deploy_id']} started at the same time)"), note
+        conflict = self._provenance_conflict(prev)
+        if conflict:
+            return cur, f"comparison with the previous deployment: not shown (provenance conflict: {conflict})", note
+        old, why = self._config_at(vers, prev["commit"])
+        plabel = self._dep_label(prev)
+        if old is None:
+            return cur, (f"comparison with the previous deployment {plabel}: not possible (its config could not "
+                         f"be established: {why})"), note
+        if old["commit"] == cur["commit"] or old["content"] == cur["content"]:
+            return cur, (f"unchanged from previous deployment {plabel}: both deployments run config "
+                         f"{cur['commit'][:7]}"), note
+        diff = "".join(difflib.unified_diff(old["content"].splitlines(True), cur["content"].splitlines(True),
+                                            old["commit"][:7], cur["commit"][:7], n=1))
+        return cur, (f"changed from previous deployment {plabel} (config {old['commit'][:7]}) to this deployment "
+                     f"(config {cur['commit'][:7]}):\n{diff}"), note
+
+    def _config_at(self, vers, sha):
+        """Config version in effect at commit `sha`, found by walking commit parents (no time ordering)."""
+        if "commits" in self._st.unavailable:
+            return None, "commit history unavailable"
+        by_sha = {c["sha"]: c for c in self._st.commits}
+        cfg = {}
+        for c in vers:
+            cfg.setdefault(c["commit"], c)
+        if sha not in by_sha and sha not in cfg:
+            return None, f"deployed commit {sha[:7]} is not in the available commit history"
+        frontier, seen = [sha], set()
+        while frontier:
+            found = [cfg[s] for s in frontier if s in cfg]
+            if len({c["content"] for c in found}) > 1:
+                return None, f"ambiguous: several config versions at the same ancestry depth from {sha[:7]}"
+            if found:
+                return found[0], ""
+            seen |= set(frontier)
+            nxt = []
+            for s in frontier:
+                c = by_sha.get(s)
+                if c is not None:
+                    nxt += [p for p in c.get("parents", []) if p not in seen]
+            frontier = list(dict.fromkeys(nxt))
+        return None, f"no config version of this service is an ancestor of commit {sha[:7]} in the available history"
 
     def search_tickets(self, query=None, service=None, limit=5) -> BackendResult:
         g = self._gate("search_tickets")
