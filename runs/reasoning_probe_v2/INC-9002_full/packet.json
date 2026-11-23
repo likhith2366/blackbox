@@ -1,0 +1,561 @@
+[
+ {
+  "role": "deployment",
+  "evidence_id": "deploy:d-579",
+  "source": "deployments",
+  "service": "payment-svc",
+  "event_time": "2026-11-20T03:46:08.202Z",
+  "available_time": "2026-11-20T03:46:10.474Z",
+  "version": "2.4.1",
+  "title": "deployment of payment-svc 2.4.1",
+  "content": "2026-11-20T03:46:08.202Z deployment d-579 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f by deploy-bot (pipeline) status=succeeded",
+  "content_ref": "deployments.jsonl#d-579",
+  "attributes": {
+   "deploy_id": "d-579",
+   "build_id": "b-1214",
+   "commit": "b7ae74f",
+   "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+   "trigger": "pipeline",
+   "actor": "deploy-bot"
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "deployment",
+  "evidence_id": "deploy:d-580",
+  "source": "deployments",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:12.603Z",
+  "available_time": "2026-11-20T03:46:13.146Z",
+  "version": "1.8.2",
+  "title": "deployment of checkout-svc 1.8.2",
+  "content": "2026-11-20T03:46:12.603Z deployment d-580 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f by deploy-bot (pipeline) status=succeeded",
+  "content_ref": "deployments.jsonl#d-580",
+  "attributes": {
+   "deploy_id": "d-580",
+   "build_id": "b-1215",
+   "commit": "b7ae74f",
+   "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+   "trigger": "pipeline",
+   "actor": "deploy-bot"
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "deployment",
+  "evidence_id": "deploy:d-581",
+  "source": "deployments",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:24.461Z",
+  "available_time": "2026-11-20T03:46:25.017Z",
+  "version": "1.9.0",
+  "title": "deployment of checkout-svc 1.9.0",
+  "content": "2026-11-20T03:46:24.461Z deployment d-581 of checkout-svc version 1.9.0 to demo-local build=b-1230 commit=0d6ba14 by deploy-bot (pipeline) status=succeeded",
+  "content_ref": "deployments.jsonl#d-581",
+  "attributes": {
+   "deploy_id": "d-581",
+   "build_id": "b-1230",
+   "commit": "0d6ba14",
+   "artifact_digest": "sha256:f9a69997bf12c2d9dce839f0b02e9fb8a3f5d25698fc40d29fff8e4537edafeb",
+   "trigger": "pipeline",
+   "actor": "deploy-bot"
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "build",
+  "evidence_id": "build:b-1214",
+  "source": "builds",
+  "service": "payment-svc",
+  "event_time": "2026-11-20T02:37:16.699Z",
+  "available_time": "2026-11-20T02:37:16.831Z",
+  "version": "2.4.1",
+  "title": "build b-1214 of payment-svc 2.4.1",
+  "content": "build b-1214 service=payment-svc version=2.4.1 commit=b7ae74f40b4cbabbd9f731663eb42bf8b238b75f artifact=payment-svc-2.4.1-b-1214.tar status=success pipeline=local-build started=2026-11-20T02:37:16.699Z finished=2026-11-20T02:37:16.831Z source_paths=services/__init__.py,services/payment,libs,config/payment-svc.yaml,db",
+  "content_ref": "builds.jsonl#b-1214",
+  "attributes": {
+   "commit": "b7ae74f",
+   "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f"
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "commit",
+  "evidence_id": "commit:b7ae74f",
+  "source": "commits",
+  "service": null,
+  "event_time": "2026-11-19T16:30:00.000Z",
+  "available_time": "2026-11-19T16:30:00.000Z",
+  "version": "b7ae74f",
+  "title": "Update CHANGELOG",
+  "content": "commit b7ae74f 2026-11-19T16:30:00.000Z Likhith Vardhan Goruputi\nUpdate CHANGELOG\nfiles: M CHANGELOG.md\n\ndiff --git a/CHANGELOG.md b/CHANGELOG.md\nindex 993a58d..3009623 100644\n--- a/CHANGELOG.md\n+++ b/CHANGELOG.md\n@@ -12,3 +12,7 @@\n ## 2026-09\n - DEMO-3: customer/time index for payment velocity checks\n - initial import of checkout-svc and payment-svc\n+\n+## Unreleased\n+- runbooks for checkout-svc and payment-svc, on-call and architecture docs\n+- CI workflow, policy tests, ruff config, smoke check script\n",
+  "content_ref": "commits.jsonl#b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+  "attributes": {
+   "sha": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+   "author": "Likhith Vardhan Goruputi",
+   "files": [
+    "CHANGELOG.md"
+   ]
+  },
+  "truncated": false,
+  "fixture": true
+ },
+ {
+  "role": "build",
+  "evidence_id": "build:b-1215",
+  "source": "builds",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T02:37:21.484Z",
+  "available_time": "2026-11-20T02:37:21.629Z",
+  "version": "1.8.2",
+  "title": "build b-1215 of checkout-svc 1.8.2",
+  "content": "build b-1215 service=checkout-svc version=1.8.2 commit=b7ae74f40b4cbabbd9f731663eb42bf8b238b75f artifact=checkout-svc-1.8.2-b-1215.tar status=success pipeline=local-build started=2026-11-20T02:37:21.484Z finished=2026-11-20T02:37:21.629Z source_paths=services/__init__.py,services/checkout,libs,config/checkout-svc.yaml",
+  "content_ref": "builds.jsonl#b-1215",
+  "attributes": {
+   "commit": "b7ae74f",
+   "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1"
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "build",
+  "evidence_id": "build:b-1230",
+  "source": "builds",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:22.355Z",
+  "available_time": "2026-11-20T03:46:22.482Z",
+  "version": "1.9.0",
+  "title": "build b-1230 of checkout-svc 1.9.0",
+  "content": "build b-1230 service=checkout-svc version=1.9.0 commit=0d6ba14efa876f117f0951c0916da6b9fa7e1887 artifact=checkout-svc-1.9.0-b-1230.tar status=success pipeline=local-build started=2026-11-20T03:46:22.355Z finished=2026-11-20T03:46:22.482Z source_paths=services/__init__.py,services/checkout,libs,config/checkout-svc.yaml",
+  "content_ref": "builds.jsonl#b-1230",
+  "attributes": {
+   "commit": "0d6ba14",
+   "artifact_digest": "sha256:f9a69997bf12c2d9dce839f0b02e9fb8a3f5d25698fc40d29fff8e4537edafeb"
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "commit",
+  "evidence_id": "commit:0d6ba14",
+  "source": "commits",
+  "service": "checkout-svc,payment-svc",
+  "event_time": "2026-11-20T03:46:22.000Z",
+  "available_time": "2026-11-20T03:46:22.000Z",
+  "version": "0d6ba14",
+  "title": "DEMO-9: retry transient payment failures in shared client",
+  "content": "commit 0d6ba14 2026-11-20T03:46:22.000Z Likhith Vardhan Goruputi\nDEMO-9: retry transient payment failures in shared client\n\nRetry timeouts and 5xx responses, tighten the per-attempt timeout so a\nslow attempt is abandoned quickly, and drop the fixed backoff.\nfiles: M libs/httpclient/VERSION, M libs/httpclient/policy.py, M services/checkout/VERSION\n\ndiff --git a/libs/httpclient/VERSION b/libs/httpclient/VERSION\nindex fd2a018..944880f 100644\n--- a/libs/httpclient/VERSION\n+++ b/libs/httpclient/VERSION\n@@ -1 +1 @@\n-3.1.0\n+3.2.0\ndiff --git a/libs/httpclient/policy.py b/libs/httpclient/policy.py\nindex 15dd75d..a404ba1 100644\n--- a/libs/httpclient/policy.py\n+++ b/libs/httpclient/policy.py\n@@ -3,8 +3,8 @@\n Services use these values unless their own config overrides a field.\n \"\"\"\n \n-DEFAULT_TIMEOUT_MS = 2000\n-MAX_RETRIES = 1\n+DEFAULT_TIMEOUT_MS = 250\n+MAX_RETRIES = 4\n # Which failures are retried: \"connect_error\", \"timeout\", \"5xx\"\n-RETRY_ON = (\"connect_error\",)\n-BACKOFF_MS = 100\n+RETRY_ON = (\"connect_error\", \"timeout\", \"5xx\")\n+BACKOFF_MS = 0\ndiff --git a/services/checkout/VERSION b/services/checkout/VERSION\nindex 53adb84..f8e233b 100644\n--- a/services/checkout/VERSION\n+++ b/services/checkout/VERSION\n@@ -1 +1 @@\n-1.8.2\n+1.9.0\n",
+  "content_ref": "commits.jsonl#0d6ba14efa876f117f0951c0916da6b9fa7e1887",
+  "attributes": {
+   "sha": "0d6ba14efa876f117f0951c0916da6b9fa7e1887",
+   "author": "Likhith Vardhan Goruputi",
+   "files": [
+    "libs/httpclient/VERSION",
+    "libs/httpclient/policy.py",
+    "services/checkout/VERSION"
+   ]
+  },
+  "truncated": false,
+  "fixture": true
+ },
+ {
+  "role": "source",
+  "evidence_id": "source:b-1230:libs/httpclient/__init__.py#ServiceClient",
+  "source": "builds",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:22.482Z",
+  "available_time": null,
+  "version": "1.9.0",
+  "title": "libs/httpclient/__init__.py ServiceClient @ b-1230",
+  "content": "libs/httpclient/__init__.py lines 44-113 in build b-1230 artifact checkout-svc-1.9.0-b-1230.tar (commit 0d6ba14)\n  44 class ServiceClient:\n  45     def __init__(self, base_url: str, tracer, metrics=None, peer: str = \"\",\n  46                  timeout_ms: int | None = None, max_retries: int | None = None,\n  47                  retry_on=None, backoff_ms: int | None = None):\n  48         self.base_url = base_url.rstrip(\"/\")\n  49         u = urlparse(self.base_url)\n  50         self.host, self.port = u.hostname, u.port or 80\n  51         self.tracer = tracer\n  52         self.metrics = metrics\n  53         self.peer = peer or self.host\n  54         self.timeout_ms = timeout_ms if timeout_ms is not None else policy.DEFAULT_TIMEOUT_MS\n  55         self.max_retries = max_retries if max_retries is not None else policy.MAX_RETRIES\n  56         self.retry_on = tuple(retry_on if retry_on is not None else policy.RETRY_ON)\n  57         self.backoff_ms = backoff_ms if backoff_ms is not None else policy.BACKOFF_MS\n  58 \n  59     def describe(self) -> dict:\n  60         return {\"base_url\": self.base_url, \"timeout_ms\": self.timeout_ms,\n  61                 \"max_retries\": self.max_retries, \"retry_on\": list(self.retry_on),\n  62                 \"backoff_ms\": self.backoff_ms, \"client_version\": CLIENT_VERSION}\n  63 \n  64     def post_json(self, path: str, payload: dict) -> Response:\n  65         body = json.dumps(payload).encode(\"utf-8\")\n  66         attempt = 0\n  67         while True:\n  68             attempt += 1\n  69             kind, detail, resp = self._attempt(path, body, attempt)\n  70             if kind == \"ok\":\n  71                 return resp\n  72             retryable = (kind in self.retry_on) and attempt <= self.max_retries\n  73             if not retryable:\n  74                 if kind == \"5xx\":\n  75                     return resp\n  76                 if kind == \"timeout\":\n  77                     raise ClientTimeout(f\"timed out after {self.timeout_ms}ms\", attempt)\n  78                 raise ClientConnectionError(detail, attempt)\n  79             if self.backoff_ms:\n  80                 time.sleep(self.backoff_ms / 1000.0)\n  81 \n  82     def _attempt(self, path, body, attempt):\n  83         if self.metrics:\n  84             self.metrics.inc(\"upstream_attempts\")\n  85         with self.tracer.span(f\"POST {path}\", kind=\"client\",\n  86                               attributes={\"peer.service\": self.peer, \"http.attempt\": attempt,\n  87                                           \"http.timeout_ms\": self.timeout_ms}) as sp:\n  88             conn = http.client.HTTPConnection(self.host, self.port, timeout=self.timeout_ms / 1000.0)\n  89             try:\n  90                 conn.request(\"POST\", path, body=body, headers={\n  91                     \"Content-Type\": \"application/json\", \"traceparent\": sp.traceparent()})\n  92                 r = conn.getresponse()\n  93                 data = r.read()\n  94                 sp.set(\"http.status_code\", r.status)\n  95                 resp = Response(r.status, data, attempt)\n  96                 if r.status >= 500:\n  97                     sp.fail(f\"HTTP {r.status}\")\n  98                     if self.metrics:\n  99                         self.metrics.inc(\"upstream_errors\")\n 100                     return \"5xx\", f\"HTTP {r.status}\", resp\n 101                 return \"ok\", \"\", resp\n 102             except (socket.timeout, TimeoutError):\n 103                 sp.fail(f\"timeout after {self.timeout_ms}ms\")\n 104                 if self.metrics:\n 105                     self.metrics.inc(\"upstream_errors\")\n 106                 return \"timeout\", \"timeout\", None\n 107             except (ConnectionError, OSError) as exc:\n 108                 sp.fail(f\"connect error: {exc}\")\n 109                 if self.metrics:\n 110                     self.metrics.inc(\"upstream_errors\")\n 111                 return \"connect_error\", f\"{type(exc).__name__}: {exc}\", None\n 112             finally:\n 113                 conn.close()",
+  "content_ref": null,
+  "attributes": {},
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "config",
+  "evidence_id": "config:checkout-svc@bc913fb",
+  "source": "configs",
+  "service": "checkout-svc",
+  "event_time": "2026-09-02T14:10:00.000Z",
+  "available_time": "2026-09-02T14:10:00.000Z",
+  "version": "bc913fb",
+  "title": "config/checkout-svc.yaml @ bc913fb",
+  "content": "config/checkout-svc.yaml @ bc913fb (committed 2026-09-02T14:10:00.000Z); config of the running deployment d-581 (commit 0d6ba14)\n# checkout-svc runtime configuration\nservice: checkout-svc\nport: 18101\nlog_level: INFO\npayment:\n  base_url: http://127.0.0.1:18102\n  # timeout / retry policy: defaults from libs/httpclient/policy.py unless set here\n",
+  "content_ref": "configs.jsonl#checkout-svc@bc913fbfe17d1738e9a58621affd5d11e63b47d9",
+  "attributes": {
+   "versions": [
+    "bc913fb"
+   ],
+   "path": "config/checkout-svc.yaml"
+  },
+  "truncated": false,
+  "fixture": true
+ },
+ {
+  "role": "config",
+  "evidence_id": "config:payment-svc@b1e5a60",
+  "source": "configs",
+  "service": "payment-svc",
+  "event_time": "2026-11-06T11:15:00.000Z",
+  "available_time": "2026-11-06T11:15:00.000Z",
+  "version": "b1e5a60",
+  "title": "config/payment-svc.yaml @ b1e5a60",
+  "content": "config/payment-svc.yaml @ b1e5a60 (committed 2026-11-06T11:15:00.000Z); config of the running deployment d-579 (commit b7ae74f)\n# payment-svc runtime configuration\nservice: payment-svc\nport: 18102\nlog_level: INFO\ndb:\n  path: payments.db          # overridden by PAYMENT_DB_PATH in deployed environments\n  pool_size: 4\n  acquire_timeout_ms: 1000\n\nchange vs previous version:\n--- previous\n+++ b1e5a60\n@@ -7,2 +7,2 @@\n   pool_size: 4\n-  acquire_timeout_ms: 3000\n+  acquire_timeout_ms: 1000\n",
+  "content_ref": "configs.jsonl#payment-svc@b1e5a60a67e79de913fb8f46feff348c6a42c78f",
+  "attributes": {
+   "versions": [
+    "bc913fb",
+    "b1e5a60"
+   ],
+   "path": "config/payment-svc.yaml"
+  },
+  "truncated": false,
+  "fixture": true
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:1364a73bd4",
+  "source": "metrics",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:17.944Z",
+  "available_time": "2026-11-20T03:47:25.013Z",
+  "version": null,
+  "title": "checkout-svc error_rate",
+  "content": "checkout-svc error_rate (5.0s points, 2026-11-20T03:46:17.944Z .. 2026-11-20T03:47:25.013Z): min=0 max=0.8125 last=0.2121\n03:46:17 0; 03:46:22 0; 03:46:34 0; 03:46:44 0.8125; 03:46:54 0.3103; 03:47:04 0.3667; 03:47:14 0.8125; 03:47:25 0.2121",
+  "content_ref": "metrics.jsonl#checkout-svc/error_rate",
+  "attributes": {
+   "metric": "error_rate",
+   "points": 15,
+   "min": 0.0,
+   "max": 0.8125,
+   "last": 0.2121
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:6e738d58e3",
+  "source": "metrics",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:17.944Z",
+  "available_time": "2026-11-20T03:47:25.013Z",
+  "version": null,
+  "title": "checkout-svc inflight_requests",
+  "content": "checkout-svc inflight_requests (5.0s points, 2026-11-20T03:46:17.944Z .. 2026-11-20T03:47:25.013Z): min=0 max=5 last=1\n03:46:17 0; 03:46:22 0; 03:46:34 0; 03:46:39 5; 03:46:44 3; 03:46:54 1; 03:47:04 3; 03:47:14 2; 03:47:25 1",
+  "content_ref": "metrics.jsonl#checkout-svc/inflight_requests",
+  "attributes": {
+   "metric": "inflight_requests",
+   "points": 15,
+   "min": 0.0,
+   "max": 5.0,
+   "last": 1.0
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:9c07c13b52",
+  "source": "metrics",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:17.944Z",
+  "available_time": "2026-11-20T03:47:25.013Z",
+  "version": null,
+  "title": "checkout-svc latency_p95_ms",
+  "content": "checkout-svc latency_p95_ms (5.0s points, 2026-11-20T03:46:17.944Z .. 2026-11-20T03:47:25.013Z): min=0 max=1322.72 last=775.43\n03:46:17 25.52; 03:46:22 0; 03:46:34 566.42; 03:46:44 1322.72; 03:46:54 1319.92; 03:47:04 523.27; 03:47:14 294.49; 03:47:25 775.43",
+  "content_ref": "metrics.jsonl#checkout-svc/latency_p95_ms",
+  "attributes": {
+   "metric": "latency_p95_ms",
+   "points": 15,
+   "min": 0.0,
+   "max": 1322.72,
+   "last": 775.43
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:e72538a7f4",
+  "source": "metrics",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:17.944Z",
+  "available_time": "2026-11-20T03:47:25.013Z",
+  "version": null,
+  "title": "checkout-svc requests_per_s",
+  "content": "checkout-svc requests_per_s (5.0s points, 2026-11-20T03:46:17.944Z .. 2026-11-20T03:47:25.013Z): min=0 max=7.2 last=6.6\n03:46:17 0.2; 03:46:22 0; 03:46:34 7; 03:46:44 6.4; 03:46:54 5.8; 03:47:04 6; 03:47:14 3.2; 03:47:20 7.2; 03:47:25 6.6",
+  "content_ref": "metrics.jsonl#checkout-svc/requests_per_s",
+  "attributes": {
+   "metric": "requests_per_s",
+   "points": 15,
+   "min": 0.0,
+   "max": 7.2,
+   "last": 6.6
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:858412a4f1",
+  "source": "metrics",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:17.944Z",
+  "available_time": "2026-11-20T03:47:25.013Z",
+  "version": null,
+  "title": "checkout-svc upstream_attempts_per_s",
+  "content": "checkout-svc upstream_attempts_per_s (5.0s points, 2026-11-20T03:46:17.944Z .. 2026-11-20T03:47:25.013Z): min=0 max=27.6 last=14.4\n03:46:17 0.2; 03:46:22 0; 03:46:34 9; 03:46:44 27.6; 03:46:54 18.4; 03:47:04 17.8; 03:47:14 14.4; 03:47:25 14.4",
+  "content_ref": "metrics.jsonl#checkout-svc/upstream_attempts_per_s",
+  "attributes": {
+   "metric": "upstream_attempts_per_s",
+   "points": 15,
+   "min": 0.0,
+   "max": 27.6,
+   "last": 14.4
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:0400058a8f",
+  "source": "metrics",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:17.944Z",
+  "available_time": "2026-11-20T03:47:25.013Z",
+  "version": null,
+  "title": "checkout-svc upstream_errors_per_s",
+  "content": "checkout-svc upstream_errors_per_s (5.0s points, 2026-11-20T03:46:17.944Z .. 2026-11-20T03:47:25.013Z): min=0 max=26.8 last=9\n03:46:17 0; 03:46:22 0; 03:46:34 2; 03:46:44 26.8; 03:46:54 14.6; 03:47:04 13.6; 03:47:14 13.6; 03:47:25 9",
+  "content_ref": "metrics.jsonl#checkout-svc/upstream_errors_per_s",
+  "attributes": {
+   "metric": "upstream_errors_per_s",
+   "points": 15,
+   "min": 0.0,
+   "max": 26.8,
+   "last": 9.0
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:71e74a95e7",
+  "source": "metrics",
+  "service": "payment-svc",
+  "event_time": "2026-11-20T03:46:15.226Z",
+  "available_time": "2026-11-20T03:47:23.783Z",
+  "version": null,
+  "title": "payment-svc db_pool_in_use",
+  "content": "payment-svc db_pool_in_use (5.0s points, 2026-11-20T03:46:15.226Z .. 2026-11-20T03:47:23.783Z): min=-6 max=1 last=-6\n03:46:15 0; 03:46:25 0; 03:46:30 1; 03:46:35 0; 03:46:48 -3; 03:46:53 -3; 03:47:03 -1; 03:47:13 -6; 03:47:23 -6",
+  "content_ref": "metrics.jsonl#payment-svc/db_pool_in_use",
+  "attributes": {
+   "metric": "db_pool_in_use",
+   "points": 14,
+   "min": -6.0,
+   "max": 1.0,
+   "last": -6.0
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:60e447ad63",
+  "source": "metrics",
+  "service": "payment-svc",
+  "event_time": "2026-11-20T03:46:15.226Z",
+  "available_time": "2026-11-20T03:47:23.783Z",
+  "version": null,
+  "title": "payment-svc db_pool_wait_p95_ms",
+  "content": "payment-svc db_pool_wait_p95_ms (5.0s points, 2026-11-20T03:46:15.226Z .. 2026-11-20T03:47:23.783Z): min=0 max=464.97 last=1.01\n03:46:15 0; 03:46:25 0; 03:46:35 201; 03:46:43 464.97; 03:46:48 3; 03:46:53 3; 03:47:03 1.01; 03:47:13 1.01; 03:47:23 1.01",
+  "content_ref": "metrics.jsonl#payment-svc/db_pool_wait_p95_ms",
+  "attributes": {
+   "metric": "db_pool_wait_p95_ms",
+   "points": 14,
+   "min": 0.0,
+   "max": 464.97,
+   "last": 1.01
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:7e4996f4b4",
+  "source": "metrics",
+  "service": "payment-svc",
+  "event_time": "2026-11-20T03:46:15.226Z",
+  "available_time": "2026-11-20T03:47:23.783Z",
+  "version": null,
+  "title": "payment-svc db_query_p95_ms",
+  "content": "payment-svc db_query_p95_ms (5.0s points, 2026-11-20T03:46:15.226Z .. 2026-11-20T03:47:23.783Z): min=0 max=153.67 last=1.52\n03:46:15 0; 03:46:25 0; 03:46:35 5.01; 03:46:48 153.67; 03:46:53 51.56; 03:47:03 3.02; 03:47:13 0; 03:47:23 1.52",
+  "content_ref": "metrics.jsonl#payment-svc/db_query_p95_ms",
+  "attributes": {
+   "metric": "db_query_p95_ms",
+   "points": 14,
+   "min": 0.0,
+   "max": 153.67,
+   "last": 1.52
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:e084a75703",
+  "source": "metrics",
+  "service": "payment-svc",
+  "event_time": "2026-11-20T03:46:15.226Z",
+  "available_time": "2026-11-20T03:47:23.783Z",
+  "version": null,
+  "title": "payment-svc error_rate",
+  "content": "payment-svc error_rate (5.0s points, 2026-11-20T03:46:15.226Z .. 2026-11-20T03:47:23.783Z): min=0 max=1 last=0.6716\n03:46:15 0; 03:46:25 0; 03:46:35 0.2222; 03:46:48 0.7093; 03:46:53 0.6892; 03:47:03 0.7246; 03:47:13 1; 03:47:23 0.6716",
+  "content_ref": "metrics.jsonl#payment-svc/error_rate",
+  "attributes": {
+   "metric": "error_rate",
+   "points": 14,
+   "min": 0.0,
+   "max": 1.0,
+   "last": 0.6716
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:9d756c5419",
+  "source": "metrics",
+  "service": "payment-svc",
+  "event_time": "2026-11-20T03:46:15.226Z",
+  "available_time": "2026-11-20T03:47:23.783Z",
+  "version": null,
+  "title": "payment-svc latency_p95_ms",
+  "content": "payment-svc latency_p95_ms (5.0s points, 2026-11-20T03:46:15.226Z .. 2026-11-20T03:47:23.783Z): min=0 max=982.2 last=533.31\n03:46:15 0; 03:46:25 0; 03:46:35 982.2; 03:46:48 543.21; 03:46:53 640.92; 03:47:03 52.25; 03:47:13 50.52; 03:47:23 533.31",
+  "content_ref": "metrics.jsonl#payment-svc/latency_p95_ms",
+  "attributes": {
+   "metric": "latency_p95_ms",
+   "points": 14,
+   "min": 0.0,
+   "max": 982.2,
+   "last": 533.31
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "metric",
+  "evidence_id": "metric:2fbc297412",
+  "source": "metrics",
+  "service": "payment-svc",
+  "event_time": "2026-11-20T03:46:15.226Z",
+  "available_time": "2026-11-20T03:47:23.783Z",
+  "version": null,
+  "title": "payment-svc requests_per_s",
+  "content": "payment-svc requests_per_s (5.0s points, 2026-11-20T03:46:15.226Z .. 2026-11-20T03:47:23.783Z): min=0 max=24.6 last=13.4\n03:46:15 0; 03:46:25 0; 03:46:35 9; 03:46:48 17.2; 03:46:53 14.8; 03:46:58 24.6; 03:47:03 13.8; 03:47:13 17.4; 03:47:23 13.4",
+  "content_ref": "metrics.jsonl#payment-svc/requests_per_s",
+  "attributes": {
+   "metric": "requests_per_s",
+   "points": 14,
+   "min": 0.0,
+   "max": 24.6,
+   "last": 13.4
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "log",
+  "evidence_id": "log:7db2506518",
+  "source": "logs",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:38.961Z",
+  "available_time": "2026-11-20T03:46:38.961Z",
+  "version": null,
+  "title": "ERROR checkout-svc: payment call timed out after 250ms (x31 similar lines 2026-11-20T03:46:38.961Z .. 2026-11-20T03:47:18.879Z)",
+  "content": "2026-11-20T03:46:38.961Z ERROR checkout-svc payment call timed out after 250ms {\"trace_id\":\"0438e1a6df4f8d463d5846b7885903bb\",\"span_id\":\"901ed42457611ba1\",\"order_id\":\"ord-0700084\",\"attempts\":5}",
+  "content_ref": "logs.jsonl#183",
+  "attributes": {
+   "level": "ERROR",
+   "msg": "payment call timed out after 250ms",
+   "similar_lines": 31,
+   "first_seen": "2026-11-20T03:46:38.961Z",
+   "last_seen": "2026-11-20T03:47:18.879Z"
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "log",
+  "evidence_id": "log:de694e9264",
+  "source": "logs",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:43.830Z",
+  "available_time": "2026-11-20T03:46:43.830Z",
+  "version": null,
+  "title": "ERROR checkout-svc: payment service returned HTTP 500 (x88 similar lines 2026-11-20T03:46:43.830Z .. 2026-11-20T03:47:24.518Z)",
+  "content": "2026-11-20T03:46:43.830Z ERROR checkout-svc payment service returned HTTP 500 {\"trace_id\":\"9d24b77c5dfffdb9edb4d481a753cd46\",\"span_id\":\"550566343762d9cf\",\"order_id\":\"ord-0700110\",\"attempts\":5,\"body\":\"{\\\"error\\\": \\\"internal error\\\"}\"}",
+  "content_ref": "logs.jsonl#235",
+  "attributes": {
+   "level": "ERROR",
+   "msg": "payment service returned HTTP 500",
+   "similar_lines": 88,
+   "first_seen": "2026-11-20T03:46:43.830Z",
+   "last_seen": "2026-11-20T03:47:24.518Z"
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "log",
+  "evidence_id": "log:94d4ddd7b4",
+  "source": "logs",
+  "service": "payment-svc",
+  "event_time": "2026-11-20T03:46:27.243Z",
+  "available_time": "2026-11-20T03:46:27.243Z",
+  "version": null,
+  "title": "ERROR payment-svc: charge failed (x575 similar lines 2026-11-20T03:46:27.243Z .. 2026-11-20T03:47:25.221Z)",
+  "content": "2026-11-20T03:46:27.243Z ERROR payment-svc charge failed {\"trace_id\":\"8165c54f07dde5e88b29dcf73cebc3fd\",\"span_id\":\"58047df1f476da42\",\"order_id\":\"ord-0700002\",\"error\":\"IntegrityError: UNIQUE constraint failed: payments.order_id\"}",
+  "content_ref": "logs.jsonl#13",
+  "attributes": {
+   "level": "ERROR",
+   "msg": "charge failed",
+   "similar_lines": 575,
+   "first_seen": "2026-11-20T03:46:27.243Z",
+   "last_seen": "2026-11-20T03:47:25.221Z"
+  },
+  "truncated": false,
+  "fixture": false
+ },
+ {
+  "role": "trace",
+  "evidence_id": "trace:8165c54f07dde5e88b29dcf73cebc3fd",
+  "source": "traces",
+  "service": "checkout-svc",
+  "event_time": "2026-11-20T03:46:26.481Z",
+  "available_time": "2026-11-20T03:46:27.243Z",
+  "version": null,
+  "title": "checkout-svc POST /orders 534.9ms error",
+  "content": "trace 8165c54f07dde5e88b29dcf73cebc3fd root=checkout-svc POST /orders start=2026-11-20T03:46:26.481Z duration=534.9ms status=error spans=18 services=checkout-svc,payment-svc\n - checkout-svc POST /orders 534.9ms ok {\"http.route\":\"/orders\",\"order.id\":\"ord-0700002\",\"http.status_code\":201}\n - checkout-svc POST /charge 263.91ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":1,\"http.timeout_ms\":250}\n - payment-svc POST /charge 494.88ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) { ...[truncated]",
+  "content_ref": "spans.jsonl?trace_id=8165c54f07dde5e88b29dcf73cebc3fd",
+  "attributes": {
+   "trace_id": "8165c54f07dde5e88b29dcf73cebc3fd",
+   "duration_ms": 534.9,
+   "status": "error",
+   "span_count": 18,
+   "services": [
+    "checkout-svc",
+    "payment-svc"
+   ]
+  },
+  "truncated": true,
+  "fixture": false
+ }
+]

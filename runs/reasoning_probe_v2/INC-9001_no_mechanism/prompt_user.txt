@@ -1,0 +1,82 @@
+INCIDENT
+Incident INC-9001 (demo-local)
+Alert: checkout-svc error rate high | service=checkout-svc | signal=error_rate | condition: error_rate > 0.1 for 15s | observed=1.0 | fired_at=2026-11-20T03:44:34.628Z
+Window: 2026-11-20T03:43:42.797Z to 2026-11-20T03:45:11.174Z; evidence after 2026-11-20T03:45:11.174Z is not available.
+Services: checkout-svc, payment-svc
+Notes: Alert fired in demo-local. Investigate using the available evidence sources.
+Sources: logs=available; traces=available; metrics=available; deployments=available; builds=available; commits=available; configs=available; tickets=available
+
+EVIDENCE (18 records)
+[deploy:d-574] deployments payment-svc 2026-11-20T03:43:49.742Z v=2.4.1 | deployment of payment-svc 2.4.1
+2026-11-20T03:43:49.742Z deployment d-574 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f by deploy-bot (pipeline) status=succeeded
+
+[deploy:d-575] deployments checkout-svc 2026-11-20T03:43:54.148Z v=1.8.2 | deployment of checkout-svc 1.8.2
+2026-11-20T03:43:54.148Z deployment d-575 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f by deploy-bot (pipeline) status=succeeded
+
+[deploy:d-576] deployments payment-svc 2026-11-20T03:44:06.356Z v=2.5.0 | deployment of payment-svc 2.5.0
+2026-11-20T03:44:06.356Z deployment d-576 of payment-svc version 2.5.0 to demo-local build=b-1229 commit=d142601 by deploy-bot (pipeline) status=succeeded
+
+[build:b-1214] builds payment-svc 2026-11-20T02:37:16.699Z v=2.4.1 | build b-1214 of payment-svc 2.4.1
+build b-1214 service=payment-svc version=2.4.1 commit=b7ae74f40b4cbabbd9f731663eb42bf8b238b75f artifact=payment-svc-2.4.1-b-1214.tar status=success pipeline=local-build started=2026-11-20T02:37:16.699Z finished=2026-11-20T02:37:16.831Z source_paths=services/__init__.py,services/payment,libs,config/payment-svc.yaml,db
+
+[commit:b7ae74f] commits 2026-11-19T16:30:00.000Z v=b7ae74f | Update CHANGELOG
+commit b7ae74f 2026-11-19T16:30:00.000Z Likhith Vardhan Goruputi
+Update CHANGELOG
+files: M CHANGELOG.md
+
+[build:b-1215] builds checkout-svc 2026-11-20T02:37:21.484Z v=1.8.2 | build b-1215 of checkout-svc 1.8.2
+build b-1215 service=checkout-svc version=1.8.2 commit=b7ae74f40b4cbabbd9f731663eb42bf8b238b75f artifact=checkout-svc-1.8.2-b-1215.tar status=success pipeline=local-build started=2026-11-20T02:37:21.484Z finished=2026-11-20T02:37:21.629Z source_paths=services/__init__.py,services/checkout,libs,config/checkout-svc.yaml
+
+[build:b-1229] builds payment-svc 2026-11-20T03:44:03.636Z v=2.5.0 | build b-1229 of payment-svc 2.5.0
+build b-1229 service=payment-svc version=2.5.0 commit=d142601829cee858851b38811fb27a5ef4621880 artifact=payment-svc-2.5.0-b-1229.tar status=success pipeline=local-build started=2026-11-20T03:44:03.636Z finished=2026-11-20T03:44:03.851Z source_paths=services/__init__.py,services/payment,libs,config/payment-svc.yaml,db
+
+[commit:d142601] commits payment-svc 2026-11-20T03:44:03.000Z v=d142601 | DEMO-41: fast path for micro-charges under $5
+commit d142601 2026-11-20T03:44:03.000Z Praneeth Kadem
+DEMO-41: fast path for micro-charges under $5
+
+Small charges skip the risk provider and velocity queries; they are
+written straight to the payments table.
+files: M services/payment/VERSION, M services/payment/app.py
+
+[metric:4d19b12fad] metrics checkout-svc 2026-11-20T03:43:59.549Z | checkout-svc error_rate
+checkout-svc error_rate (5.0s points, 2026-11-20T03:43:59.549Z .. 2026-11-20T03:45:09.695Z): min=0 max=1 last=1
+03:43:59 0; 03:44:09 0; 03:44:19 0.0741; 03:44:24 1; 03:44:29 1; 03:44:39 1; 03:44:49 1; 03:44:59 1; 03:45:09 1
+
+[metric:625970ad48] metrics checkout-svc 2026-11-20T03:43:59.549Z | checkout-svc latency_p95_ms
+checkout-svc latency_p95_ms (5.0s points, 2026-11-20T03:43:59.549Z .. 2026-11-20T03:45:09.695Z): min=0 max=1210.69 last=1028.4
+03:43:59 56.96; 03:44:09 0; 03:44:19 1014.55; 03:44:29 1053.49; 03:44:39 1030.83; 03:44:49 1042.57; 03:44:54 1210.69; 03:44:59 1025.09; 03:45:09 1028.4
+
+[metric:05f9bb24dd] metrics checkout-svc 2026-11-20T03:43:59.549Z | checkout-svc requests_per_s
+checkout-svc requests_per_s (5.0s points, 2026-11-20T03:43:59.549Z .. 2026-11-20T03:45:09.695Z): min=0 max=8.2 last=7.2
+03:43:59 0.2; 03:44:09 0; 03:44:14 8.2; 03:44:19 5.4; 03:44:29 5.8; 03:44:39 5.2; 03:44:49 6.2; 03:44:59 5; 03:45:09 7.2
+
+[metric:95f388cff1] metrics checkout-svc 2026-11-20T03:43:59.549Z | checkout-svc upstream_errors_per_s
+checkout-svc upstream_errors_per_s (5.0s points, 2026-11-20T03:43:59.549Z .. 2026-11-20T03:45:09.695Z): min=0 max=7.4 last=7.2
+03:43:59 0; 03:44:09 0; 03:44:19 0.4; 03:44:29 5.8; 03:44:39 5.2; 03:44:44 7.4; 03:44:49 6.2; 03:44:59 5; 03:45:09 7.2
+
+[metric:feb04e3d4a] metrics payment-svc 2026-11-20T03:43:56.435Z | payment-svc error_rate
+payment-svc error_rate (5.0s points, 2026-11-20T03:43:56.435Z .. 2026-11-20T03:45:07.196Z): min=0 max=1 last=1
+03:43:56 0; 03:44:04 0; 03:44:17 0; 03:44:27 1; 03:44:37 1; 03:44:47 1; 03:44:57 1; 03:45:07 1
+
+[metric:010cbc2f51] metrics payment-svc 2026-11-20T03:43:56.435Z | payment-svc latency_p95_ms
+payment-svc latency_p95_ms (5.0s points, 2026-11-20T03:43:56.435Z .. 2026-11-20T03:45:07.196Z): min=0 max=1048.49 last=1016.06
+03:43:56 0; 03:44:04 0; 03:44:17 453.23; 03:44:27 1048.49; 03:44:37 1014.63; 03:44:47 1017.33; 03:44:57 1019.58; 03:45:07 1016.06
+
+[metric:075c37e673] metrics payment-svc 2026-11-20T03:43:56.435Z | payment-svc requests_per_s
+payment-svc requests_per_s (5.0s points, 2026-11-20T03:43:56.435Z .. 2026-11-20T03:45:07.196Z): min=0 max=7.8 last=4.4
+03:43:56 0; 03:44:04 0; 03:44:17 7.8; 03:44:27 4.6; 03:44:37 6.2; 03:44:47 6.8; 03:44:57 4.6; 03:45:07 4.4
+
+[log:9110a7c06d] logs checkout-svc 2026-11-20T03:44:19.578Z | ERROR checkout-svc: payment service returned HTTP 503 (x308 similar lines 2026-11-20T03:44:19.578Z .. 2026-11-20T03:45:10.415Z)
+2026-11-20T03:44:19.578Z ERROR checkout-svc payment service returned HTTP 503 {"trace_id":"84bc7633414fe8cfa17bf6eedc1547b8","span_id":"633e54d0156596eb","order_id":"ord-0700066","attempts":1,"body":"{\"error\": \"service unavailable\"}"}
+
+[log:3bf4f24e33] logs payment-svc 2026-11-20T03:44:19.577Z | ERROR payment-svc: db pool acquire timed out after 1000ms (x308 similar lines 2026-11-20T03:44:19.577Z .. 2026-11-20T03:45:10.413Z)
+2026-11-20T03:44:19.577Z ERROR payment-svc db pool acquire timed out after 1000ms {"trace_id":"4c39319cf48b5a6dcf2010e167df5f58","span_id":"5c125ae7a5e37c93","order_id":"ord-0700067"}
+
+[trace:84bc7633414fe8cfa17bf6eedc1547b8] traces checkout-svc 2026-11-20T03:44:18.550Z | checkout-svc POST /orders 1029.22ms error
+trace 84bc7633414fe8cfa17bf6eedc1547b8 root=checkout-svc POST /orders start=2026-11-20T03:44:18.550Z duration=1029.22ms status=error spans=4 services=checkout-svc,payment-svc
+ - checkout-svc POST /orders 1029.22ms error (HTTP 502) {"http.route":"/orders","order.id":"ord-0700066","http.status_code":502}
+ - checkout-svc POST /charge 1027.03ms error (HTTP 503) {"peer.service":"payment-svc","http.attempt":1,"http.timeout_ms":2000,"http.status_code":503}
+ - payment-svc db.pool.acquire 1012.14ms error (PoolTimeout: db pool acquire timed out after 1000ms)
+ - payment-svc POST /charge 10 ...[truncated]
+
+Reply with the JSON object.

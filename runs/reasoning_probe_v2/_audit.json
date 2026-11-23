@@ -1,0 +1,146 @@
+{
+  "INC-0000": {
+    "key_mechanism_summary": "checkout-svc 1.9.0 (httpclient 3.2.0) retries timeouts/5xx up to 4x, 250ms per-attempt timeout, no backoff -> slow large charges abandoned and repeated -> payment calls ~5/s -> ~20/s -> concurrent duplicate charges -> payment-svc SQLite 'database is locked' + UNIQUE errors (HTTP 500) -> checkout error_rate alert.",
+    "links": {
+      "a_change_deployed": {
+        "step4_full": {"status": "observed", "ids": ["deploy:d-535", "build:b-1216", "commit:e7a0cc0"], "quote": "deployment d-535 of checkout-svc version 1.9.0 ... build=b-1216 commit=e7a0cc0"},
+        "v2_full": {"status": "observed", "ids": ["deploy:d-535", "build:b-1216", "commit:e7a0cc0"], "quote": "same as STEP4"},
+        "v2_no_mechanism": {"status": "observed", "ids": ["deploy:d-535", "build:b-1216", "commit:e7a0cc0"], "quote": "same as STEP4"}
+      },
+      "b_change_content": {
+        "step4_full": {"status": "observed", "ids": ["commit:e7a0cc0", "config:checkout-svc@bc913fb"], "quote": "+DEFAULT_TIMEOUT_MS = 250 / +MAX_RETRIES = 4 / +RETRY_ON = (\"connect_error\", \"timeout\", \"5xx\") / +BACKOFF_MS = 0; config: '# timeout / retry policy: defaults from libs/httpclient/policy.py unless set here'"},
+        "v2_full": {"status": "observed", "ids": ["commit:e7a0cc0", "config:checkout-svc@bc913fb", "source:b-1216:libs/httpclient/__init__.py#ServiceClient"], "quote": "diff as STEP4; source lines 54-57 show policy defaults are used when not overridden"},
+        "v2_no_mechanism": {"status": "observed (qualitative) + values inferred from log", "ids": ["commit:e7a0cc0", "log:aea2b46ce0"], "quote": "commit message kept: 'Retry timeouts and 5xx responses, tighten the per-attempt timeout so a slow attempt is abandoned quickly, and drop the fixed backoff.'; log: 'payment call timed out after 250ms ... \"attempts\":5'. Diff removed, but the change is described in prose and the numbers are recoverable from the log."}
+      },
+      "c_mechanism": {
+        "step4_full": {"status": "inferred", "ids": ["commit:e7a0cc0", "log:aea2b46ce0", "trace:bffac3bd7e8d6eaa8e89b3fb0143ae23", "log:4c3dac5d49"], "step": "retry semantics must be assumed from constant names; trace shows attempt 1 abandoned at 257.78ms while payment risk.score ran 279.95ms (server keeps working after client gives up); UNIQUE constraint on payments.order_id shows a second charge of the same order -> duplicate concurrent charges. Retry loop itself not visible."},
+        "v2_full": {"status": "observed for retry loop; inferred for duplicate-charge contention", "ids": ["source:b-1216:libs/httpclient/__init__.py#ServiceClient", "trace:bffac3bd7e8d6eaa8e89b3fb0143ae23", "log:4c3dac5d49"], "quote": "72 retryable = (kind in self.retry_on) and attempt <= self.max_retries; 79 if self.backoff_ms: (0 -> no sleep); 102-106 socket.timeout -> 'timeout' (retryable). Server-side duplication still inferred from trace + UNIQUE log."},
+        "v2_no_mechanism": {"status": "inferred", "ids": ["commit:e7a0cc0", "log:aea2b46ce0", "metric:8956e7ef9d", "metric:69a2e76f44", "trace:bffac3bd7e8d6eaa8e89b3fb0143ae23", "log:4c3dac5d49"], "step": "commit prose + attempts=5 + payment rps (4.8 -> 22.8) vs flat checkout rps (~5) => amplification; trace + UNIQUE => duplicates. Fully reachable with moderate inference."}
+      },
+      "d_runtime_effect": {
+        "step4_full": {"status": "observed", "ids": ["metric:17f535fce8", "metric:8956e7ef9d", "log:4c3dac5d49"], "quote": "upstream_attempts_per_s 02:38:37 4.2 ... 02:39:27 28; payment requests_per_s 02:40:02 22.8; 'IntegrityError: UNIQUE constraint failed: payments.order_id'"},
+        "v2_full": {"status": "observed", "ids": ["metric:17f535fce8", "metric:8956e7ef9d", "log:4c3dac5d49"], "quote": "same as STEP4"},
+        "v2_no_mechanism": {"status": "observed (payment side only)", "ids": ["metric:8956e7ef9d", "log:4c3dac5d49"], "quote": "upstream_attempts_per_s removed; payment requests_per_s 4.8 -> 22.8 remains"},
+        "gap_all_packets": "'database is locked' (1548 of ~1581 ERROR 'charge failed' lines in the raw snapshot) is NOT available: the 'charge failed' group (x912) is represented by its first exemplar, which is the UNIQUE error. The dominant lock-contention symptom in the key is hidden by message-level grouping."
+      },
+      "e_symptom": {
+        "step4_full": {"status": "observed", "ids": ["metric:83cc53b310", "log:04618de589"], "quote": "checkout error_rate ... 02:39:27 1; 'payment service returned HTTP 500 ... \"attempts\":5'"},
+        "v2_full": {"status": "observed", "ids": ["metric:83cc53b310", "log:04618de589"]},
+        "v2_no_mechanism": {"status": "observed", "ids": ["metric:83cc53b310", "log:04618de589"]}
+      }
+    },
+    "answerable": {
+      "step4_full": "only with inference (component + retry amplification yes; retry loop semantics assumed; DB-lock part not available)",
+      "v2_full": "yes for the accepted mechanism 'retry amplification' (code + attempts metric observed); 'database is locked' detail not available; duplicate contention inferred",
+      "v2_no_mechanism": "only with inference, and the inference is short (commit message states the change in words)"
+    },
+    "insufficient_evidence_defensible_for_no_mechanism": "weak/no. Commit message, log 'timed out after 250ms attempts:5', payment rps x4 and the UNIQUE log remain; a careful investigator can reach retry amplification. The no_mechanism ablation does not remove the mechanism for this family.",
+    "distractors": [
+      "metric:75680f44c4 payment latency_p95 5564ms (key distractor) - points at payment-svc.",
+      "log:4c3dac5d49 UNIQUE constraint exemplar - invites a payment-svc idempotency/DB bug hypothesis (key: consequence).",
+      "metric:5e03882bca db_pool_in_use goes negative (-2): a system counter artifact (raw series too) that could suggest a double-release bug in payment-svc.",
+      "config:payment-svc@b1e5a60 'change vs previous' acquire_timeout_ms 3000 -> 1000 (committed 2026-11-06, unrelated).",
+      "commit:b7ae74f CHANGELOG and routine redeploys d-533/d-534."
+    ],
+    "thinning": "No decisive pattern lost. upstream_attempts keeps baseline ~5 and peaks 28/23. Loss: checkout error_rate thinned skips 02:39:02=0.85 and the alerted 02:39:12=0.3226 (shows 0.1333 before 1.0); payment error_rate thinned hides the onset at 02:38:25-30 (0.03/0.22) right after deploy 02:38:26, though log:4c3dac5d49 at 02:38:27 still shows it. Trace truncated after 5 of 18 spans, hiding retry attempts 2-5 that would directly show duplicate charges."
+  },
+  "INC-9001": {
+    "key_mechanism_summary": "payment-svc 2.5.0 micro-charge fast path returns before POOL.release(conn) -> pool (size 4) exhausted -> acquire timeouts (503) -> checkout 502s -> alert.",
+    "links": {
+      "a_change_deployed": {
+        "step4_full": {"status": "observed", "ids": ["deploy:d-576", "build:b-1229", "commit:d142601"], "quote": "deployment d-576 of payment-svc version 2.5.0 ... build=b-1229 commit=d142601"},
+        "v2_full": {"status": "observed", "ids": ["deploy:d-576", "build:b-1229", "commit:d142601"]},
+        "v2_no_mechanism": {"status": "observed", "ids": ["deploy:d-576", "build:b-1229", "commit:d142601"]}
+      },
+      "b_change_content": {
+        "step4_full": {"status": "observed", "ids": ["commit:d142601"], "quote": "+ if amount < SMALL_CHARGE_LIMIT: ... payment_id = db.insert_payment(conn, ...) ... + return 201"},
+        "v2_full": {"status": "observed", "ids": ["commit:d142601", "source:b-1229:services/payment/app.py#Handler"], "quote": "source lines 95-100"},
+        "v2_no_mechanism": {"status": "observed (prose only)", "ids": ["commit:d142601"], "quote": "'Small charges skip the risk provider and velocity queries; they are written straight to the payments table.' No mention of connection handling."}
+      },
+      "c_mechanism": {
+        "step4_full": {"status": "inferred", "ids": ["commit:d142601", "metric:03d4f590b8", "log:3bf4f24e33"], "step": "diff never shows POOL.acquire or POOL.release; reader must assume conn is a pooled connection that needs explicit release, then combine with db_pool_in_use stuck at 4 (= pool_size 4 from config) to conclude the early return leaks it."},
+        "v2_full": {"status": "observed", "ids": ["source:b-1229:services/payment/app.py#Handler"], "quote": "78 conn = POOL.acquire(); 91 POOL.release(conn) before 'return 200' on the existing-payment path; 95-100 fast path 'return 201' with no release; 112 and 116 release on the other paths; no finally block."},
+        "v2_no_mechanism": {"status": "not available", "step": "only a guess: pool exhaustion right after a deploy that changed the charge path."}
+      },
+      "d_runtime_effect": {
+        "step4_full": {"status": "observed", "ids": ["metric:03d4f590b8", "metric:5478273809", "metric:531d143549", "log:3bf4f24e33", "config:payment-svc@b1e5a60"], "quote": "db_pool_in_use 03:44:04 0; 03:44:17 3; 03:44:22 4 ... 03:45:07 4; db_pool_wait_p95 ~1015ms; db_query_p95 0 from 03:44:27 (pool full but no queries running); 'db pool acquire timed out after 1000ms'; pool_size: 4"},
+        "v2_full": {"status": "observed", "ids": ["metric:03d4f590b8", "metric:5478273809", "metric:531d143549", "log:3bf4f24e33"]},
+        "v2_no_mechanism": {"status": "observed (exhaustion only)", "ids": ["log:3bf4f24e33", "trace:84bc7633414fe8cfa17bf6eedc1547b8"], "quote": "'db pool acquire timed out after 1000ms' (x308); pool metrics and config removed, so leak vs. saturation cannot be told apart."},
+        "gap_all_packets": "That fast-path charges actually ran is not shown: the raw snapshot has exactly 4 INFO 'charge approved ... fast_path:true' lines (03:44:10.9-03:44:18.3), matching pool_size 4, but INFO logs are not selected."
+      },
+      "e_symptom": {
+        "step4_full": {"status": "observed", "ids": ["metric:4d19b12fad", "log:9110a7c06d", "trace:84bc7633414fe8cfa17bf6eedc1547b8"], "quote": "checkout error_rate 03:44:24 1; trace 'POST /orders ... (HTTP 502)', 'POST /charge ... (HTTP 503)', 'db.pool.acquire 1012.14ms error (PoolTimeout ...)'"},
+        "v2_full": {"status": "observed", "ids": ["metric:4d19b12fad", "log:9110a7c06d", "trace:84bc7633414fe8cfa17bf6eedc1547b8"]},
+        "v2_no_mechanism": {"status": "observed", "ids": ["metric:4d19b12fad", "log:9110a7c06d", "trace:84bc7633414fe8cfa17bf6eedc1547b8"]}
+      }
+    },
+    "q2_release_bypass": {
+      "step4_diff_alone": "No. Hunk '@@ -91,6 +92,12 @@' starts at new line 92 (LOG.info 'charge already recorded'), so the POOL.release(conn) at line 91 and the acquire at line 78 are outside the context. The diff shows the new branch uses conn and returns 201, but nothing shows that conn must be released or where release happens. Establishing the leak needs an assumption plus db_pool_in_use=4 and pool_size 4.",
+      "v2_source": "Yes. Lines 78 (POOL.acquire), 91 (release before return 200), 95-100 (fast path returns 201 with no release), 112 and 116 (release on exception and normal paths), no try/finally around the release. The bypass can be read directly from one record."
+    },
+    "answerable": {
+      "step4_full": "only with inference (strong circumstantial support: pool stuck at 4 = pool_size, query time 0, early return using conn)",
+      "v2_full": "yes",
+      "v2_no_mechanism": "no (leak is only a hypothesis)"
+    },
+    "insufficient_evidence_defensible_for_no_mechanism": "yes. Pool exhaustion is observed but the cause (leak vs. load vs. slow queries vs. timeout setting) is not distinguishable; payment rps ~5-7/s is normal and code, pool metrics and config are removed.",
+    "distractors": [
+      "config:payment-svc@b1e5a60 'change vs previous' acquire_timeout_ms 3000 -> 1000 (committed 2026-11-06, already running before d-576) - supports a competing 'timeout too short' hypothesis matching the 'timed out after 1000ms' log. Present only in full packets.",
+      "config:checkout-svc@bc913fb mentions timeout/retry policy - irrelevant here.",
+      "commit:b7ae74f CHANGELOG, routine redeploys d-574/d-575."
+    ],
+    "thinning": "No decisive pattern lost. db_pool_in_use 0 -> 3 -> 4 then flat 4 is preserved (raw: 3 at 03:44:12, 4 from 03:44:22 to the end). db_query_p95 0 after 03:44:27 preserved. Trace record truncated at 'payment-svc POST /charge 10 ...', but the PoolTimeout span is visible."
+  },
+  "INC-9002": {
+    "key_mechanism_summary": "Same fault as INC-0000 (commit 0d6ba14, build b-1230, deploy d-581).",
+    "links": {
+      "a_change_deployed": {
+        "step4_full": {"status": "observed", "ids": ["deploy:d-581", "build:b-1230", "commit:0d6ba14"], "quote": "deployment d-581 of checkout-svc version 1.9.0 ... build=b-1230 commit=0d6ba14"},
+        "v2_full": {"status": "observed", "ids": ["deploy:d-581", "build:b-1230", "commit:0d6ba14"]},
+        "v2_no_mechanism": {"status": "observed", "ids": ["deploy:d-581", "build:b-1230", "commit:0d6ba14"]}
+      },
+      "b_change_content": {
+        "step4_full": {"status": "observed", "ids": ["commit:0d6ba14", "config:checkout-svc@bc913fb"], "quote": "+DEFAULT_TIMEOUT_MS = 250 / +MAX_RETRIES = 4 / +RETRY_ON = (... \"timeout\", \"5xx\") / +BACKOFF_MS = 0"},
+        "v2_full": {"status": "observed", "ids": ["commit:0d6ba14", "source:b-1230:libs/httpclient/__init__.py#ServiceClient"]},
+        "v2_no_mechanism": {"status": "observed (qualitative) + values from log", "ids": ["commit:0d6ba14", "log:7db2506518"], "quote": "commit message prose kept; 'payment call timed out after 250ms ... \"attempts\":5'"}
+      },
+      "c_mechanism": {
+        "step4_full": {"status": "inferred", "ids": ["commit:0d6ba14", "log:7db2506518", "trace:8165c54f07dde5e88b29dcf73cebc3fd", "log:94d4ddd7b4"], "step": "retry semantics from constant names; trace shows client attempt 1 timing out at 263.91ms and payment POST /charge 494.88ms 'ConnectionAbortedError' (server still working when client abandoned); UNIQUE on order_id => duplicate charge."},
+        "v2_full": {"status": "observed for retry loop; inferred for duplicate contention", "ids": ["source:b-1230:libs/httpclient/__init__.py#ServiceClient", "trace:8165c54f07dde5e88b29dcf73cebc3fd", "log:94d4ddd7b4"], "quote": "source lines 67-80 and 102-106 (identical body to INC-0000's b-1216 record)"},
+        "v2_no_mechanism": {"status": "inferred", "ids": ["commit:0d6ba14", "log:7db2506518", "metric:2fbc297412", "metric:e72538a7f4", "trace:8165c54f07dde5e88b29dcf73cebc3fd"], "step": "commit prose + attempts=5 + payment rps 9 -> 24.6 vs checkout rps ~6."}
+      },
+      "d_runtime_effect": {
+        "step4_full": {"status": "observed", "ids": ["metric:858412a4f1", "metric:2fbc297412", "log:94d4ddd7b4"], "quote": "upstream_attempts_per_s 03:46:34 9; 03:46:44 27.6; payment requests_per_s 03:46:58 24.6; UNIQUE constraint failed"},
+        "v2_full": {"status": "observed", "ids": ["metric:858412a4f1", "metric:2fbc297412", "log:94d4ddd7b4"]},
+        "v2_no_mechanism": {"status": "observed (payment side only)", "ids": ["metric:2fbc297412", "log:94d4ddd7b4"]},
+        "gap_all_packets": "'database is locked' is again hidden behind the UNIQUE exemplar of the 'charge failed' group (x575)."
+      },
+      "e_symptom": {
+        "step4_full": {"status": "observed", "ids": ["metric:1364a73bd4", "log:de694e9264"], "quote": "checkout error_rate 03:46:44 0.8125; 'payment service returned HTTP 500 ... attempts:5'"},
+        "v2_full": {"status": "observed", "ids": ["metric:1364a73bd4", "log:de694e9264"]},
+        "v2_no_mechanism": {"status": "observed", "ids": ["metric:1364a73bd4", "log:de694e9264"]}
+      }
+    },
+    "answerable": {
+      "step4_full": "only with inference",
+      "v2_full": "yes for retry amplification; DB-lock detail not available",
+      "v2_no_mechanism": "only with inference (short)"
+    },
+    "insufficient_evidence_defensible_for_no_mechanism": "weak/no, same reasons as INC-0000.",
+    "distractors": [
+      "metric:71e74a95e7 db_pool_in_use negative down to -6 (system artifact, also raw) - may suggest a payment-svc pool bug.",
+      "log:94d4ddd7b4 UNIQUE exemplar and ConnectionAbortedError in the trace point at payment-svc.",
+      "config:payment-svc@b1e5a60 acquire_timeout change (old, unrelated).",
+      "commit:b7ae74f and routine redeploys d-579/d-580."
+    ],
+    "thinning": "No decisive pattern lost; upstream_attempts peak 27.6 kept (raw second peak 25.8 at 03:47:09 dropped). checkout error_rate drops 03:46:39=0.16 onset and 03:47:09=0.71; harmless."
+  },
+  "leakage": [
+    {"finding": "No answer-key wording or explanatory labels found in any of the 9 packets (STEP4 full, v2 full, v2 no_mechanism x 3 incidents)."},
+    {"searched_terms": "leak, fault, root cause, amplif, storm, exhaust, bypass, bug, culprit, distractor, decisive, inject, answer, misbehav, regress, scenario, database is locked, locked (case-insensitive)"},
+    {"false_positive": "'fault' matches only inside 'DEFAULT_TIMEOUT_MS' and the system-produced config comment '# timeout / retry policy: defaults from libs/httpclient/policy.py unless set here'."},
+    {"system_produced_hints_not_leakage": "Commit messages ('tighten the per-attempt timeout so a slow attempt is abandoned quickly, and drop the fixed backoff'; 'Small charges skip the risk provider...'), code comment in source line 96 '# Micro-charges skip risk scoring and velocity checks (DEMO-41).' These are authentic repo text, not labels, but the INC-0000/9002 commit message is close to a mechanism description and survives the no_mechanism ablation."},
+    {"note": "System prompt line 'Some records may be unrelated to the incident.' is generic, not leakage."}
+  ],
+  "notes": "1) v2 source records are verbatim and add exactly the missing link for INC-9001 (release bypass, lines 78/91/95-100/112/116); for retry incidents they turn assumed retry semantics into observed code (lines 67-80). 2) The no_mechanism ablation is asymmetric: it removes the mechanism for INC-9001 (insufficient_evidence defensible) but not for INC-0000/9002, where the commit message, log 'timed out after 250ms attempts:5' and payment rps x4 remain; abstention there is hard to defend. 3) The key's 'database is locked' errors (the dominant raw payment error, ~98% of charge-failed lines) never reach any packet because log groups are keyed by message ('charge failed') and show the first exemplar (UNIQUE). 4) The INC-9001 decisive log id log:4f9f142c0b is not in the packets, but its listed equivalent log:3bf4f24e33 is. 5) Negative db_pool_in_use values in INC-0000/9002 are a counter artifact present in raw data and could mislead. 6) Traces are truncated after a few spans, hiding retry attempts 2-5 (INC-0000/9002). 7) 9-point thinning appears to keep extremes; no decisive pattern is hidden, only alert-time values and onset points are dropped."
+}

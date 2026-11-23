@@ -1,0 +1,257 @@
+INCIDENT
+Incident INC-0000 (demo-local)
+Alert: checkout-svc error rate high | service=checkout-svc | signal=error_rate | condition: error_rate > 0.05 for 15s | observed=0.3226 | fired_at=2026-11-20T02:39:12.273Z
+Window: 2026-11-20T02:37:12.027Z to 2026-11-20T02:40:12.273Z; evidence after 2026-11-20T02:40:12.273Z is not available.
+Services: checkout-svc, payment-svc
+Notes: Alert fired in demo-local. Investigate using the available evidence sources.
+Sources: logs=available; traces=available; metrics=available; deployments=available; builds=available; commits=available; configs=available; tickets=available
+
+EVIDENCE (27 records)
+[deploy:d-533] deployments payment-svc 2026-11-20T02:37:18.933Z v=2.4.1 | deployment of payment-svc 2.4.1
+2026-11-20T02:37:18.933Z deployment d-533 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f by deploy-bot (pipeline) status=succeeded
+
+[deploy:d-534] deployments checkout-svc 2026-11-20T02:37:23.717Z v=1.8.2 | deployment of checkout-svc 1.8.2
+2026-11-20T02:37:23.717Z deployment d-534 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f by deploy-bot (pipeline) status=succeeded
+
+[deploy:d-535] deployments checkout-svc 2026-11-20T02:38:26.737Z v=1.9.0 | deployment of checkout-svc 1.9.0
+2026-11-20T02:38:26.737Z deployment d-535 of checkout-svc version 1.9.0 to demo-local build=b-1216 commit=e7a0cc0 by deploy-bot (pipeline) status=succeeded
+
+[build:b-1214] builds payment-svc 2026-11-20T02:37:16.699Z v=2.4.1 | build b-1214 of payment-svc 2.4.1
+build b-1214 service=payment-svc version=2.4.1 commit=b7ae74f40b4cbabbd9f731663eb42bf8b238b75f artifact=payment-svc-2.4.1-b-1214.tar status=success pipeline=local-build started=2026-11-20T02:37:16.699Z finished=2026-11-20T02:37:16.831Z source_paths=services/__init__.py,services/payment,libs,config/payment-svc.yaml,db
+
+[commit:b7ae74f] commits 2026-11-19T16:30:00.000Z v=b7ae74f | Update CHANGELOG
+commit b7ae74f 2026-11-19T16:30:00.000Z Likhith Vardhan Goruputi
+Update CHANGELOG
+files: M CHANGELOG.md
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 993a58d..3009623 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -12,3 +12,7 @@
+ ## 2026-09
+ - DEMO-3: customer/time index for payment velocity checks
+ - initial import of checkout-svc and payment-svc
++
++## Unreleased
++- runbooks for checkout-svc and payment-svc, on-call and architecture docs
++- CI workflow, policy tests, ruff config, smoke check script
+
+
+[build:b-1215] builds checkout-svc 2026-11-20T02:37:21.484Z v=1.8.2 | build b-1215 of checkout-svc 1.8.2
+build b-1215 service=checkout-svc version=1.8.2 commit=b7ae74f40b4cbabbd9f731663eb42bf8b238b75f artifact=checkout-svc-1.8.2-b-1215.tar status=success pipeline=local-build started=2026-11-20T02:37:21.484Z finished=2026-11-20T02:37:21.629Z source_paths=services/__init__.py,services/checkout,libs,config/checkout-svc.yaml
+
+[build:b-1216] builds checkout-svc 2026-11-20T02:38:24.565Z v=1.9.0 | build b-1216 of checkout-svc 1.9.0
+build b-1216 service=checkout-svc version=1.9.0 commit=e7a0cc0f0e8492abe652cb31eec201d653cffb1d artifact=checkout-svc-1.9.0-b-1216.tar status=success pipeline=local-build started=2026-11-20T02:38:24.565Z finished=2026-11-20T02:38:24.704Z source_paths=services/__init__.py,services/checkout,libs,config/checkout-svc.yaml
+
+[commit:e7a0cc0] commits checkout-svc,payment-svc 2026-11-20T02:38:24.000Z v=e7a0cc0 | DEMO-9: retry transient payment failures in shared client
+commit e7a0cc0 2026-11-20T02:38:24.000Z Likhith Vardhan Goruputi
+DEMO-9: retry transient payment failures in shared client
+
+Retry timeouts and 5xx responses, tighten the per-attempt timeout so a
+slow attempt is abandoned quickly, and drop the fixed backoff.
+files: M libs/httpclient/VERSION, M libs/httpclient/policy.py, M services/checkout/VERSION
+
+diff --git a/libs/httpclient/VERSION b/libs/httpclient/VERSION
+index fd2a018..944880f 100644
+--- a/libs/httpclient/VERSION
++++ b/libs/httpclient/VERSION
+@@ -1 +1 @@
+-3.1.0
++3.2.0
+diff --git a/libs/httpclient/policy.py b/libs/httpclient/policy.py
+index 15dd75d..a404ba1 100644
+--- a/libs/httpclient/policy.py
++++ b/libs/httpclient/policy.py
+@@ -3,8 +3,8 @@
+ Services use these values unless their own config overrides a field.
+ """
+ 
+-DEFAULT_TIMEOUT_MS = 2000
+-MAX_RETRIES = 1
++DEFAULT_TIMEOUT_MS = 250
++MAX_RETRIES = 4
+ # Which failures are retried: "connect_error", "timeout", "5xx"
+-RETRY_ON = ("connect_error",)
+-BACKOFF_MS = 100
++RETRY_ON = ("connect_error", "timeout", "5xx")
++BACKOFF_MS = 0
+diff --git a/services/checkout/VERSION b/services/checkout/VERSION
+index 53adb84..f8e233b 100644
+--- a/services/checkout/VERSION
++++ b/services/checkout/VERSION
+@@ -1 +1 @@
+-1.8.2
++1.9.0
+
+
+[source:b-1216:libs/httpclient/__init__.py#ServiceClient] builds checkout-svc 2026-11-20T02:38:24.704Z v=1.9.0 | libs/httpclient/__init__.py ServiceClient @ b-1216
+libs/httpclient/__init__.py lines 44-113 in build b-1216 artifact checkout-svc-1.9.0-b-1216.tar (commit e7a0cc0)
+  44 class ServiceClient:
+  45     def __init__(self, base_url: str, tracer, metrics=None, peer: str = "",
+  46                  timeout_ms: int | None = None, max_retries: int | None = None,
+  47                  retry_on=None, backoff_ms: int | None = None):
+  48         self.base_url = base_url.rstrip("/")
+  49         u = urlparse(self.base_url)
+  50         self.host, self.port = u.hostname, u.port or 80
+  51         self.tracer = tracer
+  52         self.metrics = metrics
+  53         self.peer = peer or self.host
+  54         self.timeout_ms = timeout_ms if timeout_ms is not None else policy.DEFAULT_TIMEOUT_MS
+  55         self.max_retries = max_retries if max_retries is not None else policy.MAX_RETRIES
+  56         self.retry_on = tuple(retry_on if retry_on is not None else policy.RETRY_ON)
+  57         self.backoff_ms = backoff_ms if backoff_ms is not None else policy.BACKOFF_MS
+  58 
+  59     def describe(self) -> dict:
+  60         return {"base_url": self.base_url, "timeout_ms": self.timeout_ms,
+  61                 "max_retries": self.max_retries, "retry_on": list(self.retry_on),
+  62                 "backoff_ms": self.backoff_ms, "client_version": CLIENT_VERSION}
+  63 
+  64     def post_json(self, path: str, payload: dict) -> Response:
+  65         body = json.dumps(payload).encode("utf-8")
+  66         attempt = 0
+  67         while True:
+  68             attempt += 1
+  69             kind, detail, resp = self._attempt(path, body, attempt)
+  70             if kind == "ok":
+  71                 return resp
+  72             retryable = (kind in self.retry_on) and attempt <= self.max_retries
+  73             if not retryable:
+  74                 if kind == "5xx":
+  75                     return resp
+  76                 if kind == "timeout":
+  77                     raise ClientTimeout(f"timed out after {self.timeout_ms}ms", attempt)
+  78                 raise ClientConnectionError(detail, attempt)
+  79             if self.backoff_ms:
+  80                 time.sleep(self.backoff_ms / 1000.0)
+  81 
+  82     def _attempt(self, path, body, attempt):
+  83         if self.metrics:
+  84             self.metrics.inc("upstream_attempts")
+  85         with self.tracer.span(f"POST {path}", kind="client",
+  86                               attributes={"peer.service": self.peer, "http.attempt": attempt,
+  87                                           "http.timeout_ms": self.timeout_ms}) as sp:
+  88             conn = http.client.HTTPConnection(self.host, self.port, timeout=self.timeout_ms / 1000.0)
+  89             try:
+  90                 conn.request("POST", path, body=body, headers={
+  91                     "Content-Type": "application/json", "traceparent": sp.traceparent()})
+  92                 r = conn.getresponse()
+  93                 data = r.read()
+  94                 sp.set("http.status_code", r.status)
+  95                 resp = Response(r.status, data, attempt)
+  96                 if r.status >= 500:
+  97                     sp.fail(f"HTTP {r.status}")
+  98                     if self.metrics:
+  99                         self.metrics.inc("upstream_errors")
+ 100                     return "5xx", f"HTTP {r.status}", resp
+ 101                 return "ok", "", resp
+ 102             except (socket.timeout, TimeoutError):
+ 103                 sp.fail(f"timeout after {self.timeout_ms}ms")
+ 104                 if self.metrics:
+ 105                     self.metrics.inc("upstream_errors")
+ 106                 return "timeout", "timeout", None
+ 107             except (ConnectionError, OSError) as exc:
+ 108                 sp.fail(f"connect error: {exc}")
+ 109                 if self.metrics:
+ 110                     self.metrics.inc("upstream_errors")
+ 111                 return "connect_error", f"{type(exc).__name__}: {exc}", None
+ 112             finally:
+ 113                 conn.close()
+
+[config:checkout-svc@bc913fb] configs checkout-svc 2026-09-02T14:10:00.000Z v=bc913fb | config/checkout-svc.yaml @ bc913fb
+config/checkout-svc.yaml @ bc913fb (committed 2026-09-02T14:10:00.000Z); config of the running deployment d-535 (commit e7a0cc0)
+# checkout-svc runtime configuration
+service: checkout-svc
+port: 18101
+log_level: INFO
+payment:
+  base_url: http://127.0.0.1:18102
+  # timeout / retry policy: defaults from libs/httpclient/policy.py unless set here
+
+
+[config:payment-svc@b1e5a60] configs payment-svc 2026-11-06T11:15:00.000Z v=b1e5a60 | config/payment-svc.yaml @ b1e5a60
+config/payment-svc.yaml @ b1e5a60 (committed 2026-11-06T11:15:00.000Z); config of the running deployment d-533 (commit b7ae74f)
+# payment-svc runtime configuration
+service: payment-svc
+port: 18102
+log_level: INFO
+db:
+  path: payments.db          # overridden by PAYMENT_DB_PATH in deployed environments
+  pool_size: 4
+  acquire_timeout_ms: 1000
+
+change vs previous version:
+--- previous
++++ b1e5a60
+@@ -7,2 +7,2 @@
+   pool_size: 4
+-  acquire_timeout_ms: 3000
++  acquire_timeout_ms: 1000
+
+
+[metric:83cc53b310] metrics checkout-svc 2026-11-20T02:37:29.177Z | checkout-svc error_rate
+checkout-svc error_rate (5.0s points, 2026-11-20T02:37:29.177Z .. 2026-11-20T02:40:07.387Z): min=0 max=1 last=0.7241
+02:37:29 0; 02:37:54 0; 02:38:14 0; 02:38:37 0; 02:38:57 0; 02:39:22 0.1333; 02:39:27 1; 02:39:42 0.5238; 02:40:07 0.7241
+
+[metric:5fa4e8eaff] metrics checkout-svc 2026-11-20T02:37:29.177Z | checkout-svc inflight_requests
+checkout-svc inflight_requests (5.0s points, 2026-11-20T02:37:29.177Z .. 2026-11-20T02:40:07.387Z): min=0 max=8 last=0
+02:37:29 0; 02:37:54 0; 02:38:14 0; 02:38:37 0; 02:38:57 7; 02:39:22 1; 02:39:27 8; 02:39:42 1; 02:40:07 0
+
+[metric:86ce8ca0cd] metrics checkout-svc 2026-11-20T02:37:29.177Z | checkout-svc latency_p95_ms
+checkout-svc latency_p95_ms (5.0s points, 2026-11-20T02:37:29.177Z .. 2026-11-20T02:40:07.387Z): min=52.68 max=1339.9 last=816.75
+02:37:29 527; 02:37:54 332.89; 02:38:14 399.71; 02:38:37 60.57; 02:38:57 804.03; 02:39:22 923.83; 02:39:37 1339.9; 02:39:42 240.91; 02:40:07 816.75
+
+[metric:69a2e76f44] metrics checkout-svc 2026-11-20T02:37:29.177Z | checkout-svc requests_per_s
+checkout-svc requests_per_s (5.0s points, 2026-11-20T02:37:29.177Z .. 2026-11-20T02:40:07.387Z): min=1.2 max=6.6 last=5.8
+02:37:29 6; 02:37:54 5.8; 02:38:14 5.2; 02:38:32 6.6; 02:38:37 4.2; 02:38:57 2.6; 02:39:22 6; 02:39:42 4.2; 02:40:07 5.8
+
+[metric:17f535fce8] metrics checkout-svc 2026-11-20T02:37:29.177Z | checkout-svc upstream_attempts_per_s
+checkout-svc upstream_attempts_per_s (5.0s points, 2026-11-20T02:37:29.177Z .. 2026-11-20T02:40:07.387Z): min=1.2 max=28 last=23
+02:37:29 6; 02:37:54 5.8; 02:38:14 5; 02:38:37 4.2; 02:38:57 8.8; 02:39:22 13.2; 02:39:27 28; 02:39:42 14.6; 02:40:07 23
+
+[metric:3631246b54] metrics checkout-svc 2026-11-20T02:37:29.177Z | checkout-svc upstream_errors_per_s
+checkout-svc upstream_errors_per_s (5.0s points, 2026-11-20T02:37:29.177Z .. 2026-11-20T02:40:07.387Z): min=0 max=26.6 last=21.8
+02:37:29 0; 02:37:54 0; 02:38:14 0; 02:38:37 0; 02:38:57 4.8; 02:39:22 7.8; 02:39:27 26.6; 02:39:42 12.6; 02:40:07 21.8
+
+[metric:5e03882bca] metrics payment-svc 2026-11-20T02:37:25.877Z | payment-svc db_pool_in_use
+payment-svc db_pool_in_use (5.0s points, 2026-11-20T02:37:25.877Z .. 2026-11-20T02:40:07.510Z): min=-2 max=4 last=-2
+02:37:25 0; 02:37:50 0; 02:38:10 1; 02:38:35 0; 02:38:56 2; 02:39:01 4; 02:39:21 2; 02:39:42 -2; 02:40:07 -2
+
+[metric:068d1c7692] metrics payment-svc 2026-11-20T02:37:25.877Z | payment-svc db_pool_wait_p95_ms
+payment-svc db_pool_wait_p95_ms (5.0s points, 2026-11-20T02:37:25.877Z .. 2026-11-20T02:40:07.510Z): min=1 max=265.66 last=1.51
+02:37:25 2.07; 02:37:50 1.01; 02:38:10 1.01; 02:38:35 1.35; 02:38:56 265.66; 02:39:21 120.92; 02:39:42 1.51; 02:40:07 1.51
+
+[metric:7c887c3fe9] metrics payment-svc 2026-11-20T02:37:25.877Z | payment-svc db_query_p95_ms
+payment-svc db_query_p95_ms (5.0s points, 2026-11-20T02:37:25.877Z .. 2026-11-20T02:40:07.510Z): min=0 max=451.75 last=4.54
+02:37:25 9.87; 02:37:50 3.03; 02:38:10 3.44; 02:38:35 5.02; 02:38:40 451.75; 02:38:56 338.1; 02:39:21 3.99; 02:39:42 3.52; 02:40:07 4.54
+
+[metric:5b57555878] metrics payment-svc 2026-11-20T02:37:25.877Z | payment-svc error_rate
+payment-svc error_rate (5.0s points, 2026-11-20T02:37:25.877Z .. 2026-11-20T02:40:07.510Z): min=0 max=1 last=0.9273
+02:37:25 0; 02:37:50 0; 02:38:10 0; 02:38:35 0; 02:38:56 0.3667; 02:39:01 1; 02:39:21 0.5556; 02:39:42 0.8571; 02:40:07 0.9273
+
+[metric:75680f44c4] metrics payment-svc 2026-11-20T02:37:25.877Z | payment-svc latency_p95_ms
+payment-svc latency_p95_ms (5.0s points, 2026-11-20T02:37:25.877Z .. 2026-11-20T02:40:07.510Z): min=48.38 max=5564.45 last=386.26
+02:37:25 55.49; 02:37:50 306.85; 02:38:10 54.7; 02:38:35 53.01; 02:38:56 1025.38; 02:39:06 5564.45; 02:39:21 648.28; 02:39:42 62.82; 02:40:07 386.26
+
+[metric:8956e7ef9d] metrics payment-svc 2026-11-20T02:37:25.877Z | payment-svc requests_per_s
+payment-svc requests_per_s (5.0s points, 2026-11-20T02:37:25.877Z .. 2026-11-20T02:40:07.510Z): min=0.2 max=22.8 last=22
+02:37:25 1.8; 02:37:50 4.2; 02:38:10 4.4; 02:38:35 4.8; 02:38:56 6; 02:39:21 12.6; 02:39:42 14; 02:40:02 22.8; 02:40:07 22
+
+[log:aea2b46ce0] logs checkout-svc 2026-11-20T02:38:57.342Z | ERROR checkout-svc: payment call timed out after 250ms (x58 similar lines 2026-11-20T02:38:57.342Z .. 2026-11-20T02:40:04.122Z)
+2026-11-20T02:38:57.342Z ERROR checkout-svc payment call timed out after 250ms {"trace_id":"0c13fc60dad783621a3c7b8c8c29d9ab","span_id":"6a85e8d8c80a8d4a","order_id":"ord-0300446","attempts":5}
+
+[log:04618de589] logs checkout-svc 2026-11-20T02:39:04.572Z | ERROR checkout-svc: payment service returned HTTP 500 (x155 similar lines 2026-11-20T02:39:04.572Z .. 2026-11-20T02:40:11.430Z)
+2026-11-20T02:39:04.572Z ERROR checkout-svc payment service returned HTTP 500 {"trace_id":"58be53f72444369cb75f3be0bed76212","span_id":"05122d0e99a96d4f","order_id":"ord-0300487","attempts":5,"body":"{\"error\": \"internal error\"}"}
+
+[log:4c3dac5d49] logs payment-svc 2026-11-20T02:38:27.720Z | ERROR payment-svc: charge failed (x912 similar lines 2026-11-20T02:38:27.720Z .. 2026-11-20T02:40:11.631Z)
+2026-11-20T02:38:27.720Z ERROR payment-svc charge failed {"trace_id":"bffac3bd7e8d6eaa8e89b3fb0143ae23","span_id":"e73c15d0b7ba0df5","order_id":"ord-0300318","error":"IntegrityError: UNIQUE constraint failed: payments.order_id"}
+
+[trace:bffac3bd7e8d6eaa8e89b3fb0143ae23] traces checkout-svc 2026-11-20T02:38:27.163Z | checkout-svc POST /orders 634.1ms error
+trace bffac3bd7e8d6eaa8e89b3fb0143ae23 root=checkout-svc POST /orders start=2026-11-20T02:38:27.163Z duration=634.1ms status=error spans=18 services=checkout-svc,payment-svc
+ - checkout-svc POST /orders 634.1ms ok {"http.route":"/orders","order.id":"ord-0300318","http.status_code":201}
+ - checkout-svc POST /charge 257.78ms error (timeout after 250ms) {"peer.service":"payment-svc","http.attempt":1,"http.timeout_ms":250}
+ - payment-svc db.pool.acquire 0.0ms ok {"db.pool.wait_ms":0.0}
+ - payment-svc risk.score 279.95ms ok {"amount":592.15}
+ - payment-svc POST /charge 283.48ms error ...[truncated]
+
+Reply with the JSON object.
