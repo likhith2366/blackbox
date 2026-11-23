@@ -1,0 +1,134 @@
+00:32:37 gpu=73, Not Active, Not Active free_mib=1947
+qwen3:8b INC-0000 full r1: 7977 in, 984 out, stop, 552s, vram 5380 MiB
+00:41:50 gpu=78, Not Active, Not Active free_mib=2354
+qwen3:8b INC-0000 no_mechanism r1: 4638 in, 816 out, stop, 266s, vram 5270 MiB
+00:46:38 gpu=68, Not Active, Not Active free_mib=1544
+qwen3:8b INC-9001 full r1: 8024 in, 919 out, stop, 472s, vram 5253 MiB
+00:54:52 gpu=67, Not Active, Not Active free_mib=1747
+qwen3:8b INC-9001 no_mechanism r1: 4308 in, 733 out, stop, 231s, vram 5233 MiB
+01:00:48 gpu=59, Not Active, Not Active free_mib=6622
+qwen3:8b INC-9002 full r1: 7871 in, 1003 out, stop, 525s, vram 5252 MiB
+01:09:34 gpu=73, Not Active, Not Active free_mib=3029
+qwen3:8b INC-9002 no_mechanism r1: 4555 in, 857 out, stop, 276s, vram 5229 MiB
+01:14:12 gpu=73, Not Active, Not Active free_mib=2135
+qwen3:8b INC-0000 full r2: 7977 in, 912 out, stop, 470s, vram 5282 MiB
+01:22:45 gpu=71, Not Active, Not Active free_mib=1976
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waitingqwen3:8b INC-9001 no_mechanism r2: 4308 in, 733 out, stop, 200s, vram 5254 MiB
+n3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waitingqwen3:8b INC-9002 full r2: 7871 in, 995 out, stop, 458s, vram 5262 MiB
+obe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waitingqwen3:8b INC-9002 no_mechanism r2: 4555 in, 1039 out, stop, 303s, vram 5262 MiB
+3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+waiting for GPU lock held by: probe2 qwen3:8b
+01:50:02 gpu=64, Not Active, Not Active free_mib=2959
+01:50:03 gpu=64, Not Active, Not Active free_mib=2964
+01:50:04 gpu=63, Not Active, Not Active free_mib=2977
+01:50:05 gpu=63, Not Active, Not Active free_mib=2962
+LOOP_DONE qwen3:8b
+t Active, Not Active free_mib=2970
+01:50:00 gpu=64, Not Active, Not Active free_mib=2977
+01:50:01 gpu=64, Not Active, Not Active free_mib=2944
+waiting for GPU lock held by: probe2 qwen3:8b
+LOOP_DONE qwen3:8b

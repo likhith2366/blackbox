@@ -1,0 +1,734 @@
+[
+ {
+  "blind_id": "X943",
+  "packet_dir": "INC-0000_full",
+  "top_hypothesis": "hypo1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 6,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "The mechanism sentence attributes the retries to payment-svc's configuration, so a reviewer could score the mechanism 'no'.",
+  "notes": "Top hypo1 cites the right change (commit:e7a0cc0, source:b-1216, log:aea2b46ce0 attempts=5) with 4 retries and 0ms backoff, but frames retries as 'causing timeouts' instead of multiplying payment calls. Its mechanism text also misattributes the change to 'payment-svc's new configuration', and its rationale calls the acquire-timeout distractor a contributing factor.",
+  "run": "INC-0000_full/qwen3_4b_r1",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X277",
+  "packet_dir": "INC-0000_full",
+  "top_hypothesis": "hypo1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 7,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "'Retried excessively' could be read as retry amplification in substance (mechanism 'yes', verdict 'correct, weak support').",
+  "notes": "Top hypo1 names 4 retries with 0 backoff on timeouts/5xx (commit:e7a0cc0, source:b-1216) but never says this multiplies calls to payment-svc; upstream_attempts metric:17f535fce8 is not cited. Its rationale correctly sets aside the acquire-timeout distractor, using the UNIQUE errors (log:4c3dac5d49).",
+  "run": "INC-0000_full/qwen3_4b_r2",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X791",
+  "packet_dir": "INC-0000_full",
+  "top_hypothesis": "hypo1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 6,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": true,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "The top states that retries raise upstream attempts (amplification), so it could be scored 'yes' / 'correct and supported'; I held it to partial because it leaves out the short timeout.",
+  "notes": "Top hypo1: the new policy retries timeouts/5xx, raising upstream_attempts (metric:17f535fce8), but it leaves out the 250ms per-attempt timeout and no-backoff and treats payment-svc errors as pre-existing. hypo3 adds the reduced timeout + more retries -> more attempts, which counts as the full mechanism.",
+  "run": "INC-0000_full/qwen3_8b_r1",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X103",
+  "packet_dir": "INC-0000_full",
+  "top_hypothesis": "hypo1",
+  "component_correct": true,
+  "mechanism_full": "yes",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 6,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": true,
+  "distractor_taken": false,
+  "verdict": "correct and supported",
+  "confidence": "low",
+  "dispute_reason": "It states retry amplification (retries -> more upstream attempts) but leaves out no-backoff and timeout retries, and does not say the retries cause the payment-svc failures; a stricter reviewer would call it 'partial'.",
+  "notes": "Top hypo1: the retry policy now retries 5xx with a shorter timeout (commit:e7a0cc0, source:b-1216) and upstream_attempts_per_s rises 5->28 (metric:17f535fce8), leading to the error rate in metric:83cc53b310. It leaves out no-backoff and retried timeouts, and treats payment-svc slowness as independent.",
+  "run": "INC-0000_full/qwen3_8b_r2",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X145",
+  "packet_dir": "INC-0000_no_mechanism",
+  "top_hypothesis": "hypothesis-1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 5,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top names checkout-svc 1.9.0's retry change (commit:e7a0cc0) and the 250ms timeouts (log:aea2b46ce0), but calls it a 'timeout bug' and gives no amplification, even though the commit message and payment-svc requests_per_s (metric:8956e7ef9d, 4->22/s) were in the packet.",
+  "run": "INC-0000_no_mechanism/qwen3_4b_r1",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X788",
+  "packet_dir": "INC-0000_no_mechanism",
+  "top_hypothesis": "hypothesis-1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 5,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top names checkout-svc 1.9.0's retry change (commit:e7a0cc0) and the 250ms timeouts (log:aea2b46ce0), but calls it a 'timeout bug' and gives no amplification, even though the commit message and payment-svc requests_per_s (metric:8956e7ef9d, 4->22/s) were in the packet.",
+  "run": "INC-0000_no_mechanism/qwen3_4b_r2",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X915",
+  "packet_dir": "INC-0000_no_mechanism",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 4,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top h1: the tightened per-attempt timeout in 1.9.0 (commit:e7a0cc0) causes quick timeouts 'leading to retries' (log:aea2b46ce0 attempts=5); it does not say the retries multiply payment-svc load.",
+  "run": "INC-0000_no_mechanism/qwen3_8b_r1",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X808",
+  "packet_dir": "INC-0000_no_mechanism",
+  "top_hypothesis": "h1",
+  "component_correct": false,
+  "mechanism_full": "no",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "partial",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 1,
+   "total": 5,
+   "unsupported_ids": [
+    "deploy:d-533"
+   ]
+  },
+  "contradictions_considered": "listed, invalid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": true,
+  "verdict": "wrong",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top h1 is labelled checkout-svc, but its cause is a payment-svc deploy (deploy:d-533, a CHANGELOG-only redeploy) introducing the UNIQUE-constraint violation (log:4c3dac5d49, a distractor/consequence). h2 has the retry idea but lists d-533/log:4c3dac5d49 as contradicting it, which they do not.",
+  "run": "INC-0000_no_mechanism/qwen3_8b_r2",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X241",
+  "packet_dir": "INC-9001_full",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "no",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "partial",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 2,
+   "total": 6,
+   "unsupported_ids": [
+    "deploy:d-576",
+    "metric:05f9bb24dd"
+   ]
+  },
+  "contradictions_considered": "listed, invalid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": true,
+  "verdict": "wrong",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top h1 blames the acquire_timeout 3000->1000ms change (config:payment-svc@b1e5a60, committed 2026-11-06, not introduced by deploy:d-576); metric:05f9bb24dd is checkout request rate and shows nothing about rejections. The leak in source:b-1229 (fast path returns 201 without POOL.release) is cited only in h3, which misreads it as extra write load; h2's contradicting deploy:d-575 does not bear on h2.",
+  "run": "INC-9001_full/qwen3_4b_r1",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X998",
+  "packet_dir": "INC-9001_full",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "no",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "partial",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 2,
+   "total": 6,
+   "unsupported_ids": [
+    "deploy:d-576",
+    "metric:05f9bb24dd"
+   ]
+  },
+  "contradictions_considered": "listed, invalid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": true,
+  "verdict": "wrong",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top h1 blames the acquire_timeout 3000->1000ms change (config:payment-svc@b1e5a60, committed 2026-11-06, not introduced by deploy:d-576); metric:05f9bb24dd is checkout request rate and shows nothing about rejections. The leak in source:b-1229 (fast path returns 201 without POOL.release) is cited only in h3, which misreads it as extra write load; h2's contradicting deploy:d-575 does not bear on h2.",
+  "run": "INC-9001_full/qwen3_4b_r2",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X720",
+  "packet_dir": "INC-9001_full",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "no",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 1,
+   "total": 6,
+   "unsupported_ids": [
+    "deploy:d-576"
+   ]
+  },
+  "contradictions_considered": "listed, invalid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": true,
+  "verdict": "wrong",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top h1 is built on the 2026-11-06 acquire_timeout distractor (config:payment-svc@b1e5a60); the pool-timeout effect (log:3bf4f24e33, metric:5478273809) is real, but deploy:d-576 did not change the timeout. h3 points at the fast path in source:b-1229 but only says 'may have introduced a bug'; the contradicting lists in h2/h3 (deploy:d-576, config) are not real contradictions.",
+  "run": "INC-9001_full/qwen3_8b_r1",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X576",
+  "packet_dir": "INC-9001_full",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "no",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 1,
+   "total": 6,
+   "unsupported_ids": [
+    "deploy:d-576"
+   ]
+  },
+  "contradictions_considered": "listed, invalid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": true,
+  "verdict": "wrong",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top h1 is built on the 2026-11-06 acquire_timeout distractor (config:payment-svc@b1e5a60); the pool-timeout effect (log:3bf4f24e33, metric:5478273809) is real, but deploy:d-576 did not change the timeout. h3 points at the fast path in source:b-1229 but only says 'may have introduced a bug'; the contradicting lists in h2/h3 (deploy:d-576, config) are not real contradictions.",
+  "run": "INC-9001_full/qwen3_8b_r2",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X601",
+  "packet_dir": "INC-9001_no_mechanism",
+  "top_hypothesis": "hypo2",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "partial",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 5,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": "debatable"
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "The stated 'how' (high write load) is wrong rather than missing, so a reviewer could score mechanism 'no' and the verdict 'wrong'; insufficient_evidence was also defensible for this packet.",
+  "notes": "Top hypo2 ties the fast path (commit:d142601) to pool exhaustion (log:3bf4f24e33), but blames 'high write load' rather than unreleased connections; nothing in the packet shows load (metric:010cbc2f51 is only latency). The leak can't be determined here, so stopping at pool exhaustion is fine, but the load claim is not supported.",
+  "run": "INC-9001_no_mechanism/qwen3_4b_r1",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X266",
+  "packet_dir": "INC-9001_no_mechanism",
+  "top_hypothesis": "hypo2",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "partial",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 5,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": "debatable"
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "The stated 'how' (high write load) is wrong rather than missing, so a reviewer could score mechanism 'no' and the verdict 'wrong'; insufficient_evidence was also defensible for this packet.",
+  "notes": "Top hypo2 ties the fast path (commit:d142601) to pool exhaustion (log:3bf4f24e33), but blames 'high write load' rather than unreleased connections; nothing in the packet shows load (metric:010cbc2f51 is only latency). The leak can't be determined here, so stopping at pool exhaustion is fine, but the load claim is not supported.",
+  "run": "INC-9001_no_mechanism/qwen3_4b_r2",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X878",
+  "packet_dir": "INC-9001_no_mechanism",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "no",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 3,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "listed, valid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": "debatable"
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "Right component but a symptom-only mechanism: this could be scored 'wrong' instead of 'partially correct'; abstaining was the defensible call for this packet.",
+  "notes": "Top h1 names payment-svc 2.5.0 (deploy:d-576) and pool acquire timeouts (log:3bf4f24e33 -> log:9110a7c06d), which is symptom-level with no mechanism. Listing log:9110a7c06d against the checkout-internal h2, and deploy:d-576/log:3bf4f24e33 against the bad-endpoint h3, are reasonable contradictions.",
+  "run": "INC-9001_no_mechanism/qwen3_8b_r1",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X548",
+  "packet_dir": "INC-9001_no_mechanism",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "no",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 3,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "listed, valid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": "debatable"
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "Right component but a symptom-only mechanism: this could be scored 'wrong' instead of 'partially correct'; abstaining was the defensible call for this packet.",
+  "notes": "Top h1 names payment-svc 2.5.0 (deploy:d-576) and pool acquire timeouts (log:3bf4f24e33 -> log:9110a7c06d), which is symptom-level with no mechanism. Listing log:9110a7c06d against the checkout-internal h2, and deploy:d-576/log:3bf4f24e33 against the bad-endpoint h3, are reasonable contradictions.",
+  "run": "INC-9001_no_mechanism/qwen3_8b_r2",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X534",
+  "packet_dir": "INC-9002_full",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 7,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "'Retried excessively' could be read as retry amplification in substance (mechanism 'yes').",
+  "notes": "Top h1 names 4 retries with 0 backoff on timeouts/5xx (commit:0d6ba14, source:b-1230), but does not say the retries multiply calls to payment-svc or cite upstream_attempts (metric:858412a4f1).",
+  "run": "INC-9002_full/qwen3_4b_r1",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X895",
+  "packet_dir": "INC-9002_full",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 7,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "'Retried excessively' could be read as retry amplification in substance (mechanism 'yes').",
+  "notes": "Top h1 names 4 retries with 0 backoff on timeouts/5xx (commit:0d6ba14, source:b-1230), but does not say the retries multiply calls to payment-svc or cite upstream_attempts (metric:858412a4f1). Its rationale also misreads payment-svc error_rate (metric:e084a75703, 0.67-1.0) as 'low'.",
+  "run": "INC-9002_full/qwen3_4b_r2",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X957",
+  "packet_dir": "INC-9002_full",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 7,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "listed, valid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "The 'yes'/'partial' line is thin: h1 or h3 could be judged to state amplification, given the attempts metric it cites.",
+  "notes": "Like X682, h1 has the reduced 250ms timeout + retries on 5xx (commit:0d6ba14, source:b-1230, metric:858412a4f1) but no explicit multiplication of payment calls. h3 (reduced timeout + more retries -> 'backlog') comes close. Listing log:de694e9264 (HTTP 500, not a 503 pool timeout) against the pool h2 is a fair contradiction.",
+  "run": "INC-9002_full/qwen3_8b_r1",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X682",
+  "packet_dir": "INC-9002_full",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 8,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "listed, invalid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "It cites the rising upstream_attempts metric next to 'increased retries', which a reviewer could accept as amplification (mechanism 'yes').",
+  "notes": "Top h1: retries on 5xx plus a 250ms timeout cause frequent timeouts and retries; it cites the attempts metric (metric:858412a4f1) but never says that payment calls multiply. Contradictions are mixed: metric:71e74a95e7 (pool never exhausted) validly counts against the pool h2, but log:7db2506518/log:de694e9264 do not contradict the retry h3.",
+  "run": "INC-9002_full/qwen3_8b_r2",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X352",
+  "packet_dir": "INC-9002_no_mechanism",
+  "top_hypothesis": "hypo1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 5,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top hypo1: a 'timeout bug in retry logic' from commit:0d6ba14 with 250ms timeouts (log:7db2506518); right change, no explanation of how retries produce the failures.",
+  "run": "INC-9002_no_mechanism/qwen3_4b_r1",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X177",
+  "packet_dir": "INC-9002_no_mechanism",
+  "top_hypothesis": "hypothesis-1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "partial",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 5,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "none",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top: 1.9.0 'timeout bug' in the retry logic, with retries at 250ms per attempt (commit:0d6ba14, log:7db2506518 attempts=5); no amplification, although payment-svc requests_per_s (metric:2fbc297412) rising to 24.6/s was available.",
+  "run": "INC-9002_no_mechanism/qwen3_4b_r2",
+  "model": "qwen3:4b"
+ },
+ {
+  "blind_id": "X918",
+  "packet_dir": "INC-9002_no_mechanism",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 5,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "listed, invalid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "high",
+  "dispute_reason": null,
+  "notes": "Top h1 covers only the too-short timeout (commit:0d6ba14, log:7db2506518), with no retries or amplification. h3 lists log:de694e9264 and metric:0400058a8f as contradicting the retry hypothesis, but those records (attempts=5, upstream errors) actually support it.",
+  "run": "INC-9002_no_mechanism/qwen3_8b_r1",
+  "model": "qwen3:8b"
+ },
+ {
+  "blind_id": "X842",
+  "packet_dir": "INC-9002_no_mechanism",
+  "top_hypothesis": "h1",
+  "component_correct": true,
+  "mechanism_full": "partial",
+  "links": {
+   "cause": "yes",
+   "runtime_effect": "yes",
+   "symptom": "yes"
+  },
+  "citation_accuracy": {
+   "unsupported": 0,
+   "total": 7,
+   "unsupported_ids": []
+  },
+  "contradictions_considered": "listed, valid",
+  "abstention": {
+   "decision": "diagnosis",
+   "abstention_appropriate": true
+  },
+  "any_hypothesis_full": false,
+  "distractor_taken": false,
+  "verdict": "partially correct",
+  "confidence": "low",
+  "dispute_reason": "'Excessive retries' against an unresponsive payment-svc might be accepted as retry storm in substance (mechanism 'yes').",
+  "notes": "Top h1: a misconfigured shared-client retry policy (commit:0d6ba14) causes excessive retries and connection aborts (log:7db2506518, trace:8165c54f07dde5e88b29dcf73cebc3fd), with no short timeout and no explicit call multiplication. Listing the retry change against the payment-DB h2 is fair.",
+  "run": "INC-9002_no_mechanism/qwen3_8b_r2",
+  "model": "qwen3:8b"
+ }
+]

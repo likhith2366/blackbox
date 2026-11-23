@@ -1,0 +1,100 @@
+{
+ "blind_id": "X791",
+ "packet_dir": "INC-0000_full",
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"hypo1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"The checkout-svc's retry policy was updated to retry more failures, but the payment-svc is experiencing high latency or errors, causing the checkout-svc to retry excessively and leading to a high error rate.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc version 1.9.0 was deployed with a new retry policy that retries more failure types.\",\n          \"evidence_ids\": [\"deploy:d-535\", \"commit:e7a0cc0\", \"source:b-1216:libs/httpclient/__init__.py#ServiceClient\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The retry policy causes checkout-svc to retry more frequently on 5xx errors and timeouts, increasing upstream_attempts_per_s and upstream_errors_per_s.\",\n          \"evidence_ids\": [\"metric:17f535fce8\", \"metric:3631246b54\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc error rate exceeds the threshold due to excessive retries and failed upstream calls.\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypo2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"The payment-svc is experiencing database contention or query latency, leading to 5xx errors and timeouts, which are then retried by checkout-svc, increasing the error rate.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"payment-svc version 2.4.1 was deployed with a reduced acquire_timeout_ms, leading to database contention.\",\n          \"evidence_ids\": [\"deploy:d-533\", \"build:b-1214\", \"config:payment-svc@b1e5a60\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The reduced acquire_timeout_ms causes payment-svc to fail more frequently, leading to 5xx errors and timeouts, which are then retried by checkout-svc.\",\n          \"evidence_ids\": [\"metric:5b57555878\", \"metric:75680f44c4\", \"log:04618de589\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc error rate is high due to increased upstream errors from payment-svc.\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypo3\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"The checkout-svc's timeout was reduced, leading to more timeouts on slow or failing payment-svc calls, which are then retried, increasing the error rate.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc version 1.9.0 was deployed with a reduced timeout_ms and increased max_retries.\",\n          \"evidence_ids\": [\"deploy:d-535\", \"commit:e7a0cc0\", \"source:b-1216:libs/httpclient/__init__.py#ServiceClient\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The reduced timeout and increased retries cause checkout-svc to retry more frequently on slow or failing calls, increasing upstream_attempts_per_s and upstream_errors_per_s.\",\n          \"evidence_ids\": [\"metric:17f535fce8\", \"metric:3631246b54\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc error rate is high due to excessive retries and failed upstream calls.\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": []\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"hypo1\",\n  \"rationale\": \"The evidence supports hypothesis hypo1 as the most likely root cause. The checkout-svc version 1.9.0 was deployed with a new retry policy that retries more failure types, leading to increased upstream_attempts_per_s and upstream_errors_per_s. The error rate in checkout-svc is directly linked to these upstream errors, and the logs confirm timeout and 5xx errors from payment-svc.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "hypo1",
+    "component": "checkout-svc",
+    "mechanism": "The checkout-svc's retry policy was updated to retry more failures, but the payment-svc is experiencing high latency or errors, causing the checkout-svc to retry excessively and leading to a high error rate.",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc version 1.9.0 was deployed with a new retry policy that retries more failure types.",
+      "evidence_ids": [
+       "deploy:d-535",
+       "commit:e7a0cc0",
+       "source:b-1216:libs/httpclient/__init__.py#ServiceClient"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The retry policy causes checkout-svc to retry more frequently on 5xx errors and timeouts, increasing upstream_attempts_per_s and upstream_errors_per_s.",
+      "evidence_ids": [
+       "metric:17f535fce8",
+       "metric:3631246b54"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc error rate exceeds the threshold due to excessive retries and failed upstream calls.",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypo2",
+    "component": "payment-svc",
+    "mechanism": "The payment-svc is experiencing database contention or query latency, leading to 5xx errors and timeouts, which are then retried by checkout-svc, increasing the error rate.",
+    "chain": {
+     "cause": {
+      "statement": "payment-svc version 2.4.1 was deployed with a reduced acquire_timeout_ms, leading to database contention.",
+      "evidence_ids": [
+       "deploy:d-533",
+       "build:b-1214",
+       "config:payment-svc@b1e5a60"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The reduced acquire_timeout_ms causes payment-svc to fail more frequently, leading to 5xx errors and timeouts, which are then retried by checkout-svc.",
+      "evidence_ids": [
+       "metric:5b57555878",
+       "metric:75680f44c4",
+       "log:04618de589"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc error rate is high due to increased upstream errors from payment-svc.",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypo3",
+    "component": "checkout-svc",
+    "mechanism": "The checkout-svc's timeout was reduced, leading to more timeouts on slow or failing payment-svc calls, which are then retried, increasing the error rate.",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc version 1.9.0 was deployed with a reduced timeout_ms and increased max_retries.",
+      "evidence_ids": [
+       "deploy:d-535",
+       "commit:e7a0cc0",
+       "source:b-1216:libs/httpclient/__init__.py#ServiceClient"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The reduced timeout and increased retries cause checkout-svc to retry more frequently on slow or failing calls, increasing upstream_attempts_per_s and upstream_errors_per_s.",
+      "evidence_ids": [
+       "metric:17f535fce8",
+       "metric:3631246b54"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc error rate is high due to excessive retries and failed upstream calls.",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": []
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "hypo1",
+  "rationale": "The evidence supports hypothesis hypo1 as the most likely root cause. The checkout-svc version 1.9.0 was deployed with a new retry policy that retries more failure types, leading to increased upstream_attempts_per_s and upstream_errors_per_s. The error rate in checkout-svc is directly linked to these upstream errors, and the logs confirm timeout and 5xx errors from payment-svc."
+ }
+}

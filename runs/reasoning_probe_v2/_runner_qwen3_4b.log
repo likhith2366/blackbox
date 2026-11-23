@@ -1,0 +1,25 @@
+00:16:19 gpu=78, Not Active, Not Active free_mib=1972
+qwen3:4b INC-0000 full r1: 7971 in, 956 out, stop, 63s, vram 5234 MiB
+00:19:26 gpu=67, Not Active, Not Active free_mib=1835
+qwen3:4b INC-0000 no_mechanism r1: 4632 in, 775 out, stop, 34s, vram 5224 MiB
+00:21:23 gpu=67, Not Active, Not Active free_mib=7322
+qwen3:4b INC-9001 full r1: 8018 in, 907 out, stop, 50s, vram 5001 MiB
+00:22:17 gpu=78, Not Active, Not Active free_mib=3962
+qwen3:4b INC-9001 no_mechanism r1: 4302 in, 877 out, stop, 38s, vram 5048 MiB
+00:25:01 gpu=71, Not Active, Not Active free_mib=2883
+qwen3:4b INC-9002 full r1: 7865 in, 1019 out, stop, 49s, vram 5030 MiB
+00:26:13 gpu=75, Not Active, Not Active free_mib=6049
+qwen3:4b INC-9002 no_mechanism r1: 4549 in, 853 out, stop, 29s, vram 5004 MiB
+00:27:04 gpu=78, Not Active, Not Active free_mib=5083
+qwen3:4b INC-0000 full r2: 7971 in, 1018 out, stop, 46s, vram 5004 MiB
+00:28:12 gpu=75, Not Active, Not Active free_mib=4308
+qwen3:4b INC-0000 no_mechanism r2: 4632 in, 796 out, stop, 25s, vram 5006 MiB
+00:28:59 gpu=74, Not Active, Not Active free_mib=3037
+qwen3:4b INC-9001 full r2: 8018 in, 907 out, stop, 40s, vram 5006 MiB
+00:30:00 gpu=74, Not Active, Not Active free_mib=2500
+qwen3:4b INC-9001 no_mechanism r2: 4302 in, 877 out, stop, 27s, vram 5006 MiB
+00:30:48 gpu=74, Not Active, Not Active free_mib=1578
+qwen3:4b INC-9002 full r2: 7865 in, 1032 out, stop, 43s, vram 5318 MiB
+00:31:52 gpu=74, Not Active, Not Active free_mib=2198
+qwen3:4b INC-9002 no_mechanism r2: 4549 in, 812 out, stop, 23s, vram 5214 MiB
+LOOP_DONE qwen3:4b

@@ -1,0 +1,94 @@
+{
+ "blind_id": "X177",
+ "packet_dir": "INC-9002_no_mechanism",
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"hypothesis-1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"checkout-svc version 1.9.0 has a bug that causes payment calls to time out after 250ms when retrying\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc version 1.9.0 introduced a timeout bug in payment retry logic\",\n          \"evidence_ids\": [\"deploy:d-581\", \"commit:0d6ba14\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"checkout-svc retries payment calls with a 250ms timeout per attempt\",\n          \"evidence_ids\": [\"log:7db2506518\", \"metric:0400058a8f\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 0.1 for 15s\",\n          \"evidence_ids\": [\"metric:1364a73bd4\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypothesis-2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"payment-svc version 2.4.1 has a bug that causes connection timeouts when handling payment requests\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"payment-svc version 2.4.1 has a network connection bug\",\n          \"evidence_ids\": [\"deploy:d-579\", \"metric:9d756c5419\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment-svc connections are aborted by the host machine\",\n          \"evidence_ids\": [\"trace:8165c54f07dde5e88b29dcf73cebc3fd\"]\n        },\n        \"symptom\": {\n          \"statement\": \"payment-svc error rate exceeds 0.1 for 15s\",\n          \"evidence_ids\": [\"metric:e084a75703\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypothesis-3\",\n      \"component\": \"shared client\",\n      \"mechanism\": \"shared client retry policy is misconfigured for payment services\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"commit 0d6ba14 changed the shared client retry policy\",\n          \"evidence_ids\": [\"commit:0d6ba14\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"shared client retries payment calls with a fixed backoff that causes timeouts\",\n          \"evidence_ids\": [\"log:de694e9264\", \"metric:0400058a8f\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 0.1 for 15s\",\n          \"evidence_ids\": [\"metric:1364a73bd4\"]\n        }\n      },\n      \"contradicting\": []\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"hypothesis-1\",\n  \"rationale\": \"The evidence shows checkout-svc version 1.9.0 (deployed at d-581) was deployed after a commit (0d6ba14) that added retry logic for payment failures. Logs show checkout-svc timing out payment calls after 250ms, and the error rate metric confirms the incident. Payment-svc error rate is high but the trace shows the issue originates in checkout-svc's retry logic.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "hypothesis-1",
+    "component": "checkout-svc",
+    "mechanism": "checkout-svc version 1.9.0 has a bug that causes payment calls to time out after 250ms when retrying",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc version 1.9.0 introduced a timeout bug in payment retry logic",
+      "evidence_ids": [
+       "deploy:d-581",
+       "commit:0d6ba14"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "checkout-svc retries payment calls with a 250ms timeout per attempt",
+      "evidence_ids": [
+       "log:7db2506518",
+       "metric:0400058a8f"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 0.1 for 15s",
+      "evidence_ids": [
+       "metric:1364a73bd4"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypothesis-2",
+    "component": "payment-svc",
+    "mechanism": "payment-svc version 2.4.1 has a bug that causes connection timeouts when handling payment requests",
+    "chain": {
+     "cause": {
+      "statement": "payment-svc version 2.4.1 has a network connection bug",
+      "evidence_ids": [
+       "deploy:d-579",
+       "metric:9d756c5419"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment-svc connections are aborted by the host machine",
+      "evidence_ids": [
+       "trace:8165c54f07dde5e88b29dcf73cebc3fd"
+      ]
+     },
+     "symptom": {
+      "statement": "payment-svc error rate exceeds 0.1 for 15s",
+      "evidence_ids": [
+       "metric:e084a75703"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypothesis-3",
+    "component": "shared client",
+    "mechanism": "shared client retry policy is misconfigured for payment services",
+    "chain": {
+     "cause": {
+      "statement": "commit 0d6ba14 changed the shared client retry policy",
+      "evidence_ids": [
+       "commit:0d6ba14"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "shared client retries payment calls with a fixed backoff that causes timeouts",
+      "evidence_ids": [
+       "log:de694e9264",
+       "metric:0400058a8f"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 0.1 for 15s",
+      "evidence_ids": [
+       "metric:1364a73bd4"
+      ]
+     }
+    },
+    "contradicting": []
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "hypothesis-1",
+  "rationale": "The evidence shows checkout-svc version 1.9.0 (deployed at d-581) was deployed after a commit (0d6ba14) that added retry logic for payment failures. Logs show checkout-svc timing out payment calls after 250ms, and the error rate metric confirms the incident. Payment-svc error rate is high but the trace shows the issue originates in checkout-svc's retry logic."
+ }
+}
