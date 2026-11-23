@@ -1,0 +1,274 @@
+[
+  {
+    "run": "INC-0000_v2_r1",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "3/4 ['commit:e7a0cc0', 'deploy:d-535', 'metric:17f535fce8']",
+    "decisive_cited": "1/4 ['metric:17f535fce8']",
+    "refusals": {
+      "change check": 1,
+      "v1 citations": 3
+    },
+    "after_gate_refusal": [
+      "R4:get_metrics+get_metrics+get_metrics",
+      "R5:get_metrics+get_metrics+get_metrics",
+      "R6:get_metrics+get_metrics+get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 9,
+    "rounds": 6,
+    "wall_s": 99,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 9 tool calls"
+  },
+  {
+    "run": "INC-0000_v2_r2",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "3/4 ['commit:e7a0cc0', 'deploy:d-535', 'metric:17f535fce8']",
+    "decisive_cited": "1/4 ['metric:17f535fce8']",
+    "refusals": {
+      "change check": 1,
+      "v1 citations": 3
+    },
+    "after_gate_refusal": [
+      "R4:get_metrics",
+      "R5:get_metrics",
+      "R6:get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 6,
+    "rounds": 6,
+    "wall_s": 128,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 6 tool calls"
+  },
+  {
+    "run": "INC-0000_v2c_r1",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "3/4 ['commit:e7a0cc0', 'deploy:d-535', 'metric:17f535fce8']",
+    "decisive_cited": "1/4 ['metric:17f535fce8']",
+    "refusals": {
+      "change check": 1,
+      "mechanism not stated": 3
+    },
+    "after_gate_refusal": [
+      "R4:get_metrics",
+      "R5:get_metrics",
+      "R6:get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 6,
+    "rounds": 6,
+    "wall_s": 86,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 6 tool calls"
+  },
+  {
+    "run": "INC-0000_v2c_r2",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "3/4 ['commit:e7a0cc0', 'deploy:d-535', 'metric:17f535fce8']",
+    "decisive_cited": "1/4 ['metric:17f535fce8']",
+    "refusals": {
+      "change check": 1,
+      "mechanism not stated": 3
+    },
+    "after_gate_refusal": [
+      "R4:get_metrics+get_metrics+get_metrics",
+      "R5:get_metrics+get_metrics+get_metrics",
+      "R6:get_metrics+get_metrics+get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 9,
+    "rounds": 6,
+    "wall_s": 98,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 9 tool calls"
+  },
+  {
+    "run": "INC-9001_v2_r1",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "2/4 ['commit:d142601', 'deploy:d-576']",
+    "decisive_cited": "0/4 []",
+    "refusals": {
+      "change check": 1,
+      "v1 citations": 2
+    },
+    "after_gate_refusal": [
+      "R5:get_metrics",
+      "R6:get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 7,
+    "rounds": 6,
+    "wall_s": 172,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 7 tool calls"
+  },
+  {
+    "run": "INC-9001_v2_r2",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "2/4 ['commit:d142601', 'deploy:d-576']",
+    "decisive_cited": "0/4 []",
+    "refusals": {
+      "change check": 1,
+      "v1 citations": 2
+    },
+    "after_gate_refusal": [
+      "R5:get_metrics",
+      "R6:get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 7,
+    "rounds": 6,
+    "wall_s": 135,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 7 tool calls"
+  },
+  {
+    "run": "INC-9001_v2c_r1",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "2/4 ['commit:d142601', 'deploy:d-576']",
+    "decisive_cited": "0/4 []",
+    "refusals": {
+      "change check": 1,
+      "mechanism evidence": 2
+    },
+    "after_gate_refusal": [
+      "R5:get_metrics",
+      "R6:get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 7,
+    "rounds": 6,
+    "wall_s": 163,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 7 tool calls"
+  },
+  {
+    "run": "INC-9001_v2c_r2",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "2/4 ['commit:d142601', 'deploy:d-576']",
+    "decisive_cited": "0/4 []",
+    "refusals": {
+      "change check": 1,
+      "mechanism evidence": 2
+    },
+    "after_gate_refusal": [
+      "R5:get_metrics",
+      "R6:get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 7,
+    "rounds": 6,
+    "wall_s": 148,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 7 tool calls"
+  },
+  {
+    "run": "INC-9002_v2_r1",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "3/4 ['commit:0d6ba14', 'deploy:d-581', 'metric:858412a4f1']",
+    "decisive_cited": "1/4 ['metric:858412a4f1']",
+    "refusals": {
+      "change check": 1,
+      "v1 citations": 3
+    },
+    "after_gate_refusal": [
+      "R4:get_metrics",
+      "R5:get_metrics",
+      "R6:get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 4,
+    "rounds": 6,
+    "wall_s": 142,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 4 tool calls"
+  },
+  {
+    "run": "INC-9002_v2_r2",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "3/4 ['commit:0d6ba14', 'deploy:d-581', 'metric:858412a4f1']",
+    "decisive_cited": "1/4 ['metric:858412a4f1']",
+    "refusals": {
+      "change check": 1,
+      "v1 citations": 3
+    },
+    "after_gate_refusal": [
+      "R4:get_metrics",
+      "R5:get_metrics",
+      "R6:get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 4,
+    "rounds": 6,
+    "wall_s": 134,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 4 tool calls"
+  },
+  {
+    "run": "INC-9002_v2c_r1",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "3/4 ['commit:0d6ba14', 'deploy:d-581', 'metric:858412a4f1']",
+    "decisive_cited": "1/4 ['metric:858412a4f1']",
+    "refusals": {
+      "change check": 1,
+      "mechanism not stated": 3
+    },
+    "after_gate_refusal": [
+      "R4:get_metrics",
+      "R5:get_metrics",
+      "R6:get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 4,
+    "rounds": 6,
+    "wall_s": 140,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 4 tool calls"
+  },
+  {
+    "run": "INC-9002_v2c_r2",
+    "outcome": "abstained (insufficient_evidence)",
+    "top3": false,
+    "decisive_retrieved": "3/4 ['commit:0d6ba14', 'deploy:d-581', 'metric:858412a4f1']",
+    "decisive_cited": "1/4 ['metric:858412a4f1']",
+    "refusals": {
+      "change check": 1,
+      "mechanism not stated": 3
+    },
+    "after_gate_refusal": [
+      "R4:get_metrics",
+      "R5:get_metrics",
+      "R6:get_metrics"
+    ],
+    "get_commit_calls": 0,
+    "get_config_calls": 0,
+    "tool_calls": 4,
+    "rounds": 6,
+    "wall_s": 139,
+    "top_cause": "",
+    "stop": "limit reached after 6 rounds and 4 tool calls"
+  }
+]
