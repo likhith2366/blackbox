@@ -1,0 +1,117 @@
+{
+ "incident": "INC-0000",
+ "condition": "no_mechanism",
+ "repeat": 1,
+ "model": "qwen3:8b",
+ "code_revision": "25f3230",
+ "settings": {
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 7,
+  "num_ctx": 12288,
+  "num_predict": 4000,
+  "think": false
+ },
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"The checkout service's payment call to the payment service is timing out due to a misconfigured timeout setting, leading to high error rates.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"The checkout-svc version 1.9.0 was deployed with a reduced timeout for payment calls.\",\n          \"evidence_ids\": [\"deploy:d-535\", \"commit:e7a0cc0\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The reduced timeout causes payment calls to time out quickly, leading to retries and increased error rates.\",\n          \"evidence_ids\": [\"log:aea2b46ce0\", \"metric:83cc53b310\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc error rate spikes to 0.3226, triggering the alert.\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"The payment-svc is experiencing database integrity errors due to duplicate order IDs, causing HTTP 500 errors and increasing the error rate in checkout-svc.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"The payment-svc version 2.4.1 has a database integrity constraint violation due to duplicate order IDs.\",\n          \"evidence_ids\": [\"deploy:d-533\", \"log:4c3dac5d49\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The database errors cause HTTP 500 responses, which are propagated to checkout-svc as upstream errors.\",\n          \"evidence_ids\": [\"log:04618de589\", \"metric:83cc53b310\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc error rate spikes to 0.3226, triggering the alert.\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"The checkout-svc is experiencing high latency due to a misconfigured HTTP client, leading to timeouts and increased error rates.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"The checkout-svc version 1.9.0 has a misconfigured HTTP client with a reduced timeout for payment calls.\",\n          \"evidence_ids\": [\"deploy:d-535\", \"commit:e7a0cc0\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The reduced timeout causes payment calls to time out quickly, leading to retries and increased error rates.\",\n          \"evidence_ids\": [\"log:aea2b46ce0\", \"metric:83cc53b310\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc error rate spikes to 0.3226, triggering the alert.\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": []\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"h1\",\n  \"rationale\": \"The evidence supports the hypothesis that the checkout-svc version 1.9.0 was deployed with a reduced timeout for payment calls, leading to timeouts and retries, which increased the error rate and triggered the alert.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "h1",
+    "component": "checkout-svc",
+    "mechanism": "The checkout service's payment call to the payment service is timing out due to a misconfigured timeout setting, leading to high error rates.",
+    "chain": {
+     "cause": {
+      "statement": "The checkout-svc version 1.9.0 was deployed with a reduced timeout for payment calls.",
+      "evidence_ids": [
+       "deploy:d-535",
+       "commit:e7a0cc0"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The reduced timeout causes payment calls to time out quickly, leading to retries and increased error rates.",
+      "evidence_ids": [
+       "log:aea2b46ce0",
+       "metric:83cc53b310"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc error rate spikes to 0.3226, triggering the alert.",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "h2",
+    "component": "payment-svc",
+    "mechanism": "The payment-svc is experiencing database integrity errors due to duplicate order IDs, causing HTTP 500 errors and increasing the error rate in checkout-svc.",
+    "chain": {
+     "cause": {
+      "statement": "The payment-svc version 2.4.1 has a database integrity constraint violation due to duplicate order IDs.",
+      "evidence_ids": [
+       "deploy:d-533",
+       "log:4c3dac5d49"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The database errors cause HTTP 500 responses, which are propagated to checkout-svc as upstream errors.",
+      "evidence_ids": [
+       "log:04618de589",
+       "metric:83cc53b310"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc error rate spikes to 0.3226, triggering the alert.",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "h3",
+    "component": "checkout-svc",
+    "mechanism": "The checkout-svc is experiencing high latency due to a misconfigured HTTP client, leading to timeouts and increased error rates.",
+    "chain": {
+     "cause": {
+      "statement": "The checkout-svc version 1.9.0 has a misconfigured HTTP client with a reduced timeout for payment calls.",
+      "evidence_ids": [
+       "deploy:d-535",
+       "commit:e7a0cc0"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The reduced timeout causes payment calls to time out quickly, leading to retries and increased error rates.",
+      "evidence_ids": [
+       "log:aea2b46ce0",
+       "metric:83cc53b310"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc error rate spikes to 0.3226, triggering the alert.",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": []
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "h1",
+  "rationale": "The evidence supports the hypothesis that the checkout-svc version 1.9.0 was deployed with a reduced timeout for payment calls, leading to timeouts and retries, which increased the error rate and triggered the alert."
+ },
+ "parse_error": null,
+ "done_reason": "stop",
+ "prompt_tokens": 4638,
+ "completion_tokens": 816,
+ "wall_seconds": 265.6,
+ "load_seconds": 0.0,
+ "prompt_eval_seconds": 7.2,
+ "eval_seconds": 257.5,
+ "peak_vram_mib": 5270,
+ "peak_server_rss_mib": 4648
+}

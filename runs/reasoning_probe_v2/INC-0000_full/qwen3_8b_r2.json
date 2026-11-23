@@ -1,0 +1,119 @@
+{
+ "incident": "INC-0000",
+ "condition": "full",
+ "repeat": 2,
+ "model": "qwen3:8b",
+ "code_revision": "25f3230",
+ "settings": {
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 7,
+  "num_ctx": 12288,
+  "num_predict": 4000,
+  "think": false
+ },
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"hypo1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"The checkout-svc's retry policy was updated to retry on 5xx errors, but the payment-svc is experiencing high latency or errors, causing the checkout-svc to retry excessively and leading to a high error rate.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc was updated to retry on 5xx errors with a shorter timeout.\",\n          \"evidence_ids\": [\"deploy:d-535\", \"commit:e7a0cc0\", \"source:b-1216:libs/httpclient/__init__.py#ServiceClient\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"checkout-svc retries on 5xx errors from payment-svc, increasing upstream_attempts_per_s and upstream_errors_per_s.\",\n          \"evidence_ids\": [\"metric:17f535fce8\", \"metric:3631246b54\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 5% due to retries on 5xx errors.\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypo2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"The payment-svc's database connection pool has a timeout that is too short, causing frequent connection errors and leading to a high error rate in checkout-svc.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"payment-svc's database connection pool has a timeout that is too short.\",\n          \"evidence_ids\": [\"config:payment-svc@b1e5a60\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment-svc experiences connection errors, leading to 5xx errors and timeouts in checkout-svc.\",\n          \"evidence_ids\": [\"log:4c3dac5d49\", \"log:aea2b46ce0\", \"log:04618de589\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 5% due to 5xx errors and timeouts from payment-svc.\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypo3\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"The checkout-svc's timeout is set too low, causing it to timeout on slow or failing payment-svc calls, leading to a high error rate.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc's timeout is set to 250ms, which is too low for the payment-svc's response time.\",\n          \"evidence_ids\": [\"config:checkout-svc@bc913fb\", \"commit:e7a0cc0\", \"source:b-1216:libs/httpclient/__init__.py#ServiceClient\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"checkout-svc times out on slow or failing payment-svc calls, increasing upstream_attempts_per_s and upstream_errors_per_s.\",\n          \"evidence_ids\": [\"metric:17f535fce8\", \"metric:3631246b54\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 5% due to timeouts on payment-svc calls.\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": []\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"hypo1\",\n  \"rationale\": \"The evidence supports that the checkout-svc was updated to retry on 5xx errors with a shorter timeout, leading to excessive retries and a high error rate. The metrics and logs show a correlation between the retry policy change and the error rate, with the symptom being the high error rate.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "hypo1",
+    "component": "checkout-svc",
+    "mechanism": "The checkout-svc's retry policy was updated to retry on 5xx errors, but the payment-svc is experiencing high latency or errors, causing the checkout-svc to retry excessively and leading to a high error rate.",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc was updated to retry on 5xx errors with a shorter timeout.",
+      "evidence_ids": [
+       "deploy:d-535",
+       "commit:e7a0cc0",
+       "source:b-1216:libs/httpclient/__init__.py#ServiceClient"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "checkout-svc retries on 5xx errors from payment-svc, increasing upstream_attempts_per_s and upstream_errors_per_s.",
+      "evidence_ids": [
+       "metric:17f535fce8",
+       "metric:3631246b54"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 5% due to retries on 5xx errors.",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypo2",
+    "component": "payment-svc",
+    "mechanism": "The payment-svc's database connection pool has a timeout that is too short, causing frequent connection errors and leading to a high error rate in checkout-svc.",
+    "chain": {
+     "cause": {
+      "statement": "payment-svc's database connection pool has a timeout that is too short.",
+      "evidence_ids": [
+       "config:payment-svc@b1e5a60"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment-svc experiences connection errors, leading to 5xx errors and timeouts in checkout-svc.",
+      "evidence_ids": [
+       "log:4c3dac5d49",
+       "log:aea2b46ce0",
+       "log:04618de589"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 5% due to 5xx errors and timeouts from payment-svc.",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypo3",
+    "component": "checkout-svc",
+    "mechanism": "The checkout-svc's timeout is set too low, causing it to timeout on slow or failing payment-svc calls, leading to a high error rate.",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc's timeout is set to 250ms, which is too low for the payment-svc's response time.",
+      "evidence_ids": [
+       "config:checkout-svc@bc913fb",
+       "commit:e7a0cc0",
+       "source:b-1216:libs/httpclient/__init__.py#ServiceClient"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "checkout-svc times out on slow or failing payment-svc calls, increasing upstream_attempts_per_s and upstream_errors_per_s.",
+      "evidence_ids": [
+       "metric:17f535fce8",
+       "metric:3631246b54"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 5% due to timeouts on payment-svc calls.",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": []
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "hypo1",
+  "rationale": "The evidence supports that the checkout-svc was updated to retry on 5xx errors with a shorter timeout, leading to excessive retries and a high error rate. The metrics and logs show a correlation between the retry policy change and the error rate, with the symptom being the high error rate."
+ },
+ "parse_error": null,
+ "done_reason": "stop",
+ "prompt_tokens": 7977,
+ "completion_tokens": 912,
+ "wall_seconds": 470.2,
+ "load_seconds": 0.0,
+ "prompt_eval_seconds": 13.5,
+ "eval_seconds": 456.0,
+ "peak_vram_mib": 5282,
+ "peak_server_rss_mib": 5123
+}

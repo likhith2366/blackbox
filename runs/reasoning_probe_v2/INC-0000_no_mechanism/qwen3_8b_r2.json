@@ -1,0 +1,123 @@
+{
+ "incident": "INC-0000",
+ "condition": "no_mechanism",
+ "repeat": 2,
+ "model": "qwen3:8b",
+ "code_revision": "25f3230",
+ "settings": {
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 7,
+  "num_ctx": 12288,
+  "num_predict": 4000,
+  "think": false
+ },
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"The checkout service's error rate increased due to a timeout in its payment call to the payment-svc, which was caused by a recent deployment of the payment-svc that introduced a database integrity constraint violation.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"The payment-svc deployment introduced a database integrity constraint violation.\",\n          \"evidence_ids\": [\"deploy:d-533\", \"log:4c3dac5d49\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The payment-svc's database constraint violation caused timeouts and 500 errors when processing charges.\",\n          \"evidence_ids\": [\"log:4c3dac5d49\", \"log:04618de589\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc's error rate spiked due to timeouts and 500 errors from the payment-svc.\",\n          \"evidence_ids\": [\"metric:83cc53b310\", \"log:aea2b46ce0\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"The checkout-svc's error rate increased due to a recent deployment that introduced a retry mechanism for transient payment failures, which caused excessive retries and timeouts.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"The checkout-svc deployment introduced a retry mechanism for transient payment failures.\",\n          \"evidence_ids\": [\"deploy:d-535\", \"commit:e7a0cc0\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The retry mechanism caused excessive retries and timeouts when the payment-svc was slow or failed.\",\n          \"evidence_ids\": [\"log:aea2b46ce0\", \"log:04618de589\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc's error rate spiked due to timeouts and retries in the payment call.\",\n          \"evidence_ids\": [\"metric:83cc53b310\", \"log:aea2b46ce0\"]\n        }\n      },\n      \"contradicting\": [\"deploy:d-533\", \"log:4c3dac5d49\"]\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"The payment-svc's error rate increased due to a database integrity constraint violation introduced by a recent deployment, which caused timeouts and 500 errors when processing charges.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"The payment-svc deployment introduced a database integrity constraint violation.\",\n          \"evidence_ids\": [\"deploy:d-533\", \"log:4c3dac5d49\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The database constraint violation caused timeouts and 500 errors when processing charges.\",\n          \"evidence_ids\": [\"log:4c3dac5d49\", \"log:04618de589\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc's error rate spiked due to timeouts and 500 errors from the payment-svc.\",\n          \"evidence_ids\": [\"metric:83cc53b310\", \"log:aea2b46ce0\"]\n        }\n      },\n      \"contradicting\": []\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"h1\",\n  \"rationale\": \"The evidence supports the hypothesis that the payment-svc deployment introduced a database integrity constraint violation, which caused timeouts and 500 errors in the payment call, leading to the checkout-svc's error rate spike.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "h1",
+    "component": "checkout-svc",
+    "mechanism": "The checkout service's error rate increased due to a timeout in its payment call to the payment-svc, which was caused by a recent deployment of the payment-svc that introduced a database integrity constraint violation.",
+    "chain": {
+     "cause": {
+      "statement": "The payment-svc deployment introduced a database integrity constraint violation.",
+      "evidence_ids": [
+       "deploy:d-533",
+       "log:4c3dac5d49"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The payment-svc's database constraint violation caused timeouts and 500 errors when processing charges.",
+      "evidence_ids": [
+       "log:4c3dac5d49",
+       "log:04618de589"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc's error rate spiked due to timeouts and 500 errors from the payment-svc.",
+      "evidence_ids": [
+       "metric:83cc53b310",
+       "log:aea2b46ce0"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "h2",
+    "component": "checkout-svc",
+    "mechanism": "The checkout-svc's error rate increased due to a recent deployment that introduced a retry mechanism for transient payment failures, which caused excessive retries and timeouts.",
+    "chain": {
+     "cause": {
+      "statement": "The checkout-svc deployment introduced a retry mechanism for transient payment failures.",
+      "evidence_ids": [
+       "deploy:d-535",
+       "commit:e7a0cc0"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The retry mechanism caused excessive retries and timeouts when the payment-svc was slow or failed.",
+      "evidence_ids": [
+       "log:aea2b46ce0",
+       "log:04618de589"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc's error rate spiked due to timeouts and retries in the payment call.",
+      "evidence_ids": [
+       "metric:83cc53b310",
+       "log:aea2b46ce0"
+      ]
+     }
+    },
+    "contradicting": [
+     "deploy:d-533",
+     "log:4c3dac5d49"
+    ]
+   },
+   {
+    "id": "h3",
+    "component": "payment-svc",
+    "mechanism": "The payment-svc's error rate increased due to a database integrity constraint violation introduced by a recent deployment, which caused timeouts and 500 errors when processing charges.",
+    "chain": {
+     "cause": {
+      "statement": "The payment-svc deployment introduced a database integrity constraint violation.",
+      "evidence_ids": [
+       "deploy:d-533",
+       "log:4c3dac5d49"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The database constraint violation caused timeouts and 500 errors when processing charges.",
+      "evidence_ids": [
+       "log:4c3dac5d49",
+       "log:04618de589"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc's error rate spiked due to timeouts and 500 errors from the payment-svc.",
+      "evidence_ids": [
+       "metric:83cc53b310",
+       "log:aea2b46ce0"
+      ]
+     }
+    },
+    "contradicting": []
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "h1",
+  "rationale": "The evidence supports the hypothesis that the payment-svc deployment introduced a database integrity constraint violation, which caused timeouts and 500 errors in the payment call, leading to the checkout-svc's error rate spike."
+ },
+ "parse_error": null,
+ "done_reason": "stop",
+ "prompt_tokens": 4638,
+ "completion_tokens": 860,
+ "wall_seconds": 261.6,
+ "load_seconds": 0.0,
+ "prompt_eval_seconds": 7.5,
+ "eval_seconds": 252.8,
+ "peak_vram_mib": 5280,
+ "peak_server_rss_mib": 4461
+}

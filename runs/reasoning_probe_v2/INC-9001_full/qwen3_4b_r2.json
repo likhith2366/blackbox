@@ -1,0 +1,115 @@
+{
+ "incident": "INC-9001",
+ "condition": "full",
+ "repeat": 2,
+ "model": "qwen3:4b",
+ "code_revision": "25f3230",
+ "settings": {
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 7,
+  "num_ctx": 12288,
+  "num_predict": 4000,
+  "think": false
+ },
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"Payment service's database connection pool timeout increased from 3000ms to 1000ms, causing connection acquisition failures during high load\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Payment-svc deployment d-576 (v2.5.0) reduced db pool acquire timeout from 3000ms to 1000ms\",\n          \"evidence_ids\": [\"deploy:d-576\", \"config:payment-svc@b1e5a60\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"Payment-svc starts rejecting new database connections after 1000ms of waiting\",\n          \"evidence_ids\": [\"metric:5478273809\", \"metric:05f9bb24dd\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Checkout-svc receives HTTP 503 errors from payment-svc due to pool acquisition failures\",\n          \"evidence_ids\": [\"log:9110a7c06d\", \"trace:84bc7633414fe8cfa17bf6eedc1547b8\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"Checkout service's payment service URL points to local payment service causing circular dependency\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Checkout-svc config points to payment-svc at 127.0.0.1:18102 (local address)\",\n          \"evidence_ids\": [\"config:checkout-svc@bc913fb\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"Checkout-svc attempts to call payment-svc locally, which is not available during payment-svc deployment\",\n          \"evidence_ids\": []\n        },\n        \"symptom\": {\n          \"statement\": \"Checkout-svc receives HTTP 503 errors from payment-svc\",\n          \"evidence_ids\": [\"log:9110a7c06d\"]\n        }\n      },\n      \"contradicting\": [\"deploy:d-575\"]\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"Payment service's new micro-charge path bypasses velocity checks, causing payment table overwrites\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Payment-svc v2.5.0 (commit d142601) added fast path for micro-charges under $5\",\n          \"evidence_ids\": [\"commit:d142601\", \"build:b-1229\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"Payment-svc skips velocity checks for small charges, increasing database write load\",\n          \"evidence_ids\": [\"source:b-1229:services/payment/app.py#Handler\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Checkout-svc error rate increases due to payment service failures\",\n          \"evidence_ids\": [\"metric:4d19b12fad\"]\n        }\n      },\n      \"contradicting\": []\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"h1\",\n  \"rationale\": \"The evidence shows payment-svc deployment d-576 reduced db pool acquire timeout from 3000ms to 1000ms (config:payment-svc@b1e5a60), causing pool acquisition timeouts (metric:5478273809) which directly led to checkout-svc receiving 503 errors (log:9110a7c06d) and trace data (trace:84bc7633414fe8cfa17bf6eedc1547b8). This hypothesis is supported by all evidence links without contradictions.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "h1",
+    "component": "payment-svc",
+    "mechanism": "Payment service's database connection pool timeout increased from 3000ms to 1000ms, causing connection acquisition failures during high load",
+    "chain": {
+     "cause": {
+      "statement": "Payment-svc deployment d-576 (v2.5.0) reduced db pool acquire timeout from 3000ms to 1000ms",
+      "evidence_ids": [
+       "deploy:d-576",
+       "config:payment-svc@b1e5a60"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "Payment-svc starts rejecting new database connections after 1000ms of waiting",
+      "evidence_ids": [
+       "metric:5478273809",
+       "metric:05f9bb24dd"
+      ]
+     },
+     "symptom": {
+      "statement": "Checkout-svc receives HTTP 503 errors from payment-svc due to pool acquisition failures",
+      "evidence_ids": [
+       "log:9110a7c06d",
+       "trace:84bc7633414fe8cfa17bf6eedc1547b8"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "h2",
+    "component": "checkout-svc",
+    "mechanism": "Checkout service's payment service URL points to local payment service causing circular dependency",
+    "chain": {
+     "cause": {
+      "statement": "Checkout-svc config points to payment-svc at 127.0.0.1:18102 (local address)",
+      "evidence_ids": [
+       "config:checkout-svc@bc913fb"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "Checkout-svc attempts to call payment-svc locally, which is not available during payment-svc deployment",
+      "evidence_ids": []
+     },
+     "symptom": {
+      "statement": "Checkout-svc receives HTTP 503 errors from payment-svc",
+      "evidence_ids": [
+       "log:9110a7c06d"
+      ]
+     }
+    },
+    "contradicting": [
+     "deploy:d-575"
+    ]
+   },
+   {
+    "id": "h3",
+    "component": "payment-svc",
+    "mechanism": "Payment service's new micro-charge path bypasses velocity checks, causing payment table overwrites",
+    "chain": {
+     "cause": {
+      "statement": "Payment-svc v2.5.0 (commit d142601) added fast path for micro-charges under $5",
+      "evidence_ids": [
+       "commit:d142601",
+       "build:b-1229"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "Payment-svc skips velocity checks for small charges, increasing database write load",
+      "evidence_ids": [
+       "source:b-1229:services/payment/app.py#Handler"
+      ]
+     },
+     "symptom": {
+      "statement": "Checkout-svc error rate increases due to payment service failures",
+      "evidence_ids": [
+       "metric:4d19b12fad"
+      ]
+     }
+    },
+    "contradicting": []
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "h1",
+  "rationale": "The evidence shows payment-svc deployment d-576 reduced db pool acquire timeout from 3000ms to 1000ms (config:payment-svc@b1e5a60), causing pool acquisition timeouts (metric:5478273809) which directly led to checkout-svc receiving 503 errors (log:9110a7c06d) and trace data (trace:84bc7633414fe8cfa17bf6eedc1547b8). This hypothesis is supported by all evidence links without contradictions."
+ },
+ "parse_error": null,
+ "done_reason": "stop",
+ "prompt_tokens": 8018,
+ "completion_tokens": 907,
+ "wall_seconds": 39.5,
+ "load_seconds": 0.0,
+ "prompt_eval_seconds": 3.8,
+ "eval_seconds": 35.1,
+ "peak_vram_mib": 5006,
+ "peak_server_rss_mib": 4919
+}

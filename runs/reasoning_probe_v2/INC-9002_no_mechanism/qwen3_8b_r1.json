@@ -1,0 +1,122 @@
+{
+ "incident": "INC-9002",
+ "condition": "no_mechanism",
+ "repeat": 1,
+ "model": "qwen3:8b",
+ "code_revision": "25f3230",
+ "settings": {
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 7,
+  "num_ctx": 12288,
+  "num_predict": 4000,
+  "think": false
+ },
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"The checkout service's payment call timeout is too short, leading to timeouts and errors when the payment service is slow or unresponsive.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Checkout-svc version 1.9.0 was deployed with a reduced timeout for payment calls.\",\n          \"evidence_ids\": [\"deploy:d-581\", \"commit:0d6ba14\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The reduced timeout causes payment calls to time out quickly when the payment service is slow or unresponsive.\",\n          \"evidence_ids\": [\"log:7db2506518\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc error rate spikes due to timeouts and HTTP 500 errors from the payment service.\",\n          \"evidence_ids\": [\"metric:1364a73bd4\", \"log:de694e9264\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"The payment service is experiencing high error rates due to database integrity issues, causing upstream errors in the checkout service.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Payment-svc version 2.4.1 has a database integrity constraint violation due to duplicate order IDs.\",\n          \"evidence_ids\": [\"deploy:d-579\", \"log:94d4ddd7b4\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The payment service returns HTTP 500 errors due to database integrity issues, which are propagated to the checkout service.\",\n          \"evidence_ids\": [\"log:de694e9264\", \"metric:0400058a8f\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc error rate increases due to upstream errors from the payment service.\",\n          \"evidence_ids\": [\"metric:1364a73bd4\"]\n        }\n      },\n      \"contradicting\": [\"deploy:d-581\", \"commit:0d6ba14\"]\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"The checkout service is experiencing high error rates due to a misconfigured retry policy that leads to excessive retries and timeouts.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Checkout-svc version 1.9.0 has a misconfigured retry policy that causes excessive retries and timeouts.\",\n          \"evidence_ids\": [\"deploy:d-581\", \"commit:0d6ba14\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The retry policy causes the checkout service to retry payment calls too frequently, leading to timeouts and increased error rates.\",\n          \"evidence_ids\": [\"log:7db2506518\"]\n        },\n        \"symptom\": {\n          \"statement\": \"The checkout-svc error rate spikes due to timeouts and retries.\",\n          \"evidence_ids\": [\"metric:1364a73bd4\"]\n        }\n      },\n      \"contradicting\": [\"log:de694e9264\", \"metric:0400058a8f\"]\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"h1\",\n  \"rationale\": \"The evidence supports the hypothesis that the checkout-svc version 1.9.0 deployment introduced a reduced timeout for payment calls, leading to timeouts and errors when the payment service is slow or unresponsive. This is directly supported by the deployment record, the commit, and the logs showing timeouts and HTTP 500 errors.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "h1",
+    "component": "checkout-svc",
+    "mechanism": "The checkout service's payment call timeout is too short, leading to timeouts and errors when the payment service is slow or unresponsive.",
+    "chain": {
+     "cause": {
+      "statement": "Checkout-svc version 1.9.0 was deployed with a reduced timeout for payment calls.",
+      "evidence_ids": [
+       "deploy:d-581",
+       "commit:0d6ba14"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The reduced timeout causes payment calls to time out quickly when the payment service is slow or unresponsive.",
+      "evidence_ids": [
+       "log:7db2506518"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc error rate spikes due to timeouts and HTTP 500 errors from the payment service.",
+      "evidence_ids": [
+       "metric:1364a73bd4",
+       "log:de694e9264"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "h2",
+    "component": "payment-svc",
+    "mechanism": "The payment service is experiencing high error rates due to database integrity issues, causing upstream errors in the checkout service.",
+    "chain": {
+     "cause": {
+      "statement": "Payment-svc version 2.4.1 has a database integrity constraint violation due to duplicate order IDs.",
+      "evidence_ids": [
+       "deploy:d-579",
+       "log:94d4ddd7b4"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The payment service returns HTTP 500 errors due to database integrity issues, which are propagated to the checkout service.",
+      "evidence_ids": [
+       "log:de694e9264",
+       "metric:0400058a8f"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc error rate increases due to upstream errors from the payment service.",
+      "evidence_ids": [
+       "metric:1364a73bd4"
+      ]
+     }
+    },
+    "contradicting": [
+     "deploy:d-581",
+     "commit:0d6ba14"
+    ]
+   },
+   {
+    "id": "h3",
+    "component": "checkout-svc",
+    "mechanism": "The checkout service is experiencing high error rates due to a misconfigured retry policy that leads to excessive retries and timeouts.",
+    "chain": {
+     "cause": {
+      "statement": "Checkout-svc version 1.9.0 has a misconfigured retry policy that causes excessive retries and timeouts.",
+      "evidence_ids": [
+       "deploy:d-581",
+       "commit:0d6ba14"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The retry policy causes the checkout service to retry payment calls too frequently, leading to timeouts and increased error rates.",
+      "evidence_ids": [
+       "log:7db2506518"
+      ]
+     },
+     "symptom": {
+      "statement": "The checkout-svc error rate spikes due to timeouts and retries.",
+      "evidence_ids": [
+       "metric:1364a73bd4"
+      ]
+     }
+    },
+    "contradicting": [
+     "log:de694e9264",
+     "metric:0400058a8f"
+    ]
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "h1",
+  "rationale": "The evidence supports the hypothesis that the checkout-svc version 1.9.0 deployment introduced a reduced timeout for payment calls, leading to timeouts and errors when the payment service is slow or unresponsive. This is directly supported by the deployment record, the commit, and the logs showing timeouts and HTTP 500 errors."
+ },
+ "parse_error": null,
+ "done_reason": "stop",
+ "prompt_tokens": 4555,
+ "completion_tokens": 857,
+ "wall_seconds": 276.3,
+ "load_seconds": 0.0,
+ "prompt_eval_seconds": 6.5,
+ "eval_seconds": 269.1,
+ "peak_vram_mib": 5229,
+ "peak_server_rss_mib": 4600
+}
