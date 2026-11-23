@@ -1,0 +1,138 @@
+## INC-0000_full: same ids in same order: True; changed records: ['config:checkout-svc@bc913fb', 'config:payment-svc@b1e5a60']
+--- v2 config:checkout-svc@bc913fb
++++ v3 config:checkout-svc@bc913fb
+@@ -1,4 +1,4 @@
+-config/checkout-svc.yaml @ bc913fb (committed 2026-09-02T14:10:00.000Z); config of the running deployment d-535 (commit e7a0cc0)
++config/checkout-svc.yaml @ bc913fb (committed 2026-09-02T14:10:00.000Z); config of the running deployment d-535 (checkout-svc 1.9.0, started 2026-11-20T02:38:26.737Z, commit e7a0cc0)
+ # checkout-svc runtime configuration
+ service: checkout-svc
+ port: 18101
+@@ -6,3 +6,5 @@
+ payment:
+   base_url: http://127.0.0.1:18102
+   # timeout / retry policy: defaults from libs/httpclient/policy.py unless set here
++
++unchanged from previous deployment d-534 (checkout-svc 1.8.2, started 2026-11-20T02:37:23.717Z, commit b7ae74f): both deployments run config bc913fb
+attributes v2: {'versions': ['bc913fb'], 'path': 'config/checkout-svc.yaml'} 
+attributes v3: {'versions': ['bc913fb'], 'path': 'config/checkout-svc.yaml', 'deployment': 'd-535'}
+--- v2 config:payment-svc@b1e5a60
++++ v3 config:payment-svc@b1e5a60
+@@ -1,4 +1,4 @@
+-config/payment-svc.yaml @ b1e5a60 (committed 2026-11-06T11:15:00.000Z); config of the running deployment d-533 (commit b7ae74f)
++config/payment-svc.yaml @ b1e5a60 (committed 2026-11-06T11:15:00.000Z); config of the running deployment d-533 (payment-svc 2.4.1, started 2026-11-20T02:37:18.933Z, commit b7ae74f)
+ # payment-svc runtime configuration
+ service: payment-svc
+ port: 18102
+@@ -8,10 +8,4 @@
+   pool_size: 4
+   acquire_timeout_ms: 1000
+ 
+-change vs previous version:
+---- previous
+-+++ b1e5a60
+-@@ -7,2 +7,2 @@
+-   pool_size: 4
+--  acquire_timeout_ms: 3000
+-+  acquire_timeout_ms: 1000
++comparison with the previous deployment: not possible (no earlier deployment of payment-svc in the available deployment records)
+attributes v2: {'versions': ['bc913fb', 'b1e5a60'], 'path': 'config/payment-svc.yaml'} 
+attributes v3: {'versions': ['bc913fb', 'b1e5a60'], 'path': 'config/payment-svc.yaml', 'deployment': 'd-533'}
+prompt_user lines changed: 13
+prompt_system identical: True 
+
+## INC-0000_no_mechanism: same ids in same order: True; changed records: []
+prompt_user lines changed: 0
+prompt_system identical: True 
+
+## INC-9001_full: same ids in same order: True; changed records: ['config:checkout-svc@bc913fb', 'config:payment-svc@b1e5a60']
+--- v2 config:checkout-svc@bc913fb
++++ v3 config:checkout-svc@bc913fb
+@@ -1,4 +1,4 @@
+-config/checkout-svc.yaml @ bc913fb (committed 2026-09-02T14:10:00.000Z); config of the running deployment d-575 (commit b7ae74f)
++config/checkout-svc.yaml @ bc913fb (committed 2026-09-02T14:10:00.000Z); config of the running deployment d-575 (checkout-svc 1.8.2, started 2026-11-20T03:43:54.148Z, commit b7ae74f)
+ # checkout-svc runtime configuration
+ service: checkout-svc
+ port: 18101
+@@ -6,3 +6,5 @@
+ payment:
+   base_url: http://127.0.0.1:18102
+   # timeout / retry policy: defaults from libs/httpclient/policy.py unless set here
++
++comparison with the previous deployment: not possible (no earlier deployment of checkout-svc in the available deployment records)
+attributes v2: {'versions': ['bc913fb'], 'path': 'config/checkout-svc.yaml'} 
+attributes v3: {'versions': ['bc913fb'], 'path': 'config/checkout-svc.yaml', 'deployment': 'd-575'}
+--- v2 config:payment-svc@b1e5a60
++++ v3 config:payment-svc@b1e5a60
+@@ -1,4 +1,4 @@
+-config/payment-svc.yaml @ b1e5a60 (committed 2026-11-06T11:15:00.000Z); config of the running deployment d-576 (commit d142601)
++config/payment-svc.yaml @ b1e5a60 (committed 2026-11-06T11:15:00.000Z); config of the running deployment d-576 (payment-svc 2.5.0, started 2026-11-20T03:44:06.356Z, commit d142601)
+ # payment-svc runtime configuration
+ service: payment-svc
+ port: 18102
+@@ -8,10 +8,4 @@
+   pool_size: 4
+   acquire_timeout_ms: 1000
+ 
+-change vs previous version:
+---- previous
+-+++ b1e5a60
+-@@ -7,2 +7,2 @@
+-   pool_size: 4
+--  acquire_timeout_ms: 3000
+-+  acquire_timeout_ms: 1000
++unchanged from previous deployment d-574 (payment-svc 2.4.1, started 2026-11-20T03:43:49.742Z, commit b7ae74f): both deployments run config b1e5a60
+attributes v2: {'versions': ['bc913fb', 'b1e5a60'], 'path': 'config/payment-svc.yaml'} 
+attributes v3: {'versions': ['bc913fb', 'b1e5a60'], 'path': 'config/payment-svc.yaml', 'deployment': 'd-576'}
+prompt_user lines changed: 13
+prompt_system identical: True 
+
+## INC-9001_no_mechanism: same ids in same order: True; changed records: []
+prompt_user lines changed: 0
+prompt_system identical: True 
+
+## INC-9002_full: same ids in same order: True; changed records: ['config:checkout-svc@bc913fb', 'config:payment-svc@b1e5a60']
+--- v2 config:checkout-svc@bc913fb
++++ v3 config:checkout-svc@bc913fb
+@@ -1,4 +1,4 @@
+-config/checkout-svc.yaml @ bc913fb (committed 2026-09-02T14:10:00.000Z); config of the running deployment d-581 (commit 0d6ba14)
++config/checkout-svc.yaml @ bc913fb (committed 2026-09-02T14:10:00.000Z); config of the running deployment d-581 (checkout-svc 1.9.0, started 2026-11-20T03:46:24.461Z, commit 0d6ba14)
+ # checkout-svc runtime configuration
+ service: checkout-svc
+ port: 18101
+@@ -6,3 +6,5 @@
+ payment:
+   base_url: http://127.0.0.1:18102
+   # timeout / retry policy: defaults from libs/httpclient/policy.py unless set here
++
++unchanged from previous deployment d-580 (checkout-svc 1.8.2, started 2026-11-20T03:46:12.603Z, commit b7ae74f): both deployments run config bc913fb
+attributes v2: {'versions': ['bc913fb'], 'path': 'config/checkout-svc.yaml'} 
+attributes v3: {'versions': ['bc913fb'], 'path': 'config/checkout-svc.yaml', 'deployment': 'd-581'}
+--- v2 config:payment-svc@b1e5a60
++++ v3 config:payment-svc@b1e5a60
+@@ -1,4 +1,4 @@
+-config/payment-svc.yaml @ b1e5a60 (committed 2026-11-06T11:15:00.000Z); config of the running deployment d-579 (commit b7ae74f)
++config/payment-svc.yaml @ b1e5a60 (committed 2026-11-06T11:15:00.000Z); config of the running deployment d-579 (payment-svc 2.4.1, started 2026-11-20T03:46:08.202Z, commit b7ae74f)
+ # payment-svc runtime configuration
+ service: payment-svc
+ port: 18102
+@@ -8,10 +8,4 @@
+   pool_size: 4
+   acquire_timeout_ms: 1000
+ 
+-change vs previous version:
+---- previous
+-+++ b1e5a60
+-@@ -7,2 +7,2 @@
+-   pool_size: 4
+--  acquire_timeout_ms: 3000
+-+  acquire_timeout_ms: 1000
++comparison with the previous deployment: not possible (no earlier deployment of payment-svc in the available deployment records)
+attributes v2: {'versions': ['bc913fb', 'b1e5a60'], 'path': 'config/payment-svc.yaml'} 
+attributes v3: {'versions': ['bc913fb', 'b1e5a60'], 'path': 'config/payment-svc.yaml', 'deployment': 'd-579'}
+prompt_user lines changed: 13
+prompt_system identical: True 
+
+## INC-9002_no_mechanism: same ids in same order: True; changed records: []
+prompt_user lines changed: 0
+prompt_system identical: True 
+
