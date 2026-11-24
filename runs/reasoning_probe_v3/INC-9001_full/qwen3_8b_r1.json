@@ -1,0 +1,115 @@
+{
+ "incident": "INC-9001",
+ "condition": "full",
+ "repeat": 1,
+ "model": "qwen3:8b",
+ "code_revision": "eed75ca",
+ "settings": {
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 7,
+  "num_ctx": 12288,
+  "num_predict": 4000,
+  "think": false
+ },
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"payment-svc db pool\",\n      \"mechanism\": \"The payment-svc database connection pool was exhausted due to a recent deployment, causing timeouts and 503 errors that propagated to checkout-svc.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Deployment d-576 of payment-svc 2.5.0 increased database connection pool usage.\",\n          \"evidence_ids\": [\"deploy:d-576\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The db pool wait time increased to 1014.8ms, and the pool was fully utilized.\",\n          \"evidence_ids\": [\"metric:5478273809\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Checkout-svc received 503 errors from payment-svc due to database connection timeouts.\",\n          \"evidence_ids\": [\"log:9110a7c06d\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"checkout-svc upstream retries\",\n      \"mechanism\": \"Checkout-svc was retrying requests to payment-svc, which caused increased upstream attempts and errors due to the payment-svc being overwhelmed.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Checkout-svc was retrying requests to payment-svc due to upstream errors.\",\n          \"evidence_ids\": [\"metric:ef658d70e7\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"Checkout-svc had high upstream attempts and errors, indicating retries due to upstream failures.\",\n          \"evidence_ids\": [\"metric:ef658d70e7\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Checkout-svc error rate spiked to 1.0, indicating failed retries to payment-svc.\",\n          \"evidence_ids\": [\"metric:4d19b12fad\"]\n        }\n      },\n      \"contradicting\": [\"log:9110a7c06d\"]\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"payment-svc code change\",\n      \"mechanism\": \"The new code in payment-svc 2.5.0 introduced a bug that caused database connection pool exhaustion.\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"The new code in payment-svc 2.5.0 introduced a bug that caused database connection pool exhaustion.\",\n          \"evidence_ids\": [\"deploy:d-576\", \"build:b-1229\", \"commit:d142601\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"The db pool wait time increased to 1014.8ms, and the pool was fully utilized.\",\n          \"evidence_ids\": [\"metric:5478273809\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Checkout-svc received 503 errors from payment-svc due to database connection timeouts.\",\n          \"evidence_ids\": [\"log:9110a7c06d\"]\n        }\n      },\n      \"contradicting\": []\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"h1\",\n  \"rationale\": \"The evidence supports the hypothesis that the payment-svc database connection pool was exhausted due to a recent deployment, causing timeouts and 503 errors that propagated to checkout-svc. The deployment of payment-svc 2.5.0 increased database connection pool usage, leading to increased wait times and pool utilization, which resulted in the observed 503 errors.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "h1",
+    "component": "payment-svc db pool",
+    "mechanism": "The payment-svc database connection pool was exhausted due to a recent deployment, causing timeouts and 503 errors that propagated to checkout-svc.",
+    "chain": {
+     "cause": {
+      "statement": "Deployment d-576 of payment-svc 2.5.0 increased database connection pool usage.",
+      "evidence_ids": [
+       "deploy:d-576"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The db pool wait time increased to 1014.8ms, and the pool was fully utilized.",
+      "evidence_ids": [
+       "metric:5478273809"
+      ]
+     },
+     "symptom": {
+      "statement": "Checkout-svc received 503 errors from payment-svc due to database connection timeouts.",
+      "evidence_ids": [
+       "log:9110a7c06d"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "h2",
+    "component": "checkout-svc upstream retries",
+    "mechanism": "Checkout-svc was retrying requests to payment-svc, which caused increased upstream attempts and errors due to the payment-svc being overwhelmed.",
+    "chain": {
+     "cause": {
+      "statement": "Checkout-svc was retrying requests to payment-svc due to upstream errors.",
+      "evidence_ids": [
+       "metric:ef658d70e7"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "Checkout-svc had high upstream attempts and errors, indicating retries due to upstream failures.",
+      "evidence_ids": [
+       "metric:ef658d70e7"
+      ]
+     },
+     "symptom": {
+      "statement": "Checkout-svc error rate spiked to 1.0, indicating failed retries to payment-svc.",
+      "evidence_ids": [
+       "metric:4d19b12fad"
+      ]
+     }
+    },
+    "contradicting": [
+     "log:9110a7c06d"
+    ]
+   },
+   {
+    "id": "h3",
+    "component": "payment-svc code change",
+    "mechanism": "The new code in payment-svc 2.5.0 introduced a bug that caused database connection pool exhaustion.",
+    "chain": {
+     "cause": {
+      "statement": "The new code in payment-svc 2.5.0 introduced a bug that caused database connection pool exhaustion.",
+      "evidence_ids": [
+       "deploy:d-576",
+       "build:b-1229",
+       "commit:d142601"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "The db pool wait time increased to 1014.8ms, and the pool was fully utilized.",
+      "evidence_ids": [
+       "metric:5478273809"
+      ]
+     },
+     "symptom": {
+      "statement": "Checkout-svc received 503 errors from payment-svc due to database connection timeouts.",
+      "evidence_ids": [
+       "log:9110a7c06d"
+      ]
+     }
+    },
+    "contradicting": []
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "h1",
+  "rationale": "The evidence supports the hypothesis that the payment-svc database connection pool was exhausted due to a recent deployment, causing timeouts and 503 errors that propagated to checkout-svc. The deployment of payment-svc 2.5.0 increased database connection pool usage, leading to increased wait times and pool utilization, which resulted in the observed 503 errors."
+ },
+ "parse_error": null,
+ "done_reason": "stop",
+ "prompt_tokens": 8130,
+ "completion_tokens": 819,
+ "wall_seconds": 468.6,
+ "load_seconds": 12.1,
+ "prompt_eval_seconds": 13.6,
+ "eval_seconds": 442.9,
+ "peak_vram_mib": 5179,
+ "peak_server_rss_mib": 3344
+}

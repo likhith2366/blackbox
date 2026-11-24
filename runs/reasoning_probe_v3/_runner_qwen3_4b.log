@@ -1,0 +1,34 @@
+02:30:23 gpu=65, Not Active, Not Active free_mib=2251
+qwen3:4b INC-0000 full r1: 8075 in, 1047 out, stop, 65s, vram 5238 MiB
+02:32:13 gpu=79, Not Active, Not Active free_mib=1915
+qwen3:4b INC-0000 no_mechanism r1: 4632 in, 874 out, stop, 38s, vram 5245 MiB
+02:34:57 gpu=78, Not Active, Not Active free_mib=3718
+qwen3:4b INC-9001 full r1: 8124 in, 1253 out, stop, 80s, vram 5334 MiB
+02:37:00 gpu=79, Not Active, Not Active free_mib=2735
+qwen3:4b INC-9001 no_mechanism r1: 4302 in, 844 out, stop, 30s, vram 5259 MiB
+02:41:17 gpu=78, Not Active, Not Active free_mib=2937
+qwen3:4b INC-9002 full r1: 7969 in, 1039 out, stop, 81s, vram 5317 MiB
+02:43:43 gpu=77, Not Active, Not Active free_mib=2487
+qwen3:4b INC-9002 no_mechanism r1: 4549 in, 853 out, stop, 42s, vram 5263 MiB
+02:50:37 gpu=78, Not Active, Not Active free_mib=3383
+qwen3:4b INC-0000 full r2: 8075 in, 1047 out, stop, 68s, vram 5265 MiB
+02:52:27 gpu=79, Not Active, Not Active free_mib=2523
+qwen3:4b INC-0000 no_mechanism r2: 4632 in, 874 out, stop, 55s, vram 5280 MiB
+03:00:13 gpu=78, Not Active, Not Active free_mib=3823
+qwen3:4b INC-9001 full r2: 8124 in, 1253 out, stop, 93s, vram 5280 MiB
+03:36:35 gpu=79, Not Active, Not Active free_mib=1682
+qwen3:4b INC-9001 no_mechanism r2: 4302 in, 844 out, stop, 68s, vram 5379 MiB
+03:40:28 gpu=79, Not Active, Not Active free_mib=1827
+qwen3:4b INC-9002 full r2: 7969 in, 1039 out, stop, 82s, vram 5371 MiB
+03:44:37 gpu=79, Not Active, Not Active free_mib=1969
+waiting for GPU lock held by: live-stack investigation 2
+waiting for GPU lock held by: live-stack investigation 2
+waiting for GPU lock held by: live-stack investigation 2
+waiting for GPU lock held by: live-stack investigation 2
+waiting for GPU lock held by: live-stack investigation 2
+waiting for GPU lock held by: live-stack investigation 2
+waiting for GPU lock held by: live-stack investigation 2
+waiting for GPU lock held by: live-stack investigation 2
+waiting for GPU lock held by: live-stack investigation 2
+qwen3:4b INC-9002 no_mechanism r2: 4549 in, 949 out, stop, 90s, vram 5375 MiB
+LOOP_DONE qwen3:4b

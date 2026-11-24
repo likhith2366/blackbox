@@ -1,0 +1,96 @@
+{
+ "blind_id": "Y778",
+ "packet_dir": "INC-9002_no_mechanism",
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"hypo1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"checkout-svc version 1.9.0 introduced a timeout bug that causes payment calls to time out after 250ms when retrying\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc version 1.9.0 has a bug in retry logic\",\n          \"evidence_ids\": [\"deploy:d-581\", \"build:b-1230\", \"commit:0d6ba14\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment calls time out after 250ms during retry attempts\",\n          \"evidence_ids\": [\"log:7db2506518\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 0.1 for 15s\",\n          \"evidence_ids\": [\"metric:1364a73bd4\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypo2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"payment-svc version 2.4.1 has a database constraint issue causing duplicate order IDs\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"payment-svc version 2.4.1 has a UNIQUE constraint violation\",\n          \"evidence_ids\": [\"deploy:d-579\", \"build:b-1214\", \"commit:b7ae74f\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment service returns HTTP 500 errors due to duplicate order IDs\",\n          \"evidence_ids\": [\"log:de694e9264\", \"metric:e084a75703\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 0.1 for 15s\",\n          \"evidence_ids\": [\"metric:1364a73bd4\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypo3\",\n      \"component\": \"shared client\",\n      \"mechanism\": \"shared client retry policy changed to have shorter timeouts causing payment calls to fail\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"shared client retry policy updated to tighten timeouts\",\n          \"evidence_ids\": [\"commit:0d6ba14\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment calls time out after 250ms during retry attempts\",\n          \"evidence_ids\": [\"log:7db2506518\", \"trace:8165c54f07dde5e88b29dcf73cebc3fd\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 0.1 for 15s\",\n          \"evidence_ids\": [\"metric:1364a73bd4\"]\n        }\n      },\n      \"contradicting\": []\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"hypo1\",\n  \"rationale\": \"The evidence shows checkout-svc version 1.9.0 (deployed at d-581) was built from commit 0d6ba14 which introduced a retry policy change. Logs confirm payment calls timing out after 250ms (log:7db2506518) and traces show the timeout error (trace:8165c54f07dde5e88b29dcf73cebc3fd). The error rate metric (metric:1364a73bd4) matches the alert condition. No contradicting evidence exists for this hypothesis.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "hypo1",
+    "component": "checkout-svc",
+    "mechanism": "checkout-svc version 1.9.0 introduced a timeout bug that causes payment calls to time out after 250ms when retrying",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc version 1.9.0 has a bug in retry logic",
+      "evidence_ids": [
+       "deploy:d-581",
+       "build:b-1230",
+       "commit:0d6ba14"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment calls time out after 250ms during retry attempts",
+      "evidence_ids": [
+       "log:7db2506518"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 0.1 for 15s",
+      "evidence_ids": [
+       "metric:1364a73bd4"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypo2",
+    "component": "payment-svc",
+    "mechanism": "payment-svc version 2.4.1 has a database constraint issue causing duplicate order IDs",
+    "chain": {
+     "cause": {
+      "statement": "payment-svc version 2.4.1 has a UNIQUE constraint violation",
+      "evidence_ids": [
+       "deploy:d-579",
+       "build:b-1214",
+       "commit:b7ae74f"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment service returns HTTP 500 errors due to duplicate order IDs",
+      "evidence_ids": [
+       "log:de694e9264",
+       "metric:e084a75703"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 0.1 for 15s",
+      "evidence_ids": [
+       "metric:1364a73bd4"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypo3",
+    "component": "shared client",
+    "mechanism": "shared client retry policy changed to have shorter timeouts causing payment calls to fail",
+    "chain": {
+     "cause": {
+      "statement": "shared client retry policy updated to tighten timeouts",
+      "evidence_ids": [
+       "commit:0d6ba14"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment calls time out after 250ms during retry attempts",
+      "evidence_ids": [
+       "log:7db2506518",
+       "trace:8165c54f07dde5e88b29dcf73cebc3fd"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 0.1 for 15s",
+      "evidence_ids": [
+       "metric:1364a73bd4"
+      ]
+     }
+    },
+    "contradicting": []
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "hypo1",
+  "rationale": "The evidence shows checkout-svc version 1.9.0 (deployed at d-581) was built from commit 0d6ba14 which introduced a retry policy change. Logs confirm payment calls timing out after 250ms (log:7db2506518) and traces show the timeout error (trace:8165c54f07dde5e88b29dcf73cebc3fd). The error rate metric (metric:1364a73bd4) matches the alert condition. No contradicting evidence exists for this hypothesis."
+ }
+}

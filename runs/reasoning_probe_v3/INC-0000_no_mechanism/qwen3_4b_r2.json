@@ -1,0 +1,122 @@
+{
+ "incident": "INC-0000",
+ "condition": "no_mechanism",
+ "repeat": 2,
+ "model": "qwen3:4b",
+ "code_revision": "5fbb9c5",
+ "settings": {
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 7,
+  "num_ctx": 12288,
+  "num_predict": 4000,
+  "think": false
+ },
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"hypothesis-1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"checkout-svc version 1.9.0 has a bug that causes payment calls to time out after 250ms when retrying\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc version 1.9.0 introduced a timeout bug in payment retry logic\",\n          \"evidence_ids\": [\"deploy:d-535\", \"build:b-1216\", \"commit:e7a0cc0\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment calls in checkout-svc time out after 250ms during retries\",\n          \"evidence_ids\": [\"log:aea2b46ce0\", \"metric:3631246b54\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 5% for 15 seconds\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypothesis-2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"payment-svc version 2.4.1 has a bug that causes duplicate order_id errors\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"payment-svc version 2.4.1 has a bug that causes duplicate order_id errors\",\n          \"evidence_ids\": [\"deploy:d-533\", \"build:b-1214\", \"commit:b7ae74f\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment-svc returns HTTP 500 errors for duplicate order_id attempts\",\n          \"evidence_ids\": [\"log:4c3dac5d49\", \"metric:5b57555878\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 5% for 15 seconds\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": [\"log:04618de589\"]\n    },\n    {\n      \"id\": \"hypothesis-3\",\n      \"component\": \"shared client\",\n      \"mechanism\": \"shared client retry policy changed to be too aggressive, causing payment failures\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"commit e7a0cc0 changed the shared client retry policy to be too aggressive\",\n          \"evidence_ids\": [\"commit:e7a0cc0\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment calls in checkout-svc time out after 250ms during retries\",\n          \"evidence_ids\": [\"log:aea2b46ce0\", \"metric:3631246b54\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 5% for 15 seconds\",\n          \"evidence_ids\": [\"metric:83cc53b310\"]\n        }\n      },\n      \"contradicting\": [\"log:04618de589\"]\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"hypothesis-1\",\n  \"rationale\": \"The evidence shows checkout-svc version 1.9.0 (deployed at d-535) has a timeout bug in payment retry logic (commit e7a0cc0), causing payment calls to time out after 250ms (log:aea2b46ce0) which leads to high error rate (metric:83cc53b310). Payment-svc errors (log:4c3dac5d49) are a symptom of the checkout-svc timeout, not the root cause.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "hypothesis-1",
+    "component": "checkout-svc",
+    "mechanism": "checkout-svc version 1.9.0 has a bug that causes payment calls to time out after 250ms when retrying",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc version 1.9.0 introduced a timeout bug in payment retry logic",
+      "evidence_ids": [
+       "deploy:d-535",
+       "build:b-1216",
+       "commit:e7a0cc0"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment calls in checkout-svc time out after 250ms during retries",
+      "evidence_ids": [
+       "log:aea2b46ce0",
+       "metric:3631246b54"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 5% for 15 seconds",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypothesis-2",
+    "component": "payment-svc",
+    "mechanism": "payment-svc version 2.4.1 has a bug that causes duplicate order_id errors",
+    "chain": {
+     "cause": {
+      "statement": "payment-svc version 2.4.1 has a bug that causes duplicate order_id errors",
+      "evidence_ids": [
+       "deploy:d-533",
+       "build:b-1214",
+       "commit:b7ae74f"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment-svc returns HTTP 500 errors for duplicate order_id attempts",
+      "evidence_ids": [
+       "log:4c3dac5d49",
+       "metric:5b57555878"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 5% for 15 seconds",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": [
+     "log:04618de589"
+    ]
+   },
+   {
+    "id": "hypothesis-3",
+    "component": "shared client",
+    "mechanism": "shared client retry policy changed to be too aggressive, causing payment failures",
+    "chain": {
+     "cause": {
+      "statement": "commit e7a0cc0 changed the shared client retry policy to be too aggressive",
+      "evidence_ids": [
+       "commit:e7a0cc0"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment calls in checkout-svc time out after 250ms during retries",
+      "evidence_ids": [
+       "log:aea2b46ce0",
+       "metric:3631246b54"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 5% for 15 seconds",
+      "evidence_ids": [
+       "metric:83cc53b310"
+      ]
+     }
+    },
+    "contradicting": [
+     "log:04618de589"
+    ]
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "hypothesis-1",
+  "rationale": "The evidence shows checkout-svc version 1.9.0 (deployed at d-535) has a timeout bug in payment retry logic (commit e7a0cc0), causing payment calls to time out after 250ms (log:aea2b46ce0) which leads to high error rate (metric:83cc53b310). Payment-svc errors (log:4c3dac5d49) are a symptom of the checkout-svc timeout, not the root cause."
+ },
+ "parse_error": null,
+ "done_reason": "stop",
+ "prompt_tokens": 4632,
+ "completion_tokens": 874,
+ "wall_seconds": 54.6,
+ "load_seconds": 0.0,
+ "prompt_eval_seconds": 2.7,
+ "eval_seconds": 50.9,
+ "peak_vram_mib": 5280,
+ "peak_server_rss_mib": 2174
+}

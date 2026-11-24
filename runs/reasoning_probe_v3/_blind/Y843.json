@@ -1,0 +1,112 @@
+{
+ "blind_id": "Y843",
+ "packet_dir": "INC-9001_full",
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"New payment-svc version 2.5.0 introduced a fast path for micro-charges that bypasses risk checks and velocity queries, causing database pool exhaustion due to high concurrency of small charges\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Payment-svc deployment d-576 (v2.5.0) introduced fast path for micro-charges\",\n          \"evidence_ids\": [\"deploy:d-576\", \"commit:d142601\", \"source:b-1229:services/payment/app.py#Handler\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"Micro-charges skip risk checks and velocity queries, leading to high concurrency of small charges\",\n          \"evidence_ids\": [\"commit:d142601\", \"source:b-1229:services/payment/app.py#Handler\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Payment-svc database pool acquisition timeouts (1000ms) causing checkout-svc to return 503 errors\",\n          \"evidence_ids\": [\"metric:03d4f590b8\", \"metric:5478273809\", \"log:3bf4f24e33\", \"log:9110a7c06d\", \"trace:84bc7633414fe8cfa17bf6eedc1547b8\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"Checkout-svc configuration change caused increased upstream requests to payment-svc, overwhelming the payment-svc database pool\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Checkout-svc deployment d-575 (v1.8.2) introduced new configuration that increases payment-svc requests\",\n          \"evidence_ids\": [\"deploy:d-575\", \"config:checkout-svc@bc913fb\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"Checkout-svc sends more requests to payment-svc, increasing database pool usage\",\n          \"evidence_ids\": [\"metric:05f9bb24dd\", \"metric:95f388cff1\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Payment-svc database pool acquisition timeouts causing checkout-svc to return 503 errors\",\n          \"evidence_ids\": [\"metric:03d4f590b8\", \"metric:5478273809\", \"log:3bf4f24e33\", \"log:9110a7c06d\", \"trace:84bc7633414fe8cfa17bf6eedc1547b8\"]\n        }\n      },\n      \"contradicting\": [\"metric:531d143549\"]\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"Payment-svc database pool size is too small (4 connections) for the load of micro-charges\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"Payment-svc config uses pool_size=4 for database connections\",\n          \"evidence_ids\": [\"config:payment-svc@b1e5a60\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"High concurrency of micro-charges causes database pool exhaustion\",\n          \"evidence_ids\": [\"metric:5478273809\", \"metric:03d4f590b8\"]\n        },\n        \"symptom\": {\n          \"statement\": \"Payment-svc database pool acquisition timeouts causing checkout-svc to return 503 errors\",\n          \"evidence_ids\": [\"metric:03d4f590b8\", \"metric:5478273809\", \"log:3bf4f24e33\", \"log:9110a7c06d\", \"trace:84bc7633414fe8cfa17bf6eedc1547b8\"]\n        }\n      },\n      \"contradicting\": [\"metric:531d143549\"]\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"h1\",\n  \"rationale\": \"The evidence shows payment-svc v2.5.0 (d-576) introduced a fast path for micro-charges that bypasses risk checks and velocity queries (commit d142601, source code). This caused payment-svc to experience database pool timeouts (metric:03d4f590b8 shows pool in use=4, metric:5478273809 shows pool wait p95=1014ms), which were directly reported as errors in payment-svc logs (log:3bf4f24e33) and propagated to checkout-svc (log:9110a7c06d, trace:84bc7633414fe8cfa17bf6eedc1547b8). The checkout-svc configuration (config:checkout-svc@bc913fb) did not change, and payment-svc config (config:payment-svc@b1e5a60) remained unchanged, so the root cause is the new payment-svc deployment.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "h1",
+    "component": "payment-svc",
+    "mechanism": "New payment-svc version 2.5.0 introduced a fast path for micro-charges that bypasses risk checks and velocity queries, causing database pool exhaustion due to high concurrency of small charges",
+    "chain": {
+     "cause": {
+      "statement": "Payment-svc deployment d-576 (v2.5.0) introduced fast path for micro-charges",
+      "evidence_ids": [
+       "deploy:d-576",
+       "commit:d142601",
+       "source:b-1229:services/payment/app.py#Handler"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "Micro-charges skip risk checks and velocity queries, leading to high concurrency of small charges",
+      "evidence_ids": [
+       "commit:d142601",
+       "source:b-1229:services/payment/app.py#Handler"
+      ]
+     },
+     "symptom": {
+      "statement": "Payment-svc database pool acquisition timeouts (1000ms) causing checkout-svc to return 503 errors",
+      "evidence_ids": [
+       "metric:03d4f590b8",
+       "metric:5478273809",
+       "log:3bf4f24e33",
+       "log:9110a7c06d",
+       "trace:84bc7633414fe8cfa17bf6eedc1547b8"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "h2",
+    "component": "checkout-svc",
+    "mechanism": "Checkout-svc configuration change caused increased upstream requests to payment-svc, overwhelming the payment-svc database pool",
+    "chain": {
+     "cause": {
+      "statement": "Checkout-svc deployment d-575 (v1.8.2) introduced new configuration that increases payment-svc requests",
+      "evidence_ids": [
+       "deploy:d-575",
+       "config:checkout-svc@bc913fb"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "Checkout-svc sends more requests to payment-svc, increasing database pool usage",
+      "evidence_ids": [
+       "metric:05f9bb24dd",
+       "metric:95f388cff1"
+      ]
+     },
+     "symptom": {
+      "statement": "Payment-svc database pool acquisition timeouts causing checkout-svc to return 503 errors",
+      "evidence_ids": [
+       "metric:03d4f590b8",
+       "metric:5478273809",
+       "log:3bf4f24e33",
+       "log:9110a7c06d",
+       "trace:84bc7633414fe8cfa17bf6eedc1547b8"
+      ]
+     }
+    },
+    "contradicting": [
+     "metric:531d143549"
+    ]
+   },
+   {
+    "id": "h3",
+    "component": "payment-svc",
+    "mechanism": "Payment-svc database pool size is too small (4 connections) for the load of micro-charges",
+    "chain": {
+     "cause": {
+      "statement": "Payment-svc config uses pool_size=4 for database connections",
+      "evidence_ids": [
+       "config:payment-svc@b1e5a60"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "High concurrency of micro-charges causes database pool exhaustion",
+      "evidence_ids": [
+       "metric:5478273809",
+       "metric:03d4f590b8"
+      ]
+     },
+     "symptom": {
+      "statement": "Payment-svc database pool acquisition timeouts causing checkout-svc to return 503 errors",
+      "evidence_ids": [
+       "metric:03d4f590b8",
+       "metric:5478273809",
+       "log:3bf4f24e33",
+       "log:9110a7c06d",
+       "trace:84bc7633414fe8cfa17bf6eedc1547b8"
+      ]
+     }
+    },
+    "contradicting": [
+     "metric:531d143549"
+    ]
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "h1",
+  "rationale": "The evidence shows payment-svc v2.5.0 (d-576) introduced a fast path for micro-charges that bypasses risk checks and velocity queries (commit d142601, source code). This caused payment-svc to experience database pool timeouts (metric:03d4f590b8 shows pool in use=4, metric:5478273809 shows pool wait p95=1014ms), which were directly reported as errors in payment-svc logs (log:3bf4f24e33) and propagated to checkout-svc (log:9110a7c06d, trace:84bc7633414fe8cfa17bf6eedc1547b8). The checkout-svc configuration (config:checkout-svc@bc913fb) did not change, and payment-svc config (config:payment-svc@b1e5a60) remained unchanged, so the root cause is the new payment-svc deployment."
+ }
+}

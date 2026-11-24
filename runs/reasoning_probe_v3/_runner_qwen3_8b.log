@@ -1,0 +1,33 @@
+03:50:07 gpu=78, Not Active, Not Active free_mib=3435
+qwen3:8b INC-0000 full r1: 8081 in, 938 out, stop, 607s, vram 5372 MiB
+04:02:19 gpu=77, Not Active, Not Active free_mib=4460
+qwen3:8b INC-0000 no_mechanism r1: 4638 in, 894 out, stop, 371s, vram 5725 MiB
+04:10:36 gpu=72, Not Active, Not Active free_mib=3574
+qwen3:8b INC-9001 full r1: 8130 in, 819 out, stop, 469s, vram 5179 MiB
+04:20:29 gpu=76, Not Active, Not Active free_mib=3667
+qwen3:8b INC-9001 no_mechanism r1: 4308 in, 864 out, stop, 346s, vram 5202 MiB
+04:26:38 gpu=79, Not Active, Not Active free_mib=3265
+qwen3:8b INC-9002 full r1: 7975 in, 952 out, stop, 498s, vram 5191 MiB
+04:42:48 gpu=79, Not Active, Not Active free_mib=1994
+waiting for GPU lock held by: live sweep retry-policy
+waiting for GPU lock held by: live sweep retry-policy
+waiting for GPU lock held by: live sweep retry-policy
+waiting for GPU lock held by: live sweep retry-policy
+waiting for GPU lock held by: live sweep retry-policy
+waiting for GPU lock held by: live sweep retry-policy
+waiting for GPU lock held by: live sweep retry-policy
+waiting for GPU lock held by: live sweep retry-policy
+qwen3:8b INC-9002 no_mechanism r1: 4555 in, 826 out, stop, 326s, vram 5164 MiB
+04:54:02 gpu=79, Not Active, Not Active free_mib=1804
+qwen3:8b INC-0000 full r2: 8081 in, 938 out, stop, 483s, vram 5371 MiB
+05:04:49 gpu=77, Not Active, Not Active free_mib=2013
+qwen3:8b INC-0000 no_mechanism r2: 4638 in, 894 out, stop, 314s, vram 5402 MiB
+05:14:51 gpu=68, Not Active, Not Active free_mib=1513
+qwen3:8b INC-9001 full r2: 8130 in, 819 out, stop, 421s, vram 5207 MiB
+05:24:36 gpu=79, Not Active, Not Active free_mib=1822
+qwen3:8b INC-9001 no_mechanism r2: 4308 in, 864 out, stop, 281s, vram 5199 MiB
+05:33:45 gpu=77, Not Active, Not Active free_mib=1702
+qwen3:8b INC-9002 full r2: 7975 in, 936 out, stop, 548s, vram 5185 MiB
+05:43:16 gpu=77, Not Active, Not Active free_mib=1535
+qwen3:8b INC-9002 no_mechanism r2: 4555 in, 857 out, stop, 323s, vram 4958 MiB
+LOOP_DONE qwen3:8b

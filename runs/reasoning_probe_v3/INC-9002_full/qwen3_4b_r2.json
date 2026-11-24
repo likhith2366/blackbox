@@ -1,0 +1,126 @@
+{
+ "incident": "INC-9002",
+ "condition": "full",
+ "repeat": 2,
+ "model": "qwen3:4b",
+ "code_revision": "eed75ca",
+ "settings": {
+  "temperature": 0.0,
+  "top_p": 1.0,
+  "seed": 7,
+  "num_ctx": 12288,
+  "num_predict": 4000,
+  "think": false
+ },
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"checkout-svc's retry policy for payment service calls was increased to 4 retries with a 250ms timeout, causing timeouts on payment service calls due to increased retry attempts\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc deployment d-581 (v1.9.0) introduced a retry policy change for payment service calls\",\n          \"evidence_ids\": [\"deploy:d-581\", \"commit:0d6ba14\", \"build:b-1230\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"checkout-svc starts retrying payment service calls up to 4 times with a 250ms timeout per attempt\",\n          \"evidence_ids\": [\"source:b-1230:libs/httpclient/__init__.py#ServiceClient\", \"commit:0d6ba14\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate spikes to 0.3667 due to payment service timeouts\",\n          \"evidence_ids\": [\"metric:1364a73bd4\", \"log:7db2506518\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"payment-svc's database pool is exhausted due to high transaction volume from checkout-svc retries\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"payment-svc deployment d-579 (v2.4.1) introduced a database pool configuration change\",\n          \"evidence_ids\": [\"deploy:d-579\", \"build:b-1214\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment-svc database pool is exhausted, causing connection timeouts and 500 errors\",\n          \"evidence_ids\": [\"metric:71e74a95e7\", \"metric:60e447ad63\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate spikes to 0.3667 due to payment service 500 errors\",\n          \"evidence_ids\": [\"metric:1364a73bd4\", \"log:de694e9264\"]\n        }\n      },\n      \"contradicting\": [\"metric:9d756c5419\"]\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"checkout-svc's payment service call timeout was reduced from 2000ms to 250ms, causing timeouts on payment service calls\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc deployment d-581 (v1.9.0) reduced the timeout for payment service calls\",\n          \"evidence_ids\": [\"deploy:d-581\", \"commit:0d6ba14\", \"build:b-1230\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"checkout-svc payment service calls time out after 250ms instead of 2000ms\",\n          \"evidence_ids\": [\"source:b-1230:libs/httpclient/__init__.py#ServiceClient\", \"commit:0d6ba14\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate spikes to 0.3667 due to payment service timeouts\",\n          \"evidence_ids\": [\"metric:1364a73bd4\", \"log:7db2506518\"]\n        }\n      },\n      \"contradicting\": [\"metric:9d756c5419\"]\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"h1\",\n  \"rationale\": \"The evidence shows checkout-svc deployment d-581 (v1.9.0) introduced a retry policy change (commit 0d6ba14) that increased retries to 4 with a 250ms timeout. This caused checkout-svc to time out on payment service calls (log:7db2506518), leading to the observed error rate spike (metric:1364a73bd4). The payment-svc error rate (metric:9d756c5419) shows 500 errors, but the primary symptom is checkout-svc timeouts, which align with the retry policy change. The other hypotheses are contradicted by the evidence.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "h1",
+    "component": "checkout-svc",
+    "mechanism": "checkout-svc's retry policy for payment service calls was increased to 4 retries with a 250ms timeout, causing timeouts on payment service calls due to increased retry attempts",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc deployment d-581 (v1.9.0) introduced a retry policy change for payment service calls",
+      "evidence_ids": [
+       "deploy:d-581",
+       "commit:0d6ba14",
+       "build:b-1230"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "checkout-svc starts retrying payment service calls up to 4 times with a 250ms timeout per attempt",
+      "evidence_ids": [
+       "source:b-1230:libs/httpclient/__init__.py#ServiceClient",
+       "commit:0d6ba14"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate spikes to 0.3667 due to payment service timeouts",
+      "evidence_ids": [
+       "metric:1364a73bd4",
+       "log:7db2506518"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "h2",
+    "component": "payment-svc",
+    "mechanism": "payment-svc's database pool is exhausted due to high transaction volume from checkout-svc retries",
+    "chain": {
+     "cause": {
+      "statement": "payment-svc deployment d-579 (v2.4.1) introduced a database pool configuration change",
+      "evidence_ids": [
+       "deploy:d-579",
+       "build:b-1214"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment-svc database pool is exhausted, causing connection timeouts and 500 errors",
+      "evidence_ids": [
+       "metric:71e74a95e7",
+       "metric:60e447ad63"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate spikes to 0.3667 due to payment service 500 errors",
+      "evidence_ids": [
+       "metric:1364a73bd4",
+       "log:de694e9264"
+      ]
+     }
+    },
+    "contradicting": [
+     "metric:9d756c5419"
+    ]
+   },
+   {
+    "id": "h3",
+    "component": "checkout-svc",
+    "mechanism": "checkout-svc's payment service call timeout was reduced from 2000ms to 250ms, causing timeouts on payment service calls",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc deployment d-581 (v1.9.0) reduced the timeout for payment service calls",
+      "evidence_ids": [
+       "deploy:d-581",
+       "commit:0d6ba14",
+       "build:b-1230"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "checkout-svc payment service calls time out after 250ms instead of 2000ms",
+      "evidence_ids": [
+       "source:b-1230:libs/httpclient/__init__.py#ServiceClient",
+       "commit:0d6ba14"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate spikes to 0.3667 due to payment service timeouts",
+      "evidence_ids": [
+       "metric:1364a73bd4",
+       "log:7db2506518"
+      ]
+     }
+    },
+    "contradicting": [
+     "metric:9d756c5419"
+    ]
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "h1",
+  "rationale": "The evidence shows checkout-svc deployment d-581 (v1.9.0) introduced a retry policy change (commit 0d6ba14) that increased retries to 4 with a 250ms timeout. This caused checkout-svc to time out on payment service calls (log:7db2506518), leading to the observed error rate spike (metric:1364a73bd4). The payment-svc error rate (metric:9d756c5419) shows 500 errors, but the primary symptom is checkout-svc timeouts, which align with the retry policy change. The other hypotheses are contradicted by the evidence."
+ },
+ "parse_error": null,
+ "done_reason": "stop",
+ "prompt_tokens": 7969,
+ "completion_tokens": 1039,
+ "wall_seconds": 81.6,
+ "load_seconds": 8.7,
+ "prompt_eval_seconds": 6.3,
+ "eval_seconds": 66.4,
+ "peak_vram_mib": 5371,
+ "peak_server_rss_mib": 869
+}

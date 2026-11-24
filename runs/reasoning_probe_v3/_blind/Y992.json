@@ -1,0 +1,94 @@
+{
+ "blind_id": "Y992",
+ "packet_dir": "INC-9001_no_mechanism",
+ "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"hypo1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"checkout-svc version 1.8.2 has a bug that causes it to fail when payment-svc is slow\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"checkout-svc version 1.8.2 has a bug that causes it to fail when payment-svc is slow\",\n          \"evidence_ids\": [\"deploy:d-575\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"checkout-svc fails to process orders when payment-svc is slow\",\n          \"evidence_ids\": [\"metric:4d19b12fad\", \"log:9110a7c06d\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 0.1 for 15s\",\n          \"evidence_ids\": [\"metric:4d19b12fad\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypo2\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"payment-svc version 2.5.0 has a bug that causes database pool timeouts\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"payment-svc version 2.5.0 has a bug that causes database pool timeouts\",\n          \"evidence_ids\": [\"deploy:d-576\", \"commit:d142601\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"payment-svc database pool timeouts occur during high load\",\n          \"evidence_ids\": [\"log:3bf4f24e33\", \"metric:010cbc2f51\"]\n        },\n        \"symptom\": {\n          \"statement\": \"payment-svc error rate exceeds 0.1 for 15s\",\n          \"evidence_ids\": [\"metric:feb04e3d4a\"]\n        }\n      },\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"hypo3\",\n      \"component\": \"payment-svc\",\n      \"mechanism\": \"payment-svc version 2.5.0 has a bug that causes payment processing to fail for small charges\",\n      \"chain\": {\n        \"cause\": {\n          \"statement\": \"payment-svc version 2.5.0 has a bug that causes payment processing to fail for small charges\",\n          \"evidence_ids\": [\"deploy:d-576\", \"commit:d142601\"]\n        },\n        \"runtime_effect\": {\n          \"statement\": \"small charges skip risk checks and write directly to payments table, causing database contention\",\n          \"evidence_ids\": [\"commit:d142601\"]\n        },\n        \"symptom\": {\n          \"statement\": \"checkout-svc error rate exceeds 0.1 for 15s\",\n          \"evidence_ids\": [\"metric:4d19b12fad\"]\n        }\n      },\n      \"contradicting\": []\n    }\n  ],\n  \"decision\": \"diagnosis\",\n  \"top_hypothesis\": \"hypo2\",\n  \"rationale\": \"The evidence shows payment-svc version 2.5.0 (deployed at 03:44:06) has a database pool timeout issue (log:3bf4f24e33) that causes payment-svc errors (metric:feb04e3d4a), which leads to checkout-svc errors (log:9110a7c06d and metric:4d19b12fad). The commit d142601 introduces a fast path for small charges that may cause database contention, but the direct evidence of payment-svc timeouts and checkout-svc errors points to payment-svc as the root cause.\"\n}",
+ "parsed": {
+  "hypotheses": [
+   {
+    "id": "hypo1",
+    "component": "checkout-svc",
+    "mechanism": "checkout-svc version 1.8.2 has a bug that causes it to fail when payment-svc is slow",
+    "chain": {
+     "cause": {
+      "statement": "checkout-svc version 1.8.2 has a bug that causes it to fail when payment-svc is slow",
+      "evidence_ids": [
+       "deploy:d-575"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "checkout-svc fails to process orders when payment-svc is slow",
+      "evidence_ids": [
+       "metric:4d19b12fad",
+       "log:9110a7c06d"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 0.1 for 15s",
+      "evidence_ids": [
+       "metric:4d19b12fad"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypo2",
+    "component": "payment-svc",
+    "mechanism": "payment-svc version 2.5.0 has a bug that causes database pool timeouts",
+    "chain": {
+     "cause": {
+      "statement": "payment-svc version 2.5.0 has a bug that causes database pool timeouts",
+      "evidence_ids": [
+       "deploy:d-576",
+       "commit:d142601"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "payment-svc database pool timeouts occur during high load",
+      "evidence_ids": [
+       "log:3bf4f24e33",
+       "metric:010cbc2f51"
+      ]
+     },
+     "symptom": {
+      "statement": "payment-svc error rate exceeds 0.1 for 15s",
+      "evidence_ids": [
+       "metric:feb04e3d4a"
+      ]
+     }
+    },
+    "contradicting": []
+   },
+   {
+    "id": "hypo3",
+    "component": "payment-svc",
+    "mechanism": "payment-svc version 2.5.0 has a bug that causes payment processing to fail for small charges",
+    "chain": {
+     "cause": {
+      "statement": "payment-svc version 2.5.0 has a bug that causes payment processing to fail for small charges",
+      "evidence_ids": [
+       "deploy:d-576",
+       "commit:d142601"
+      ]
+     },
+     "runtime_effect": {
+      "statement": "small charges skip risk checks and write directly to payments table, causing database contention",
+      "evidence_ids": [
+       "commit:d142601"
+      ]
+     },
+     "symptom": {
+      "statement": "checkout-svc error rate exceeds 0.1 for 15s",
+      "evidence_ids": [
+       "metric:4d19b12fad"
+      ]
+     }
+    },
+    "contradicting": []
+   }
+  ],
+  "decision": "diagnosis",
+  "top_hypothesis": "hypo2",
+  "rationale": "The evidence shows payment-svc version 2.5.0 (deployed at 03:44:06) has a database pool timeout issue (log:3bf4f24e33) that causes payment-svc errors (metric:feb04e3d4a), which leads to checkout-svc errors (log:9110a7c06d and metric:4d19b12fad). The commit d142601 introduces a fast path for small charges that may cause database contention, but the direct evidence of payment-svc timeouts and checkout-svc errors points to payment-svc as the root cause."
+ }
+}
