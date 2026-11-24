@@ -22,6 +22,7 @@ export function StartView() {
   const [incidentId, setIncidentId] = useState(query.get('incident') ?? '')
   const [mode, setMode] = useState<'snapshot' | 'live' | 'live_stack'>('snapshot')
   const [alert, setAlert] = useState('checkout-svc:error_rate>0.1:15')
+  const [settings, setSettings] = useState<'standard' | 'improved'>('standard')
   const [desc, setDesc] = useState(followup ? `Follow-up of saved run ${followup}: ` : '')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
@@ -61,7 +62,7 @@ export function StartView() {
       setSubmitting(true)
       setSubmitErr(null)
       try {
-        const job = await api.startInvestigation({ incident_id: '', mode, alert: alert.replace(/\s/g, '') })
+        const job = await api.startInvestigation({ incident_id: '', mode, settings, alert: alert.replace(/\s/g, '') })
         navigate(href('jobs', job.job_id))
       } catch (err) {
         setSubmitErr(errText(err))
@@ -71,7 +72,7 @@ export function StartView() {
       return
     }
     if (!inc) return
-    const req: InvestigationRequest = { incident_id: inc.incident_id, mode }
+    const req: InvestigationRequest = { incident_id: inc.incident_id, mode, settings }
     if (followup) req.followup_of = followup
     if (desc.trim()) req.problem_description = desc.trim()
     // send the window only when narrowed, so the default is exactly the incident window
@@ -153,6 +154,18 @@ export function StartView() {
               <label className="inline">
                 <input type="radio" name="mode" checked={liveStack} onChange={() => setMode('live_stack')} /> live stack
                 (Loki, Prometheus, Tempo, deployment records, GitHub; never snapshots)
+              </label>
+            </fieldset>
+            <fieldset>
+              <legend>Investigator</legend>
+              <label className="inline">
+                <input type="radio" name="settings" checked={settings === 'standard'} onChange={() => setSettings('standard')} />{' '}
+                standard (the evaluated settings)
+              </label>
+              <label className="inline">
+                <input type="radio" name="settings" checked={settings === 'improved'} onChange={() => setSettings('improved')} />{' '}
+                improved (development: follows deployments to their code, rewrites hypotheses from all evidence, stricter
+                evidence gate)
               </label>
             </fieldset>
             {liveStack && (

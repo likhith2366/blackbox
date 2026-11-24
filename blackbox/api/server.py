@@ -29,6 +29,7 @@ RUNS = REPO / "runs"
 SNAPSHOTS = REPO / "scenarios" / "snapshots"
 JOBS_DIR = RUNS / "ui_jobs"
 CONFIG = REPO / "configs" / "dev.yaml"
+SETTINGS = {"standard": CONFIG, "improved": REPO / "configs" / "dev_v3e.yaml"}   # improved = development options
 DEFAULT_REPO = "likhith2366/blackbox-demo-shop"
 HIDDEN_META = ("answer", "score", "scenario", "fault", "controller")   # never sent to the browser
 
@@ -363,6 +364,7 @@ class InvestigationRequest(BaseModel):
     incident_id: str = ""
     mode: str = "snapshot"              # snapshot | live (snapshot + GitHub + local logs) | live_stack (live sources only)
     alert: Optional[str] = None         # live_stack: service:metric>threshold:for_s
+    settings: str = "standard"          # standard | improved (change expansion, synthesis, causal gate; development)
     followup_of: Optional[str] = None   # run id this investigation follows up (new job, new run id)
     problem_description: Optional[str] = None
     window_start: Optional[str] = None
@@ -402,6 +404,8 @@ def _set(job: dict, **fields: Any) -> None:
 
 @app.post("/api/investigations", status_code=202)
 def submit(req: InvestigationRequest, retry_of: Optional[str] = None) -> dict:
+    if req.settings not in SETTINGS:
+        raise HTTPException(400, "settings must be standard or improved")
     if req.mode not in ("snapshot", "live", "live_stack"):
         raise HTTPException(400, "mode must be snapshot, live or live_stack")
     live_incident = None
@@ -611,11 +615,12 @@ def _worker() -> None:
                                          loki_incident=req.incident_id if loki else None)
             else:
                 base = load_backend(req.incident_id, snapshot_root=SNAPSHOTS)
-            cfg = RunConfig(**(yaml.safe_load(CONFIG.read_text(encoding="utf-8")) or {}))
+            cfg_file = SETTINGS.get(req.settings, CONFIG)
+            cfg = RunConfig(**(yaml.safe_load(cfg_file.read_text(encoding="utf-8")) or {}))
             import hashlib
             from blackbox.systems import code_revision as _rev
             man = SNAPSHOTS / req.incident_id / "manifest.json"
-            _set(job, meta={"mode": req.mode, "config_file": str(CONFIG.relative_to(REPO)),
+            _set(job, meta={"mode": req.mode, "settings": req.settings, "config_file": str(cfg_file.relative_to(REPO)),
                             "model": cfg.model_dump(include={"model", "temperature", "seed", "num_ctx", "num_predict",
                                                               "max_rounds", "max_tool_calls", "round_prompt",
                                                               "report_prompt", "coverage_hint"}),

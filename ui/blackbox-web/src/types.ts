@@ -252,6 +252,7 @@ export interface InvestigationRequest {
   incident_id: string
   mode: 'snapshot' | 'live' | 'live_stack'
   alert?: string
+  settings?: 'standard' | 'improved'
   problem_description?: string
   window_start?: string
   window_end?: string
