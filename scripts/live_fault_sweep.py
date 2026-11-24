@@ -40,6 +40,19 @@ def gpu_temp() -> int:
         return 0
 
 
+def traffic_rps() -> float:
+    """Mean checkout-svc requests_per_s over the last minute, from Prometheus (0 if unknown)."""
+    import urllib.parse
+    import urllib.request
+    q = urllib.parse.urlencode({"query": 'avg_over_time(requests_per_s{job="checkout-svc"}[1m])'})
+    try:
+        with urllib.request.urlopen(f"http://127.0.0.1:9090/api/v1/query?{q}", timeout=10) as r:
+            res = json.loads(r.read())["data"]["result"]
+        return float(res[0]["value"][1]) if res else 0.0
+    except Exception:
+        return 0.0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--faults", default=",".join(FAULTS))
@@ -68,7 +81,17 @@ def main():
         with demo_lock(f"live sweep reset {fault}"):
             controller.baseline(str(RUNTIME / "telemetry" / "stack"))
         time.sleep(a.settle)
-        log(f"{fault}: inject")
+        for _ in range(12):                  # traffic must be flowing, or no alert can fire
+            rps = traffic_rps()
+            if rps >= 1.5:
+                break
+            log(f"{fault}: waiting for traffic (checkout requests_per_s={rps:.2f}); is demo.loadgen running?")
+            time.sleep(15)
+        else:
+            log(f"{fault}: no healthy traffic; skipped (recorded as 'no traffic')")
+            (d / "output.json").write_text(json.dumps({"status": "no_traffic", "fault": fault}), encoding="utf-8")
+            continue
+        log(f"{fault}: inject (traffic {rps:.1f} req/s)")
         with demo_lock(f"live sweep inject {fault}"):
             ev = controller.apply(fault)
         (d / "truth.json").write_text(json.dumps(ev, indent=2), encoding="utf-8")
