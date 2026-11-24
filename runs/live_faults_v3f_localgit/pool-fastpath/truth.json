@@ -1,0 +1,14 @@
+{
+  "change_id": "pool-fastpath",
+  "family": "connection_leak",
+  "kind": "commit",
+  "at": "2026-11-24T10:14:41.016Z",
+  "commit": "1182efcc70c0ce5cb0f49dbaeb2f66c3467da2ed",
+  "builds": [
+    "b-1264"
+  ],
+  "deployments": [
+    "d-736"
+  ],
+  "done_at": "2026-11-24T10:14:43.660Z"
+}

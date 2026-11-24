@@ -126,3 +126,35 @@ decisive change was never cited. These runs cite the faulty commit and the decis
 
 **The lexical matcher still says "no match".** It needs the key's wording ("retry amplification", "connection
 leak"). A semantic reviewer, human or blinded, should score them.
+
+## dev_v3e: + error and lifecycle logs before synthesis (`configs/dev_v3e.yaml`, `runs/live_faults_v3f_localgit`)
+
+Before synthesis, the coordinator fetches each incident service's ERROR logs and lifecycle events (start, stop,
+exit) with ordinary read-only `search_logs` calls. This is generic operational context.
+
+| Fault | Top cause | Provisional verdict |
+|---|---|---|
+| payment-stop | "payment-svc was shut down by operator, causing checkout-svc to time out", citing the "shutdown requested (operator request)" and "payment-svc stopped" log lines | **correct** (first time in any sweep) |
+| pool-fastpath | "payment-svc 2.5.0 introduced a db pool timeout due to new fast path for micro-charges" | **partially correct** (no unreleased connection) |
+| retry-policy | "checkout-svc's payment client configuration change caused payment calls to time out due to reduced timeout and increased retries" | **correct** |
+| endpoint-port | "checkout-svc's payment client configuration changed to use port 18112, but payment-svc is not listening on that port" | **correct** (exact) |
+
+**This sweep:** 3 correct, 1 partially correct, 0 wrong, 0 abstained.
+
+**Progress across sweeps of the same live faults (provisional, my scoring):**
+
+| Settings | Correct | Partial | Wrong | Abstained |
+|---|---|---|---|---|
+| v1 (evaluated) | 0 | 0 | 1 | 4 |
+| v2 | 0 | 0 | 2 | 2 |
+| v2 + local git | 0 | 0 | 2 | 2 |
+| dev_v3 (expansion + synthesis) | 1 | 2 | 1 | 0 |
+| dev_v3c (+ causal gate) | 2 | 0 | 0 | 2 |
+| dev_v3d (+ gate ranking, in-window rule) | 2 | 1 | 0 | 1 |
+| **dev_v3e (+ error/lifecycle logs)** | **3** | **1** | **0** | **0** |
+
+**Still open:**
+- The connection leak's mechanism (an early return skips `POOL.release`) is not stated.
+- Faults that raise no alert (index-migration, pool-override) were not investigated.
+- Every number here comes from one run per fault, scored by me. These are development results; a second reviewer
+  is needed, and the 47 formal runs are untouched.

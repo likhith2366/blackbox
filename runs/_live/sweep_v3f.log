@@ -1,0 +1,17 @@
+10:00:58 payment-stop: reset to baseline
+10:06:38 payment-stop: inject (traffic 3.1 req/s)
+10:07:10 payment-stop: alert error_rate > 0.1 for 15s fired 2026-11-24T10:06:58.650Z (LIVE-CA39FD)
+10:08:58 payment-stop: completed in 108s -> diagnosis: Most likely cause: payment-svc - payment-svc was shut down by operator, causing checkout-svc to time out
+10:08:58 pool-fastpath: reset to baseline
+10:14:41 pool-fastpath: inject (traffic 3.1 req/s)
+10:15:58 pool-fastpath: alert error_rate > 0.1 for 15s fired 2026-11-24T10:15:51.016Z (LIVE-DDD02D)
+10:18:50 pool-fastpath: completed in 171s -> diagnosis: Most likely cause: payment-svc - payment-svc deployment of 2.5.0 introduced a db pool timeout due to new fast path for micro-charges
+10:18:50 retry-policy: reset to baseline
+10:24:32 retry-policy: inject (traffic 2.6 req/s)
+10:26:35 retry-policy: alert error_rate > 0.1 for 15s fired 2026-11-24T10:26:32.999Z (LIVE-87977F)
+10:28:52 retry-policy: completed in 137s -> diagnosis: Most likely cause: checkout-svc - checkout-svc's payment client configuration change caused payment calls to time out due to reduced timeout and increased retries
+10:28:52 endpoint-port: reset to baseline
+10:34:35 endpoint-port: inject (traffic 2.8 req/s)
+10:35:07 endpoint-port: alert error_rate > 0.1 for 15s fired 2026-11-24T10:34:55.158Z (LIVE-EF2B03)
+10:37:06 endpoint-port: completed in 119s -> diagnosis: Most likely cause: checkout-svc - checkout-svc's payment client configuration changed to use port 18112, but payment-svc is not listening on that port
+10:37:06 sweep finished; resetting to baseline

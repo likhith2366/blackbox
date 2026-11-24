@@ -1,0 +1,31 @@
+{
+  "incident_id": "LIVE-EF2B03",
+  "alert": {
+    "alert_id": "ALR-EF2B03",
+    "title": "checkout-svc error rate high",
+    "service": "checkout-svc",
+    "signal": "error_rate",
+    "condition": "error_rate > 0.1 for 15s",
+    "observed_value": 1.0,
+    "fired_at": "2026-11-24T10:34:55.158Z"
+  },
+  "window_start": "2026-11-24T10:29:55.158Z",
+  "window_end": "2026-11-24T10:35:07.858Z",
+  "investigation_cutoff": "2026-11-24T10:35:07.858Z",
+  "environment": "demo-local (live)",
+  "services": [
+    "checkout-svc",
+    "payment-svc"
+  ],
+  "available_sources": [
+    "logs",
+    "traces",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "notes": "Live incident opened from a Prometheus alert evaluation. Investigate using the available evidence sources."
+}
