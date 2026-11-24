@@ -127,7 +127,7 @@ function AssistantTurn({ t }: { t: ChatTurn }) {
           <ul className="plain">
             {t.tools.map((x, i) => (
               <li key={i} className="small">
-                <code>{x.tool}</code> <span className="muted">{JSON.stringify(x.args)}</span>{' '}
+                <code>{x.tool}</code> {x.auto && <Badge tone="muted">auto</Badge>} <span className="muted">{JSON.stringify(x.args)}</span>{' '}
                 <Badge tone={x.status === 'ok' ? 'good' : x.status === 'empty' ? 'muted' : 'warn'}>{x.status}</Badge>{' '}
                 {x.records} records {x.backends.length > 0 && <span className="muted">from {x.backends.join(', ')}</span>}
                 {x.error && <div className="error-text">{x.error}</div>}

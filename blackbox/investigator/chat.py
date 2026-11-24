@@ -103,7 +103,8 @@ def verify(answer: str, citations: list[str], evidence: dict[str, EvidenceRecord
 
 
 class ChatSession:
-    def __init__(self, backend, config: RunConfig, adapter: Optional[OllamaAdapter] = None, title: str = ""):
+    def __init__(self, backend, config: RunConfig, adapter: Optional[OllamaAdapter] = None, title: str = "",
+                 follow_changes: bool = True):
         self.id = time.strftime("%Y%m%dT%H%M%S", time.gmtime()) + "-" + uuid.uuid4().hex[:6]
         self.backend = backend
         self.cfg = config
@@ -115,6 +116,30 @@ class ChatSession:
         text, self.prompt_version = load_prompt("chat_v1")
         self.system = text.format(max_calls=MAX_CALLS, tools=tool_catalog(tools=self.runner.tools))
         self._calls: dict[str, int] = {}
+        self.follow_changes = follow_changes
+        self._followed: set[str] = set()
+
+    def _follow_changes(self, records, rnd: int, tools_used: list, observations: list) -> None:
+        """Like the investigator's change expansion: a deployment inside the incident window is followed to its
+        build and commit diff (read-only calls, marked 'auto' in the tool list)."""
+        inc = self.backend.incident()
+        deps = [r for r in records if r.source == "deployments" and r.service in inc.services
+                and inc.window_start <= (r.event_time or "") <= inc.investigation_cutoff and r.evidence_id not in self._followed]
+        for d in sorted(deps, key=lambda r: r.event_time or "", reverse=True)[:2]:
+            self._followed.add(d.evidence_id)
+            a = d.attributes or {}
+            for tool, args in (("get_build", {"build_id": a.get("build_id")}),
+                               ("get_commit", {"sha": a.get("commit_full") or a.get("commit")})):
+                if not list(args.values())[0]:
+                    continue
+                res = self.runner.run(ToolRequest(call_id=f"auto{len(self._followed)}", round=rnd, tool=tool, args=args))
+                for r in res.records:
+                    self.evidence[r.evidence_id] = r if len(r.content or "") >= len(self.evidence.get(r.evidence_id, r).content or "")                         else self.evidence[r.evidence_id]
+                tools_used.append({"tool": tool, "args": args, "status": res.status, "records": len(res.records),
+                                   "error": res.error, "auto": True, "ids": [r.evidence_id for r in res.records],
+                                   "backends": sorted({str(r.attributes.get("backend")) for r in res.records
+                                                       if r.attributes.get("backend")})})
+                observations.append(f"(auto, follows {d.evidence_id}) {tool} -> {res.status}, {len(res.records)} records")
 
     def close(self):
         self.runner.close()
@@ -178,6 +203,8 @@ class ChatSession:
                                    "ids": [r.evidence_id for r in res.records][:20]})
                 observations.append(f"{req.tool}({json.dumps(req.args)[:160]}) -> {res.status}, {len(res.records)} records"
                                     + (f": {res.error}" if res.error else ""))
+                if self.follow_changes:
+                    self._follow_changes(res.records, rnd, tools_used, observations)
         if answer is None:      # tool budget spent: one answer-only call over what was retrieved
             reply = self.adapter.chat(
                 [{"role": "system", "content": self.system},

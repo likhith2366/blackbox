@@ -75,3 +75,14 @@ def test_absence_claims_need_a_query_of_that_source():
     v = verify("Errors come from payment-svc (log:a1). No recent deployments are visible.", ["log:a1"], EV,
                queried={"search_logs", "list_deployments"})
     assert v["verdict"] == "verified"
+
+
+def test_chat_follows_a_deployment_in_the_window_to_its_commit():
+    from tests.test_dev_options import DeployBackend
+    outputs = [{"tool_calls": [{"tool": "list_deployments", "args": {}}], "answer": None},
+               {"tool_calls": [], "answer": "d-9 shipped commit:abc1234.", "citations": ["deploy:d-9", "commit:abc1234"]}]
+    b = DeployBackend()
+    s = ChatSession(b, RunConfig(), adapter=ScriptedAdapter(outputs))
+    t = s.ask("what changed?")
+    assert "get_commit:abc1234" in b.calls and any(x.get("auto") for x in t.tools)
+    assert t.verification["verdict"] == "verified"

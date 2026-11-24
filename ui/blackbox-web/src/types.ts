@@ -315,6 +315,7 @@ export interface ChatVerification {
 }
 export interface ChatToolUse {
   tool: string
+  auto?: boolean
   args: Record<string, unknown>
   status: string
   records: number
