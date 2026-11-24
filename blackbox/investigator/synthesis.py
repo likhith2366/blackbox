@@ -52,6 +52,25 @@ SCHEMA: dict[str, Any] = {
 }
 
 
+OUTPUT_TOKENS = 1600
+
+
+def recover(raw: str) -> dict | None:
+    """An output cut after the hypotheses array: keep the complete hypotheses and the decision, if present.
+    Nothing is invented: a missing decision means no recovery; a missing top_hypothesis stays null."""
+    import json
+    import re
+    m = re.search(r'\]\s*,\s*"decision"\s*:\s*"(diagnosis|insufficient_evidence)"', raw or "")
+    if not m:
+        return None
+    try:
+        obj = json.loads(raw[: m.start() + 1] + "}")
+    except ValueError:
+        return None
+    obj.update({"decision": m.group(1), "top_hypothesis": None, "rationale": "(cut at the output limit)"})
+    return obj
+
+
 def chain_ids(h: dict) -> list[str]:
     out: list[str] = []
     for link in (h.get("chain") or {}).values():
