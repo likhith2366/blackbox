@@ -80,3 +80,33 @@ Fixes found and made while getting this run clean (earlier attempts are kept in 
 
 **Totals:** 2 correct, 0 wrong, 2 abstained, out of 4 investigated faults. Before these options, the totals were
 0 correct out of 13. This is still development-only (n = 4, one run each, scored by me) and needs a second reviewer.
+
+## dev_v3d + in-window change rule (`configs/dev_v3d.yaml`, `runs/live_faults_v3e_localgit`)
+
+dev_v3d adds gate-checked ranking: the first synthesized hypothesis that the gate accepts is reported.
+
+The earlier dev_v3d sweep (`runs/live_faults_v3d_localgit`) exposed a gap. The gate accepted "rate-limiting bug in
+checkout-svc" on the strength of checkout deployments from an hour earlier, left over from previous faults. The
+causal gate now requires a change-based claim to cite a change inside the incident window (`007eda1`). The sweep
+also checks traffic before injecting: in the earlier run a stalled load generator left retry-policy without an
+alert.
+
+| Fault | Result | Top cause | Provisional verdict |
+|---|---|---|---|
+| retry-policy | diagnosis | "checkout-svc 1.9.0 … bug in the HTTP client retry policy that causes excessive retries on payment-svc" | **correct** |
+| endpoint-port | diagnosis | "checkout-svc misconfigured payment base_url causing payment-svc to fail" | **correct** (names the field, not the port) |
+| pool-fastpath | diagnosis (rank 2 accepted) | "payment-svc v2.5.0 has a bug in the database connection pool that causes high latency for small charges" (cites commit 3cc944e + build) | **partially correct**: right component and change, mechanism stops short of "connections not released" |
+| payment-stop | insufficient evidence | – | abstained (no wrong answer) |
+
+**Across the clean runs with the full options (dev_v3c and v3e), 8 investigations:**
+
+| | Count |
+|---|---|
+| Correct | 4 (retry-policy ×2, endpoint-port ×2) |
+| Partially correct | 1 (pool-fastpath) |
+| Wrong | 0 |
+| Abstained | 3 (payment-stop ×2, pool-fastpath ×1) |
+
+For comparison, the v1 and v2 settings found 0 of 13. This is still development-only and scored by me; a second
+reviewer is needed. Not yet tested by these options: faults without an alert (index-migration, pool-override) and
+the 47-run evaluation set.
