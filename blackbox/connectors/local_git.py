@@ -21,6 +21,14 @@ _SHA = re.compile(r"^[0-9a-f]{7,40}$")
 _SEP = "\x1f"
 
 
+def _attributes_file() -> str:
+    import tempfile
+    p = Path(tempfile.gettempdir()) / "blackbox_git_attributes"
+    if not p.exists():
+        p.write_text("*.py diff=python" + chr(10), encoding="utf-8")
+    return str(p)
+
+
 def _z(s: str) -> str:
     from datetime import datetime, timezone
     dt = datetime.fromisoformat(s.strip()).astimezone(timezone.utc)
@@ -108,7 +116,10 @@ class LocalGitConnector:
         try:
             meta = self._git("show", "-s", f"--format=%H{_SEP}%aI{_SEP}%cI{_SEP}%an{_SEP}%B", s)
             files = self._git("show", "--format=", "--name-status", s).strip()
-            diff = self._git("show", "--format=", "--patch", "-U3", s)
+            # whole enclosing functions around each change (git's built-in Python function detection), so a reader
+            # sees e.g. the release calls that a new early return skips; plain -U3 hunks would hide them
+            diff = self._git("-c", f"core.attributesFile={_attributes_file()}", "show", "--format=", "--patch",
+                             "--function-context", s)
         except (LookupError, subprocess.TimeoutExpired) as exc:
             return BackendResult(status="empty", total_matches=0, error=f"commit {s} not in {self.dir}: {str(exc)[:120]}")
         h, ad, cd, an, body = meta.split(_SEP, 4)

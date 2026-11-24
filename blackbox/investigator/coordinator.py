@@ -549,7 +549,7 @@ class Coordinator:
 
         def render() -> str:
             return "\n".join(render_record(r, full=r.evidence_id not in short,
-                                           max_chars=2500 if r.evidence_id in code else 600) for r in recs)
+                                           max_chars=5000 if r.evidence_id in code else 600) for r in recs)
         text = render()
         for r in list(recs):
             if count_tokens(text) <= budget:
