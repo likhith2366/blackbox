@@ -1,0 +1,24 @@
+11:58:57 retry-policy: reset to baseline
+12:04:38 retry-policy: inject (traffic 3.1 req/s)
+12:05:11 retry-policy: alert error_rate > 0.1 for 15s fired 2026-11-24T12:04:58.543Z (LIVE-40B3FB)
+12:06:29 retry-policy: completed in 78s -> diagnosis: Most likely cause: payment-svc - Payment service's database connection pool is exhausted due to high request volume from checkout-svc
+12:06:29 index-migration: reset to baseline
+12:12:10 index-migration: inject (traffic 2.8 req/s)
+12:13:00 index-migration: alert db_query_p95_ms > 200 for 30s fired 2026-11-24T12:12:45.406Z (LIVE-5910C4)
+12:14:01 index-migration: completed in 61s -> diagnosis: Most likely cause: payment-svc - Database index drop causing increased query latency due to missing index on customer_created
+12:14:01 endpoint-port: reset to baseline
+12:19:42 endpoint-port: inject (traffic 3.1 req/s)
+12:20:14 endpoint-port: alert error_rate > 0.1 for 15s fired 2026-11-24T12:20:02.043Z (LIVE-7CF62A)
+12:23:04 endpoint-port: completed in 170s -> diagnosis: Most likely cause: checkout-svc - checkout-svc configuration change to use a new payment service port causing timeout errors
+12:23:04 payment-stop: reset to baseline
+12:28:47 payment-stop: inject (traffic 3.1 req/s)
+12:29:18 payment-stop: alert error_rate > 0.1 for 15s fired 2026-11-24T12:29:07.181Z (LIVE-4B3803)
+12:32:30 payment-stop: completed in 192s -> diagnosis: Most likely cause: checkout-svc - checkout-svc is timing out when calling payment-svc due to payment-svc being stopped
+12:32:30 pool-override: reset to baseline
+12:38:13 pool-override: inject (traffic 2.7 req/s)
+12:42:16 pool-override: no alert fired within 4 min; recorded as 'no alert'
+12:42:16 pool-fastpath: reset to baseline
+12:47:57 pool-fastpath: inject (traffic 2.9 req/s)
+12:48:59 pool-fastpath: alert error_rate > 0.1 for 15s fired 2026-11-24T12:48:57.081Z (LIVE-85FEB0)
+12:52:37 pool-fastpath: completed in 217s -> diagnosis: Most likely cause: payment-svc - payment-svc 2.5.0 deployment introduced a db pool timeout issue due to a new fast path for micro-charges
+12:52:37 sweep finished; resetting to baseline

@@ -212,3 +212,19 @@ which is noted here. The run without them is kept in `runs/live_faults_v3h_no_db
 
 All of this comes from one live run per configuration, scored by me against the injected ground truth. These are
 development results, not a re-run of the 47-run evaluation.
+
+## Repeat run of all six faults (`runs/live_faults_repeat2`, dev_v3e, extended alerts)
+
+| Fault | First run | Repeat |
+|---|---|---|
+| retry-policy | correct | **wrong**: "payment-svc DB pool exhausted due to high request volume from checkout-svc" (a consequence, not the cause). The gate accepted it because local git attributed the shared-library commit to every service. Fixed afterwards (`d742132`: a shared-library commit names no service; deployment records say who received it). Not yet re-run. |
+| index-migration | correct | correct |
+| endpoint-port | correct | correct |
+| payment-stop | correct | correct ("timing out … due to payment-svc being stopped") |
+| pool-override | abstained | no alert (pool wait stayed under the 200 ms alert this time) |
+| pool-fastpath | partially correct | partially correct (same: fast path → pool timeouts, no leak) |
+
+**Repeat totals:** 3 correct, 1 partially correct, 1 wrong, 1 not alerted. The wrong one came from a data
+attribution flaw that is now fixed.
+
+**Stable across both runs:** endpoint-port, payment-stop, index-migration (correct); pool-fastpath (partial).

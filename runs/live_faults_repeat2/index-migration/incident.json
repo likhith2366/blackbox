@@ -1,0 +1,31 @@
+{
+  "incident_id": "LIVE-5910C4",
+  "alert": {
+    "alert_id": "ALR-5910C4",
+    "title": "payment-svc db query p95 ms high",
+    "service": "payment-svc",
+    "signal": "db_query_p95_ms",
+    "condition": "db_query_p95_ms > 200 for 30s",
+    "observed_value": 354.22,
+    "fired_at": "2026-11-24T12:12:45.406Z"
+  },
+  "window_start": "2026-11-24T12:07:45.406Z",
+  "window_end": "2026-11-24T12:13:00.447Z",
+  "investigation_cutoff": "2026-11-24T12:13:00.447Z",
+  "environment": "demo-local (live)",
+  "services": [
+    "checkout-svc",
+    "payment-svc"
+  ],
+  "available_sources": [
+    "logs",
+    "traces",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "notes": "Live incident opened from a Prometheus alert evaluation. Investigate using the available evidence sources."
+}

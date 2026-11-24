@@ -1,0 +1,31 @@
+{
+  "incident_id": "LIVE-40B3FB",
+  "alert": {
+    "alert_id": "ALR-40B3FB",
+    "title": "payment-svc error rate high",
+    "service": "payment-svc",
+    "signal": "error_rate",
+    "condition": "error_rate > 0.1 for 15s",
+    "observed_value": 0.1429,
+    "fired_at": "2026-11-24T12:04:58.543Z"
+  },
+  "window_start": "2026-11-24T11:59:58.543Z",
+  "window_end": "2026-11-24T12:05:11.220Z",
+  "investigation_cutoff": "2026-11-24T12:05:11.220Z",
+  "environment": "demo-local (live)",
+  "services": [
+    "checkout-svc",
+    "payment-svc"
+  ],
+  "available_sources": [
+    "logs",
+    "traces",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "notes": "Live incident opened from a Prometheus alert evaluation. Investigate using the available evidence sources."
+}
