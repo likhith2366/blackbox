@@ -25,6 +25,9 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 ALERTS = [("checkout-svc", "error_rate", ">", 0.10, 15), ("checkout-svc", "latency_p95_ms", ">", 1500.0, 15)]
+# --alerts extended also watches common latency SLOs of both services (lower thresholds, held for 30 s)
+EXTENDED_ALERTS = ALERTS + [("payment-svc", "latency_p95_ms", ">", 1000.0, 30), ("checkout-svc", "latency_p95_ms", ">", 1000.0, 30),
+                            ("payment-svc", "error_rate", ">", 0.10, 15)]
 FAULTS = ["retry-policy", "index-migration", "endpoint-port", "payment-stop", "pool-override", "pool-fastpath"]
 
 
@@ -58,6 +61,7 @@ def main():
     ap.add_argument("--faults", default=",".join(FAULTS))
     ap.add_argument("--out", default=str(ROOT / "runs" / "live_faults"))
     ap.add_argument("--settle", type=int, default=330, help="seconds of healthy traffic before injecting (longer than the 5-min incident lookback, so the previous fault is outside the window)")
+    ap.add_argument("--alerts", choices=["standard", "extended"], default="standard")
     ap.add_argument("--config", default="configs/frozen_v1.yaml", help="investigator settings (dev_v2.yaml adds the change check)")
     a = ap.parse_args()
     import yaml
@@ -98,7 +102,7 @@ def main():
         inc, deadline = None, time.time() + 240
         while inc is None and time.time() < deadline:
             time.sleep(15)
-            for svc, metric, op, thr, for_s in ALERTS:
+            for svc, metric, op, thr, for_s in (EXTENDED_ALERTS if a.alerts == "extended" else ALERTS):
                 try:
                     inc = open_incident(svc, metric, op, thr, for_s, since=ev["at"])
                     break
@@ -115,8 +119,9 @@ def main():
             time.sleep(10)
         try:
             # the cutoff is the start of the investigation: re-open so the window ends now
-            inc = open_incident(inc.alert.service, inc.alert.signal, inc.alert.condition.split()[1],
-                                float(inc.alert.condition.split()[2]), 15, since=ev["at"])
+            parts = inc.alert.condition.split()
+            inc = open_incident(inc.alert.service, inc.alert.signal, parts[1], float(parts[2]), int(parts[4].rstrip("s")),
+                                since=ev["at"])
             backend = load_live_stack(inc)
             (d / "incident.json").write_text(inc.model_dump_json(indent=2), encoding="utf-8")
             (d / "sources.json").write_text(json.dumps([s.model_dump() for s in backend.source_status()], indent=2),
