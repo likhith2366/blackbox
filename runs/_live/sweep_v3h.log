@@ -1,0 +1,7 @@
+11:09:00 index-migration: reset to baseline
+11:14:41 index-migration: inject (traffic 3.1 req/s)
+11:18:45 index-migration: no alert fired within 4 min; recorded as 'no alert'
+11:18:45 pool-override: reset to baseline
+11:24:25 pool-override: inject (traffic 2.9 req/s)
+11:28:28 pool-override: no alert fired within 4 min; recorded as 'no alert'
+11:28:28 sweep finished; resetting to baseline

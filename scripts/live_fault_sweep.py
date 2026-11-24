@@ -27,7 +27,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 ALERTS = [("checkout-svc", "error_rate", ">", 0.10, 15), ("checkout-svc", "latency_p95_ms", ">", 1500.0, 15)]
 # --alerts extended also watches common latency SLOs of both services (lower thresholds, held for 30 s)
 EXTENDED_ALERTS = ALERTS + [("payment-svc", "latency_p95_ms", ">", 1000.0, 30), ("checkout-svc", "latency_p95_ms", ">", 1000.0, 30),
-                            ("payment-svc", "error_rate", ">", 0.10, 15)]
+                            ("payment-svc", "error_rate", ">", 0.10, 15),
+                            # database health alerts (added after observing that some faults only show up there)
+                            ("payment-svc", "db_query_p95_ms", ">", 200.0, 30),
+                            ("payment-svc", "db_pool_wait_p95_ms", ">", 200.0, 30)]
 FAULTS = ["retry-policy", "index-migration", "endpoint-port", "payment-stop", "pool-override", "pool-fastpath"]
 
 
