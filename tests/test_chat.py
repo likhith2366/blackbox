@@ -61,3 +61,17 @@ def test_answer_only_step_after_the_tool_budget():
     s = ChatSession(FakeBackend(), RunConfig(), adapter=ScriptedAdapter([call] * 4 + [final]))
     t = s.ask("why?")
     assert t.citations == ["log:a1"] and t.verification["verdict"] == "verified"
+
+
+def test_quoted_json_values_count_as_supported():
+    ev = {"log:q": R("log:q", '{"msg":"timed out","attempts":5}')}
+    assert verify("Calls show attempts:5 (log:q).", ["log:q"], ev)["unsupported_tokens"] == []
+
+
+def test_absence_claims_need_a_query_of_that_source():
+    v = verify("Errors come from payment-svc (log:a1). No recent deployments are visible.", ["log:a1"], EV,
+               queried={"search_logs"})
+    assert v["verdict"] == "partly verified" and v["unqueried_absence_claims"] == ["deployments"]
+    v = verify("Errors come from payment-svc (log:a1). No recent deployments are visible.", ["log:a1"], EV,
+               queried={"search_logs", "list_deployments"})
+    assert v["verdict"] == "verified"

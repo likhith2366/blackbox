@@ -37,7 +37,7 @@ def find_firing(prom: PrometheusMetrics, service: str, metric: str, op: str, thr
 
 
 def open_incident(service: str, metric: str, op: str, threshold: float, for_s: int = 15, since: Optional[str] = None,
-                  lookback_s: int = 120, services: Optional[list[str]] = None,
+                  lookback_s: int = 300, services: Optional[list[str]] = None,
                   prom: Optional[PrometheusMetrics] = None, title: Optional[str] = None) -> Incident:
     prom = prom or PrometheusMetrics()
     now = datetime.now(timezone.utc).timestamp()

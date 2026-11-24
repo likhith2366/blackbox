@@ -62,25 +62,44 @@ class Turn:
     seconds: float = 0.0
 
 
-def verify(answer: str, citations: list[str], evidence: dict[str, EvidenceRecord]) -> dict:
+# "no X" claims are only checkable if a tool for X was called in the conversation
+ABSENCE_CHECKS = [
+    ("deployments", "deployments?|deploys?|releases?", {"list_deployments", "get_build"}),
+    ("commits", "commits?|code changes?|changes to the code", {"search_commits", "get_commit"}),
+    ("traces", "traces?|spans?", {"search_traces", "get_trace"}),
+    ("metrics", "metrics?", {"get_metrics"}),
+    ("logs", "logs?|log lines?", {"search_logs"}),
+]
+
+
+def verify(answer: str, citations: list[str], evidence: dict[str, EvidenceRecord],
+           queried: set[str] | None = None) -> dict:
+    queried = queried or set()
     cited = [c for c in dict.fromkeys(citations or [])]
     unknown = [c for c in cited if c not in evidence]
     known = [evidence[c] for c in cited if c in evidence]
-    hay = " ".join((r.evidence_id + " " + r.title + " " + r.content).lower() for r in known)
+    def norm(x: str) -> str:
+        return re.sub(r"[\s\"'`]", "", x.lower())
+    hay = norm(" ".join(r.evidence_id + " " + r.title + " " + r.content for r in known))
     tokens = sorted({t for t in _TOKEN.findall(answer or "")})
-    unsupported = [t for t in tokens if t.lower().replace(" ", "") not in hay.replace(" ", "") and t.lower() not in hay]
+    unsupported = [t for t in tokens if norm(t) not in hay]
     no_info = bool(re.search(r"(?i)\b(not enough|insufficient|cannot|can't|could not|couldn't|no evidence|unknown|not found)\b",
                              answer or ""))
+    unqueried = []
+    for source, words, tools in ABSENCE_CHECKS:
+        pattern = r"(?i)\bno (recent )?(%s)\b|\b(%s)\b[^.]*\b(not visible|none|not found|no sign)" % (words, words)
+        if re.search(pattern, answer or "") and not (queried & tools):
+            unqueried.append(source)
     if not known and not tokens and no_info:
         verdict = "no evidence"          # an honest 'I could not find it'
     elif not known:
         verdict = "not verified"
-    elif unknown or unsupported:
+    elif unknown or unsupported or unqueried:
         verdict = "partly verified"
     else:
         verdict = "verified"
     return {"verdict": verdict, "cited": len(cited), "cited_known": len(known), "unknown_ids": unknown,
-            "checked_tokens": tokens, "unsupported_tokens": unsupported}
+            "checked_tokens": tokens, "unsupported_tokens": unsupported, "unqueried_absence_claims": unqueried}
 
 
 class ChatSession:
@@ -172,9 +191,13 @@ class ChatSession:
             answer = "I could not reach an answer within the tool budget for this question."
         user = Turn("user", question)
         bot = Turn("assistant", answer, citations=cites, confidence=conf, tools=tools_used,
-                   verification=verify(answer, cites, self.evidence), seconds=round(time.time() - t0, 1))
+                   verification=verify(answer, cites, self.evidence, self._queried_tools()),
+                   seconds=round(time.time() - t0, 1))
         self.turns += [user, bot]
         return bot
+
+    def _queried_tools(self) -> set[str]:
+        return {x["tool"] for t in self.turns for x in t.tools if x.get("status") in ("ok", "empty")} |                {json.loads(k)[0] for k in self._calls}
 
     def to_dict(self) -> dict[str, Any]:
         inc = self.backend.incident()
