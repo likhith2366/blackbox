@@ -4,7 +4,8 @@
   Commit listings are capped at the investigation cutoff; config files are read at a commit
   SHA (the deployed commit from the deployment record, or the version the caller passes),
   never at a branch head. An unknown deployed version is reported, not guessed.
-- logs: the application's actual JSONL output (blackbox/connectors/local_logs.py).
+- logs: the application's actual JSONL output, read from the local files (blackbox/connectors/local_logs.py)
+  or from a Grafana Loki server the logs were shipped to (blackbox/connectors/loki.py).
 - everything else (incident, traces, metrics, deployments, builds, tickets): the snapshot.
 
 Live responses can be recorded verbatim (blackbox/connectors/capture.py) so a live run is
@@ -57,7 +58,7 @@ class LiveBackend:
                                  detail=f"live GitHub API ({self.github.repo}), capped at the investigation cutoff")
             elif self.logs and s.source == "logs":
                 s = SourceStatus(source="logs", available=True, healthy=True, fixture=False,
-                                 detail="live read of the application's JSONL log files")
+                                 detail=getattr(self.logs, "detail", "live read of the application's JSONL log files"))
             out.append(s)
         return out
 
@@ -166,7 +167,8 @@ class LiveBackend:
 
 def load_live_backend(incident_id: str, repo: str, telemetry_dir: Optional[Path] = None,
                       capture_dir: Optional[Path] = None, replay: bool = False,
-                      snapshot_root: Optional[Path] = None) -> LiveBackend:
+                      snapshot_root: Optional[Path] = None, loki_url: Optional[str] = None,
+                      loki_incident: Optional[str] = None) -> LiveBackend:
     from blackbox.connectors.github_api import GitHubConnector
     session = None
     if capture_dir is not None:
@@ -175,7 +177,10 @@ def load_live_backend(incident_id: str, repo: str, telemetry_dir: Optional[Path]
                    else capture.RecordingSession(capture_dir, repo=repo))
     github = GitHubConnector(repo, session=session) if session is not None else GitHubConnector(repo)
     logs = None
-    if telemetry_dir is not None:
+    if loki_url is not None:
+        from blackbox.connectors.loki import LokiLogs
+        logs = LokiLogs(loki_url, incident=loki_incident)
+    elif telemetry_dir is not None:
         from blackbox.connectors.local_logs import LocalLogs
         logs = LocalLogs(telemetry_dir)
     return LiveBackend(load_backend(incident_id, snapshot_root=snapshot_root), github=github, local_logs=logs)

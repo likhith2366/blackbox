@@ -93,6 +93,8 @@ def _main(argv: list[str] | None = None) -> int:
                      help="demonstration only: commits/configs from GitHub, logs from the app's JSONL files")
     inv.add_argument("--repo", default="likhith2366/blackbox-demo-shop")
     inv.add_argument("--telemetry-dir", help="live log directory (default: the demo's current telemetry dir)")
+    inv.add_argument("--loki-url", help="read logs from this Grafana Loki server instead of local files (live mode)")
+    inv.add_argument("--loki-incident", help="Loki incident label of a replayed snapshot (scripts/push_logs_to_loki.py)")
     inv.add_argument("--capture-id", help="record GitHub responses verbatim under scenarios/live_captures/<id>/github")
     inv.add_argument("--out", required=True)
     show = sub.add_parser("show")
@@ -120,7 +122,8 @@ def _main(argv: list[str] | None = None) -> int:
         backend = load_live_backend(args.incident, args.repo,
                                     telemetry_dir=Path(args.telemetry_dir) if args.telemetry_dir else None,
                                     capture_dir=capture_dir_for(args.capture_id) if args.capture_id else None,
-                                    snapshot_root=root)
+                                    snapshot_root=root, loki_url=args.loki_url,
+                                    loki_incident=args.loki_incident)
     else:
         backend = load_backend(args.incident, ablation=args.ablation, snapshot_root=root)
     b1_evidence = None

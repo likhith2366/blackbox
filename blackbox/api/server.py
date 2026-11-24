@@ -180,6 +180,12 @@ def project() -> dict:
     except Exception as exc:  # connector import or network problems are reported, not hidden
         sources.append({"source": "commits", "mode": "unavailable", "healthy": False,
                         "detail": "GitHub REST API", "error": f"{type(exc).__name__}: {str(exc)[:200]}"})
+    if os.environ.get("BLACKBOX_LOKI_URL"):
+        from blackbox.connectors.loki import LokiLogs
+        lk = LokiLogs()
+        ok, why = lk.ready()
+        sources.append({"source": "logs (Grafana Loki)", "mode": "live" if ok else "unavailable", "healthy": ok,
+                        "detail": lk.detail, "error": None if ok else why})
     try:
         from blackbox.connectors.local_logs import LocalLogs
         r = LocalLogs().search(limit=1)
@@ -442,9 +448,11 @@ def _worker() -> None:
                 # the incident's own captured application logs, read live from the files the services wrote;
                 # never the demo's current telemetry, which belongs to whatever is running now
                 tel = REPO / "demo" / ".runtime" / "captures" / req.incident_id / "telemetry"
+                loki = os.environ.get("BLACKBOX_LOKI_URL")
                 base = load_live_backend(req.incident_id, DEFAULT_REPO, telemetry_dir=tel if tel.exists() else None,
                                          capture_dir=capture_dir_for(f"ui-{job_id}"),
-                                         snapshot_root=SNAPSHOTS)
+                                         snapshot_root=SNAPSHOTS, loki_url=loki or None,
+                                         loki_incident=req.incident_id if loki else None)
             else:
                 base = load_backend(req.incident_id, snapshot_root=SNAPSHOTS)
             cfg = RunConfig(**(yaml.safe_load(CONFIG.read_text(encoding="utf-8")) or {}))
