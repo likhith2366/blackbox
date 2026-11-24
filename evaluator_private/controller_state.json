@@ -721,5 +721,1511 @@
       "d-586",
       "d-587"
     ]
+  },
+  {
+    "at": "2026-11-24T03:09:08.844Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-588",
+      "d-589"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T03:16:53.468Z",
+    "commit": "c24dd445c1e7483a5c330aa62a024c112cb30926",
+    "builds": [
+      "b-1231"
+    ],
+    "deployments": [
+      "d-590"
+    ],
+    "done_at": "2026-11-24T03:16:57.278Z"
+  },
+  {
+    "at": "2026-11-24T04:33:45.134Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-591",
+      "d-592"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T04:35:00.154Z",
+    "commit": "a89c1f0f4c04dfe554f308eca3e95925c7161ca0",
+    "builds": [
+      "b-1232"
+    ],
+    "deployments": [
+      "d-593"
+    ],
+    "done_at": "2026-11-24T04:35:02.806Z"
+  },
+  {
+    "at": "2026-11-24T04:44:46.674Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-594",
+      "d-595"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "index-migration",
+    "family": "missing_index",
+    "kind": "commit",
+    "at": "2026-11-24T04:46:01.685Z",
+    "commit": "8bd62ea041d47a0001fba5883962cb22a1b12195",
+    "builds": [
+      "b-1233"
+    ],
+    "deployments": [
+      "d-596"
+    ],
+    "done_at": "2026-11-24T04:46:07.574Z"
+  },
+  {
+    "at": "2026-11-24T04:53:27.520Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-597",
+      "d-598"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-24T04:54:42.538Z",
+    "commit": "adecd03b9634282bff0a569d4630a83f111c5cf1",
+    "builds": [
+      "b-1234"
+    ],
+    "deployments": [
+      "d-599"
+    ],
+    "done_at": "2026-11-24T04:54:46.404Z"
+  },
+  {
+    "at": "2026-11-24T05:04:07.104Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-600",
+      "d-601"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-24T05:05:22.122Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-24T05:05:24.015Z"
+  },
+  {
+    "at": "2026-11-24T05:12:32.095Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-602",
+      "d-603"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-override",
+    "family": "config_override_pool_size",
+    "kind": "restart_env",
+    "at": "2026-11-24T05:13:47.105Z",
+    "service": "payment-svc",
+    "env": {
+      "PAYMENT_DB_POOL_SIZE": "1"
+    },
+    "deployments": [
+      "d-604"
+    ],
+    "done_at": "2026-11-24T05:13:49.550Z"
+  },
+  {
+    "at": "2026-11-24T05:18:04.005Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-605",
+      "d-606"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T05:19:19.036Z",
+    "commit": "d67b90d8cc7d1c594e6bb71f1ee13f6f838b889a",
+    "builds": [
+      "b-1235"
+    ],
+    "deployments": [
+      "d-607"
+    ],
+    "done_at": "2026-11-24T05:19:22.065Z"
+  },
+  {
+    "at": "2026-11-24T05:24:05.802Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-608",
+      "d-609"
+    ]
+  },
+  {
+    "at": "2026-11-24T05:24:22.825Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-610",
+      "d-611"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T05:25:37.837Z",
+    "commit": "f5a1eb6d7d1a3220913a8d722b78218c9a5ec000",
+    "builds": [
+      "b-1236"
+    ],
+    "deployments": [
+      "d-612"
+    ],
+    "done_at": "2026-11-24T05:25:41.641Z"
+  },
+  {
+    "at": "2026-11-24T05:32:58.560Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-613",
+      "d-614"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "index-migration",
+    "family": "missing_index",
+    "kind": "commit",
+    "at": "2026-11-24T05:34:13.577Z",
+    "commit": "d2abf1fc75b6e24a3b72fab9027c56c2bef8bef0",
+    "builds": [
+      "b-1237"
+    ],
+    "deployments": [
+      "d-615"
+    ],
+    "done_at": "2026-11-24T05:34:19.562Z"
+  },
+  {
+    "at": "2026-11-24T05:52:51.716Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-616",
+      "d-617"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-24T05:54:06.731Z",
+    "commit": "f914a87302e28cc4f9bc76c303850ac902307962",
+    "builds": [
+      "b-1238"
+    ],
+    "deployments": [
+      "d-618"
+    ],
+    "done_at": "2026-11-24T05:54:09.188Z"
+  },
+  {
+    "at": "2026-11-24T05:56:35.221Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-619",
+      "d-620"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-24T05:57:50.233Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-24T05:57:51.848Z"
+  },
+  {
+    "at": "2026-11-24T06:01:48.303Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-621",
+      "d-622"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-override",
+    "family": "config_override_pool_size",
+    "kind": "restart_env",
+    "at": "2026-11-24T06:03:03.379Z",
+    "service": "payment-svc",
+    "env": {
+      "PAYMENT_DB_POOL_SIZE": "1"
+    },
+    "deployments": [
+      "d-623"
+    ],
+    "done_at": "2026-11-24T06:03:05.801Z"
+  },
+  {
+    "at": "2026-11-24T06:07:16.038Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-624",
+      "d-625"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T06:08:31.058Z",
+    "commit": "849e2907a2f5096291a0a96810552ad4244d1a84",
+    "builds": [
+      "b-1239"
+    ],
+    "deployments": [
+      "d-626"
+    ],
+    "done_at": "2026-11-24T06:08:33.799Z"
+  },
+  {
+    "at": "2026-11-24T06:10:18.621Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-627",
+      "d-628"
+    ]
+  },
+  {
+    "at": "2026-11-24T06:10:31.810Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-629",
+      "d-630"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T06:11:46.828Z",
+    "commit": "ba49dd50170f946956d0dc27394042cd1bc16e43",
+    "builds": [
+      "b-1240"
+    ],
+    "deployments": [
+      "d-631"
+    ],
+    "done_at": "2026-11-24T06:11:49.504Z"
+  },
+  {
+    "at": "2026-11-24T06:16:21.302Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-632",
+      "d-633"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "index-migration",
+    "family": "missing_index",
+    "kind": "commit",
+    "at": "2026-11-24T06:17:36.324Z",
+    "commit": "48f4fb108729d0a164da334be995dbc5a433f928",
+    "builds": [
+      "b-1241"
+    ],
+    "deployments": [
+      "d-634"
+    ],
+    "done_at": "2026-11-24T06:17:40.795Z"
+  },
+  {
+    "at": "2026-11-24T06:21:51.174Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-635",
+      "d-636"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-24T06:23:06.195Z",
+    "commit": "0aaa5ba83b2b29f50936da558cb247eba46f7c67",
+    "builds": [
+      "b-1242"
+    ],
+    "deployments": [
+      "d-637"
+    ],
+    "done_at": "2026-11-24T06:23:08.875Z"
+  },
+  {
+    "at": "2026-11-24T06:24:47.479Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-638",
+      "d-639"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-24T06:26:02.497Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-24T06:26:04.343Z"
+  },
+  {
+    "at": "2026-11-24T06:27:36.732Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-640",
+      "d-641"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-override",
+    "family": "config_override_pool_size",
+    "kind": "restart_env",
+    "at": "2026-11-24T06:28:51.761Z",
+    "service": "payment-svc",
+    "env": {
+      "PAYMENT_DB_POOL_SIZE": "1"
+    },
+    "deployments": [
+      "d-642"
+    ],
+    "done_at": "2026-11-24T06:28:54.125Z"
+  },
+  {
+    "at": "2026-11-24T06:33:04.526Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-643",
+      "d-644"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T06:34:19.543Z",
+    "commit": "36c5d002b0eec11468da73557f9ad400b139d57b",
+    "builds": [
+      "b-1243"
+    ],
+    "deployments": [
+      "d-645"
+    ],
+    "done_at": "2026-11-24T06:34:22.220Z"
+  },
+  {
+    "at": "2026-11-24T06:35:50.765Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-646",
+      "d-647"
+    ]
+  },
+  {
+    "at": "2026-11-24T06:40:43.861Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-648",
+      "d-649"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T06:41:58.871Z",
+    "commit": "476ae2047184b8fcbb19fa1a844f7101d090f2f7",
+    "builds": [
+      "b-1244"
+    ],
+    "deployments": [
+      "d-650"
+    ],
+    "done_at": "2026-11-24T06:42:01.376Z"
+  },
+  {
+    "at": "2026-11-24T06:46:01.108Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-651",
+      "d-652"
+    ]
+  },
+  {
+    "at": "2026-11-24T06:47:15.950Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-653",
+      "d-654"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T06:48:30.965Z",
+    "commit": "cc699b8aaca7ebda2633958cb32ea23779de8bfc",
+    "builds": [
+      "b-1245"
+    ],
+    "deployments": [
+      "d-655"
+    ],
+    "done_at": "2026-11-24T06:48:33.494Z"
+  },
+  {
+    "at": "2026-11-24T06:52:35.085Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-656",
+      "d-657"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "index-migration",
+    "family": "missing_index",
+    "kind": "commit",
+    "at": "2026-11-24T06:53:50.101Z",
+    "commit": "f08865069bdf1d07dc55b7a9d1fd063876215d86",
+    "builds": [
+      "b-1246"
+    ],
+    "deployments": [
+      "d-658"
+    ],
+    "done_at": "2026-11-24T06:53:52.794Z"
+  },
+  {
+    "at": "2026-11-24T06:58:04.077Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-659",
+      "d-660"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-24T06:59:19.098Z",
+    "commit": "e8d58bdeffdd18154f86d54b7e283a087803ce1a",
+    "builds": [
+      "b-1247"
+    ],
+    "deployments": [
+      "d-661"
+    ],
+    "done_at": "2026-11-24T06:59:21.705Z"
+  },
+  {
+    "at": "2026-11-24T07:00:59.671Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-662",
+      "d-663"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-24T07:02:14.682Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-24T07:02:16.509Z"
+  },
+  {
+    "at": "2026-11-24T07:05:00.899Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-664",
+      "d-665"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T07:06:15.929Z",
+    "commit": "d24f5c09f7052e02713cf439f4fccdc301d3a5a0",
+    "builds": [
+      "b-1248"
+    ],
+    "deployments": [
+      "d-666"
+    ],
+    "done_at": "2026-11-24T07:06:18.750Z"
+  },
+  {
+    "at": "2026-11-24T07:09:55.620Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-667",
+      "d-668"
+    ]
+  },
+  {
+    "at": "2026-11-24T07:10:51.917Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-669",
+      "d-670"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T07:12:06.928Z",
+    "commit": "463ddad29baa4e4ff578c318e72260d7675f0b5e",
+    "builds": [
+      "b-1249"
+    ],
+    "deployments": [
+      "d-671"
+    ],
+    "done_at": "2026-11-24T07:12:09.654Z"
+  },
+  {
+    "at": "2026-11-24T07:15:41.671Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-672",
+      "d-673"
+    ]
+  },
+  {
+    "at": "2026-11-24T07:17:11.111Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-674",
+      "d-675"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T07:18:26.123Z",
+    "commit": "ad44c84d11d7d6362aff68a7f68d29e49783509b",
+    "builds": [
+      "b-1250"
+    ],
+    "deployments": [
+      "d-676"
+    ],
+    "done_at": "2026-11-24T07:18:28.772Z"
+  },
+  {
+    "at": "2026-11-24T07:23:39.238Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-677",
+      "d-678"
+    ]
+  },
+  {
+    "at": "2026-11-24T07:24:28.108Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-679",
+      "d-680"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T07:25:43.118Z",
+    "commit": "6b844c7e62aba63719a123460d2a11b7e190af49",
+    "builds": [
+      "b-1251"
+    ],
+    "deployments": [
+      "d-681"
+    ],
+    "done_at": "2026-11-24T07:25:45.898Z"
+  },
+  {
+    "at": "2026-11-24T07:29:51.701Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-682",
+      "d-683"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-24T07:31:06.715Z",
+    "commit": "e4aa4546436e29571e009e64313ecfd8220c621e",
+    "builds": [
+      "b-1252"
+    ],
+    "deployments": [
+      "d-684"
+    ],
+    "done_at": "2026-11-24T07:31:09.219Z"
+  },
+  {
+    "at": "2026-11-24T07:35:00.249Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-685",
+      "d-686"
+    ]
+  },
+  {
+    "at": "2026-11-24T07:36:06.995Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-687",
+      "d-688"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T07:41:37.008Z",
+    "commit": "3ae7e95a42edb5cb02316545e6d62361ca73ba7e",
+    "builds": [
+      "b-1253"
+    ],
+    "deployments": [
+      "d-689"
+    ],
+    "done_at": "2026-11-24T07:41:39.504Z"
+  },
+  {
+    "at": "2026-11-24T07:45:02.681Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-690",
+      "d-691"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-24T07:50:32.726Z",
+    "commit": "b40d5eea4218f1de1cc4839f3f758ef2c59a6cae",
+    "builds": [
+      "b-1254"
+    ],
+    "deployments": [
+      "d-692"
+    ],
+    "done_at": "2026-11-24T07:50:35.244Z"
+  },
+  {
+    "at": "2026-11-24T07:53:16.629Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-693",
+      "d-694"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-24T07:58:46.651Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-24T07:58:48.584Z"
+  },
+  {
+    "at": "2026-11-24T08:01:17.032Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-695",
+      "d-696"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T08:06:47.053Z",
+    "commit": "812b3b53286c646a77aa88b731dae519f4763d60",
+    "builds": [
+      "b-1255"
+    ],
+    "deployments": [
+      "d-697"
+    ],
+    "done_at": "2026-11-24T08:06:49.785Z"
+  },
+  {
+    "at": "2026-11-24T08:09:27.345Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-698",
+      "d-699"
+    ]
+  },
+  {
+    "at": "2026-11-24T08:13:06.351Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-700",
+      "d-701"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T08:18:36.361Z",
+    "commit": "bfa905736148c265b2c538564324ecab97b26545",
+    "builds": [
+      "b-1256"
+    ],
+    "deployments": [
+      "d-702"
+    ],
+    "done_at": "2026-11-24T08:18:39.183Z"
+  },
+  {
+    "at": "2026-11-24T08:22:51.236Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-703",
+      "d-704"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-24T08:28:21.252Z",
+    "commit": "6ae1c7adff1290c2223183d0f8e9dd148951a0ae",
+    "builds": [
+      "b-1257"
+    ],
+    "deployments": [
+      "d-705"
+    ],
+    "done_at": "2026-11-24T08:28:23.976Z"
+  },
+  {
+    "at": "2026-11-24T08:31:08.333Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-706",
+      "d-707"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-24T08:36:38.354Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-24T08:36:40.189Z"
+  },
+  {
+    "at": "2026-11-24T08:39:03.652Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-708",
+      "d-709"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T08:44:33.664Z",
+    "commit": "3c8b45e6dab4a7d9f13687c858acb6b039880833",
+    "builds": [
+      "b-1258"
+    ],
+    "deployments": [
+      "d-710"
+    ],
+    "done_at": "2026-11-24T08:44:36.470Z"
+  },
+  {
+    "at": "2026-11-24T08:47:48.461Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-711",
+      "d-712"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "index-migration",
+    "family": "missing_index",
+    "kind": "commit",
+    "at": "2026-11-24T08:53:18.475Z",
+    "commit": "4966ac463027bc06556c47af43cd213b175aba68",
+    "builds": [
+      "b-1259"
+    ],
+    "deployments": [
+      "d-713"
+    ],
+    "done_at": "2026-11-24T08:53:22.963Z"
+  },
+  {
+    "at": "2026-11-24T08:57:34.001Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-714",
+      "d-715"
+    ]
+  },
+  {
+    "at": "2026-11-24T08:57:54.603Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-716",
+      "d-717"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T09:03:24.638Z",
+    "commit": "3cc944ed9edf24e8fba839ed69e56162e85e0ea1",
+    "builds": [
+      "b-1260"
+    ],
+    "deployments": [
+      "d-718"
+    ],
+    "done_at": "2026-11-24T09:03:27.365Z"
+  },
+  {
+    "at": "2026-11-24T09:07:01.133Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-719",
+      "d-720"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T09:12:31.153Z",
+    "commit": "30faf744c71f9bda911787ffd8845066162c9718",
+    "builds": [
+      "b-1261"
+    ],
+    "deployments": [
+      "d-721"
+    ],
+    "done_at": "2026-11-24T09:12:33.945Z"
+  },
+  {
+    "at": "2026-11-24T09:19:04.606Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-722",
+      "d-723"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-24T09:24:34.636Z",
+    "commit": "678e4445a43e87ecb5a73f80786e6eb5165a42ad",
+    "builds": [
+      "b-1262"
+    ],
+    "deployments": [
+      "d-724"
+    ],
+    "done_at": "2026-11-24T09:24:37.243Z"
+  },
+  {
+    "at": "2026-11-24T09:26:41.641Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-725",
+      "d-726"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-24T09:32:11.666Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-24T09:32:13.346Z"
+  },
+  {
+    "at": "2026-11-24T09:35:23.473Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-727",
+      "d-728"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T09:50:58.159Z",
+    "commit": "5f8eabc75960a333203bba74ba73afec04feceef",
+    "builds": [
+      "b-1263"
+    ],
+    "deployments": [
+      "d-729"
+    ],
+    "done_at": "2026-11-24T09:51:00.778Z"
+  },
+  {
+    "at": "2026-11-24T09:55:55.480Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-730",
+      "d-731"
+    ]
+  },
+  {
+    "at": "2026-11-24T10:01:08.631Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-732",
+      "d-733"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-24T10:06:38.650Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-24T10:06:40.538Z"
+  },
+  {
+    "at": "2026-11-24T10:09:10.996Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-734",
+      "d-735"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T10:14:41.016Z",
+    "commit": "1182efcc70c0ce5cb0f49dbaeb2f66c3467da2ed",
+    "builds": [
+      "b-1264"
+    ],
+    "deployments": [
+      "d-736"
+    ],
+    "done_at": "2026-11-24T10:14:43.660Z"
+  },
+  {
+    "at": "2026-11-24T10:19:02.969Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-737",
+      "d-738"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T10:24:32.999Z",
+    "commit": "f2e70609267aa9ea1ec547a1d134b2aefc4f6b92",
+    "builds": [
+      "b-1265"
+    ],
+    "deployments": [
+      "d-739"
+    ],
+    "done_at": "2026-11-24T10:24:35.514Z"
+  },
+  {
+    "at": "2026-11-24T10:29:05.136Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-740",
+      "d-741"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-24T10:34:35.158Z",
+    "commit": "028d8f20998d10fcdd34597fc11038f3d927b95b",
+    "builds": [
+      "b-1266"
+    ],
+    "deployments": [
+      "d-742"
+    ],
+    "done_at": "2026-11-24T10:34:37.740Z"
+  },
+  {
+    "at": "2026-11-24T10:37:17.827Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-743",
+      "d-744"
+    ]
+  },
+  {
+    "at": "2026-11-24T10:38:55.566Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-745",
+      "d-746"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T10:44:25.586Z",
+    "commit": "32d3f6f4818e2d12f0e6122266fdfee244160b49",
+    "builds": [
+      "b-1267"
+    ],
+    "deployments": [
+      "d-747"
+    ],
+    "done_at": "2026-11-24T10:44:28.322Z"
+  },
+  {
+    "at": "2026-11-24T10:48:07.175Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-748",
+      "d-749"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T10:53:37.191Z",
+    "commit": "3660c96e7209c20f16d168defe35f3c4ff841487",
+    "builds": [
+      "b-1268"
+    ],
+    "deployments": [
+      "d-750"
+    ],
+    "done_at": "2026-11-24T10:53:39.834Z"
+  },
+  {
+    "at": "2026-11-24T10:56:20.572Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-751",
+      "d-752"
+    ]
+  },
+  {
+    "at": "2026-11-24T11:09:11.715Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-753",
+      "d-754"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "index-migration",
+    "family": "missing_index",
+    "kind": "commit",
+    "at": "2026-11-24T11:14:41.733Z",
+    "commit": "cbeedd6b3a9cb1d1321ab933602985e46d2a4361",
+    "builds": [
+      "b-1269"
+    ],
+    "deployments": [
+      "d-755"
+    ],
+    "done_at": "2026-11-24T11:14:44.515Z"
+  },
+  {
+    "at": "2026-11-24T11:18:55.526Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-756",
+      "d-757"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-override",
+    "family": "config_override_pool_size",
+    "kind": "restart_env",
+    "at": "2026-11-24T11:24:25.542Z",
+    "service": "payment-svc",
+    "env": {
+      "PAYMENT_DB_POOL_SIZE": "1"
+    },
+    "deployments": [
+      "d-758"
+    ],
+    "done_at": "2026-11-24T11:24:28.029Z"
+  },
+  {
+    "at": "2026-11-24T11:28:37.888Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-759",
+      "d-760"
+    ]
+  },
+  {
+    "at": "2026-11-24T11:29:29.917Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-761",
+      "d-762"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "index-migration",
+    "family": "missing_index",
+    "kind": "commit",
+    "at": "2026-11-24T11:34:59.939Z",
+    "commit": "8e3b34b03dbb4f9854630d7c2bd814f6b64696ac",
+    "builds": [
+      "b-1270"
+    ],
+    "deployments": [
+      "d-763"
+    ],
+    "done_at": "2026-11-24T11:35:02.523Z"
+  },
+  {
+    "at": "2026-11-24T11:37:21.893Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-764",
+      "d-765"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-override",
+    "family": "config_override_pool_size",
+    "kind": "restart_env",
+    "at": "2026-11-24T11:42:51.916Z",
+    "service": "payment-svc",
+    "env": {
+      "PAYMENT_DB_POOL_SIZE": "1"
+    },
+    "deployments": [
+      "d-766"
+    ],
+    "done_at": "2026-11-24T11:42:54.395Z"
+  },
+  {
+    "at": "2026-11-24T11:45:20.085Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-767",
+      "d-768"
+    ]
+  },
+  {
+    "at": "2026-11-24T11:59:08.528Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-769",
+      "d-770"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-24T12:04:38.543Z",
+    "commit": "6372f0c4ca669c27824f1cf404437b8a4e547d87",
+    "builds": [
+      "b-1271"
+    ],
+    "deployments": [
+      "d-771"
+    ],
+    "done_at": "2026-11-24T12:04:41.101Z"
+  },
+  {
+    "at": "2026-11-24T12:06:40.391Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-772",
+      "d-773"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "index-migration",
+    "family": "missing_index",
+    "kind": "commit",
+    "at": "2026-11-24T12:12:10.406Z",
+    "commit": "be2943261c0c5f916717199a50e5815cd39f76b3",
+    "builds": [
+      "b-1272"
+    ],
+    "deployments": [
+      "d-774"
+    ],
+    "done_at": "2026-11-24T12:12:15.286Z"
+  },
+  {
+    "at": "2026-11-24T12:14:12.004Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-775",
+      "d-776"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-24T12:19:42.043Z",
+    "commit": "f27c07f71d5b081e9726af948803f1b4cace1f3f",
+    "builds": [
+      "b-1273"
+    ],
+    "deployments": [
+      "d-777"
+    ],
+    "done_at": "2026-11-24T12:19:44.922Z"
+  },
+  {
+    "at": "2026-11-24T12:23:17.156Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-778",
+      "d-779"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-24T12:28:47.181Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-24T12:28:48.888Z"
+  },
+  {
+    "at": "2026-11-24T12:32:43.388Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-780",
+      "d-781"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-override",
+    "family": "config_override_pool_size",
+    "kind": "restart_env",
+    "at": "2026-11-24T12:38:13.425Z",
+    "service": "payment-svc",
+    "env": {
+      "PAYMENT_DB_POOL_SIZE": "1"
+    },
+    "deployments": [
+      "d-782"
+    ],
+    "done_at": "2026-11-24T12:38:15.768Z"
+  },
+  {
+    "at": "2026-11-24T12:42:27.057Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-783",
+      "d-784"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "pool-fastpath",
+    "family": "connection_leak",
+    "kind": "commit",
+    "at": "2026-11-24T12:47:57.081Z",
+    "commit": "dc578fffe10331abef283dd286e99f7ae49e5513",
+    "builds": [
+      "b-1274"
+    ],
+    "deployments": [
+      "d-785"
+    ],
+    "done_at": "2026-11-24T12:47:59.675Z"
+  },
+  {
+    "at": "2026-11-24T12:52:48.503Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-786",
+      "d-787"
+    ]
   }
 ]
