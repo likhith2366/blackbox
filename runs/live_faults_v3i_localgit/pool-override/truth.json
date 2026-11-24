@@ -1,0 +1,14 @@
+{
+  "change_id": "pool-override",
+  "family": "config_override_pool_size",
+  "kind": "restart_env",
+  "at": "2026-11-24T11:42:51.916Z",
+  "service": "payment-svc",
+  "env": {
+    "PAYMENT_DB_POOL_SIZE": "1"
+  },
+  "deployments": [
+    "d-766"
+  ],
+  "done_at": "2026-11-24T11:42:54.395Z"
+}

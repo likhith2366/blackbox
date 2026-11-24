@@ -1,0 +1,31 @@
+{
+  "incident_id": "LIVE-5770AF",
+  "alert": {
+    "alert_id": "ALR-5770AF",
+    "title": "payment-svc db query p95 ms high",
+    "service": "payment-svc",
+    "signal": "db_query_p95_ms",
+    "condition": "db_query_p95_ms > 200 for 30s",
+    "observed_value": 970.27,
+    "fired_at": "2026-11-24T11:35:34.939Z"
+  },
+  "window_start": "2026-11-24T11:30:34.939Z",
+  "window_end": "2026-11-24T11:35:47.687Z",
+  "investigation_cutoff": "2026-11-24T11:35:47.687Z",
+  "environment": "demo-local (live)",
+  "services": [
+    "checkout-svc",
+    "payment-svc"
+  ],
+  "available_sources": [
+    "logs",
+    "traces",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "notes": "Live incident opened from a Prometheus alert evaluation. Investigate using the available evidence sources."
+}

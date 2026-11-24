@@ -177,3 +177,38 @@ changes up to 5000 characters.
   that alert are found or partly found. Wrong answers are now rare, but details can still be misread (timeout
   direction).
 - Leak-style mechanisms that require reading control flow remain beyond qwen3:4b.
+
+## Faults that never reached a user-facing alert (`runs/live_faults_v3i_localgit`, dev_v3e, extended alerts)
+
+**Why they never alerted:** at 3 requests/s, index-migration and pool-override never cross the checkout error or
+latency alerts. Their only signal is inside the database:
+- index-migration: payment-svc `db_query_p95_ms` rises from ~5 to ~370 ms;
+- pool-override: `db_pool_wait_p95_ms` rises from ~1 to ~460–585 ms.
+
+The extended alert set (`--alerts extended`) adds `db_query_p95_ms > 200 for 30s` and
+`db_pool_wait_p95_ms > 200 for 30s` for payment-svc. These two alerts were added **after** seeing those signals,
+which is noted here. The run without them is kept in `runs/live_faults_v3h_no_db_alerts`.
+
+| Fault | Alert that fired | Result | Provisional verdict |
+|---|---|---|---|
+| index-migration | db_query_p95_ms > 200 for 30s | "payment-svc: database index removal causing increased query latency due to missing index on customer creation" | **correct** (first investigation of this fault) |
+| pool-override | db_pool_wait_p95_ms > 200 for 30s | insufficient evidence; the top hypothesis, "database pool timeout configuration change causing connection delays", was refused for lacking a runtime-effect citation | abstained |
+
+**Why pool-override is hard to find:**
+- The override is an environment variable set at an operator restart (`d-766`, same version, same build).
+- No deployment, commit or config record shows the new pool size.
+- The only trace is runtime behaviour, so abstaining is a defensible answer.
+
+## Summary over all six live fault types (development, best settings, latest run of each)
+
+| Fault | Kind | Verdict |
+|---|---|---|
+| retry-policy | code (shared client) | correct in 3 of the last 4 runs; one run misread the timeout direction |
+| endpoint-port | config | correct (exact) |
+| payment-stop | operator stop | correct (from lifecycle logs) |
+| index-migration | schema/code | correct (once database alerts exist) |
+| pool-fastpath | code (connection leak) | partially correct: right change and component, the leak is not inferred |
+| pool-override | operator env override | abstained |
+
+All of this comes from one live run per configuration, scored by me against the injected ground truth. These are
+development results, not a re-run of the 47-run evaluation.

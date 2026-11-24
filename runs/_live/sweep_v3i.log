@@ -1,0 +1,9 @@
+11:29:19 index-migration: reset to baseline
+11:34:59 index-migration: inject (traffic 2.9 req/s)
+11:35:47 index-migration: alert db_query_p95_ms > 200 for 30s fired 2026-11-24T11:35:34.939Z (LIVE-5770AF)
+11:37:11 index-migration: completed in 84s -> diagnosis: Most likely cause: payment-svc - Database index removal causing increased query latency due to missing index on customer creation
+11:37:11 pool-override: reset to baseline
+11:42:51 pool-override: inject (traffic 2.8 req/s)
+11:43:39 pool-override: alert db_pool_wait_p95_ms > 200 for 30s fired 2026-11-24T11:43:36.916Z (LIVE-98980F)
+11:45:08 pool-override: completed in 89s -> insufficient_evidence: No reliable root cause identified.
+11:45:08 sweep finished; resetting to baseline

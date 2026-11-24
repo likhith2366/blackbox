@@ -1,0 +1,31 @@
+{
+  "incident_id": "LIVE-98980F",
+  "alert": {
+    "alert_id": "ALR-98980F",
+    "title": "payment-svc db pool wait p95 ms high",
+    "service": "payment-svc",
+    "signal": "db_pool_wait_p95_ms",
+    "condition": "db_pool_wait_p95_ms > 200 for 30s",
+    "observed_value": 371.27,
+    "fired_at": "2026-11-24T11:43:36.916Z"
+  },
+  "window_start": "2026-11-24T11:38:36.916Z",
+  "window_end": "2026-11-24T11:43:39.557Z",
+  "investigation_cutoff": "2026-11-24T11:43:39.557Z",
+  "environment": "demo-local (live)",
+  "services": [
+    "checkout-svc",
+    "payment-svc"
+  ],
+  "available_sources": [
+    "logs",
+    "traces",
+    "metrics",
+    "deployments",
+    "builds",
+    "commits",
+    "configs",
+    "tickets"
+  ],
+  "notes": "Live incident opened from a Prometheus alert evaluation. Investigate using the available evidence sources."
+}
