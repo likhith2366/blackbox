@@ -1,0 +1,17 @@
+07:35:57 retry-policy: reset to baseline
+07:41:37 retry-policy: inject
+07:42:54 retry-policy: alert error_rate > 0.1 for 15s fired 2026-11-24T07:42:47.008Z (LIVE-D9A155)
+07:44:50 retry-policy: completed in 116s -> diagnosis: Most likely cause: checkout-svc - checkout-svc's retry policy for payment failures was changed to retry more aggressively, causing cascading retries and timeouts
+07:44:50 endpoint-port: reset to baseline
+07:50:32 endpoint-port: inject
+07:51:05 endpoint-port: alert error_rate > 0.1 for 15s fired 2026-11-24T07:50:52.726Z (LIVE-E3A326)
+07:53:03 endpoint-port: completed in 118s -> diagnosis: Most likely cause: checkout-svc - checkout-svc misconfigured to use a non-existent payment-svc port, causing payment requests to fail
+07:53:03 payment-stop: reset to baseline
+07:58:46 payment-stop: inject
+07:59:18 payment-stop: alert error_rate > 0.1 for 15s fired 2026-11-24T07:59:06.651Z (LIVE-9C3E18)
+08:01:04 payment-stop: completed in 106s -> insufficient_evidence: No reliable root cause identified.
+08:01:04 pool-fastpath: reset to baseline
+08:06:47 pool-fastpath: inject
+08:07:34 pool-fastpath: alert error_rate > 0.1 for 15s fired 2026-11-24T08:07:32.053Z (LIVE-BE143B)
+08:09:17 pool-fastpath: completed in 102s -> insufficient_evidence: No reliable root cause identified.
+08:09:17 sweep finished; resetting to baseline

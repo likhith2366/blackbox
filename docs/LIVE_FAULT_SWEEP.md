@@ -62,3 +62,21 @@ These are two development options in `blackbox/investigator/synthesis.py` and th
   - deployments left over from earlier faults can be cited (d-655).
 - **Status:** provisional, scored by me. A second reviewer should confirm before any of this is reported as
   accuracy. This is n = 4 development faults, not an evaluation.
+
+## dev_v3c: dev_v3 + the causal-evidence gate (`configs/dev_v3c.yaml`, local git, `runs/live_faults_v3c_localgit`)
+
+Fixes found and made while getting this run clean (earlier attempts are kept in `runs/live_faults_v3c_superseded/`):
+- **D15:** a commit fetched with its diff could not replace the diff-less copy from the commit list (coordinator).
+- **Local git:** commits now carry the services they touch, taken from their paths.
+- **Causal gate onset:** onset is now the start of the latest error episode.
+- **Sweep:** the demo settles longer than the 5-minute incident lookback, so the previous fault is outside the window.
+
+| Fault | Result | Top cause | Cited the injected change | Provisional verdict |
+|---|---|---|---|---|
+| retry-policy | diagnosis | "checkout-svc's retry policy for payment failures was changed to retry more aggressively, causing cascading retries and timeouts" | commit 3ae7e95 + deploy d-689 | **correct** (component + mechanism) |
+| endpoint-port | diagnosis | "checkout-svc misconfigured to use a non-existent payment-svc port, causing payment requests to fail" | commit b40d5ee + deploy d-692 | **correct** |
+| payment-stop | insufficient evidence | – | (no change exists) | abstained; the earlier wrong diagnosis is now blocked |
+| pool-fastpath | insufficient evidence | (gate refused: top hypothesis named checkout-svc but cited a payment-svc commit) | listed, not cited by the accepted cause | abstained; the model's second hypothesis was "payment-svc's new fast path … causes database pool exhaustion" |
+
+**Totals:** 2 correct, 0 wrong, 2 abstained, out of 4 investigated faults. Before these options, the totals were
+0 correct out of 13. This is still development-only (n = 4, one run each, scored by me) and needs a second reviewer.

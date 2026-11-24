@@ -1,0 +1,8 @@
+{
+  "change_id": "payment-stop",
+  "family": "stopped_dependency",
+  "kind": "stop",
+  "at": "2026-11-24T07:58:46.651Z",
+  "service": "payment-svc",
+  "done_at": "2026-11-24T07:58:48.584Z"
+}

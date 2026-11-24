@@ -1,0 +1,118 @@
+[
+ {
+  "fault": "endpoint-port",
+  "family": "config_mismatch_endpoint",
+  "alert": "yes",
+  "status": "diagnosis",
+  "top_cause": "checkout-svc :: checkout-svc misconfigured to use a non-existent payment-svc port, causing payment requests to fail",
+  "keyword_match": true,
+  "change_retrieved": [
+   "commit:b40d5ee",
+   "deploy:d-692"
+  ],
+  "change_cited": [
+   "commit:b40d5ee",
+   "deploy:d-692"
+  ],
+  "tools": {
+   "get_metrics": 12,
+   "list_deployments": 1,
+   "search_commits": 1,
+   "get_build": 1,
+   "get_commit": 1
+  },
+  "backends": {
+   "prometheus": 10,
+   "demo-deploy-records": 21,
+   "local-git": 8
+  },
+  "calls": 7,
+  "rounds": 6,
+  "wall_s": 118.44
+ },
+ {
+  "fault": "payment-stop",
+  "family": "stopped_dependency",
+  "alert": "yes",
+  "status": "insufficient_evidence",
+  "top_cause": " :: ",
+  "keyword_match": false,
+  "change_retrieved": [],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 6,
+   "list_deployments": 2,
+   "search_commits": 1
+  },
+  "backends": {
+   "prometheus": 10,
+   "demo-deploy-records": 20
+  },
+  "calls": 8,
+  "rounds": 6,
+  "wall_s": 105.53
+ },
+ {
+  "fault": "pool-fastpath",
+  "family": "connection_leak",
+  "alert": "yes",
+  "status": "insufficient_evidence",
+  "top_cause": " :: ",
+  "keyword_match": false,
+  "change_retrieved": [
+   "commit:812b3b5",
+   "deploy:d-697"
+  ],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 10,
+   "list_deployments": 1,
+   "search_commits": 1,
+   "get_build": 1,
+   "get_commit": 1,
+   "search_logs": 1
+  },
+  "backends": {
+   "prometheus": 19,
+   "demo-deploy-records": 21,
+   "local-git": 1
+  },
+  "calls": 9,
+  "rounds": 6,
+  "wall_s": 102.08
+ },
+ {
+  "fault": "retry-policy",
+  "family": "retry_amplification",
+  "alert": "yes",
+  "status": "diagnosis",
+  "top_cause": "checkout-svc :: checkout-svc's retry policy for payment failures was changed to retry more aggressively, causing cascadi",
+  "keyword_match": true,
+  "change_retrieved": [
+   "commit:3ae7e95",
+   "deploy:d-689"
+  ],
+  "change_cited": [
+   "commit:3ae7e95",
+   "deploy:d-689"
+  ],
+  "tools": {
+   "get_metrics": 4,
+   "search_traces": 2,
+   "list_deployments": 1,
+   "search_commits": 1,
+   "get_build": 1,
+   "get_commit": 1,
+   "get_trace": 2
+  },
+  "backends": {
+   "prometheus": 8,
+   "tempo": 44,
+   "demo-deploy-records": 21,
+   "local-git": 8
+  },
+  "calls": 9,
+  "rounds": 6,
+  "wall_s": 115.64
+ }
+]
