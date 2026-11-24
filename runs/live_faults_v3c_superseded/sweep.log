@@ -1,0 +1,5 @@
+07:10:40 retry-policy: reset to baseline
+07:12:06 retry-policy: inject
+07:12:54 retry-policy: alert error_rate > 0.1 for 15s fired 2026-11-24T07:12:46.928Z (LIVE-3D1C7F)
+07:15:30 retry-policy: completed in 155s -> insufficient_evidence: No reliable root cause identified.
+07:15:30 endpoint-port: reset to baseline

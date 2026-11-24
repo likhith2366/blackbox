@@ -405,3 +405,22 @@ def test_rationale_first_variant_reorders_schema_and_asks_for_reconciliation():
     assert "no causal link established" in a.prompts[0] and "effective deployment time" in a.prompts[0]
     assert "Update the hypotheses, then request" not in a.prompts[0]
     assert out.steps[1].stop_decision == "stop_diagnosis"      # the gate is unchanged
+
+
+class ListThenFetchBackend(FakeBackend):
+    def search_commits(self, **kw):
+        return BackendResult(status="ok", records=[rec("commit:abc1234", "commits", "fast path")])
+
+    def get_commit(self, sha):
+        return BackendResult(status="ok", records=[rec("commit:abc1234", "commits",
+                                                       "fast path" + chr(10) + "diff --git a/app.py b/app.py" + chr(10) + "+    return 201")])
+
+
+def test_a_richer_copy_of_a_record_replaces_the_listed_one():
+    outs = [{"hypotheses": [], "tool_calls": [{"tool": "search_commits", "args": {}}], "decision": "continue", "rationale": ""},
+            {"hypotheses": [], "tool_calls": [{"tool": "get_commit", "args": {"sha": "abc1234"}}], "decision": "continue",
+             "rationale": ""},
+            {"hypotheses": [], "tool_calls": [], "decision": "insufficient_evidence", "rationale": ""}]
+    out = coordinator(outs, backend=ListThenFetchBackend()).run()
+    seen = {r.evidence_id: r for r in out.evidence_seen}
+    assert "diff --git" in seen["commit:abc1234"].content

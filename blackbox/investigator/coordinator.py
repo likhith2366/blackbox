@@ -134,6 +134,13 @@ class Coordinator:
                                   note=str(h.get("note", "")).strip()[:240]))
         return out, list(dict.fromkeys(invalid))
 
+    def _keep_record(self, rec: EvidenceRecord) -> None:
+        """Store a retrieved record. The same id can come back richer (a commit listed without its diff, then
+        fetched with it): the more complete copy replaces the shorter one, so later rounds see the full content."""
+        old = self.seen.get(rec.evidence_id)
+        if old is None or len(rec.content or "") > len(old.content or ""):
+            self.seen[rec.evidence_id] = rec
+
     @staticmethod
     def _diff(before: list[Hypothesis], after: list[Hypothesis]) -> list[str]:
         prev = {h.hypothesis_id: h for h in before}
@@ -372,8 +379,7 @@ class Coordinator:
                             self._cache[key] = res
                     self.calls_used += 1
                     for rec in res.records:
-                        if rec.evidence_id not in self.seen:
-                            self.seen[rec.evidence_id] = rec
+                        self._keep_record(rec)
                         self.last_round_ids.add(rec.evidence_id)
                 step.tool_results.append(res)
                 if step.duplicate_calls and step.duplicate_calls[-1].startswith(req.call_id + "=="):
@@ -507,8 +513,7 @@ class Coordinator:
                 step.tool_requests.append(req)
                 step.tool_results.append(res)
                 for rec in res.records:
-                    if rec.evidence_id not in self.seen:
-                        self.seen[rec.evidence_id] = rec
+                    self._keep_record(rec)
                     self.last_round_ids.add(rec.evidence_id)
                 step.orchestration_rules.append(f"change expansion: {tool}{args} for {d.evidence_id} -> {res.status}")
                 self.feedback.append(f"{req.call_id} {tool} (coordinator: follows {d.evidence_id}) -> "
