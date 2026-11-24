@@ -1,0 +1,737 @@
+{
+ "checked_at": "2026-11-24T03:17:37.560Z",
+ "raw": {
+  "loki": {
+   "query": "{job=\"blackbox-demo\", service=\"payment-svc\", level=\"ERROR\"}",
+   "ts_ns": "1795490256981000000",
+   "line": {
+    "ts": "2026-11-24T03:17:36.981Z",
+    "level": "ERROR",
+    "service": "payment-svc",
+    "msg": "db pool acquire timed out after 1000ms",
+    "trace_id": "394a318e6df10f66c9cc9e20b153434f",
+    "span_id": "95a6fab22f08b964",
+    "order_id": "ord-1101488"
+   },
+   "labels": {
+    "detected_level": "ERROR",
+    "filename": "/telemetry/logs/payment-svc.jsonl",
+    "job": "blackbox-demo",
+    "level": "ERROR",
+    "service": "payment-svc",
+    "service_name": "payment-svc"
+   }
+  },
+  "tempo": {
+   "trace_id": "394a318e6df10f66c9cc9e20b153434f",
+   "spans": [
+    {
+     "service": "checkout-svc",
+     "name": "POST /charge",
+     "spanId": "mVgQOhHOPHI=",
+     "start": "1795490255972000000",
+     "status": {
+      "message": "HTTP 503",
+      "code": "STATUS_CODE_ERROR"
+     }
+    },
+    {
+     "service": "checkout-svc",
+     "name": "POST /orders",
+     "spanId": "Df3bUMb3L6s=",
+     "start": "1795490255971000000",
+     "status": {
+      "message": "HTTP 502",
+      "code": "STATUS_CODE_ERROR"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "db.pool.acquire",
+     "spanId": "VcN0OAjeJnA=",
+     "start": "1795490255974000000",
+     "status": {
+      "message": "PoolTimeout: db pool acquire timed out after 1000ms",
+      "code": "STATUS_CODE_ERROR"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "POST /charge",
+     "spanId": "lab6si8IuWQ=",
+     "start": "1795490255974000000",
+     "status": {
+      "message": "HTTP 503",
+      "code": "STATUS_CODE_ERROR"
+     }
+    }
+   ]
+  },
+  "prometheus": {
+   "db_pool_in_use": [
+    [
+     1795490196.981,
+     "1"
+    ],
+    [
+     1795490201.981,
+     "1"
+    ],
+    [
+     1795490206.981,
+     "0"
+    ],
+    [
+     1795490211.981,
+     "0"
+    ],
+    [
+     1795490216.981,
+     "0"
+    ],
+    [
+     1795490221.981,
+     "3"
+    ],
+    [
+     1795490226.981,
+     "3"
+    ],
+    [
+     1795490231.981,
+     "4"
+    ],
+    [
+     1795490236.981,
+     "4"
+    ],
+    [
+     1795490241.981,
+     "4"
+    ],
+    [
+     1795490246.981,
+     "4"
+    ],
+    [
+     1795490251.981,
+     "4"
+    ],
+    [
+     1795490256.981,
+     "4"
+    ],
+    [
+     1795490261.981,
+     "4"
+    ]
+   ],
+   "error_rate": [
+    [
+     1795490196.981,
+     "0"
+    ],
+    [
+     1795490201.981,
+     "0"
+    ],
+    [
+     1795490206.981,
+     "0"
+    ],
+    [
+     1795490211.981,
+     "0"
+    ],
+    [
+     1795490216.981,
+     "0"
+    ],
+    [
+     1795490221.981,
+     "0"
+    ],
+    [
+     1795490226.981,
+     "0"
+    ],
+    [
+     1795490231.981,
+     "0.2667"
+    ],
+    [
+     1795490236.981,
+     "1"
+    ],
+    [
+     1795490241.981,
+     "1"
+    ],
+    [
+     1795490246.981,
+     "1"
+    ],
+    [
+     1795490251.981,
+     "1"
+    ],
+    [
+     1795490256.981,
+     "1"
+    ],
+    [
+     1795490261.981,
+     "1"
+    ]
+   ]
+  }
+ },
+ "blackbox": {
+  "search_logs": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "log:4e97b2782d",
+     "source": "logs",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T03:17:36.751Z",
+     "available_time": "2026-11-24T03:17:36.751Z",
+     "version": null,
+     "title": "ERROR payment-svc: db pool acquire timed out after 1000ms",
+     "content": "{\"ts\":\"2026-11-24T03:17:36.751Z\",\"level\":\"ERROR\",\"service\":\"payment-svc\",\"msg\":\"db pool acquire timed out after 1000ms\",\"trace_id\":\"7da06f323da7f2d3c75b36aab2f3a426\",\"span_id\":\"3279dc136baf8add\",\"order_id\":\"ord-1101486\"}",
+     "content_ref": "loki:http://127.0.0.1:3100#payment-svc@1795490256751000000",
+     "attributes": {
+      "live": true,
+      "retrieved_at": "2026-11-24T03:17:37.946Z",
+      "backend": "loki",
+      "mode": "live",
+      "query": "{job=\"blackbox-demo\", service=\"payment-svc\", level=\"ERROR\"}",
+      "source_url": "http://127.0.0.1:3100/loki/api/v1/query_range",
+      "labels": {
+       "detected_level": "ERROR",
+       "filename": "/telemetry/logs/payment-svc.jsonl",
+       "job": "blackbox-demo",
+       "level": "ERROR",
+       "service": "payment-svc",
+       "service_name": "payment-svc"
+      },
+      "level": "ERROR",
+      "trace_id": "7da06f323da7f2d3c75b36aab2f3a426"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "log:8c0c478ac7",
+     "source": "logs",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T03:17:36.844Z",
+     "available_time": "2026-11-24T03:17:36.844Z",
+     "version": null,
+     "title": "ERROR payment-svc: db pool acquire timed out after 1000ms",
+     "content": "{\"ts\":\"2026-11-24T03:17:36.844Z\",\"level\":\"ERROR\",\"service\":\"payment-svc\",\"msg\":\"db pool acquire timed out after 1000ms\",\"trace_id\":\"37f54c8bbbfbf5feeda28f31f9afd604\",\"span_id\":\"944b1cc22638b5a8\",\"order_id\":\"ord-1101487\"}",
+     "content_ref": "loki:http://127.0.0.1:3100#payment-svc@1795490256844000000",
+     "attributes": {
+      "live": true,
+      "retrieved_at": "2026-11-24T03:17:37.946Z",
+      "backend": "loki",
+      "mode": "live",
+      "query": "{job=\"blackbox-demo\", service=\"payment-svc\", level=\"ERROR\"}",
+      "source_url": "http://127.0.0.1:3100/loki/api/v1/query_range",
+      "labels": {
+       "detected_level": "ERROR",
+       "filename": "/telemetry/logs/payment-svc.jsonl",
+       "job": "blackbox-demo",
+       "level": "ERROR",
+       "service": "payment-svc",
+       "service_name": "payment-svc"
+      },
+      "level": "ERROR",
+      "trace_id": "37f54c8bbbfbf5feeda28f31f9afd604"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "log:9f6dadf739",
+     "source": "logs",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T03:17:36.981Z",
+     "available_time": "2026-11-24T03:17:36.981Z",
+     "version": null,
+     "title": "ERROR payment-svc: db pool acquire timed out after 1000ms",
+     "content": "{\"ts\":\"2026-11-24T03:17:36.981Z\",\"level\":\"ERROR\",\"service\":\"payment-svc\",\"msg\":\"db pool acquire timed out after 1000ms\",\"trace_id\":\"394a318e6df10f66c9cc9e20b153434f\",\"span_id\":\"95a6fab22f08b964\",\"order_id\":\"ord-1101488\"}",
+     "content_ref": "loki:http://127.0.0.1:3100#payment-svc@1795490256981000000",
+     "attributes": {
+      "live": true,
+      "retrieved_at": "2026-11-24T03:17:37.946Z",
+      "backend": "loki",
+      "mode": "live",
+      "query": "{job=\"blackbox-demo\", service=\"payment-svc\", level=\"ERROR\"}",
+      "source_url": "http://127.0.0.1:3100/loki/api/v1/query_range",
+      "labels": {
+       "detected_level": "ERROR",
+       "filename": "/telemetry/logs/payment-svc.jsonl",
+       "job": "blackbox-demo",
+       "level": "ERROR",
+       "service": "payment-svc",
+       "service_name": "payment-svc"
+      },
+      "level": "ERROR",
+      "trace_id": "394a318e6df10f66c9cc9e20b153434f"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "get_trace": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "span:0dfddb50c6f72fab",
+     "source": "traces",
+     "service": "checkout-svc",
+     "event_time": "2026-11-24T03:17:35.971Z",
+     "available_time": "2026-11-24T03:17:36.984Z",
+     "version": null,
+     "title": "checkout-svc POST /orders 1013.0ms error",
+     "content": "span 0dfddb50c6f72fab parent=- trace=394a318e6df10f66c9cc9e20b153434f start=2026-11-24T03:17:35.971Z checkout-svc POST /orders 1013.0ms error (HTTP 502) {\"http.route\":\"/orders\",\"order.id\":\"ord-1101488\",\"http.status_code\":\"502\"} resource={\"service.name\":\"checkout-svc\",\"telemetry.source\":\"demo-shop libs/telemetry JSONL (forwarded live)\",\"service.version\":\"1.8.2\"}",
+     "content_ref": "http://127.0.0.1:3200/api/traces/394a318e6df10f66c9cc9e20b153434f",
+     "attributes": {
+      "trace_id": "394a318e6df10f66c9cc9e20b153434f",
+      "parent_span_id": null,
+      "kind": "server",
+      "duration_ms": 1013.0,
+      "status": "error",
+      "backend": "tempo",
+      "query": "GET /api/traces/394a318e6df10f66c9cc9e20b153434f",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:3200/api/traces/394a318e6df10f66c9cc9e20b153434f"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "span:9958103a11ce3c72",
+     "source": "traces",
+     "service": "checkout-svc",
+     "event_time": "2026-11-24T03:17:35.972Z",
+     "available_time": "2026-11-24T03:17:36.982Z",
+     "version": null,
+     "title": "checkout-svc POST /charge 1010.0ms error",
+     "content": "span 9958103a11ce3c72 parent=0dfddb50c6f72fab trace=394a318e6df10f66c9cc9e20b153434f start=2026-11-24T03:17:35.972Z checkout-svc POST /charge 1010.0ms error (HTTP 503) {\"peer.service\":\"payment-svc\",\"http.attempt\":\"1\",\"http.timeout_ms\":\"2000\",\"http.status_code\":\"503\"} resource={\"service.name\":\"checkout-svc\",\"telemetry.source\":\"demo-shop libs/telemetry JSONL (forwarded live)\",\"service.version\":\"1.8.2\"}",
+     "content_ref": "http://127.0.0.1:3200/api/traces/394a318e6df10f66c9cc9e20b153434f",
+     "attributes": {
+      "trace_id": "394a318e6df10f66c9cc9e20b153434f",
+      "parent_span_id": "0dfddb50c6f72fab",
+      "kind": "client",
+      "duration_ms": 1010.0,
+      "status": "error",
+      "backend": "tempo",
+      "query": "GET /api/traces/394a318e6df10f66c9cc9e20b153434f",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:3200/api/traces/394a318e6df10f66c9cc9e20b153434f"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "span:55c3743808de2670",
+     "source": "traces",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T03:17:35.974Z",
+     "available_time": "2026-11-24T03:17:36.980Z",
+     "version": null,
+     "title": "payment-svc db.pool.acquire 1006.0ms error",
+     "content": "span 55c3743808de2670 parent=95a6fab22f08b964 trace=394a318e6df10f66c9cc9e20b153434f start=2026-11-24T03:17:35.974Z payment-svc db.pool.acquire 1006.0ms error (PoolTimeout: db pool acquire timed out after 1000ms) {} resource={\"service.name\":\"payment-svc\",\"telemetry.source\":\"demo-shop libs/telemetry JSONL (forwarded live)\",\"service.version\":\"2.5.0\"}",
+     "content_ref": "http://127.0.0.1:3200/api/traces/394a318e6df10f66c9cc9e20b153434f",
+     "attributes": {
+      "trace_id": "394a318e6df10f66c9cc9e20b153434f",
+      "parent_span_id": "95a6fab22f08b964",
+      "kind": "internal",
+      "duration_ms": 1006.0,
+      "status": "error",
+      "backend": "tempo",
+      "query": "GET /api/traces/394a318e6df10f66c9cc9e20b153434f",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:3200/api/traces/394a318e6df10f66c9cc9e20b153434f"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "span:95a6fab22f08b964",
+     "source": "traces",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T03:17:35.974Z",
+     "available_time": "2026-11-24T03:17:36.982Z",
+     "version": null,
+     "title": "payment-svc POST /charge 1008.0ms error",
+     "content": "span 95a6fab22f08b964 parent=9958103a11ce3c72 trace=394a318e6df10f66c9cc9e20b153434f start=2026-11-24T03:17:35.974Z payment-svc POST /charge 1008.0ms error (HTTP 503) {\"http.route\":\"/charge\",\"order.id\":\"ord-1101488\",\"http.status_code\":\"503\"} resource={\"service.name\":\"payment-svc\",\"telemetry.source\":\"demo-shop libs/telemetry JSONL (forwarded live)\",\"service.version\":\"2.5.0\"}",
+     "content_ref": "http://127.0.0.1:3200/api/traces/394a318e6df10f66c9cc9e20b153434f",
+     "attributes": {
+      "trace_id": "394a318e6df10f66c9cc9e20b153434f",
+      "parent_span_id": "9958103a11ce3c72",
+      "kind": "server",
+      "duration_ms": 1008.0,
+      "status": "error",
+      "backend": "tempo",
+      "query": "GET /api/traces/394a318e6df10f66c9cc9e20b153434f",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:3200/api/traces/394a318e6df10f66c9cc9e20b153434f"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "get_metrics": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "metric:3a427ddee4",
+     "source": "metrics",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T03:15:36.981Z",
+     "available_time": "2026-11-24T03:17:41.981Z",
+     "version": null,
+     "title": "payment-svc db_pool_in_use",
+     "content": "payment-svc db_pool_in_use (5s steps, 2026-11-24T03:15:36.981Z .. 2026-11-24T03:17:41.981Z): min=0 max=4 last=4\n03:15:36 0; 03:15:41 0; 03:15:46 0; 03:15:51 0; 03:15:56 1; 03:16:01 0; 03:16:06 0; 03:16:11 1; 03:16:16 0; 03:16:21 1; 03:16:26 2; 03:16:31 0; 03:16:36 1; 03:16:41 1; 03:16:46 0; 03:16:51 0; 03:16:56 0; 03:17:01 3; 03:17:06 3; 03:17:11 4; 03:17:16 4; 03:17:21 4; 03:17:26 4; 03:17:31 4; 03:17:36 4; 03:17:41 4",
+     "content_ref": "http://127.0.0.1:9090/graph?g0.expr=db_pool_in_use%7Bjob%3D%22payment-svc%22%7D&g0.tab=0",
+     "attributes": {
+      "metric": "db_pool_in_use",
+      "points": 26,
+      "min": 0.0,
+      "max": 4.0,
+      "last": 4.0,
+      "backend": "prometheus",
+      "query": "query_range db_pool_in_use{job=\"payment-svc\"} step=5s",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:9090/graph?g0.expr=db_pool_in_use%7Bjob%3D%22payment-svc%22%7D&g0.tab=0"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "list_deployments": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "deploy:d-553",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-20T03:03:05.351Z",
+     "available_time": "2026-11-20T03:03:08.502Z",
+     "version": "2.4.1",
+     "title": "deployment of payment-svc 2.4.1",
+     "content": "2026-11-20T03:03:05.351Z deployment d-553 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-553",
+     "attributes": {
+      "deploy_id": "d-553",
+      "build_id": "b-1214",
+      "commit": "b7ae74f",
+      "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "deploy:d-555",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-20T03:04:31.121Z",
+     "available_time": "2026-11-20T03:04:39.112Z",
+     "version": "2.4.2",
+     "title": "deployment of payment-svc 2.4.2",
+     "content": "2026-11-20T03:04:31.121Z deployment d-555 of payment-svc version 2.4.2 to demo-local build=b-1223 commit=ea3a3b6 artifact_digest=sha256:a65486b7c8f83e60b097f3401020116b58efc0eb96f2c06b23d0fb0c310b6c79 by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-555",
+     "attributes": {
+      "deploy_id": "d-555",
+      "build_id": "b-1223",
+      "commit": "ea3a3b6",
+      "commit_full": "ea3a3b6a3f643a3110c5963fd9fbdf9ca559a501",
+      "artifact_digest": "sha256:a65486b7c8f83e60b097f3401020116b58efc0eb96f2c06b23d0fb0c310b6c79",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "deploy:d-556",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-20T03:07:27.004Z",
+     "available_time": "2026-11-20T03:07:29.363Z",
+     "version": "2.4.1",
+     "title": "deployment of payment-svc 2.4.1",
+     "content": "2026-11-20T03:07:27.004Z deployment d-556 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-556",
+     "attributes": {
+      "deploy_id": "d-556",
+      "build_id": "b-1214",
+      "commit": "b7ae74f",
+      "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "deploy:d-559",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-20T03:11:19.240Z",
+     "available_time": "2026-11-20T03:11:21.628Z",
+     "version": "2.4.1",
+     "title": "deployment of payment-svc 2.4.1",
+     "content": "2026-11-20T03:11:19.240Z deployment d-559 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-559",
+     "attributes": {
+      "deploy_id": "d-559",
+      "build_id": "b-1214",
+      "commit": "b7ae74f",
+      "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "deploy:d-562",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-20T03:12:47.536Z",
+     "available_time": "2026-11-20T03:12:54.676Z",
+     "version": "2.4.2",
+     "title": "deployment of payment-svc 2.4.2",
+     "content": "2026-11-20T03:12:47.536Z deployment d-562 of payment-svc version 2.4.2 to demo-local build=b-1226 commit=b460c2f artifact_digest=sha256:d870d36cf77b51094309d611343acbb3f5636bd3e0adb1feebfc4ac89cfb2e1c by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-562",
+     "attributes": {
+      "deploy_id": "d-562",
+      "build_id": "b-1226",
+      "commit": "b460c2f",
+      "commit_full": "b460c2f167e2bd32e49758bfc3ec974bcb8cbace",
+      "artifact_digest": "sha256:d870d36cf77b51094309d611343acbb3f5636bd3e0adb1feebfc4ac89cfb2e1c",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "deploy:d-563",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-20T03:16:13.055Z",
+     "available_time": "2026-11-20T03:16:16.803Z",
+     "version": "2.4.1",
+     "title": "deployment of payment-svc 2.4.1",
+     "content": "2026-11-20T03:16:13.055Z deployment d-563 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-563",
+     "attributes": {
+      "deploy_id": "d-563",
+      "build_id": "b-1214",
+      "commit": "b7ae74f",
+      "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "get_build": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "build:b-1231",
+     "source": "builds",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T03:16:53.750Z",
+     "available_time": "2026-11-24T03:16:53.889Z",
+     "version": "2.5.0",
+     "title": "build b-1231 of payment-svc 2.5.0",
+     "content": "build b-1231 service=payment-svc version=2.5.0 commit=c24dd445c1e7483a5c330aa62a024c112cb30926 artifact=payment-svc-2.5.0-b-1231.tar artifact_digest=sha256:1dc868ae3a7b3f73188df48e2bf5b467857b5e21aed3724fcc611d756085ac43 status=success pipeline=local-build started=2026-11-24T03:16:53.750Z finished=2026-11-24T03:16:53.889Z source_paths=services/__init__.py,services/payment,libs,config/payment-svc.yaml,db",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\builds\\b-1231.json",
+     "attributes": {
+      "commit": "c24dd44",
+      "artifact_digest": "sha256:1dc868ae3a7b3f73188df48e2bf5b467857b5e21aed3724fcc611d756085ac43",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read builds/b-1231.json",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\builds\\b-1231.json"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "get_config": {
+   "status": "empty",
+   "error": "HTTP 422: No commit found for SHA: c24dd445c1e7483a5c330aa62a024c112cb30926",
+   "records": []
+  },
+  "get_commit(running)": {
+   "status": "empty",
+   "error": "HTTP 422: No commit found for SHA: c24dd445c1e7483a5c330aa62a024c112cb30926",
+   "records": []
+  },
+  "get_commit(b7ae74f)": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@b7ae74f",
+     "source": "commits",
+     "service": null,
+     "event_time": "2026-11-19T16:30:00.000Z",
+     "available_time": "2026-11-19T16:30:00.000Z",
+     "version": "b7ae74f",
+     "title": "Update CHANGELOG",
+     "content": "commit b7ae74f 2026-11-19T16:30:00.000Z Likhith Vardhan Goruputi\nUpdate CHANGELOG\nfiles: modified CHANGELOG.md\n\n--- CHANGELOG.md\n@@ -12,3 +12,7 @@\n ## 2026-09\n - DEMO-3: customer/time index for payment velocity checks\n - initial import of checkout-svc and payment-svc\n+\n+## Unreleased\n+- runbooks for checkout-svc and payment-svc, on-call and architecture docs\n+- CI workflow, policy tests, ruff config, smoke check script",
+     "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+     "attributes": {
+      "live": true,
+      "retrieved_at": "2026-11-24T03:17:39.068Z",
+      "repo": "likhith2366/blackbox-demo-shop",
+      "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "http_status": 200,
+      "sha": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "author": "Likhith Vardhan Goruputi",
+      "files": [
+       "CHANGELOG.md"
+      ],
+      "files_total": 1,
+      "backend": "github",
+      "mode": "live"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "list_workflow_runs": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "gh:run:likhith2366/blackbox-demo-shop#44663434650",
+     "source": "builds",
+     "service": null,
+     "event_time": "2026-11-20T02:48:56.000Z",
+     "available_time": "2026-11-20T02:49:08.000Z",
+     "version": "e7a0cc0",
+     "title": "CI run ci #3: completed/success @ e7a0cc0",
+     "content": "workflow run 44663434650 'ci' #3 attempt 1 event=push branch=capture/INC-0000 status=completed conclusion=success\nhead commit e7a0cc0: DEMO-9: retry transient payment failures in shared client\ncreated=2026-11-20T02:48:56.000Z started=2026-11-20T02:48:56.000Z updated=2026-11-20T02:49:08.000Z workflow=.github/workflows/ci.yml",
+     "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/actions/runs/44663434650",
+     "attributes": {
+      "live": true,
+      "retrieved_at": "2026-11-24T03:17:39.341Z",
+      "repo": "likhith2366/blackbox-demo-shop",
+      "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/actions/runs/44663434650",
+      "http_status": 200,
+      "run_id": 44663434650,
+      "head_sha": "e7a0cc0f0e8492abe652cb31eec201d653cffb1d",
+      "commit_evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@e7a0cc0",
+      "workflow_id": 424543330,
+      "workflow": "ci",
+      "path": ".github/workflows/ci.yml",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_branch": "capture/INC-0000",
+      "run_number": 3,
+      "run_attempt": 1,
+      "backend": "github-actions",
+      "mode": "live"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "gh:run:likhith2366/blackbox-demo-shop#44661337079",
+     "source": "builds",
+     "service": null,
+     "event_time": "2026-11-20T02:30:53.000Z",
+     "available_time": "2026-11-20T02:31:09.000Z",
+     "version": "b7ae74f",
+     "title": "CI run ci #2: completed/success @ b7ae74f",
+     "content": "workflow run 44661337079 'ci' #2 attempt 1 event=push branch=main status=completed conclusion=success\nhead commit b7ae74f: Update CHANGELOG\ncreated=2026-11-20T02:30:53.000Z started=2026-11-20T02:30:53.000Z updated=2026-11-20T02:31:09.000Z workflow=.github/workflows/ci.yml",
+     "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/actions/runs/44661337079",
+     "attributes": {
+      "live": true,
+      "retrieved_at": "2026-11-24T03:17:39.341Z",
+      "repo": "likhith2366/blackbox-demo-shop",
+      "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/actions/runs/44661337079",
+      "http_status": 200,
+      "run_id": 44661337079,
+      "head_sha": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "commit_evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@b7ae74f",
+      "workflow_id": 424543330,
+      "workflow": "ci",
+      "path": ".github/workflows/ci.yml",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_branch": "main",
+      "run_number": 2,
+      "run_attempt": 1,
+      "backend": "github-actions",
+      "mode": "live"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  }
+ },
+ "compare": [
+  {
+   "what": "log line",
+   "raw": "2026-11-24T03:17:36.981Z db pool acquire timed out after 1000ms",
+   "blackbox": "log:9f6dadf739 2026-11-24T03:17:36.981Z",
+   "same": true
+  },
+  {
+   "what": "trace spans",
+   "raw": "4 spans",
+   "blackbox": "4 spans",
+   "same": true
+  },
+  {
+   "what": "db_pool_in_use",
+   "raw": "max=4 last=4",
+   "blackbox": "max=4.0 last=4.0",
+   "same": true
+  }
+ ]
+}

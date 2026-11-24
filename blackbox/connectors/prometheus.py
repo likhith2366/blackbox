@@ -28,7 +28,7 @@ from blackbox.schemas import BackendResult, EvidenceRecord
 DEFAULT_URL = "http://127.0.0.1:9090"
 TIMEOUT_S = 10.0
 STEP_S = 5
-MAX_POINTS = 240                 # per series (20 min at 5 s); longer windows are refused, not silently thinned
+MAX_POINTS = 240                 # per series; a longer window uses a wider step, stated in the record
 CONTENT_CHARS = 4000
 _NAME = re.compile(r"^[A-Za-z_:][A-Za-z0-9_:]*$")
 _LABEL = re.compile(r"^[A-Za-z0-9_.:-]+$")
@@ -86,8 +86,9 @@ class PrometheusMetrics:
         s, e = _ts(start), _ts(end)
         if s is None or e is None or e <= s:
             return BackendResult(status="error", error="bad argument: start and end are required (end > start)")
-        if (e - s) / STEP_S > MAX_POINTS:
-            return BackendResult(status="error", error=f"window too long: at most {MAX_POINTS * STEP_S}s per query")
+        if e - s > 24 * 3600:
+            return BackendResult(status="error", error="window too long: at most 24 h per query")
+        step = STEP_S * max(1, -(-int(e - s) // (STEP_S * MAX_POINTS)))     # 5 s, or a multiple of it
         try:
             names = self.names(service)
         except (urllib.error.URLError, OSError) as exc:
@@ -106,7 +107,7 @@ class PrometheusMetrics:
                 continue
             q = f'{name}{{job="{service}"}}'
             try:
-                data = self._get("/api/v1/query_range", {"query": q, "start": s, "end": e, "step": STEP_S})
+                data = self._get("/api/v1/query_range", {"query": q, "start": s, "end": e, "step": step})
             except (urllib.error.URLError, OSError) as exc:
                 return BackendResult(status="unavailable", error=f"Prometheus not reachable: {type(exc).__name__}")
             except (RuntimeError, ValueError) as exc:
@@ -116,7 +117,8 @@ class PrometheusMetrics:
                 continue
             pts.sort()
             vals = [v for _, v in pts]
-            head = (f"{service} {name} ({STEP_S}s steps, {_iso(pts[0][0])} .. {_iso(pts[-1][0])}): "
+            head = (f"{service} {name} ({step}s steps{'' if step == STEP_S else ', widened to fit the window'}, "
+                    f"{_iso(pts[0][0])} .. {_iso(pts[-1][0])}): "
                     f"min={min(vals):g} max={max(vals):g} last={vals[-1]:g}\n")
             body = head + "; ".join(f"{_iso(t)[11:19]} {v:g}" for t, v in pts)
             cut = len(body) > CONTENT_CHARS
@@ -127,7 +129,7 @@ class PrometheusMetrics:
                 available_time=_iso(pts[-1][0]), title=f"{service} {name}", content=body[:CONTENT_CHARS],
                 truncated=cut, content_ref=link, fixture=False,
                 attributes={"metric": name, "points": len(pts), "min": min(vals), "max": max(vals), "last": vals[-1],
-                            "backend": "prometheus", "query": f"query_range {q} step={STEP_S}s",
+                            "backend": "prometheus", "query": f"query_range {q} step={step}s",
                             "mode": "live", "source_url": link}))
         if not recs:
             return BackendResult(status="empty", total_matches=0, error="no points in the window")
