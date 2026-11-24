@@ -58,11 +58,9 @@ class LocalGitConnector:
 
     def _services(self, sha: str) -> str:
         """Services a commit touches, from its changed paths: services/<name>/ -> <name>-svc, config/<svc>.yaml -> <svc>,
-        libs/ (shared code) -> every service in the repository. Empty when nothing maps."""
+        libs/ (shared code) -> no service (the deployment records say which service received it). Empty when nothing maps."""
         try:
             paths = self._git("show", "--format=", "--name-only", sha).split()
-            all_svcs = sorted(f"{d.name}-svc" for d in (self.dir / "services").iterdir() if d.is_dir() and
-                              not d.name.startswith("_")) if (self.dir / "services").is_dir() else []
         except (LookupError, subprocess.TimeoutExpired, OSError):
             return ""
         out: list[str] = []
@@ -72,8 +70,8 @@ class LocalGitConnector:
                 out.append(f"{parts[1]}-svc")
             elif parts[0] == "config" and parts[-1].endswith(".yaml"):
                 out.append(parts[-1][:-5])
-            elif parts[0] == "libs":
-                out += all_svcs
+            # libs/ (shared code) names no service: a shared change reaches a service only through a deployment,
+            # and the deployment record says which service that was
         return ",".join(dict.fromkeys(out))
 
     def _attrs(self, sha: str, query: str, **kw) -> dict:
