@@ -94,7 +94,8 @@ def has_diff(r: EvidenceRecord) -> bool:
 
 
 def onset(r: EvidenceRecord) -> Optional[datetime]:
-    """When the symptom in this record starts. For a metric: first point clearly above its starting level."""
+    """When the symptom in this record starts. For a metric: the start of the latest run of points clearly above
+    the series minimum (an earlier episode that already ended is a different event)."""
     if r.source == "logs":
         return _ts(r.attributes.get("first_seen")) or _ts(r.event_time)
     if r.source == "traces":
@@ -108,8 +109,9 @@ def onset(r: EvidenceRecord) -> Optional[datetime]:
         lo, hi = min(vals), max(vals)
         if hi <= lo:
             return None          # flat series: no onset to compare
-        thr = vals[0] + 0.25 * (hi - lo)
+        thr = lo + 0.25 * (hi - lo)
         day, prev = start.date(), None
+        run_start, last_start = None, None
         for hhmmss, v in pts:
             t = datetime.combine(day, datetime.strptime(hhmmss, "%H:%M:%S").time(), start.tzinfo)
             if prev is not None and t < prev:
@@ -117,8 +119,13 @@ def onset(r: EvidenceRecord) -> Optional[datetime]:
                 t += timedelta(days=1)
             prev = t
             if float(v) > thr:
-                return t
-        return None
+                if run_start is None:
+                    run_start = t
+                last_start = run_start
+            else:
+                run_start = None
+        # the start of the LATEST elevated episode: an earlier, already-ended episode is a different event
+        return last_start
     return None
 
 

@@ -206,3 +206,9 @@ def test_causal_gate_at_the_round_limit_does_not_turn_the_ledger_into_a_diagnosi
     out = _run("causal", rounds + [{"hypotheses": [_hyp_dict()], "tool_calls": [], "decision": "continue",
                                      "rationale": "x"}])
     assert out.report.status == "insufficient_evidence"
+
+
+def test_onset_is_the_latest_episode_not_an_earlier_one():
+    two = series("checkout-svc", "error_rate", [0, 0.9, 0.9, 0, 0, 0, 0, 0.8, 0.9])     # spikes at :05 and :35
+    t = causal_gate.onset(two)
+    assert t.strftime("%H:%M:%S") == "10:00:35"

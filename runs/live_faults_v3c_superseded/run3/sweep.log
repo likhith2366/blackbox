@@ -1,0 +1,9 @@
+07:24:16 retry-policy: reset to baseline
+07:25:43 retry-policy: inject
+07:26:30 retry-policy: alert error_rate > 0.1 for 15s fired 2026-11-24T07:26:28.118Z (LIVE-4FF38A)
+07:29:42 retry-policy: completed in 191s -> diagnosis: Most likely cause: checkout-svc - checkout-svc version 1.9.0 introduced a change in the HTTP client retry policy that increased the number of retries and changed the retry conditions, causing payment-svc to be retried more frequently and leading to higher error rates
+07:29:42 endpoint-port: reset to baseline
+07:31:06 endpoint-port: inject
+07:31:39 endpoint-port: alert error_rate > 0.1 for 15s fired 2026-11-24T07:31:26.715Z (LIVE-009DC8)
+07:34:49 endpoint-port: completed in 190s -> insufficient_evidence: No reliable root cause identified.
+07:34:49 payment-stop: reset to baseline

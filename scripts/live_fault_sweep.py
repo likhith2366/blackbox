@@ -44,7 +44,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--faults", default=",".join(FAULTS))
     ap.add_argument("--out", default=str(ROOT / "runs" / "live_faults"))
-    ap.add_argument("--settle", type=int, default=75, help="seconds of healthy traffic before injecting")
+    ap.add_argument("--settle", type=int, default=330, help="seconds of healthy traffic before injecting (longer than the 5-min incident lookback, so the previous fault is outside the window)")
     ap.add_argument("--config", default="configs/frozen_v1.yaml", help="investigator settings (dev_v2.yaml adds the change check)")
     a = ap.parse_args()
     import yaml
