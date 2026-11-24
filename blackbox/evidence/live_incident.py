@@ -1,7 +1,8 @@
 """Open a live incident from a Prometheus alert evaluation (no snapshot involved).
 
 An alert rule `<metric> <op> <threshold> for <for_s>s` on one service is evaluated over Prometheus samples:
-the alert fires at the first sample that completes `for_s` seconds of consecutive breaching samples, exactly
+the alert fires at the sample that completes `for_s` seconds of consecutive breaching samples (the most recent
+such episode is used), exactly
 like demo/alerts.py does over captured points. The incident window starts `lookback_s` before the firing time;
 the investigation cutoff is the moment the investigation starts (nothing later is visible).
 """
@@ -24,15 +25,15 @@ def find_firing(prom: PrometheusMetrics, service: str, metric: str, op: str, thr
     data = prom._get("/api/v1/query_range", {"query": f'{metric}{{job="{service}"}}', "start": _ts(since),
                                               "end": _ts(until), "step": 5})
     pts = sorted((float(t), float(v)) for s in data.get("result", []) for t, v in s.get("values", []))
-    need, streak = max(1, math.ceil(for_s / 5)), 0
+    need, streak, last = max(1, math.ceil(for_s / 5)), 0, None
     for t, v in pts:
         if OPS[op](v, threshold):
             streak += 1
-            if streak >= need:
-                return _iso(t), v
+            if streak == need:          # an alert episode fires here; keep the most recent episode
+                last = (_iso(t), v)
         else:
             streak = 0
-    return None
+    return last
 
 
 def open_incident(service: str, metric: str, op: str, threshold: float, for_s: int = 15, since: Optional[str] = None,

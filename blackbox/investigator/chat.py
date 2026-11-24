@@ -40,6 +40,12 @@ SCHEMA = {
     },
     "required": ["tool_calls", "answer"],
 }
+ANSWER_SCHEMA = {
+    "type": "object",
+    "properties": {"answer": {"type": "string"}, "citations": {"type": "array", "items": {"type": "string"}},
+                   "confidence": {"type": "string", "enum": ["high", "medium", "low"]}},
+    "required": ["answer", "citations"],
+}
 # concrete things an answer can assert that must be traceable to cited evidence
 _TOKEN = re.compile(r"\b(?:[a-z]+:[A-Za-z0-9_.#@/-]+|d-\d+|b-\d+|v?\d+\.\d+\.\d+|[0-9a-f]{7,40}|\d+(?:\.\d+)?\s?(?:ms|s|%|rps))\b")
 
@@ -153,6 +159,15 @@ class ChatSession:
                                    "ids": [r.evidence_id for r in res.records][:20]})
                 observations.append(f"{req.tool}({json.dumps(req.args)[:160]}) -> {res.status}, {len(res.records)} records"
                                     + (f": {res.error}" if res.error else ""))
+        if answer is None:      # tool budget spent: one answer-only call over what was retrieved
+            reply = self.adapter.chat(
+                [{"role": "system", "content": self.system},
+                 {"role": "user", "content": self._user_prompt(question, observations + [
+                     "No more tool calls are possible. Answer now from the evidence above, citing ids, or say what is missing."])}],
+                schema=ANSWER_SCHEMA, num_predict=self.cfg.num_predict)
+            p = reply.parsed or {}
+            if p.get("answer"):
+                answer, cites, conf = str(p["answer"]), [str(c) for c in p.get("citations") or []], p.get("confidence")
         if answer is None:
             answer = "I could not reach an answer within the tool budget for this question."
         user = Turn("user", question)

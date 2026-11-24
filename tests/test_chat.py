@@ -48,8 +48,16 @@ def test_session_uses_tools_then_answers_with_checked_citations():
 
 def test_session_refuses_identical_repeat_calls_and_stops_at_budget():
     call = {"tool_calls": [{"tool": "search_logs", "args": {"query": "pool"}}], "answer": None}
-    s = ChatSession(FakeBackend(), RunConfig(), adapter=ScriptedAdapter([call] * 5))
+    s = ChatSession(FakeBackend(), RunConfig(), adapter=ScriptedAdapter([call] * 4 + ["not json"]))
     t = s.ask("anything?")
     assert len(t.tools) == 1                       # the repeats were not executed
     assert "could not reach an answer" in t.text
     assert t.verification["verdict"] == "no evidence"
+
+
+def test_answer_only_step_after_the_tool_budget():
+    call = {"tool_calls": [{"tool": "search_logs", "args": {"query": "pool"}}], "answer": None}
+    final = {"answer": "Pool waits of 900ms (log:a1).", "citations": ["log:a1"], "confidence": "low"}
+    s = ChatSession(FakeBackend(), RunConfig(), adapter=ScriptedAdapter([call] * 4 + [final]))
+    t = s.ask("why?")
+    assert t.citations == ["log:a1"] and t.verification["verdict"] == "verified"

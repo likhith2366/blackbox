@@ -43,10 +43,15 @@ export function ProjectView() {
               value={h.gpu?.busy ? <Badge tone="warn">busy</Badge> : <Badge tone="good">free</Badge>}
               hint={h.gpu?.busy ? `holder ${h.gpu?.holder ?? '?'} since ${h.gpu?.since ?? '?'}` : undefined}
             />
-            {h.gpu?.busy && <Stat label="GPU holder" value={`${h.gpu.holder ?? '?'} since ${fmtTime(h.gpu.since)}`} />}
+
             <Stat label="jobs queued" value={h.queue?.queued ?? '—'} />
             <Stat label="jobs running" value={h.queue?.running ?? '—'} />
           </div>
+        )}
+        {backend.mode === 'api' && h?.gpu?.busy && (
+          <p className="small muted">
+            GPU held by <code>{h.gpu.holder ?? '?'}</code> since {fmtTime(h.gpu.since)}.
+          </p>
         )}
       </Card>
 
