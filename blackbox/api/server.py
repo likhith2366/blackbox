@@ -271,6 +271,93 @@ def live_incident(body: dict) -> dict:
     return _open_live_incident(str(body.get("alert", "")))
 
 
+# ------------------------------------------------------------------ chat (Ask BlackBox)
+CHAT_DIR = REPO / "runs" / "chat"
+CHATS: dict[str, Any] = {}
+CHAT_LOCK = threading.Lock()
+
+
+class ChatStart(BaseModel):
+    mode: str = "live_stack"            # live_stack | snapshot
+    alert: Optional[str] = None
+    incident_id: Optional[str] = None
+
+
+class ChatMessage(BaseModel):
+    text: str
+
+
+def _chat_save(sess) -> None:
+    CHAT_DIR.mkdir(parents=True, exist_ok=True)
+    (CHAT_DIR / f"{sess.id}.json").write_text(json.dumps(sess.to_dict(), indent=1, default=str), encoding="utf-8")
+
+
+@app.post("/api/chat/sessions")
+def chat_start(req: ChatStart) -> dict:
+    import yaml
+    from blackbox.investigator.chat import ChatSession
+    cfg = RunConfig(**(yaml.safe_load(CONFIG.read_text(encoding="utf-8")) or {}))
+    if req.mode == "live_stack":
+        from blackbox.evidence.live_stack import load_live_stack
+        from blackbox.schemas import Incident
+        backend = load_live_stack(Incident(**_open_live_incident(req.alert or "")))
+    elif req.mode == "snapshot":
+        if not req.incident_id or not (SNAPSHOTS / req.incident_id / "incident.json").exists():
+            raise HTTPException(404, f"unknown incident {req.incident_id}")
+        backend = load_backend(req.incident_id, snapshot_root=SNAPSHOTS)
+    else:
+        raise HTTPException(400, "mode must be live_stack or snapshot")
+    sess = ChatSession(backend, cfg, title=backend.incident().alert.title)
+    with CHAT_LOCK:
+        CHATS[sess.id] = sess
+    _chat_save(sess)
+    return sess.to_dict()
+
+
+@app.get("/api/chat/sessions")
+def chat_list() -> list[dict]:
+    out = []
+    for f in sorted(CHAT_DIR.glob("*.json"), reverse=True)[:30] if CHAT_DIR.exists() else []:
+        try:
+            d = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        out.append({"session_id": d["session_id"], "title": d.get("title"), "mode": d.get("mode"),
+                    "incident_id": d["incident"]["incident_id"], "turns": len(d.get("turns", [])),
+                    "open": d["session_id"] in CHATS})
+    return out
+
+
+@app.get("/api/chat/sessions/{sid}")
+def chat_get(sid: str) -> dict:
+    if sid in CHATS:
+        return CHATS[sid].to_dict()
+    f = CHAT_DIR / f"{sid}.json"
+    if not f.exists():
+        raise HTTPException(404, "unknown chat session")
+    return json.loads(f.read_text(encoding="utf-8"))
+
+
+@app.post("/api/chat/sessions/{sid}/messages")
+def chat_ask(sid: str, msg: ChatMessage) -> dict:
+    sess = CHATS.get(sid)
+    if sess is None:
+        raise HTTPException(409, "this chat session is closed (the API restarted); start a new one")
+    if not msg.text.strip():
+        raise HTTPException(400, "empty message")
+    deadline = time.time() + 900
+    while not gpu_lock.try_acquire(f"BlackBox chat {sid}"):
+        if time.time() > deadline:
+            raise HTTPException(503, "the GPU is busy; try again later")
+        time.sleep(3)
+    try:
+        turn = sess.ask(msg.text)
+    finally:
+        gpu_lock.release()
+    _chat_save(sess)
+    return {"turn": turn.__dict__, "session": sess.to_dict()}
+
+
 # ------------------------------------------------------------------ jobs
 class InvestigationRequest(BaseModel):
     incident_id: str = ""

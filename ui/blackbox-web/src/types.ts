@@ -304,3 +304,47 @@ export interface LiveSources {
   checked_at: string
   sources: LiveSource[]
 }
+
+export interface ChatVerification {
+  verdict: 'verified' | 'partly verified' | 'not verified' | 'no evidence'
+  cited: number
+  cited_known: number
+  unknown_ids: string[]
+  checked_tokens: string[]
+  unsupported_tokens: string[]
+}
+export interface ChatToolUse {
+  tool: string
+  args: Record<string, unknown>
+  status: string
+  records: number
+  error?: string | null
+  backends: string[]
+  ids: string[]
+}
+export interface ChatTurn {
+  role: 'user' | 'assistant'
+  text: string
+  at: number
+  citations: string[]
+  confidence?: string | null
+  verification?: ChatVerification | null
+  tools: ChatToolUse[]
+  seconds: number
+}
+export interface ChatSessionData {
+  session_id: string
+  title: string
+  mode: string
+  incident: IncidentSummary
+  turns: ChatTurn[]
+  evidence: Record<string, EvidenceRecord>
+}
+export interface ChatSessionSummary {
+  session_id: string
+  title: string
+  mode: string
+  incident_id: string
+  turns: number
+  open: boolean
+}

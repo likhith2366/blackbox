@@ -9,18 +9,27 @@ import { RunDetailView } from './views/RunDetailView'
 import { OverviewView } from './views/OverviewView'
 import { CompareView } from './views/CompareView'
 import { IncidentView } from './views/IncidentView'
+import { ChatView } from './views/ChatView'
 
-type NavKey = 'overview' | 'start' | 'runs' | 'connections'
+type NavKey = 'overview' | 'chat' | 'start' | 'runs' | 'connections'
 
 const ICONS: Record<NavKey, ReactNode> = {
   overview: <path d="M3 3h6v6H3zM11 3h6v4h-6zM11 9h6v8h-6zM3 11h6v6H3z" />,
   start: <path d="M6 4l10 6-10 6z" />,
+  chat: <path d="M4 5h12v8H9l-4 3v-3H4z" />,
   runs: <path d="M3 4h14M3 8h14M3 12h14M3 16h9" />,
   connections: <path d="M7 7a3 3 0 1 1 0 .01M13 13a3 3 0 1 1 0 .01M9 9l2 2M4 16l2-2M14 6l2-2" />,
 }
 
 const NAV: { group: string; items: { key: NavKey; label: string }[] }[] = [
-  { group: 'Investigate', items: [{ key: 'overview', label: 'Overview' }, { key: 'start', label: 'New investigation' }] },
+  {
+    group: 'Investigate',
+    items: [
+      { key: 'overview', label: 'Overview' },
+      { key: 'chat', label: 'Ask BlackBox' },
+      { key: 'start', label: 'New investigation' },
+    ],
+  },
   { group: 'Results', items: [{ key: 'runs', label: 'Results & history' }] },
   { group: 'Setup', items: [{ key: 'connections', label: 'Connections' }] },
 ]
@@ -72,6 +81,7 @@ function BackendStatus() {
 
 const TITLES: Record<string, { title: string; subtitle: string }> = {
   overview: { title: 'Overview', subtitle: 'Recent investigations, model jobs and connected sources' },
+  chat: { title: 'Ask BlackBox', subtitle: 'Ask questions about an incident; every answer is checked against its evidence' },
   start: { title: 'New investigation', subtitle: 'Choose an incident and a system, then start a run' },
   jobs: { title: 'Investigation job', subtitle: 'Live progress of a queued or running investigation' },
   runs: { title: 'Results & history', subtitle: 'Saved investigation runs and their reports' },
@@ -89,6 +99,7 @@ export default function App() {
   let view
   let titleKey = section
   if (section === 'start') view = <StartView />
+  else if (section === 'chat') view = <ChatView key={id ?? 'new'} sessionId={id} />
   else if (section === 'connections' || section === 'project') {
     view = <ProjectView />
     titleKey = 'connections'
@@ -105,7 +116,9 @@ export default function App() {
   }
 
   const active: NavKey =
-    section === 'jobs' || section === 'start'
+    section === 'chat'
+      ? 'chat'
+      : section === 'jobs' || section === 'start'
       ? 'start'
       : section === 'project' || section === 'connections'
         ? 'connections'

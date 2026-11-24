@@ -7,6 +7,9 @@ import type {
   IncidentTimeline,
   InvestigationRequest,
   LiveSources,
+  ChatSessionData,
+  ChatSessionSummary,
+  ChatTurn,
   Job,
   JobCreated,
   Project,
@@ -155,6 +158,12 @@ export const api = {
     withFallback(() => getJson<IncidentTimeline>(`/api/incidents/${enc(incidentId)}/timeline`), noFixture('the incident timeline')),
   jobs: () => withFallback(() => getJson<Job[]>('/api/jobs'), noFixture('the job queue')),
   liveSources: () => withFallback(() => getJson<LiveSources>('/api/live/sources'), noFixture('live source status')),
+  chatSessions: () => withFallback(() => getJson<ChatSessionSummary[]>('/api/chat/sessions'), noFixture('chat sessions')),
+  chatSession: (id: string) => getJson<ChatSessionData>(`/api/chat/sessions/${enc(id)}`),
+  chatStart: (body: { mode: 'live_stack' | 'snapshot'; alert?: string; incident_id?: string }) =>
+    postJson<ChatSessionData>('/api/chat/sessions', body),
+  chatAsk: (id: string, text: string) =>
+    postJson<{ turn: ChatTurn; session: ChatSessionData }>(`/api/chat/sessions/${enc(id)}/messages`, { text }),
   job: (jobId: string) => getJson<Job>(`/api/jobs/${enc(jobId)}`),
   exportUrl: (runId: string) => `/api/runs/${enc(runId)}/export`,
   jobEventsUrl: (jobId: string) => `/api/jobs/${enc(jobId)}/events`,

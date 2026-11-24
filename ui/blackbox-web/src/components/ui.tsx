@@ -186,3 +186,19 @@ export function CopyButton({ text, label = 'copy' }: { text: string; label?: str
     </button>
   )
 }
+
+
+/** Simple accessible tab bar; the selected tab is remembered in the URL hash query (?tab=). */
+export function Tabs({ tabs, value, onChange }: { tabs: { key: string; label: string; count?: number }[]; value: string; onChange: (k: string) => void }) {
+  return (
+    <div className="tabs-bar" role="tablist">
+      {tabs.map((t) => (
+        <button key={t.key} type="button" role="tab" aria-selected={value === t.key}
+                className={`tab${value === t.key ? ' tab-active' : ''}`} onClick={() => onChange(t.key)}>
+          {t.label}
+          {t.count !== undefined && <span className="tab-count">{t.count}</span>}
+        </button>
+      ))}
+    </div>
+  )
+}
