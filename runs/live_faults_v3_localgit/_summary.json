@@ -1,0 +1,122 @@
+[
+ {
+  "fault": "endpoint-port",
+  "family": "config_mismatch_endpoint",
+  "alert": "yes",
+  "status": "diagnosis",
+  "top_cause": "checkout-svc :: Checkout service version 1.9.0 introduced a bug in the payment routing logic that causes high error rate",
+  "keyword_match": false,
+  "change_retrieved": [
+   "commit:e8d58bd",
+   "deploy:d-661"
+  ],
+  "change_cited": [
+   "commit:e8d58bd"
+  ],
+  "tools": {
+   "get_metrics": 3,
+   "list_deployments": 1,
+   "search_commits": 1,
+   "get_build": 2,
+   "get_commit": 2
+  },
+  "backends": {
+   "prometheus": 8,
+   "demo-deploy-records": 22,
+   "local-git": 2
+  },
+  "calls": 4,
+  "rounds": 3,
+  "wall_s": 58.04
+ },
+ {
+  "fault": "index-migration",
+  "family": "missing_index",
+  "alert": "no"
+ },
+ {
+  "fault": "payment-stop",
+  "family": "stopped_dependency",
+  "alert": "yes",
+  "status": "diagnosis",
+  "top_cause": "checkout-svc :: Checkout service failed to handle payment requests due to a timeout in the payment service's database po",
+  "keyword_match": false,
+  "change_retrieved": [],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 13,
+   "list_deployments": 1,
+   "search_commits": 1,
+   "get_build": 2,
+   "get_commit": 2
+  },
+  "backends": {
+   "prometheus": 22,
+   "demo-deploy-records": 22,
+   "local-git": 8
+  },
+  "calls": 11,
+  "rounds": 6,
+  "wall_s": 138.05
+ },
+ {
+  "fault": "pool-fastpath",
+  "family": "connection_leak",
+  "alert": "yes",
+  "status": "diagnosis",
+  "top_cause": "checkout-svc :: checkout-svc is failing to handle payment requests due to a new payment-svc deployment that introduced a",
+  "keyword_match": false,
+  "change_retrieved": [
+   "commit:d24f5c0",
+   "deploy:d-666"
+  ],
+  "change_cited": [
+   "commit:d24f5c0"
+  ],
+  "tools": {
+   "get_metrics": 14,
+   "list_deployments": 1,
+   "search_commits": 1,
+   "get_build": 2,
+   "get_commit": 2
+  },
+  "backends": {
+   "prometheus": 19,
+   "demo-deploy-records": 22,
+   "local-git": 9
+  },
+  "calls": 8,
+  "rounds": 6,
+  "wall_s": 174.98
+ },
+ {
+  "fault": "retry-policy",
+  "family": "retry_amplification",
+  "alert": "yes",
+  "status": "diagnosis",
+  "top_cause": "checkout-svc :: Checkout service version 1.9.0 introduced a bug that causes payment failures to be retried too aggressiv",
+  "keyword_match": true,
+  "change_retrieved": [
+   "commit:cc699b8",
+   "deploy:d-655"
+  ],
+  "change_cited": [
+   "commit:cc699b8"
+  ],
+  "tools": {
+   "get_metrics": 8,
+   "list_deployments": 1,
+   "search_commits": 1,
+   "get_build": 2,
+   "get_commit": 2
+  },
+  "backends": {
+   "prometheus": 9,
+   "demo-deploy-records": 22,
+   "local-git": 8
+  },
+  "calls": 8,
+  "rounds": 6,
+  "wall_s": 109.2
+ }
+]

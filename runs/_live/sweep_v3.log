@@ -1,0 +1,20 @@
+06:47:05 retry-policy: reset to baseline
+06:48:30 retry-policy: inject
+06:50:33 retry-policy: alert error_rate > 0.1 for 15s fired 2026-11-24T06:50:25.965Z (LIVE-8FB0A4)
+06:52:22 retry-policy: completed in 109s -> diagnosis: Most likely cause: checkout-svc - Checkout service version 1.9.0 introduced a bug that causes payment failures to be retried too aggressively, leading to high error rates
+06:52:22 index-migration: reset to baseline
+06:53:50 index-migration: inject
+06:57:53 index-migration: no alert fired within 4 min; recorded as 'no alert'
+06:57:53 endpoint-port: reset to baseline
+06:59:19 endpoint-port: inject
+06:59:51 endpoint-port: alert error_rate > 0.1 for 15s fired 2026-11-24T06:59:39.098Z (LIVE-312DA1)
+07:00:49 endpoint-port: completed in 58s -> diagnosis: Most likely cause: checkout-svc - Checkout service version 1.9.0 introduced a bug in the payment routing logic that causes high error rates when interacting with payment-svc
+07:00:49 payment-stop: reset to baseline
+07:02:14 payment-stop: inject
+07:02:31 payment-stop: alert error_rate > 0.1 for 15s fired 2026-11-24T07:02:29.682Z (LIVE-6C9BA4)
+07:04:49 payment-stop: completed in 138s -> diagnosis: Most likely cause: checkout-svc - Checkout service failed to handle payment requests due to a timeout in the payment service's database pool
+07:04:49 pool-fastpath: reset to baseline
+07:06:15 pool-fastpath: inject
+07:06:48 pool-fastpath: alert error_rate > 0.1 for 15s fired 2026-11-24T07:06:45.929Z (LIVE-09CC93)
+07:09:44 pool-fastpath: completed in 175s -> diagnosis: Most likely cause: checkout-svc - checkout-svc is failing to handle payment requests due to a new payment-svc deployment that introduced a bug in the fast path for micro-charges
+07:09:44 sweep finished; resetting to baseline
