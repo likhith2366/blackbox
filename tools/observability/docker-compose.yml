@@ -1,0 +1,78 @@
+# Local observability stack for BlackBox live mode (all free / open source, pinned versions).
+#   docker compose -f tools/observability/docker-compose.yml up -d        (from the blackbox repo root)
+# Every port is bound to 127.0.0.1 only.
+name: blackbox-observability
+
+services:
+  loki:
+    image: grafana/loki:3.6.20
+    command: ["-config.file=/etc/loki/config.yaml"]
+    volumes:
+      - ./loki-docker.yaml:/etc/loki/config.yaml:ro
+      - loki-data:/loki
+    ports: ["127.0.0.1:3100:3100"]
+
+  tempo:
+    image: grafana/tempo:2.10.10
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    ports: ["127.0.0.1:3200:3200"]
+
+  prometheus:
+    image: prom/prometheus:v3.15.1
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-remote-write-receiver
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports: ["127.0.0.1:9090:9090"]
+
+  # Collector: tails the demo services' log files into Loki; receives their spans and metric points
+  # (OTLP/HTTP from demo/telemetry_bridge.py) and forwards them to Tempo and Prometheus.
+  alloy:
+    image: grafana/alloy:v1.21.3
+    command: ["run", "--server.http.listen-addr=0.0.0.0:12345", "--storage.path=/var/lib/alloy", "/etc/alloy/config.alloy"]
+    volumes:
+      - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - ${BLACKBOX_TELEMETRY_DIR:-../../demo/.runtime/telemetry/stack}:/telemetry:ro
+      - alloy-data:/var/lib/alloy
+    ports: ["127.0.0.1:4318:4318", "127.0.0.1:12345:12345"]
+    depends_on: [loki, tempo, prometheus]
+
+  grafana:
+    image: grafana/grafana:12.4.15
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-change-me-locally}
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports: ["127.0.0.1:3000:3000"]
+    depends_on: [loki, tempo, prometheus]
+
+  # Jenkins (profile "ci"): local CI server with one job that builds the demo shop source at a commit SHA.
+  #   docker compose -f tools/observability/docker-compose.yml --profile ci up -d jenkins
+  jenkins:
+    image: jenkins/jenkins:2.580.2-lts-jdk21
+    profiles: ["ci"]
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false -Xmx384m"
+      JENKINS_ADMIN_USER: ${JENKINS_ADMIN_USER:-blackbox}
+      JENKINS_ADMIN_PASSWORD: ${JENKINS_ADMIN_PASSWORD:-change-me-locally}
+    volumes:
+      - ./jenkins/init.groovy.d:/usr/share/jenkins/ref/init.groovy.d:ro
+      - jenkins-home:/var/jenkins_home
+    ports: ["127.0.0.1:8080:8080"]
+
+volumes:
+  jenkins-home:
+  loki-data:
+  tempo-data:
+  prometheus-data:
+  alloy-data:

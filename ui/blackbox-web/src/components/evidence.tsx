@@ -33,7 +33,13 @@ export function EvidenceCard({ rec }: { rec: EvidenceRecord }) {
             fixture data
           </Badge>
         )}
-        {rec.attributes?.live === true && <Badge tone="info">live</Badge>}
+        {typeof rec.attributes?.backend === 'string' && (
+          <Badge tone={rec.attributes?.mode === 'live' ? 'info' : 'neutral'}
+                 title={typeof rec.attributes?.query === 'string' ? `query: ${rec.attributes.query}` : undefined}>
+            {String(rec.attributes.backend)} · {rec.attributes?.mode === 'live' ? 'live' : 'recorded'}
+          </Badge>
+        )}
+        {rec.attributes?.live === true && rec.attributes?.backend === undefined && <Badge tone="info">live</Badge>}
         <CopyButton text={rec.evidence_id} label="copy id" />
         {rec.content_ref && /^https?:\/\//.test(rec.content_ref) && (
           <a className="small" href={rec.content_ref} target="_blank" rel="noreferrer">
@@ -73,7 +79,7 @@ export function EvidenceChip({ id, extra }: { id: string; extra?: string }) {
         title={rec ? `${id} — click to ${open ? 'hide' : 'show'} content` : `${id} — not among retrieved evidence`}
         aria-expanded={rec ? open : undefined}
       >
-        <span className="chip-src">{rec ? rec.source : '?'}</span>
+        <span className="chip-src">{rec ? (typeof rec.attributes?.backend === 'string' ? `${rec.attributes.backend}` : rec.source) : '?'}</span>
         <code>{shortId(id, 36)}</code>
         {rec?.truncated && <span className="chip-flag">shortened</span>}
         {extra && <span className="chip-flag">{extra}</span>}

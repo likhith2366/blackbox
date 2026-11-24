@@ -6,6 +6,7 @@ import type {
   IncidentSummary,
   IncidentTimeline,
   InvestigationRequest,
+  LiveSources,
   Job,
   JobCreated,
   Project,
@@ -153,6 +154,7 @@ export const api = {
   timeline: (incidentId: string) =>
     withFallback(() => getJson<IncidentTimeline>(`/api/incidents/${enc(incidentId)}/timeline`), noFixture('the incident timeline')),
   jobs: () => withFallback(() => getJson<Job[]>('/api/jobs'), noFixture('the job queue')),
+  liveSources: () => withFallback(() => getJson<LiveSources>('/api/live/sources'), noFixture('live source status')),
   job: (jobId: string) => getJson<Job>(`/api/jobs/${enc(jobId)}`),
   exportUrl: (runId: string) => `/api/runs/${enc(runId)}/export`,
   jobEventsUrl: (jobId: string) => `/api/jobs/${enc(jobId)}/events`,

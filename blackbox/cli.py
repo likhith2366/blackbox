@@ -83,7 +83,7 @@ def _main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="blackbox")
     sub = p.add_subparsers(dest="cmd", required=True)
     inv = sub.add_parser("investigate")
-    inv.add_argument("--incident", required=True)
+    inv.add_argument("--incident", help="snapshot incident id (not used with --live-stack)")
     inv.add_argument("--system", choices=["blackbox", "b0", "b1"], required=True)
     inv.add_argument("--ablation", default="none", choices=["none", "no_jira", "no_provenance", "no_traces"])
     inv.add_argument("--b1-from", help="output.json of the initial BlackBox run (required for b1)")
@@ -96,6 +96,10 @@ def _main(argv: list[str] | None = None) -> int:
     inv.add_argument("--loki-url", help="read logs from this Grafana Loki server instead of local files (live mode)")
     inv.add_argument("--loki-incident", help="Loki incident label of a replayed snapshot (scripts/push_logs_to_loki.py)")
     inv.add_argument("--capture-id", help="record GitHub responses verbatim under scenarios/live_captures/<id>/github")
+    inv.add_argument("--live-stack", action="store_true",
+                     help="live sources only (Loki, Prometheus, Tempo, deployment records, GitHub, Jira/Jenkins if "
+                          "configured); never snapshots. The incident is opened from --alert")
+    inv.add_argument("--alert", help="live alert rule service:metric>threshold:for_s, e.g. checkout-svc:error_rate>0.1:15")
     inv.add_argument("--out", required=True)
     show = sub.add_parser("show")
     show.add_argument("output_json")
@@ -114,7 +118,26 @@ def _main(argv: list[str] | None = None) -> int:
 
     cfg = load_config(args.config)
     root = Path(args.snapshot_root) if args.snapshot_root else None
-    if args.live:
+    if args.live_stack:
+        if args.ablation != "none" or args.system != "blackbox" or not args.alert:
+            p.error("--live-stack needs --system blackbox, no ablation, and --alert service:metric>threshold:for_s")
+        import re as _re
+        m = _re.fullmatch(r"([\w.-]+):(\w+)([<>])([\d.]+):(\d+)", args.alert.replace(" ", ""))
+        if not m:
+            p.error("--alert must look like checkout-svc:error_rate>0.1:15")
+        from blackbox.evidence.live_incident import open_incident
+        from blackbox.evidence.live_stack import load_live_stack
+        from blackbox.connectors.capture import capture_dir_for
+        incident = open_incident(m[1], m[2], m[3], float(m[4]), int(m[5]))
+        backend = load_live_stack(incident, capture_dir=capture_dir_for(args.capture_id) if args.capture_id else None)
+        args.incident = incident.incident_id
+        print(f"live incident {incident.incident_id}: {incident.alert.condition} fired {incident.alert.fired_at}; "
+              f"cutoff {incident.investigation_cutoff}")
+        for s_ in backend.source_status():
+            print(f"  {s_.source:12s} {'live' if s_.available else 'NOT AVAILABLE':14s} {s_.detail}")
+    elif not args.incident:
+        p.error("--incident is required (or use --live-stack --alert ...)")
+    elif args.live:
         if args.ablation != "none" or args.system != "blackbox":
             p.error("--live is a BlackBox demonstration mode; baselines and ablations use frozen snapshots")
         from blackbox.connectors.capture import capture_dir_for
@@ -124,7 +147,7 @@ def _main(argv: list[str] | None = None) -> int:
                                     capture_dir=capture_dir_for(args.capture_id) if args.capture_id else None,
                                     snapshot_root=root, loki_url=args.loki_url,
                                     loki_incident=args.loki_incident)
-    else:
+    if not args.live_stack and not args.live:
         backend = load_backend(args.incident, ablation=args.ablation, snapshot_root=root)
     b1_evidence = None
     if args.system == "b1":

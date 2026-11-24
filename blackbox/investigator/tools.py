@@ -132,9 +132,40 @@ LIVE_TOOLS: dict[str, tuple[type[_Args], str, str]] = {
 }
 
 
+class ListJenkinsBuilds(_Args):
+    job: Optional[str] = None
+    limit: int = Field(default=5, ge=1, le=10)
+
+
+class GetJenkinsConsole(_Args):
+    job: str
+    number: int
+
+
+class OpenRecord(_Args):
+    evidence_id: str
+
+
+# Offered only by the live-stack backend (blackbox/evidence/live_stack.py); Jenkins only when it is configured.
+JENKINS_TOOLS: dict[str, tuple[type[_Args], str, str]] = {
+    "list_jenkins_builds": (ListJenkinsBuilds, "list_jenkins_builds", "Jenkins builds of a job: number, result, time."),
+    "get_jenkins_console": (GetJenkinsConsole, "get_jenkins_console", "Tail of one Jenkins build's console log."),
+}
+OPEN_TOOLS: dict[str, tuple[type[_Args], str, str]] = {
+    "open_record": (OpenRecord, "open_record",
+                    "Full original of a retrieved record whose preview was shortened ('...[cut]'), in parts."),
+}
+
+
 def tools_for(backend) -> dict[str, tuple[type[_Args], str, str]]:
     if getattr(backend, "mode", "") == "live" and all(hasattr(backend, m) for _, m, _ in LIVE_TOOLS.values()):
-        return {**TOOLS, **LIVE_TOOLS}
+        out = {**TOOLS, **LIVE_TOOLS}
+        if hasattr(backend, "open_record"):
+            out.update(OPEN_TOOLS)
+        jk = getattr(backend, "jenkins", None)
+        if jk is not None and getattr(jk, "configured", False):
+            out.update(JENKINS_TOOLS)
+        return out
     return dict(TOOLS)
 
 

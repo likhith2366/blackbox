@@ -5,3 +5,6 @@ demo/workspace/
 demo/.runtime/
 *.log.tmp
 runs/_dev_stub/
+
+# local credentials for live connectors (never committed)
+.env.local

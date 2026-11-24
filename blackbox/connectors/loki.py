@@ -80,6 +80,7 @@ class LokiLogs:
         self.url = resolve_url(url)
         self.incident = incident        # set when the logs were replayed from a snapshot with an incident label
         self.timeout = timeout
+        self._last_query = ""
         self.detail = f"live Grafana Loki at {self.url}" + (f" (incident={incident})" if incident else "")
 
     # ------------------------------------------------------------------ HTTP
@@ -121,9 +122,10 @@ class LokiLogs:
     def _fetch(self, service, start, end, query, level):
         s, e = _ts(start), _ts(end)
         params = {"query": self.logql(service, query, level), "limit": FETCH_LIMIT, "direction": "forward"}
-        # Loki needs a window; without one, search the last 30 days up to the end (or now).
+        self._last_query = params["query"]
+        # Loki needs a window; without one, search the hour before the end (or now).
         end_ns = int((e if e is not None else datetime.now(timezone.utc).timestamp()) * 1e9) + 1
-        start_ns = int(s * 1e9) if s is not None else end_ns - 30 * 86400 * 10**9
+        start_ns = int(s * 1e9) if s is not None else end_ns - 3600 * 10**9
         params.update(start=start_ns, end=end_ns)
         data = self._get("/loki/api/v1/query_range", params)
         if data.get("status") != "success":
@@ -149,8 +151,10 @@ class LokiLogs:
             title=f"{rec.get('level', labels.get('level', ''))} {service}: {rec.get('msg', line[:80])}"[:160],
             content=line if len(line) <= CONTENT_CHARS else line[:CONTENT_CHARS], truncated=len(line) > CONTENT_CHARS,
             content_ref=f"loki:{self.url}#{service}@{ts_ns}", fixture=False,
-            attributes={"live": True, "retrieved_at": retrieved_at, "store": "loki", "labels": labels,
-                        "level": rec.get("level", labels.get("level")), "trace_id": rec.get("trace_id")})
+            attributes={"live": True, "retrieved_at": retrieved_at, "backend": "loki", "mode": "live",
+                        "query": self._last_query, "source_url": f"{self.url}/loki/api/v1/query_range", "labels": labels,
+                        "level": rec.get("level", labels.get("level")), "trace_id": rec.get("trace_id"),
+                        **({"full_text": line[:20000]} if len(line) > CONTENT_CHARS else {})})
 
     # ------------------------------------------------------------------ API (same as LocalLogs)
     def search(self, service=None, start=None, end=None, query=None, level=None, limit=20) -> BackendResult:

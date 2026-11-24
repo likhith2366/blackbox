@@ -80,6 +80,9 @@ def loki():
     f.server.shutdown()
 
 
+W = {"start": "2026-11-20T00:00:00Z", "end": "2026-11-21T00:00:00Z"}   # the snapshot's day (default lookback is 1 h)
+
+
 def _snapshot_rows(inc="INC-9001"):
     p = ROOT / "scenarios" / "snapshots" / inc / "logs.jsonl"
     return [json.loads(x) for x in p.read_text(encoding="utf-8").splitlines() if x.strip()]
@@ -90,7 +93,7 @@ def test_snapshot_replay_keeps_ids_and_lines(loki):
     rows = _snapshot_rows()
     assert len(loki.entries) == len(rows)
     lk = LokiLogs(loki.url, incident="INC-9001")
-    r = lk.search(service="payment-svc", level="ERROR", query="pool acquire", limit=5)
+    r = lk.search(service="payment-svc", level="ERROR", query="pool acquire", limit=5, **W)
     assert r.status == "ok" and r.records
     snap_ids = {x["evidence_id"] for x in rows}
     assert all(rec.evidence_id in snap_ids for rec in r.records)            # same ids the answer keys use
@@ -101,17 +104,17 @@ def test_snapshot_replay_keeps_ids_and_lines(loki):
 def test_whole_word_matching_like_the_other_backends(loki):
     shipper.snapshot(loki.url, "INC-9001")
     lk = LokiLogs(loki.url, incident="INC-9001")
-    assert lk.search(query="heckout").status == "empty"        # Loki's regex hits inside "checkout"; client drops it
-    assert lk.search(query="checkout").status == "ok"
+    assert lk.search(query="heckout", **W).status == "empty"        # Loki's regex hits inside "checkout"; client drops it
+    assert lk.search(query="checkout", **W).status == "ok"
 
 
 def test_time_window_and_cutoff_are_applied(loki):
     shipper.snapshot(loki.url, "INC-9001")
     lk = LokiLogs(loki.url, incident="INC-9001")
-    all_ = lk.export()
+    all_ = lk.export(**W)
     first, last = all_[0].event_time, all_[-1].event_time
     assert first < last
-    later = lk.export(start=all_[len(all_) // 2].event_time)
+    later = lk.export(start=all_[len(all_) // 2].event_time, end=W["end"])
     assert 0 < len(later) < len(all_)
 
 
@@ -136,7 +139,7 @@ def test_live_backend_serves_search_logs_from_loki(loki):
     from blackbox.evidence.backend import load_backend
     shipper.snapshot(loki.url, "INC-9001")
     lb = LiveBackend(load_backend("INC-9001"), github=None, local_logs=LokiLogs(loki.url, incident="INC-9001"))
-    r = lb.search_logs(level="ERROR", limit=3)
+    r = lb.search_logs(level="ERROR", limit=3, **W)
     assert r.status == "ok"
     st = {s.source: s for s in lb.source_status()}
     assert "Loki" in st["logs"].detail

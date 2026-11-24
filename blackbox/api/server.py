@@ -217,10 +217,65 @@ def health() -> dict:
             "since": (h or {}).get("started")}, "queue": {"queued": queued, "running": running}}
 
 
+# ------------------------------------------------------------------ live stack
+def _open_live_incident(alert: str) -> dict:
+    import re as _re
+    m = _re.fullmatch(r"([\w.-]+):(\w+)([<>])([\d.]+):(\d+)", (alert or "").replace(" ", ""))
+    if not m:
+        raise HTTPException(400, "alert must look like checkout-svc:error_rate>0.1:15")
+    from blackbox.evidence.live_incident import open_incident
+    try:
+        inc = open_incident(m[1], m[2], m[3], float(m[4]), int(m[5]))
+    except LookupError as exc:
+        raise HTTPException(409, str(exc))
+    except OSError as exc:
+        raise HTTPException(503, f"Prometheus not reachable: {type(exc).__name__}")
+    return inc.model_dump(mode="json")
+
+
+def _status_word(available: bool, detail: str) -> str:
+    d = detail.lower()
+    if available:
+        return "live"
+    if "not configured" in d:
+        return "not configured"
+    if "http" in d and ("answered" in d or "error" in d):
+        return "error"
+    return "unavailable"
+
+
+@app.get("/api/live/sources")
+def live_sources() -> dict:
+    """Per-source status of the live stack (no snapshot is read)."""
+    from blackbox.evidence.live_stack import load_live_stack
+    from blackbox.schemas import Alert, Incident
+    now = _now()
+    probe = Incident(incident_id="LIVE-STATUS", alert=Alert(alert_id="-", title="status", service="checkout-svc",
+                     signal="-", condition="-", fired_at=now), window_start=now, window_end=now,
+                     investigation_cutoff=now, services=["checkout-svc", "payment-svc"], available_sources=[])
+    b = load_live_stack(probe)
+    rows = [{"source": s.source, "status": _status_word(s.available, s.detail), "detail": s.detail}
+            for s in b.source_status()]
+    jk = b.jenkins
+    ok, why = jk.ready() if jk.configured else (False, "not configured (set JENKINS_URL, JENKINS_USER, JENKINS_API_TOKEN)")
+    rows.append({"source": "jenkins", "status": "live" if ok else _status_word(False, why), "detail": jk.detail + ("" if ok else f" - {why}")})
+    jr = b.jira
+    ok, why = jr.ready() if jr.configured else (False, "not configured (set JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN)")
+    rows = [r for r in rows if r["source"] != "tickets"] + [{"source": "tickets (Jira)", "status": "live" if ok else
+                                                             _status_word(False, why), "detail": jr.detail + ("" if ok else f" - {why}")}]
+    return {"checked_at": now, "sources": rows}
+
+
+@app.post("/api/live/incidents")
+def live_incident(body: dict) -> dict:
+    return _open_live_incident(str(body.get("alert", "")))
+
+
 # ------------------------------------------------------------------ jobs
 class InvestigationRequest(BaseModel):
-    incident_id: str
-    mode: str = "snapshot"
+    incident_id: str = ""
+    mode: str = "snapshot"              # snapshot | live (snapshot + GitHub + local logs) | live_stack (live sources only)
+    alert: Optional[str] = None         # live_stack: service:metric>threshold:for_s
     followup_of: Optional[str] = None   # run id this investigation follows up (new job, new run id)
     problem_description: Optional[str] = None
     window_start: Optional[str] = None
@@ -260,14 +315,20 @@ def _set(job: dict, **fields: Any) -> None:
 
 @app.post("/api/investigations", status_code=202)
 def submit(req: InvestigationRequest, retry_of: Optional[str] = None) -> dict:
-    snap = SNAPSHOTS / req.incident_id / "incident.json"
-    if not snap.exists():
-        raise HTTPException(404, f"unknown incident {req.incident_id}")
-    if req.mode not in ("snapshot", "live"):
-        raise HTTPException(400, "mode must be snapshot or live")
+    if req.mode not in ("snapshot", "live", "live_stack"):
+        raise HTTPException(400, "mode must be snapshot, live or live_stack")
+    live_incident = None
+    if req.mode == "live_stack":
+        live_incident = _open_live_incident(req.alert or "")
+        req.incident_id = live_incident["incident_id"]
+        inc = live_incident
+    else:
+        snap = SNAPSHOTS / req.incident_id / "incident.json"
+        if not snap.exists():
+            raise HTTPException(404, f"unknown incident {req.incident_id}")
+        inc = json.loads(snap.read_text(encoding="utf-8"))
     if req.followup_of:
         _run_dir(req.followup_of)   # 404 if the parent run does not exist
-    inc = json.loads(snap.read_text(encoding="utf-8"))
     lo, hi = _parse(inc["window_start"]), _parse(inc["investigation_cutoff"])
     for name in ("window_start", "window_end"):
         v = getattr(req, name)
@@ -280,6 +341,8 @@ def submit(req: InvestigationRequest, retry_of: Optional[str] = None) -> dict:
            "run_id": None, "error": None, "request": req.model_dump(), "events": [], "dir": str(d),
            "meta": None, "retry_of": retry_of, "cancel": False}
     (d / "request.json").write_text(json.dumps(req.model_dump(), indent=2), encoding="utf-8")
+    if live_incident is not None:
+        (d / "incident.json").write_text(json.dumps(live_incident, indent=2), encoding="utf-8")
     with JOBS_LOCK:
         JOBS[job_id] = job
         position = sum(1 for j in JOBS.values() if j["status"] in ("queued", "waiting_gpu"))
@@ -442,7 +505,13 @@ def _worker() -> None:
         try:
             _set(job, status="running", started=_now())
             _event(job, "started", mode=req.mode)
-            if req.mode == "live":
+            if req.mode == "live_stack":
+                from blackbox.evidence.live_stack import load_live_stack
+                from blackbox.connectors.capture import capture_dir_for
+                from blackbox.schemas import Incident
+                inc_live = Incident(**json.loads((Path(job["dir"]) / "incident.json").read_text(encoding="utf-8")))
+                base = load_live_stack(inc_live, capture_dir=capture_dir_for(f"ui-{job_id}"))
+            elif req.mode == "live":
                 from blackbox.evidence.live import load_live_backend
                 from blackbox.connectors.capture import capture_dir_for
                 # the incident's own captured application logs, read live from the files the services wrote;

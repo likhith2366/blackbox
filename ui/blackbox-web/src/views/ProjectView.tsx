@@ -24,6 +24,7 @@ function diagnose(mode: string, error?: string | null, detail?: string | null): 
 export function ProjectView() {
   const backend = useBackend()
   const st = useLoad(() => api.project(), [])
+  const live = useLoad(() => api.liveSources(), [])
   const h = backend.health
 
   return (
@@ -45,6 +46,39 @@ export function ProjectView() {
             {h.gpu?.busy && <Stat label="GPU holder" value={`${h.gpu.holder ?? '?'} since ${fmtTime(h.gpu.since)}`} />}
             <Stat label="jobs queued" value={h.queue?.queued ?? '—'} />
             <Stat label="jobs running" value={h.queue?.running ?? '—'} />
+          </div>
+        )}
+      </Card>
+
+      <Card
+        title="Live stack sources"
+        actions={
+          <button type="button" onClick={live.reload}>
+            Re-check
+          </button>
+        }
+      >
+        <p className="small muted">
+          Sources a live-stack investigation reads. Each is queried directly; an unavailable or unconfigured source is
+          reported as such and never replaced by snapshot data.
+        </p>
+        {live.loading && <Loading what="live source status" />}
+        {live.error && <ErrorBox error={live.error} onRetry={live.reload} />}
+        {live.data && (
+          <div className="list">
+            {live.data.sources.map((s) => (
+              <div className="list-row" key={s.source}>
+                <span className="list-main">
+                  <span className="list-title">{s.source}</span>
+                  <span className="list-meta">{s.detail}</span>
+                </span>
+                <Badge
+                  tone={s.status === 'live' ? 'good' : s.status === 'not configured' ? 'muted' : s.status === 'error' ? 'bad' : 'warn'}
+                >
+                  {s.status}
+                </Badge>
+              </div>
+            ))}
           </div>
         )}
       </Card>

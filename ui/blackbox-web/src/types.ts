@@ -250,7 +250,8 @@ export interface EvidenceSource {
 
 export interface InvestigationRequest {
   incident_id: string
-  mode: 'snapshot' | 'live'
+  mode: 'snapshot' | 'live' | 'live_stack'
+  alert?: string
   problem_description?: string
   window_start?: string
   window_end?: string
@@ -292,4 +293,14 @@ export interface JobCreated {
   job_id: string
   status: string
   position?: number | null
+}
+
+export interface LiveSource {
+  source: string
+  status: 'live' | 'not configured' | 'unavailable' | 'error'
+  detail: string
+}
+export interface LiveSources {
+  checked_at: string
+  sources: LiveSource[]
 }

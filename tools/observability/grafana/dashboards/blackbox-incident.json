@@ -1,0 +1,25 @@
+{
+  "uid": "blackbox-incident",
+  "title": "BlackBox demo incident: logs, metrics, traces",
+  "schemaVersion": 39,
+  "time": {"from": "now-30m", "to": "now"},
+  "refresh": "10s",
+  "templating": {"list": [
+    {"name": "service", "type": "custom", "query": "checkout-svc,payment-svc", "current": {"text": "payment-svc", "value": "payment-svc"}}
+  ]},
+  "panels": [
+    {"id": 1, "type": "timeseries", "title": "error_rate (Prometheus)", "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+     "datasource": {"type": "prometheus", "uid": "prometheus"},
+     "targets": [{"refId": "A", "expr": "error_rate", "legendFormat": "{{job}}"}]},
+    {"id": 2, "type": "timeseries", "title": "db_pool_in_use and upstream_attempts_per_s (Prometheus)", "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+     "datasource": {"type": "prometheus", "uid": "prometheus"},
+     "targets": [{"refId": "A", "expr": "db_pool_in_use", "legendFormat": "pool {{job}}"},
+                 {"refId": "B", "expr": "upstream_attempts_per_s", "legendFormat": "attempts {{job}}"}]},
+    {"id": 3, "type": "logs", "title": "ERROR logs (Loki)", "gridPos": {"x": 0, "y": 8, "w": 24, "h": 10},
+     "datasource": {"type": "loki", "uid": "loki"},
+     "targets": [{"refId": "A", "expr": "{job=\"blackbox-demo\", level=\"ERROR\"}"}]},
+    {"id": 4, "type": "table", "title": "Error traces (Tempo, TraceQL)", "gridPos": {"x": 0, "y": 18, "w": 24, "h": 9},
+     "datasource": {"type": "tempo", "uid": "tempo"},
+     "targets": [{"refId": "A", "queryType": "traceql", "query": "{ status = error }", "limit": 20}]}
+  ]
+}

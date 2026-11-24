@@ -1,0 +1,9 @@
+# Metric points arrive by remote write from the Alloy collector, with their original timestamps.
+storage:
+  tsdb:
+    out_of_order_time_window: 30m
+global:
+  scrape_interval: 15s
+scrape_configs:
+  - job_name: prometheus
+    static_configs: [{targets: ["localhost:9090"]}]

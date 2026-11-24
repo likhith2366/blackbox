@@ -20,7 +20,8 @@ export function StartView() {
   const { query } = useRoute()
   const followup = query.get('followup')
   const [incidentId, setIncidentId] = useState(query.get('incident') ?? '')
-  const [mode, setMode] = useState<'snapshot' | 'live'>('snapshot')
+  const [mode, setMode] = useState<'snapshot' | 'live' | 'live_stack'>('snapshot')
+  const [alert, setAlert] = useState('checkout-svc:error_rate>0.1:15')
   const [desc, setDesc] = useState(followup ? `Follow-up of saved run ${followup}: ` : '')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
@@ -49,11 +50,27 @@ export function StartView() {
     else if (s < wStart || e > wEnd) windowError = 'The window must lie inside the incident window.'
     else if (s >= e) windowError = 'Window start must be before window end.'
   }
-  const canSubmit = backend.mode === 'api' && !!inc && !windowError && !submitting
+  const liveStack = mode === 'live_stack'
+  const alertOk = /^[\w.-]+:\w+[<>][\d.]+:\d+$/.test(alert.replace(/\s/g, ''))
+  const canSubmit = backend.mode === 'api' && !submitting && (liveStack ? alertOk : !!inc && !windowError)
 
   async function submit(ev: FormEvent) {
     ev.preventDefault()
-    if (!inc || !canSubmit) return
+    if (!canSubmit) return
+    if (liveStack) {
+      setSubmitting(true)
+      setSubmitErr(null)
+      try {
+        const job = await api.startInvestigation({ incident_id: '', mode, alert: alert.replace(/\s/g, '') })
+        navigate(href('jobs', job.job_id))
+      } catch (err) {
+        setSubmitErr(errText(err))
+      } finally {
+        setSubmitting(false)
+      }
+      return
+    }
+    if (!inc) return
     const req: InvestigationRequest = { incident_id: inc.incident_id, mode }
     if (followup) req.followup_of = followup
     if (desc.trim()) req.problem_description = desc.trim()
@@ -130,10 +147,21 @@ export function StartView() {
                 (frozen incident evidence)
               </label>
               <label className="inline">
-                <input type="radio" name="mode" checked={mode === 'live'} onChange={() => setMode('live')} /> live (snapshot +
-                live connectors; see Project)
+                <input type="radio" name="mode" checked={mode === 'live'} onChange={() => setMode('live')} /> hybrid (snapshot +
+                GitHub and log connectors)
+              </label>
+              <label className="inline">
+                <input type="radio" name="mode" checked={liveStack} onChange={() => setMode('live_stack')} /> live stack
+                (Loki, Prometheus, Tempo, deployment records, GitHub; never snapshots)
               </label>
             </fieldset>
+            {liveStack && (
+              <label>
+                Alert rule that opens the live incident (evaluated in Prometheus)
+                <input value={alert} onChange={(ev) => setAlert(ev.target.value)} placeholder="checkout-svc:error_rate>0.1:15" />
+                {!alertOk && <span className="error-text small">Format: service:metric&gt;threshold:seconds</span>}
+              </label>
+            )}
 
             <div className="row">
               <label>
