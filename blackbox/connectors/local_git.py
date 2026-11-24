@@ -48,6 +48,26 @@ class LocalGitConnector:
             raise LookupError(r.stderr.strip()[:300] or f"git {args[0]} failed")
         return r.stdout
 
+    def _services(self, sha: str) -> str:
+        """Services a commit touches, from its changed paths: services/<name>/ -> <name>-svc, config/<svc>.yaml -> <svc>,
+        libs/ (shared code) -> every service in the repository. Empty when nothing maps."""
+        try:
+            paths = self._git("show", "--format=", "--name-only", sha).split()
+            all_svcs = sorted(f"{d.name}-svc" for d in (self.dir / "services").iterdir() if d.is_dir() and
+                              not d.name.startswith("_")) if (self.dir / "services").is_dir() else []
+        except (LookupError, subprocess.TimeoutExpired, OSError):
+            return ""
+        out: list[str] = []
+        for p in paths:
+            parts = p.split("/")
+            if parts[0] == "services" and len(parts) > 2:
+                out.append(f"{parts[1]}-svc")
+            elif parts[0] == "config" and parts[-1].endswith(".yaml"):
+                out.append(parts[-1][:-5])
+            elif parts[0] == "libs":
+                out += all_svcs
+        return ",".join(dict.fromkeys(out))
+
     def _attrs(self, sha: str, query: str, **kw) -> dict:
         return {"backend": self.backend, "mode": "live", "query": query, "source_url": f"{self.dir}@{sha[:7]}",
                 "sha": sha, **kw}
@@ -73,7 +93,8 @@ class LocalGitConnector:
         for line in out.splitlines():
             h, ad, cd, an, subj = line.split(_SEP, 4)
             recs.append(EvidenceRecord(
-                evidence_id=f"commit:{h[:7]}", source="commits", event_time=_z(ad), available_time=_z(cd), version=h[:7],
+                evidence_id=f"commit:{h[:7]}", source="commits", service=self._services(h) or None,
+                event_time=_z(ad), available_time=_z(cd), version=h[:7],
                 title=subj[:160], content=f"commit {h[:7]} {_z(cd)} {an}\n{subj}"[:LIST_CHARS], fixture=False,
                 content_ref=f"{self.dir}@{h[:7]}", attributes=self._attrs(h, " ".join(args), author=an)))
         if not recs:
@@ -93,7 +114,8 @@ class LocalGitConnector:
         h, ad, cd, an, body = meta.split(_SEP, 4)
         text = f"commit {h[:7]} {_z(cd)} {an}\n{body.strip()}\nfiles: {files.replace(chr(9), ' ')}\n\n{diff}"
         return BackendResult(status="ok", total_matches=1, records=[EvidenceRecord(
-            evidence_id=f"commit:{h[:7]}", source="commits", event_time=_z(ad), available_time=_z(cd), version=h[:7],
+            evidence_id=f"commit:{h[:7]}", source="commits", service=self._services(h) or None,
+            event_time=_z(ad), available_time=_z(cd), version=h[:7],
             title=(body.strip().splitlines() or [""])[0][:160], content=text[:GET_CHARS], truncated=len(text) > GET_CHARS,
             content_ref=f"{self.dir}@{h[:7]}", fixture=False,
             attributes=self._attrs(h, f"git show {h[:7]}", author=an,

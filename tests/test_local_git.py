@@ -38,6 +38,7 @@ def test_reads_commits_diffs_and_files_at_a_sha(repo):
     assert g.get_file("config/a.yaml", "main").status == "error"          # mutable refs refused
     assert g.get_file("../etc/passwd", lst.records[0].version).status == "error"
     assert g.get_commit("deadbee").status == "empty"
+    assert c.records[0].service == "a"                  # config/a.yaml -> service "a"
 
 
 def test_not_a_repository_is_unavailable(tmp_path):
