@@ -215,7 +215,9 @@ class RunConfig(BaseModel):
     refuse_repeats: bool = False    # v2: refuse identical repeat calls without using budget (v1 serves them from cache)
     multi_call_example: bool = False  # v2: prompt example shows two calls in one round
     rationale_first: bool = False   # experiment: rationale before hypotheses, and reconcile the hypotheses with it
-    diagnosis_gate: Literal["v1", "causal"] = "v1"  # experiment: "causal" = change/mechanism/effect roles
+    diagnosis_gate: Literal["v1", "causal"] = "v1"
+    change_expansion: bool = False  # dev: follow retrieved deployments to their build, commit diff and service metrics
+    synthesis: bool = False         # dev: rewrite hypotheses from scratch over all evidence when the round loop ends  # experiment: "causal" = change/mechanism/effect roles
     round_prompt: str = "investigator_v2"      # prompt files under blackbox/investigator/prompts/
     report_prompt: str = "report_v1"
     baseline_prompt: str = "baseline_v1"

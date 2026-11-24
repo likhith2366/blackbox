@@ -11,6 +11,7 @@ from blackbox.investigator.common import (
     fit_text, load_prompt, render_incident, render_record, round_schema,
 )
 from blackbox.investigator import causal_gate
+from blackbox.investigator import synthesis as synth
 from blackbox.investigator.tools import ToolRunner, tool_catalog
 from blackbox.model.adapter import ModelError, ModelReply, OllamaAdapter
 from blackbox.schemas import (
@@ -53,6 +54,8 @@ class Coordinator:
         self.source_status: list = []
         self.last_round_ids: set[str] = set()
         self.last_gate_roles: dict = {}
+        self.synthesis_log: dict = {}
+        self._expanded: set[str] = set()
         sys_text, self.v_round = load_prompt(config.round_prompt)
         self._cache: dict[str, ToolResult] = {}   # identical requests are answered from here
         self.sys_round = sys_text.format(max_calls_per_round=config.max_calls_per_round)
@@ -384,6 +387,8 @@ class Coordinator:
                                          + (f" of {res.total_matches} (truncated)" if res.truncated else ""))
 
             self.ledger = new_ledger
+            if self.cfg.change_expansion:
+                self._expand_changes(step, rnd)
             step.hypotheses_after = [h.model_copy() for h in new_ledger]
             step.hypothesis_changes = self._diff(step.hypotheses_before, new_ledger)
             executed = sum(1 for r in step.tool_results if r.status not in ("denied", "budget_exceeded"))
@@ -450,6 +455,8 @@ class Coordinator:
                 tool_calls_used=self.calls_used, budget_violations=self.violations,
                 unauthorized_attempts=self.unauthorized, unauthorized_executed=0, config=self.cfg,
                 prompt_versions={"round": self.v_round, "report": self.v_report})
+        if self.cfg.synthesis and stop not in ("stop_error", "stop_timeout") and self.seen:
+            stop, stop_reason = self._synthesize(incident_text, stop, stop_reason)
         if stop == "stop_error":
             # the model never decided; do not turn its unfinished ledger into a diagnosis (QA-F02)
             report, report_error = self._ledger_report(incident.incident_id, "failed"), None
@@ -467,10 +474,98 @@ class Coordinator:
             evidence_seen=list(self.seen.values()), usage=self.usage,
             wall_seconds=round(time.perf_counter() - t0, 2), rounds_used=len(self.steps),
             tool_calls_used=self.calls_used, budget_violations=self.violations,
-            context={"report_call": self.report_context},
+            context={"report_call": self.report_context, **({"synthesis": self.synthesis_log} if self.synthesis_log else {})},
             unauthorized_attempts=self.unauthorized, unauthorized_executed=0, config=self.cfg,
             prompt_versions={"round": self.v_round, "report": self.v_report},
         )
+
+    # ------------------------------------------------------------------ development options
+    def _expand_changes(self, step: InvestigationStep, rnd: int) -> None:
+        """Follow deployments retrieved this round (incident services, inside the window) to build, diff, metrics."""
+        inc = self.backend.incident()
+        deps = [r for res in step.tool_results for r in res.records if r.source == "deployments"]
+        deps = [r for r in deps if (r.service in inc.services) and inc.window_start <= (r.event_time or "") <= inc.investigation_cutoff
+                and r.evidence_id not in self._expanded]
+        deps.sort(key=lambda r: r.event_time or "", reverse=True)
+        n = 0
+        for d in deps[:2]:
+            self._expanded.add(d.evidence_id)
+            a = d.attributes or {}
+            calls = []
+            if a.get("build_id"):
+                calls.append(("get_build", {"build_id": a["build_id"]}))
+            sha = a.get("commit_full") or a.get("commit")
+            if sha:
+                calls.append(("get_commit", {"sha": sha}))
+            if d.service and f"metrics:{d.service}" not in self._expanded:
+                self._expanded.add(f"metrics:{d.service}")
+                calls.append(("get_metrics", {"service": d.service}))
+            for tool, args in calls:
+                n += 1
+                req = ToolRequest(call_id=f"r{rnd}auto{n}", round=rnd, tool=tool, args=args)
+                res = self.runner.run(req)
+                step.tool_requests.append(req)
+                step.tool_results.append(res)
+                for rec in res.records:
+                    if rec.evidence_id not in self.seen:
+                        self.seen[rec.evidence_id] = rec
+                    self.last_round_ids.add(rec.evidence_id)
+                step.orchestration_rules.append(f"change expansion: {tool}{args} for {d.evidence_id} -> {res.status}")
+                self.feedback.append(f"{req.call_id} {tool} (coordinator: follows {d.evidence_id}) -> "
+                                     f"{len(res.records)} records" + (f": {res.error}" if res.error else ""))
+
+    def _synthesis_notebook(self, budget: int) -> str:
+        """Every retrieved record in full; code changes (diffs) get a longer preview. Oldest runtime records are
+        shortened to one line, then dropped, until the text fits."""
+        recs = list(self.seen.values())
+        code = {r.evidence_id for r in recs if r.source in ("commits", "configs", "builds")}
+        short: set[str] = set()
+
+        def render() -> str:
+            return "\n".join(render_record(r, full=r.evidence_id not in short,
+                                           max_chars=2500 if r.evidence_id in code else 600) for r in recs)
+        text = render()
+        for r in list(recs):
+            if count_tokens(text) <= budget:
+                break
+            if r.evidence_id not in code:
+                short.add(r.evidence_id)
+                text = render()
+        while recs and count_tokens(text) > budget:
+            recs.remove(next((r for r in recs if r.evidence_id not in code), recs[0]))
+            text = render()
+        self.synthesis_log["notebook"] = {"records": len(recs), "of": len(self.seen), "short": len(short),
+                                          "tokens": count_tokens(text), "budget": budget}
+        return text
+
+    def _synthesize(self, incident_text: str, stop: str, stop_reason: str) -> tuple[str, str]:
+        limit = self.cfg.num_ctx - self.cfg.num_predict - 250
+        budget = limit - count_tokens(synth.PROMPT) - count_tokens(incident_text) - 100
+        user = f"INCIDENT\n{incident_text}\n\nEVIDENCE\n{self._synthesis_notebook(budget)}\n\nReply with the JSON object."
+        try:
+            reply, _ = self._chat_json(synth.PROMPT, user, synth.SCHEMA)
+        except ModelError as exc:
+            self.synthesis_log["error"] = str(exc)
+            return stop, stop_reason
+        p = reply.parsed or {}
+        self.synthesis_log.update({"raw_output": reply.text, "parsed": p, "loop_stop": stop})
+        hs = [h for h in p.get("hypotheses") or [] if isinstance(h, dict)]
+        top = next((h for h in hs if h.get("id") == p.get("top_hypothesis")), hs[0] if hs else None)
+        if top is None:
+            return "stop_insufficient", "synthesis produced no hypothesis"
+        sup = [i for i in synth.chain_ids(top) if i in self.seen]
+        con = [str(i) for i in top.get("contradicting") or [] if str(i) in self.seen]
+        h = Hypothesis(hypothesis_id="s1", component=str(top.get("component", ""))[:120],
+                       mechanism=str(top.get("mechanism", ""))[:240], status="supported", confidence="medium",
+                       supporting=sup, contradicting=con, note="synthesized from all retrieved evidence")
+        self.ledger = [h] + [x.model_copy(update={"status": "rejected"}) for x in self.ledger]
+        if p.get("decision") != "diagnosis":
+            return "stop_insufficient", "synthesis judged the evidence insufficient"
+        ok, why = self._supports_diagnosis(h)
+        self.synthesis_log["gate"] = why
+        if ok:
+            return "stop_diagnosis", f"synthesis: {why}"
+        return "stop_insufficient", f"synthesis diagnosis refused: {why}"
 
     def _final_status(self, stop: str) -> ReportStatus:
         if stop == "stop_diagnosis":
