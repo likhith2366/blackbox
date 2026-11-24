@@ -29,3 +29,29 @@ The first live test (retry-policy fault, `runs/chat/`) answered from 15 Loki err
 - **Window fix:** the incident window started after the deploy (live incidents now look back 5 minutes).
 
 This is a development feature; it does not change the evaluated investigator.
+
+## Live test after the fixes (2026-11-24, retry-policy fault injected into the running demo)
+
+Question: "Checkout orders started failing. What changed, and how does that change cause the failures?"
+
+**Answer, in 12 s and marked "verified":**
+- deployment `deploy:d-729` of checkout-svc 1.9.0;
+- built from commit `commit:5f8eabc` (read from the local repository);
+- the commit upgraded the shared httpclient from 3.1.0 to 3.2.0 and changed the retry policy, with tighter
+  timeouts and reduced backoff, raising timeouts when payment-svc is slow or returns 5xx.
+
+**Tool calls:**
+- `list_deployments`;
+- then automatically, following the in-window deployment, `get_build` and `get_commit`.
+
+Every cited id was retrieved, and every concrete detail (versions, ids) appears in the cited records.
+
+**The answer is right about the change and its kind.** It does not say that the retries multiply calls to
+payment-svc. Screenshot: `docs/live_stack/chat_retry_fault_verified.png`.
+
+**Fixes that led here:**
+- the verifier now catches "no evidence of recent deployments" without a deployment query;
+- the chat prompt asks it to check deployments and commits for "what changed" questions;
+- chat follows deployments to their commit;
+- the code source is configurable (`BLACKBOX_GIT_REPO_DIR` in `.env.local`);
+- `v1.9.0` and alert details are no longer flagged as unsupported.

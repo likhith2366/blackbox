@@ -1,0 +1,195 @@
+{
+ "session_id": "20261124T095502-cf7d4c",
+ "title": "checkout-svc error rate high",
+ "incident": {
+  "incident_id": "LIVE-F8686F",
+  "alert": {
+   "alert_id": "ALR-F8686F",
+   "title": "checkout-svc error rate high",
+   "service": "checkout-svc",
+   "signal": "error_rate",
+   "condition": "error_rate > 0.1 for 15s",
+   "observed_value": 0.7333,
+   "fired_at": "2026-11-24T09:54:12.114Z"
+  },
+  "window_start": "2026-11-24T09:49:12.114Z",
+  "window_end": "2026-11-24T09:55:02.114Z",
+  "investigation_cutoff": "2026-11-24T09:55:02.114Z",
+  "environment": "demo-local (live)",
+  "services": [
+   "checkout-svc",
+   "payment-svc"
+  ],
+  "available_sources": [
+   "logs",
+   "traces",
+   "metrics",
+   "deployments",
+   "builds",
+   "commits",
+   "configs",
+   "tickets"
+  ],
+  "notes": "Live incident opened from a Prometheus alert evaluation. Investigate using the available evidence sources."
+ },
+ "mode": "live",
+ "prompt_version": "chat_v1@8318c5f55b",
+ "turns": [
+  {
+   "role": "user",
+   "text": "Checkout orders started failing. What changed, and how does that change cause the failures?",
+   "at": 1795514114.4418883,
+   "citations": [],
+   "confidence": null,
+   "verification": null,
+   "tools": [],
+   "seconds": 0.0
+  },
+  {
+   "role": "assistant",
+   "text": "Checkout orders started failing due to a deployment of checkout-svc v1.9.0 (deploy:d-729) on 2026-11-24T09:51:00.214Z. This deployment included a commit (commit:5f8eabc) that upgraded the shared httpclient library from version 3.1.0 to 3.2.0 (libs/httpclient/VERSION) and modified the retry policy (libs/httpclient/policy.py). The change likely caused transient payment failures because the new version of httpclient has stricter retry behavior (tighter timeouts and reduced backoff), which may have increased the likelihood of timeouts when payment-svc is slow or returns 5xx errors.",
+   "at": 1795514114.4442015,
+   "citations": [
+    "deploy:d-729",
+    "build:b-1263",
+    "commit:5f8eabc"
+   ],
+   "confidence": "high",
+   "verification": {
+    "verdict": "verified",
+    "cited": 3,
+    "cited_known": 3,
+    "unknown_ids": [],
+    "checked_tokens": [
+     "3.1.0",
+     "3.2.0",
+     "commit:5f8eabc",
+     "deploy:d-729",
+     "v1.9.0"
+    ],
+    "unsupported_tokens": [],
+    "unqueried_absence_claims": []
+   },
+   "tools": [
+    {
+     "tool": "list_deployments",
+     "args": {
+      "service": "checkout-svc",
+      "start": "2026-11-24T09:49:12.114Z",
+      "end": "2026-11-24T09:55:02.114Z"
+     },
+     "status": "ok",
+     "records": 1,
+     "error": null,
+     "backends": [
+      "demo-deploy-records"
+     ],
+     "ids": [
+      "deploy:d-729"
+     ]
+    },
+    {
+     "tool": "get_build",
+     "args": {
+      "build_id": "b-1263"
+     },
+     "status": "ok",
+     "records": 1,
+     "error": null,
+     "auto": true,
+     "ids": [
+      "build:b-1263"
+     ],
+     "backends": [
+      "demo-deploy-records"
+     ]
+    },
+    {
+     "tool": "get_commit",
+     "args": {
+      "sha": "5f8eabc75960a333203bba74ba73afec04feceef"
+     },
+     "status": "ok",
+     "records": 1,
+     "error": null,
+     "auto": true,
+     "ids": [
+      "commit:5f8eabc"
+     ],
+     "backends": [
+      "local-git"
+     ]
+    }
+   ],
+   "seconds": 12.2
+  }
+ ],
+ "evidence": {
+  "deploy:d-729": {
+   "evidence_id": "deploy:d-729",
+   "source": "deployments",
+   "service": "checkout-svc",
+   "event_time": "2026-11-24T09:51:00.214Z",
+   "available_time": "2026-11-24T09:51:00.768Z",
+   "version": "1.9.0",
+   "title": "deployment of checkout-svc 1.9.0",
+   "content": "2026-11-24T09:51:00.214Z deployment d-729 of checkout-svc version 1.9.0 to demo-local build=b-1263 commit=5f8eabc artifact_digest=sha256:4f7df5db3a564e59a570f27539e9088b50e855b570a695ddb8cb12354cd8350e by deploy-bot (pipeline) status=succeeded",
+   "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-729",
+   "attributes": {
+    "deploy_id": "d-729",
+    "build_id": "b-1263",
+    "commit": "5f8eabc",
+    "commit_full": "5f8eabc75960a333203bba74ba73afec04feceef",
+    "artifact_digest": "sha256:4f7df5db3a564e59a570f27539e9088b50e855b570a695ddb8cb12354cd8350e",
+    "backend": "demo-deploy-records",
+    "mode": "live",
+    "query": "read deployments.jsonl",
+    "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+   },
+   "truncated": false,
+   "fixture": false
+  },
+  "build:b-1263": {
+   "evidence_id": "build:b-1263",
+   "source": "builds",
+   "service": "checkout-svc",
+   "event_time": "2026-11-24T09:50:58.338Z",
+   "available_time": "2026-11-24T09:50:58.445Z",
+   "version": "1.9.0",
+   "title": "build b-1263 of checkout-svc 1.9.0",
+   "content": "build b-1263 service=checkout-svc version=1.9.0 commit=5f8eabc75960a333203bba74ba73afec04feceef artifact=checkout-svc-1.9.0-b-1263.tar artifact_digest=sha256:4f7df5db3a564e59a570f27539e9088b50e855b570a695ddb8cb12354cd8350e status=success pipeline=local-build started=2026-11-24T09:50:58.338Z finished=2026-11-24T09:50:58.445Z source_paths=services/__init__.py,services/checkout,libs,config/checkout-svc.yaml",
+   "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\builds\\b-1263.json",
+   "attributes": {
+    "commit": "5f8eabc",
+    "artifact_digest": "sha256:4f7df5db3a564e59a570f27539e9088b50e855b570a695ddb8cb12354cd8350e",
+    "backend": "demo-deploy-records",
+    "mode": "live",
+    "query": "read builds/b-1263.json",
+    "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\builds\\b-1263.json"
+   },
+   "truncated": false,
+   "fixture": false
+  },
+  "commit:5f8eabc": {
+   "evidence_id": "commit:5f8eabc",
+   "source": "commits",
+   "service": "checkout-svc,payment-svc",
+   "event_time": "2026-11-24T09:50:58.000Z",
+   "available_time": "2026-11-24T09:50:58.000Z",
+   "version": "5f8eabc",
+   "title": "DEMO-9: retry transient payment failures in shared client",
+   "content": "commit 5f8eabc 2026-11-24T09:50:58.000Z Likhith Vardhan Goruputi\nDEMO-9: retry transient payment failures in shared client\n\nRetry timeouts and 5xx responses, tighten the per-attempt timeout so a\nslow attempt is abandoned quickly, and drop the fixed backoff.\nfiles: M libs/httpclient/VERSION\nM libs/httpclient/policy.py\nM services/checkout/VERSION\n\ndiff --git a/libs/httpclient/VERSION b/libs/httpclient/VERSION\nindex fd2a018..944880f 100644\n--- a/libs/httpclient/VERSION\n+++ b/libs/httpclient/VERSION\n@@ -1 +1 @@\n-3.1.0\n+3.2.0\ndiff --git a/libs/httpclient/policy.py b/libs/httpclient/policy.py\nindex 15dd75d..a404ba1 100644\n--- a/libs/httpclient/policy.py\n+++ b/libs/httpclient/policy.py\n@@ -3,8 +3,8 @@\n Services use these values unless their own config overrides a field.\n \"\"\"\n \n-DEFAULT_TIMEOUT_MS = 2000\n-MAX_RETRIES = 1\n+DEFAULT_TIMEOUT_MS = 250\n+MAX_RETRIES = 4\n # Which failures are retried: \"connect_error\", \"timeout\", \"5xx\"\n-RETRY_ON = (\"connect_error\",)\n-BACKOFF_MS = 100\n+RETRY_ON = (\"connect_error\", \"timeout\", \"5xx\")\n+BACKOFF_MS = 0\ndiff --git a/services/checkout/VERSION b/services/checkout/VERSION\nindex 53adb84..f8e233b 100644\n--- a/services/checkout/VERSION\n+++ b/services/checkout/VERSION\n@@ -1 +1 @@\n-1.8.2\n+1.9.0\n",
+   "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox-demo-shop@5f8eabc",
+   "attributes": {
+    "backend": "local-git",
+    "mode": "live",
+    "query": "git show 5f8eabc",
+    "source_url": "A:\\subjects\\genAI\\final_project\\blackbox-demo-shop@5f8eabc",
+    "sha": "5f8eabc75960a333203bba74ba73afec04feceef",
+    "author": "Likhith Vardhan Goruputi"
+   },
+   "truncated": false,
+   "fixture": false
+  }
+ }
+}
