@@ -1,0 +1,19 @@
+08:12:55 retry-policy: reset to baseline
+08:18:36 retry-policy: inject
+08:22:39 retry-policy: no alert fired within 4 min; recorded as 'no alert'
+08:22:39 endpoint-port: reset to baseline
+08:28:21 endpoint-port: inject
+08:28:54 endpoint-port: alert error_rate > 0.1 for 15s fired 2026-11-24T08:28:41.252Z (LIVE-3A562A)
+08:30:57 endpoint-port: completed in 123s -> diagnosis: Most likely cause: checkout-svc - checkout-svc misconfigured payment base_url to point to a non-existent port
+08:30:57 payment-stop: reset to baseline
+08:36:38 payment-stop: inject
+08:37:10 payment-stop: alert error_rate > 0.1 for 15s fired 2026-11-24T08:36:58.354Z (LIVE-BBD038)
+08:38:51 payment-stop: completed in 102s -> insufficient_evidence: No reliable root cause identified.
+08:38:51 pool-fastpath: reset to baseline
+08:44:33 pool-fastpath: inject
+08:45:06 pool-fastpath: alert error_rate > 0.1 for 15s fired 2026-11-24T08:45:03.664Z (LIVE-8DF4BD)
+08:47:36 pool-fastpath: completed in 150s -> diagnosis: Most likely cause: checkout-svc - checkout-svc is failing to handle high traffic due to a recent deployment of a new version that has a bug in its rate limiting logic
+08:47:36 index-migration: reset to baseline
+08:53:18 index-migration: inject
+08:57:23 index-migration: no alert fired within 4 min; recorded as 'no alert'
+08:57:23 sweep finished; resetting to baseline

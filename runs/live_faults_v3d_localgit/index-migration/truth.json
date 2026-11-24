@@ -1,0 +1,14 @@
+{
+  "change_id": "index-migration",
+  "family": "missing_index",
+  "kind": "commit",
+  "at": "2026-11-24T08:53:18.475Z",
+  "commit": "4966ac463027bc06556c47af43cd213b175aba68",
+  "builds": [
+    "b-1259"
+  ],
+  "deployments": [
+    "d-713"
+  ],
+  "done_at": "2026-11-24T08:53:22.963Z"
+}
