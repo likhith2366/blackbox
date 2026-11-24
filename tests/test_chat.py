@@ -86,3 +86,9 @@ def test_chat_follows_a_deployment_in_the_window_to_its_commit():
     t = s.ask("what changed?")
     assert "get_commit:abc1234" in b.calls and any(x.get("auto") for x in t.tools)
     assert t.verification["verdict"] == "verified"
+
+
+def test_absence_claim_with_words_in_between_is_caught():
+    v = verify("Timeouts (log:a1). No evidence of recent deployments or commits is available.", ["log:a1"], EV,
+               queried={"search_logs"})
+    assert set(v["unqueried_absence_claims"]) >= {"deployments", "commits"} and v["verdict"] == "partly verified"

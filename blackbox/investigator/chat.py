@@ -87,7 +87,8 @@ def verify(answer: str, citations: list[str], evidence: dict[str, EvidenceRecord
                              answer or ""))
     unqueried = []
     for source, words, tools in ABSENCE_CHECKS:
-        pattern = r"(?i)\bno (recent )?(%s)\b|\b(%s)\b[^.]*\b(not visible|none|not found|no sign)" % (words, words)
+        pattern = (r"(?i)\b(no|not any|without)\b(?:\W+\w+){0,5}?\W+(%s)\b"
+                   r"|\b(%s)\b[^.]*\b(not visible|none|not found|no sign|not available|unavailable)" % (words, words))
         if re.search(pattern, answer or "") and not (queried & tools):
             unqueried.append(source)
     if not known and not tokens and no_info:
