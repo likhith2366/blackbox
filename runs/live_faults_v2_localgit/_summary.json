@@ -1,0 +1,117 @@
+[
+ {
+  "fault": "endpoint-port",
+  "family": "config_mismatch_endpoint",
+  "alert": "yes",
+  "status": "diagnosis",
+  "top_cause": "checkout-svc :: payment-svc dependency failure",
+  "keyword_match": false,
+  "change_retrieved": [
+   "commit:0aaa5ba",
+   "deploy:d-637"
+  ],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 3,
+   "list_deployments": 1,
+   "search_commits": 1,
+   "search_logs": 1,
+   "get_trace": 1
+  },
+  "backends": {
+   "prometheus": 8,
+   "demo-deploy-records": 20,
+   "local-git": 1,
+   "loki": 15
+  },
+  "calls": 7,
+  "rounds": 4,
+  "wall_s": 59.05
+ },
+ {
+  "fault": "index-migration",
+  "family": "missing_index",
+  "alert": "no"
+ },
+ {
+  "fault": "payment-stop",
+  "family": "stopped_dependency",
+  "alert": "yes",
+  "status": "insufficient_evidence",
+  "top_cause": " :: ",
+  "keyword_match": false,
+  "change_retrieved": [],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 4,
+   "search_traces": 1,
+   "list_deployments": 1,
+   "search_commits": 1
+  },
+  "backends": {
+   "prometheus": 9,
+   "demo-deploy-records": 20,
+   "local-git": 8
+  },
+  "calls": 6,
+  "rounds": 6,
+  "wall_s": 61.03
+ },
+ {
+  "fault": "pool-fastpath",
+  "family": "connection_leak",
+  "alert": "yes",
+  "status": "diagnosis",
+  "top_cause": "checkout-svc :: payment-svc dependency failure",
+  "keyword_match": false,
+  "change_retrieved": [
+   "deploy:d-645"
+  ],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 2,
+   "list_deployments": 1,
+   "search_commits": 1
+  },
+  "backends": {
+   "prometheus": 8,
+   "demo-deploy-records": 20,
+   "local-git": 8
+  },
+  "calls": 4,
+  "rounds": 3,
+  "wall_s": 48.27
+ },
+ {
+  "fault": "pool-override",
+  "family": "config_override_pool_size",
+  "alert": "no"
+ },
+ {
+  "fault": "retry-policy",
+  "family": "retry_amplification",
+  "alert": "yes",
+  "status": "insufficient_evidence",
+  "top_cause": " :: ",
+  "keyword_match": false,
+  "change_retrieved": [
+   "commit:ba49dd5",
+   "deploy:d-631"
+  ],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 5,
+   "list_deployments": 1,
+   "search_commits": 1,
+   "search_logs": 1
+  },
+  "backends": {
+   "prometheus": 10,
+   "demo-deploy-records": 20,
+   "local-git": 8
+  },
+  "calls": 8,
+  "rounds": 6,
+  "wall_s": 69.06
+ }
+]
