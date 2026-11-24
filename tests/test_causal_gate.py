@@ -212,3 +212,13 @@ def test_onset_is_the_latest_episode_not_an_earlier_one():
     two = series("checkout-svc", "error_rate", [0, 0.9, 0.9, 0, 0, 0, 0, 0.8, 0.9])     # spikes at :05 and :35
     t = causal_gate.onset(two)
     assert t.strftime("%H:%M:%S") == "10:00:35"
+
+
+def test_change_based_claim_needs_a_change_inside_the_incident_window():
+    seen = dict(ALL, **{COMMIT_DIFF.evidence_id: COMMIT_DIFF})
+    h = hyp("payment-svc", "new fast path returns before releasing its DB connection, pool exhausted",
+            DEPLOY.evidence_id, COMMIT_DIFF.evidence_id, ERR.evidence_id)
+    ok, why, _ = causal_gate.check(h, seen, window_start=f"{DAY}T09:59:00.000Z")
+    assert ok, why
+    ok, why, roles = causal_gate.check(h, seen, window_start=f"{DAY}T10:30:00.000Z")
+    assert not ok and "outside the incident window" in why and roles["timing"] == "change before window"

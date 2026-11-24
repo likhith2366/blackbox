@@ -102,7 +102,8 @@ class Coordinator:
     def _supports_diagnosis(self, h: Optional[Hypothesis]) -> tuple[bool, str]:
         if self.cfg.diagnosis_gate == "causal":
             unavailable = [s.source for s in self.source_status if not s.available]
-            ok, why, self.last_gate_roles = causal_gate.check(h, self.seen, unavailable)
+            ok, why, self.last_gate_roles = causal_gate.check(h, self.seen, unavailable,
+                                                              window_start=self.backend.incident().window_start)
             return ok, why
         if h is None:
             return False, "no live hypothesis"

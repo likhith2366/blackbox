@@ -135,7 +135,7 @@ def is_change_based(h: Hypothesis, cited: list[EvidenceRecord]) -> bool:
 
 
 def check(h: Optional[Hypothesis], seen: dict[str, EvidenceRecord],
-          unavailable: Iterable[str] = ()) -> tuple[bool, str, dict]:
+          unavailable: Iterable[str] = (), window_start: Optional[str] = None) -> tuple[bool, str, dict]:
     """Return (ok, reason, roles). The reason is neutral: it names what is missing, never what to find."""
     roles: dict = {"change_based": None, "change": [], "mechanism": [], "effect": [], "timing": "n/a"}
     if h is None:
@@ -187,6 +187,15 @@ def check(h: Optional[Hypothesis], seen: dict[str, EvidenceRecord],
         return False, f"{hid}: " + missing(
             f"change evidence missing: the hypothesis attributes the fault to a change but cites no retrieved "
             f"deployment, commit, build or config record of {h.component}", {"deployments", "commits", "configs"}), roles
+    if change_based and window_start:
+        # a change-based claim needs a change that happened in the incident window (deployments, commits, builds;
+        # a config file's commit time is not when it took effect, so configs do not count here)
+        dated = [r for r in change if r.source in ("deployments", "commits", "builds") and _ts(r.event_time)]
+        if dated and all(_ts(r.event_time) < _ts(window_start) for r in dated):
+            latest = max(_ts(r.event_time) for r in dated)
+            roles["timing"] = "change before window"
+            return False, (f"{hid}: change outside the incident window: every cited change predates "
+                           f"{window_start} (latest {latest.isoformat()})"), roles
     if not mech:
         return False, f"{hid}: " + missing(
             "mechanism evidence missing: no cited commit diff, configuration, component metric other than "
