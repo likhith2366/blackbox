@@ -2,7 +2,7 @@
 
 Request a change by writing to coordination/requests.md. Every persisted artefact
 (snapshots, run records, reports) is produced from these models, so a field added
-here is the only way it reaches the other agents' code.
+here is the only way it reaches the other modules' code.
 
 Conventions
 - Timestamps are ISO-8601 UTC strings ending in "Z", e.g. "2026-11-19T21:04:05.123Z".

@@ -5,18 +5,18 @@ Source design: `docs/milestone2.md` (as submitted) and
 Owner of this file: Integration (integration lead). Others request changes in
 `coordination/requests.md`.
 
-## 0. Ground rules (all agents)
+## 0. Ground rules (all modules)
 - **No fabrication.** Never write logs, traces, metrics, model outputs or scores that a
   real execution did not produce. Team-authored *fixtures* (Jira tickets, build/commit
   history authored for the demo) are allowed only when labelled `fixture: true` and
   described as fixtures, never as live integrations.
-- **Stay in your files** (section 2). Do not edit another agent's files; request it.
+- **Stay in your files** (section 2). Do not edit another module's files; request it.
 - **Only Integration runs `git commit`.** Others never commit, stash, reset or checkout.
 - **GPU discipline.** Integration alone schedules inference. the other modules never call Ollama;
   they request model runs in `coordination/requests.md` and Integration runs them (directly or
   through Evaluation's harness). One inference job at a time.
-- **Four agents** (QA = independent integration QA and usability). Issues in another
-  agent's files go to the owner as a failing test or a proposed patch, never a concurrent edit. Evidence never calls the model. Do not run the demo
+- **Four modules** (QA = independent integration QA and usability). Issues in another
+  module's files go to the owner as a failing test or a proposed patch, never a concurrent edit. Evidence never calls the model. Do not run the demo
   load generator while an evaluation batch is running.
 - Python 3.11, run everything from the repo root with `python -m ...`.
   Available: pydantic 2, requests, fastapi, uvicorn, pyyaml, jsonschema, pytest,
@@ -55,7 +55,6 @@ Owner of this file: Integration (integration lead). Others request changes in
 | `demo/web/` (React + TS + Vite shop UI) | Frontend (frontend) |
 | `demo/control_api.py` (local demo-control API) | Evidence |
 | `viewer/` (saved-run viewer, read-only over `runs/`), `docs/REPRODUCE.md`, `docs/EVIDENCE_CHECKLIST.md`, `docs/QA_FINDINGS.md` | QA |
-| `coordination/agent{1,2,3}_log.md` | each agent its own |
 | `coordination/requests.md` | append-only, everyone |
 
 ## 3. Module boundaries
@@ -208,7 +207,6 @@ experiment runners all acquire it.
 ### BlackBox UI (Frontend) — `ui/blackbox-web/`, Vite dev server http://127.0.0.1:5173, proxy `/api` -> 8700.
 
 ## 11. Coordination protocol
-- Log progress and blockers in your own `coordination/agentN_log.md` (timestamped).
 - Ask for interface changes in `coordination/requests.md`; Integration answers there.
 - Deliver early: Evidence ships the pilot snapshot + working `load_backend` before the
-  other scenarios, because Agents 1 and 3 integrate against it.
+  other scenarios, because Integration and Evaluation integrate against it.
