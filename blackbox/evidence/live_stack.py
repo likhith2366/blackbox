@@ -91,8 +91,8 @@ class LiveStackBackend:
         gh = self.github is not None
         for s in ("commits", "configs"):
             out.append(SourceStatus(source=s, available=gh, healthy=gh,
-                                    detail=f"live GitHub API ({self.github.repo}), pinned to the deployed SHA" if gh
-                                    else "GitHub not configured"))
+                                    detail=(f"live {getattr(self.github, 'detail', 'GitHub API (' + str(self.github.repo) + ')')}"
+                                            ", pinned to the deployed SHA") if gh else "code source not configured"))
         jira_ok = bool(self.jira and self.jira.configured)
         out.append(SourceStatus(source="tickets", available=jira_ok, healthy=jira_ok,
                                 detail=self.jira.detail if self.jira else "Jira not configured"))
@@ -256,6 +256,11 @@ def load_live_stack(incident: Incident, repo: Optional[str] = None, capture_dir=
     from blackbox.connectors.tempo import TempoTraces
     github = None
     repo = repo or os.environ.get("BLACKBOX_GITHUB_REPO", "likhith2366/blackbox-demo-shop")
+    if os.environ.get("BLACKBOX_GIT_REPO_DIR"):
+        # explicitly configured self-hosted code source (the company's own git repository); not a fallback
+        from blackbox.connectors.local_git import LocalGitConnector
+        github = LocalGitConnector()
+        repo = None
     if repo:
         from blackbox.connectors.github_api import GitHubConnector
         if capture_dir is not None:
