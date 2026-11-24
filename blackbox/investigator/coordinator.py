@@ -463,6 +463,8 @@ class Coordinator:
                 unauthorized_attempts=self.unauthorized, unauthorized_executed=0, config=self.cfg,
                 prompt_versions={"round": self.v_round, "report": self.v_report})
         if self.cfg.synthesis and stop not in ("stop_error", "stop_timeout") and self.seen:
+            if self.cfg.runtime_context:
+                self._runtime_context()
             stop, stop_reason = self._synthesize(incident_text, stop, stop_reason)
         if stop == "stop_error":
             # the model never decided; do not turn its unfinished ledger into a diagnosis (QA-F02)
@@ -519,6 +521,24 @@ class Coordinator:
                 step.orchestration_rules.append(f"change expansion: {tool}{args} for {d.evidence_id} -> {res.status}")
                 self.feedback.append(f"{req.call_id} {tool} (coordinator: follows {d.evidence_id}) -> "
                                      f"{len(res.records)} records" + (f": {res.error}" if res.error else ""))
+
+    LIFECYCLE_QUERY = "shutdown stopping stopped starting started exited killed restart"
+
+    def _runtime_context(self) -> None:
+        """Before synthesis: each incident service's ERROR logs and its lifecycle events (start/stop/exit).
+        Generic operational context, fetched with ordinary read-only calls and logged in the synthesis record."""
+        inc = self.backend.incident()
+        fetched = []
+        for svc in inc.services:
+            for args in ({"service": svc, "level": "ERROR", "limit": 5},
+                         {"service": svc, "query": self.LIFECYCLE_QUERY, "limit": 5}):
+                req = ToolRequest(call_id=f"ctx{len(fetched) + 1}", round=len(self.steps) + 1, tool="search_logs",
+                                  args=args)
+                res = self.runner.run(req)
+                for rec in res.records:
+                    self._keep_record(rec)
+                fetched.append({"args": args, "status": res.status, "ids": [r.evidence_id for r in res.records]})
+        self.synthesis_log["runtime_context"] = fetched
 
     def _synthesis_notebook(self, budget: int) -> str:
         """Every retrieved record in full; code changes (diffs) get a longer preview. Oldest runtime records are

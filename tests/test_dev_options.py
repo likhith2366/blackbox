@@ -100,3 +100,12 @@ def test_gate_ranking_accepts_the_first_hypothesis_the_gate_allows():
     b2 = DeployBackend()
     out2 = Coordinator(b2, RunConfig(change_expansion=True, synthesis=True), adapter=ScriptedAdapter(rounds() + [syn])).run()
     assert out2.report.status == "insufficient_evidence"          # default: only the top choice is checked
+
+
+def test_runtime_context_fetches_error_and_lifecycle_logs_before_synthesis():
+    b = DeployBackend()
+    outs = rounds() + [SYN]
+    out = Coordinator(b, RunConfig(synthesis=True, runtime_context=True), adapter=ScriptedAdapter(outs)).run()
+    ctx = out.context["synthesis"]["runtime_context"]
+    assert len(ctx) == 4 and {c["args"].get("level") for c in ctx} == {"ERROR", None}
+    assert b.calls.count("search_logs") == 4

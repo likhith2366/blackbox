@@ -218,7 +218,8 @@ class RunConfig(BaseModel):
     diagnosis_gate: Literal["v1", "causal"] = "v1"
     change_expansion: bool = False  # dev: follow retrieved deployments to their build, commit diff and service metrics
     synthesis: bool = False         # dev: rewrite hypotheses from scratch over all evidence when the round loop ends
-    synthesis_ranking: Literal["top", "gate"] = "top"  # dev: "gate" = first synthesized hypothesis the gate accepts  # experiment: "causal" = change/mechanism/effect roles
+    synthesis_ranking: Literal["top", "gate"] = "top"  # dev: "gate" = first synthesized hypothesis the gate accepts
+    runtime_context: bool = False   # dev: before synthesis, fetch error logs and lifecycle events of incident services  # experiment: "causal" = change/mechanism/effect roles
     round_prompt: str = "investigator_v2"      # prompt files under blackbox/investigator/prompts/
     report_prompt: str = "report_v1"
     baseline_prompt: str = "baseline_v1"
