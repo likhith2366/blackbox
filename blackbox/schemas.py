@@ -2,7 +2,7 @@
 
 Request a change by writing to coordination/requests.md. Every persisted artefact
 (snapshots, run records, reports) is produced from these models, so a field added
-here is the only way it reaches the other modules' code.
+here is the only way it reaches the other agents' code.
 
 Conventions
 - Timestamps are ISO-8601 UTC strings ending in "Z", e.g. "2026-11-19T21:04:05.123Z".
@@ -217,7 +217,8 @@ class RunConfig(BaseModel):
     rationale_first: bool = False   # experiment: rationale before hypotheses, and reconcile the hypotheses with it
     diagnosis_gate: Literal["v1", "causal"] = "v1"
     change_expansion: bool = False  # dev: follow retrieved deployments to their build, commit diff and service metrics
-    synthesis: bool = False         # dev: rewrite hypotheses from scratch over all evidence when the round loop ends  # experiment: "causal" = change/mechanism/effect roles
+    synthesis: bool = False         # dev: rewrite hypotheses from scratch over all evidence when the round loop ends
+    synthesis_ranking: Literal["top", "gate"] = "top"  # dev: "gate" = first synthesized hypothesis the gate accepts  # experiment: "causal" = change/mechanism/effect roles
     round_prompt: str = "investigator_v2"      # prompt files under blackbox/investigator/prompts/
     report_prompt: str = "report_v1"
     baseline_prompt: str = "baseline_v1"

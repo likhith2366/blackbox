@@ -560,19 +560,30 @@ class Coordinator:
         top = next((h for h in hs if h.get("id") == p.get("top_hypothesis")), hs[0] if hs else None)
         if top is None:
             return "stop_insufficient", "synthesis produced no hypothesis"
-        sup = [i for i in synth.chain_ids(top) if i in self.seen]
-        con = [str(i) for i in top.get("contradicting") or [] if str(i) in self.seen]
-        h = Hypothesis(hypothesis_id="s1", component=str(top.get("component", ""))[:120],
-                       mechanism=str(top.get("mechanism", ""))[:240], status="supported", confidence="medium",
-                       supporting=sup, contradicting=con, note="synthesized from all retrieved evidence")
-        self.ledger = [h] + [x.model_copy(update={"status": "rejected"}) for x in self.ledger]
+        # the model's top choice first, then its other hypotheses in its own order; the first that the gate
+        # accepts is the diagnosis (a hypothesis the gate refuses is never reported as the cause)
+        order = [top] + [h for h in hs if h is not top] if self.cfg.synthesis_ranking == "gate" else [top]
+
+        def as_hyp(x: dict, n: int) -> Hypothesis:
+            return Hypothesis(hypothesis_id=f"s{n}", component=str(x.get("component", ""))[:120],
+                              mechanism=str(x.get("mechanism", ""))[:240], status="supported", confidence="medium",
+                              supporting=[i for i in synth.chain_ids(x) if i in self.seen],
+                              contradicting=[str(i) for i in x.get("contradicting") or [] if str(i) in self.seen],
+                              note="synthesized from all retrieved evidence")
+        cands = [as_hyp(x, n) for n, x in enumerate(order, start=1)]
+        self.ledger = cands[:1] + [x.model_copy(update={"status": "rejected"}) for x in self.ledger]
         if p.get("decision") != "diagnosis":
             return "stop_insufficient", "synthesis judged the evidence insufficient"
-        ok, why = self._supports_diagnosis(h)
-        self.synthesis_log["gate"] = why
-        if ok:
-            return "stop_diagnosis", f"synthesis: {why}"
-        return "stop_insufficient", f"synthesis diagnosis refused: {why}"
+        refusals = []
+        for n, h in enumerate(cands):
+            ok, why = self._supports_diagnosis(h)
+            if ok:
+                self.ledger = [h] + [c.model_copy(update={"status": "rejected"}) for c in cands if c is not h] +                               [x for x in self.ledger if x.hypothesis_id not in {c.hypothesis_id for c in cands}]
+                self.synthesis_log.update({"gate": why, "accepted_rank": n + 1, "refused": refusals})
+                return "stop_diagnosis", f"synthesis: {why}" + (f" (rank {n + 1}; higher ranks refused)" if n else "")
+            refusals.append(why)
+        self.synthesis_log.update({"gate": refusals[0], "refused": refusals})
+        return "stop_insufficient", f"synthesis diagnosis refused: {refusals[0]}"
 
     def _final_status(self, stop: str) -> ReportStatus:
         if stop == "stop_diagnosis":

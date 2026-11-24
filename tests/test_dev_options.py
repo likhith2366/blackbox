@@ -85,3 +85,18 @@ def test_synthesis_abstention_is_kept():
     outs = rounds() + [{**SYN, "decision": "insufficient_evidence", "top_hypothesis": None}]
     out = Coordinator(b, RunConfig(synthesis=True), adapter=ScriptedAdapter(outs)).run()
     assert out.report.status == "insufficient_evidence"
+
+
+def test_gate_ranking_accepts_the_first_hypothesis_the_gate_allows():
+    bad = {"id": "s1", "component": "checkout-svc", "mechanism": "overload",
+           "chain": {"cause": {"statement": "x", "evidence_ids": ["log:a1"]}, "runtime_effect": {"statement": "x",
+                     "evidence_ids": []}, "symptom": {"statement": "x", "evidence_ids": []}}, "contradicting": []}
+    good = {**SYN["hypotheses"][0], "id": "s2"}
+    syn = {**SYN, "hypotheses": [bad, good], "top_hypothesis": "s1"}
+    b = DeployBackend()
+    out = Coordinator(b, RunConfig(change_expansion=True, synthesis=True, synthesis_ranking="gate"),
+                      adapter=ScriptedAdapter(rounds() + [syn])).run()
+    assert out.report.status == "diagnosis" and out.context["synthesis"]["accepted_rank"] == 2
+    b2 = DeployBackend()
+    out2 = Coordinator(b2, RunConfig(change_expansion=True, synthesis=True), adapter=ScriptedAdapter(rounds() + [syn])).run()
+    assert out2.report.status == "insufficient_evidence"          # default: only the top choice is checked
