@@ -39,8 +39,15 @@ function QtyStepper(props: { value: number; onChange: (n: number) => void; label
 function ProductCard({ p, qty, setQty }: { p: Product; qty: number; setQty: (n: number) => void }) {
   return (
     <article className="product">
-      <div className="product-sku mono">{p.sku}</div>
+      <div className="product-thumb" aria-hidden="true">
+        {p.name
+          .split(' ')
+          .slice(0, 2)
+          .map((w) => w[0].toUpperCase())
+          .join('')}
+      </div>
       <h3>{p.name}</h3>
+      <div className="product-sku mono">{p.sku}</div>
       <div className="product-price">{money(p.price)}</div>
       {qty === 0 ? (
         <button className="btn" onClick={() => setQty(1)}>
