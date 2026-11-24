@@ -256,7 +256,9 @@ def load_live_stack(incident: Incident, repo: Optional[str] = None, capture_dir=
     from blackbox.connectors.tempo import TempoTraces
     github = None
     repo = repo or os.environ.get("BLACKBOX_GITHUB_REPO", "likhith2366/blackbox-demo-shop")
-    if os.environ.get("BLACKBOX_GIT_REPO_DIR"):
+    from blackbox.connectors.jira import setting
+    if setting("BLACKBOX_GIT_REPO_DIR"):
+        os.environ.setdefault("BLACKBOX_GIT_REPO_DIR", setting("BLACKBOX_GIT_REPO_DIR"))
         # explicitly configured self-hosted code source (the company's own git repository); not a fallback
         from blackbox.connectors.local_git import LocalGitConnector
         github = LocalGitConnector()

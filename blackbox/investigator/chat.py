@@ -73,16 +73,17 @@ ABSENCE_CHECKS = [
 
 
 def verify(answer: str, citations: list[str], evidence: dict[str, EvidenceRecord],
-           queried: set[str] | None = None) -> dict:
+           queried: set[str] | None = None, context: str = "") -> dict:
+    """`context` is text the user can already see (the incident's alert and window); details from it need no citation."""
     queried = queried or set()
     cited = [c for c in dict.fromkeys(citations or [])]
     unknown = [c for c in cited if c not in evidence]
     known = [evidence[c] for c in cited if c in evidence]
     def norm(x: str) -> str:
         return re.sub(r"[\s\"'`]", "", x.lower())
-    hay = norm(" ".join(r.evidence_id + " " + r.title + " " + r.content for r in known))
+    hay = norm(" ".join(r.evidence_id + " " + r.title + " " + r.content for r in known) + " " + (context or ""))
     tokens = sorted({t for t in _TOKEN.findall(answer or "")})
-    unsupported = [t for t in tokens if norm(t) not in hay]
+    unsupported = [t for t in tokens if norm(t) not in hay and norm(re.sub(r"^v(?=\d)", "", t)) not in hay]
     no_info = bool(re.search(r"(?i)\b(not enough|insufficient|cannot|can't|could not|couldn't|no evidence|unknown|not found)\b",
                              answer or ""))
     unqueried = []
@@ -219,10 +220,15 @@ class ChatSession:
             answer = "I could not reach an answer within the tool budget for this question."
         user = Turn("user", question)
         bot = Turn("assistant", answer, citations=cites, confidence=conf, tools=tools_used,
-                   verification=verify(answer, cites, self.evidence, self._queried_tools()),
+                   verification=verify(answer, cites, self.evidence, self._queried_tools(), self._context()),
                    seconds=round(time.time() - t0, 1))
         self.turns += [user, bot]
         return bot
+
+    def _context(self) -> str:
+        inc = self.backend.incident()
+        a = inc.alert
+        return f"{a.title} {a.service} {a.condition} {a.fired_at} {inc.window_start} {inc.investigation_cutoff}"
 
     def _queried_tools(self) -> set[str]:
         return {x["tool"] for t in self.turns for x in t.tools if x.get("status") in ("ok", "empty")} |                {json.loads(k)[0] for k in self._calls}

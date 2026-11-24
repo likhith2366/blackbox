@@ -92,3 +92,10 @@ def test_absence_claim_with_words_in_between_is_caught():
     v = verify("Timeouts (log:a1). No evidence of recent deployments or commits is available.", ["log:a1"], EV,
                queried={"search_logs"})
     assert set(v["unqueried_absence_claims"]) >= {"deployments", "commits"} and v["verdict"] == "partly verified"
+
+
+def test_v_prefixed_versions_and_alert_details_are_not_flagged():
+    ev = {"deploy:d-9": R("deploy:d-9", "deployment d-9 of checkout-svc version 1.9.0")}
+    v = verify("checkout-svc v1.9.0 (deploy:d-9) broke orders; error_rate > 0.1 for 15s.", ["deploy:d-9"], ev,
+               context="error_rate > 0.1 for 15s")
+    assert v["unsupported_tokens"] == [] and v["verdict"] == "verified"
