@@ -12,36 +12,21 @@ import { Trace } from '../components/trace'
 export function RunDetailView({ runId }: { runId: string }) {
   const st = useLoad(() => api.run(runId), [runId])
   const { query } = useRoute()
-  const fromHistory = query.get('from') === 'history'
   const batch = runId.includes('~') ? runId.split('~')[0] : undefined
   const summary = useLoad(() => api.runs(batch), [batch])
   const saved = summary.data?.find((r) => r.run_id === runId)
   return (
     <div className="page">
-      <nav className="breadcrumb small">
-        {fromHistory ? (
-          <>
-            <a href={href('runs')}>Results &amp; history</a> › <strong>{runId}</strong> <span className="muted">(opened from the history list)</span>
-          </>
-        ) : (
-          <a href={href('runs')}>← all runs</a>
-        )}
-        <div className="muted">
-          route <code className="wrap">{window.location.hash}</code>
-          {saved?.modified && (
+      {saved && (saved.path || saved.modified) && (
+        <p className="source-line small muted">
+          {saved.path && (
             <>
-              {' '}
-              · saved {fmtTime(saved.modified)}
+              Saved file <code>{saved.path}</code>
             </>
           )}
-          {saved?.path && (
-            <>
-              {' '}
-              · <code>{saved.path}</code>
-            </>
-          )}
-        </div>
-      </nav>
+          {saved.modified && <> · saved {fmtTime(saved.modified)}</>}
+        </p>
+      )}
       {st.fromFixture && <FixtureBanner />}
       {st.loading && <Loading what={`run ${runId}`} />}
       {st.error && <ErrorBox error={st.error} onRetry={st.reload} />}

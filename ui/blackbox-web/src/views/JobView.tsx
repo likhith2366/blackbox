@@ -290,6 +290,7 @@ export function JobView({ jobId }: { jobId: string }) {
                 {['queued', 'waiting_gpu', 'running'].includes(job.status) && (
                   <button
                     type="button"
+                    className="danger"
                     disabled={acting}
                     onClick={() => {
                       setActing(true)
@@ -303,6 +304,7 @@ export function JobView({ jobId }: { jobId: string }) {
                 {['failed', 'cancelled'].includes(job.status) && (
                   <button
                     type="button"
+                    className="primary"
                     disabled={acting}
                     onClick={() => {
                       setActing(true)

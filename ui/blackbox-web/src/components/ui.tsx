@@ -66,8 +66,8 @@ export function Loading({ what }: { what: string }) {
 export function ErrorBox({ error, onRetry }: { error: string; onRetry?: () => void }) {
   return (
     <div className="state state-error" role="alert">
-      <strong>Error</strong>
-      <pre className="pre-wrap">{error}</pre>
+      <strong>Something went wrong</strong>
+      <p className="error-message">{error}</p>
       {onRetry && (
         <button type="button" onClick={onRetry}>
           Retry
