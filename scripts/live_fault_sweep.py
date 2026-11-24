@@ -45,6 +45,7 @@ def main():
     ap.add_argument("--faults", default=",".join(FAULTS))
     ap.add_argument("--out", default=str(ROOT / "runs" / "live_faults"))
     ap.add_argument("--settle", type=int, default=75, help="seconds of healthy traffic before injecting")
+    ap.add_argument("--config", default="configs/frozen_v1.yaml", help="investigator settings (dev_v2.yaml adds the change check)")
     a = ap.parse_args()
     import yaml
     from demo import controller
@@ -55,7 +56,7 @@ def main():
     from blackbox.schemas import RunConfig
     from blackbox.systems import run_system
     from blackbox.api import gpu_lock
-    cfg = RunConfig(**yaml.safe_load((ROOT / "configs" / "frozen_v1.yaml").read_text(encoding="utf-8")))
+    cfg = RunConfig(**yaml.safe_load((ROOT / a.config).read_text(encoding="utf-8")))
     out_root = Path(a.out)
     for fault in [f.strip() for f in a.faults.split(",") if f.strip()]:
         d = out_root / fault

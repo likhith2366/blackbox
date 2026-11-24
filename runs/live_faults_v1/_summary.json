@@ -1,0 +1,112 @@
+[
+ {
+  "fault": "endpoint-port",
+  "family": "config_mismatch_endpoint",
+  "alert": "yes",
+  "status": "insufficient_evidence",
+  "top_cause": " :: ",
+  "keyword_match": false,
+  "change_retrieved": [],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 1,
+   "search_traces": 5
+  },
+  "backends": {
+   "prometheus": 1,
+   "tempo": 8
+  },
+  "calls": 6,
+  "rounds": 6,
+  "wall_s": 96.98
+ },
+ {
+  "fault": "index-migration",
+  "family": "missing_index",
+  "alert": "yes",
+  "status": "diagnosis",
+  "top_cause": "checkout-svc :: increased error rate due to payment-svc timeout",
+  "keyword_match": false,
+  "change_retrieved": [],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 4,
+   "search_traces": 3
+  },
+  "backends": {
+   "prometheus": 3,
+   "tempo": 16
+  },
+  "calls": 7,
+  "rounds": 6,
+  "wall_s": 152.78
+ },
+ {
+  "fault": "payment-stop",
+  "family": "stopped_dependency",
+  "alert": "yes",
+  "status": "insufficient_evidence",
+  "top_cause": " :: ",
+  "keyword_match": false,
+  "change_retrieved": [],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 1,
+   "search_traces": 5
+  },
+  "backends": {
+   "prometheus": 1,
+   "tempo": 21
+  },
+  "calls": 6,
+  "rounds": 6,
+  "wall_s": 120.13
+ },
+ {
+  "fault": "pool-fastpath",
+  "family": "connection_leak",
+  "alert": "yes",
+  "status": "insufficient_evidence",
+  "top_cause": " :: ",
+  "keyword_match": false,
+  "change_retrieved": [],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 1,
+   "search_traces": 5
+  },
+  "backends": {
+   "prometheus": 1,
+   "tempo": 17
+  },
+  "calls": 6,
+  "rounds": 6,
+  "wall_s": 106.17
+ },
+ {
+  "fault": "pool-override",
+  "family": "config_override_pool_size",
+  "alert": "no"
+ },
+ {
+  "fault": "retry-policy",
+  "family": "retry_amplification",
+  "alert": "yes",
+  "status": "insufficient_evidence",
+  "top_cause": " :: ",
+  "keyword_match": false,
+  "change_retrieved": [],
+  "change_cited": [],
+  "tools": {
+   "get_metrics": 1,
+   "search_traces": 5
+  },
+  "backends": {
+   "prometheus": 1,
+   "tempo": 8
+  },
+  "calls": 6,
+  "rounds": 6,
+  "wall_s": 130.45
+ }
+]

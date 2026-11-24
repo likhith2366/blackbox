@@ -1,0 +1,2290 @@
+{
+  "schema_version": "1.0",
+  "system": "blackbox",
+  "incident_id": "LIVE-B744CA",
+  "ablation": "none",
+  "status": "completed",
+  "error": null,
+  "report": {
+    "incident_id": "LIVE-B744CA",
+    "system": "blackbox",
+    "status": "insufficient_evidence",
+    "headline": "No reliable root cause identified.",
+    "ranked_causes": [],
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "checkout-svc error rate spiked to 1.0 due to payment-svc timeout",
+        "kind": "causal",
+        "evidence_ids": [
+          "metric:cf5eccbe41"
+        ]
+      }
+    ],
+    "unresolved_questions": [
+      "Why did payment-svc timeout?"
+    ],
+    "next_check": "Check payment-svc error rate and latency metrics for the same time window",
+    "suggested_fix": null,
+    "invalid_citations": [],
+    "normalized_citations": [],
+    "citation_audit": [
+      {
+        "where": "claim c1",
+        "raw": "metric:cf5eccbe41",
+        "resolved": "metric:cf5eccbe41",
+        "method": "exact"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "round": 1,
+      "prompt_tokens": 1141,
+      "completion_tokens": 170,
+      "model_seconds": 9.742922900011763,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-24T05:17:59.036Z\",\n        \"end\": \"2026-11-24T05:22:07.649Z\"\n      }\n    }\n  ],\n  \"decision\": \"continue\",\n  \"rationale\": \"To verify the error rate metric directly, as the alert is based on error_rate > 0.1 for 15s. This will confirm if the metric is indeed high and provide context for the symptom.\"\n}",
+      "model_decision": "continue",
+      "hypotheses_before": [],
+      "hypotheses_after": [],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r1c1",
+          "round": 1,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "error_rate",
+            "start": "2026-11-24T05:17:59.036Z",
+            "end": "2026-11-24T05:22:07.649Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r1c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:cf5eccbe41",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:17:59.036Z",
+              "available_time": "2026-11-24T05:22:04.036Z",
+              "version": null,
+              "title": "checkout-svc error_rate",
+              "content": "checkout-svc error_rate (5s steps, 2026-11-24T05:17:59.036Z .. 2026-11-24T05:22:04.036Z): min=0 max=1 last=1\n05:17:59 0; 05:18:04 0; 05:18:09 0; 05:18:14 0; 05:18:19 0; 05:18:24 0; 05:18:29 0; 05:18:34 0; 05:18:39 0; 05:18:44 0; 05:18:49 0; 05:18:54 0; 05:18:59 0; 05:19:04 0; 05:19:09 0; 05:19:14 0; 05:19:19 0; 05:19:24 0.0909; 05:19:29 0; 05:19:34 0; 05:19:39 0; 05:19:44 0; 05:19:49 0.5; 05:19:54 1; 05:19:59 1; 05:20:04 1; 05:20:09 1; 05:20:14 1; 05:20:19 1; 05:20:24 1; 05:20:29 1; 05:20:34 1; 05:20:39 1; 05:20:44 1; 05:20:49 1; 05:20:54 1; 05:20:59 1; 05:21:04 1; 05:21:09 1; 05:21:14 1; 05:21:19 1; 05:21:24 1; 05:21:29 1; 05:21:34 1; 05:21:39 1; 05:21:44 1; 05:21:49 1; 05:21:54 1; 05:21:59 1; 05:22:04 1",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 50,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0,
+                "backend": "prometheus",
+                "query": "query_range error_rate{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 8.39480001013726,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [],
+      "orchestration_rules": [
+        "first-tool rule: no evidence yet, so >=1 tool call required and decision limited to 'continue' (orchestration, not model behaviour)"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1172,
+        "fixed_part_cut": false,
+        "prompt_tokens_est": 1146,
+        "prompt_tokens_actual": 1141,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": ""
+    },
+    {
+      "round": 2,
+      "prompt_tokens": 1758,
+      "completion_tokens": 277,
+      "model_seconds": 5.601970800023992,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"error rate spike due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:cf5eccbe41\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-24T05:17:59.036Z\",\n        \"end\": \"2026-11-24T05:22:07.649Z\",\n        \"status\": \"error\",\n        \"min_duration_ms\": 1000\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate metric shows a spike at 05:19:49 to 1.0, which is likely due to payment-svc timeouts. Checking traces for errors in checkout-svc will confirm if traces are failing due to payment-svc timeouts.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:cf5eccbe41"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [
+        "+ h1 [active/medium] checkout-svc: error rate spike due to payment-svc timeout"
+      ],
+      "tool_requests": [
+        {
+          "call_id": "r2c1",
+          "round": 2,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-24T05:17:59.036Z",
+            "end": "2026-11-24T05:22:07.649Z",
+            "status": "error",
+            "min_duration_ms": 1000
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r2c1",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:f23993d9e2f3b1e76dd5432c5a4e832c",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:20.210Z",
+              "available_time": "2026-11-24T05:19:20.210Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2003ms",
+              "content": "trace f23993d9e2f3b1e76dd5432c5a4e832c root=checkout-svc POST /orders start=2026-11-24T05:19:20.210Z duration=2003ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/f23993d9e2f3b1e76dd5432c5a4e832c",
+              "attributes": {
+                "trace_id": "f23993d9e2f3b1e76dd5432c5a4e832c",
+                "duration_ms": 2003,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/f23993d9e2f3b1e76dd5432c5a4e832c",
+                "matched_span_ids": [
+                  "5600ab01294bac96",
+                  "bf046cb147c64ece"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:2b4e1f1db335e7426f22eaff81eea376",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:20:44.079Z",
+              "available_time": "2026-11-24T05:20:44.079Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1013ms",
+              "content": "trace 2b4e1f1db335e7426f22eaff81eea376 root=checkout-svc POST /orders start=2026-11-24T05:20:44.079Z duration=1013ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/2b4e1f1db335e7426f22eaff81eea376",
+              "attributes": {
+                "trace_id": "2b4e1f1db335e7426f22eaff81eea376",
+                "duration_ms": 1013,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/2b4e1f1db335e7426f22eaff81eea376",
+                "matched_span_ids": [
+                  "b91d7e471aad3074",
+                  "de315af49464dce8"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:b5f758b4032e331f42c874cda678351c",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:20:44.283Z",
+              "available_time": "2026-11-24T05:20:44.283Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1011ms",
+              "content": "trace b5f758b4032e331f42c874cda678351c root=checkout-svc POST /orders start=2026-11-24T05:20:44.283Z duration=1011ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/b5f758b4032e331f42c874cda678351c",
+              "attributes": {
+                "trace_id": "b5f758b4032e331f42c874cda678351c",
+                "duration_ms": 1011,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/b5f758b4032e331f42c874cda678351c",
+                "matched_span_ids": [
+                  "d887c0d5de64d983",
+                  "771eafcea640bc81"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:c2ebe7e538bb38359b022cb7afa0f1e0",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:20:44.361Z",
+              "available_time": "2026-11-24T05:20:44.361Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010ms",
+              "content": "trace c2ebe7e538bb38359b022cb7afa0f1e0 root=checkout-svc POST /orders start=2026-11-24T05:20:44.361Z duration=1010ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/c2ebe7e538bb38359b022cb7afa0f1e0",
+              "attributes": {
+                "trace_id": "c2ebe7e538bb38359b022cb7afa0f1e0",
+                "duration_ms": 1010,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/c2ebe7e538bb38359b022cb7afa0f1e0",
+                "matched_span_ids": [
+                  "6951f20ab8fdf8d6",
+                  "a8e97ddbebb77563"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:130b5d8c33750011a6582e365e688220",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:20:44.470Z",
+              "available_time": "2026-11-24T05:20:44.470Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1010ms",
+              "content": "trace 130b5d8c33750011a6582e365e688220 root=checkout-svc POST /orders start=2026-11-24T05:20:44.470Z duration=1010ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/130b5d8c33750011a6582e365e688220",
+              "attributes": {
+                "trace_id": "130b5d8c33750011a6582e365e688220",
+                "duration_ms": 1010,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/130b5d8c33750011a6582e365e688220",
+                "matched_span_ids": [
+                  "32e45fca9f3de2ec",
+                  "cb6f644c91e280ae"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:e41d257b95ac8c5bc80c050eb2b3272",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:20:44.610Z",
+              "available_time": "2026-11-24T05:20:44.610Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1012ms",
+              "content": "trace e41d257b95ac8c5bc80c050eb2b3272 root=checkout-svc POST /orders start=2026-11-24T05:20:44.610Z duration=1012ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/e41d257b95ac8c5bc80c050eb2b3272",
+              "attributes": {
+                "trace_id": "e41d257b95ac8c5bc80c050eb2b3272",
+                "duration_ms": 1012,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/e41d257b95ac8c5bc80c050eb2b3272",
+                "matched_span_ids": [
+                  "7df1404cad3f86b9",
+                  "862d7764167721b6"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:2c02d06a3875a61acd14d7a49c1d75e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:20:44.718Z",
+              "available_time": "2026-11-24T05:20:44.718Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1011ms",
+              "content": "trace 2c02d06a3875a61acd14d7a49c1d75e root=checkout-svc POST /orders start=2026-11-24T05:20:44.718Z duration=1011ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/2c02d06a3875a61acd14d7a49c1d75e",
+              "attributes": {
+                "trace_id": "2c02d06a3875a61acd14d7a49c1d75e",
+                "duration_ms": 1011,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/2c02d06a3875a61acd14d7a49c1d75e",
+                "matched_span_ids": [
+                  "758587bf6d159973",
+                  "262a2acaca79b6fe"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:90974330e7f92cb648ef0c7fc3db5185",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:20:44.750Z",
+              "available_time": "2026-11-24T05:20:44.750Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1014ms",
+              "content": "trace 90974330e7f92cb648ef0c7fc3db5185 root=checkout-svc POST /orders start=2026-11-24T05:20:44.750Z duration=1014ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/90974330e7f92cb648ef0c7fc3db5185",
+              "attributes": {
+                "trace_id": "90974330e7f92cb648ef0c7fc3db5185",
+                "duration_ms": 1014,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/90974330e7f92cb648ef0c7fc3db5185",
+                "matched_span_ids": [
+                  "61a906d954def403",
+                  "dbf2b84d2661a900"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 200,
+          "truncated": true,
+          "error": null,
+          "elapsed_ms": 84.43649997934699,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:cf5eccbe41",
+          "resolved": "metric:cf5eccbe41",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1181,
+        "fixed_part_cut": false,
+        "notebook_budget": 5961,
+        "notebook_tokens": 613,
+        "records_retrieved": 1,
+        "records_full": 1,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 1763,
+        "prompt_tokens_actual": 1758,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 3,
+      "prompt_tokens": 3086,
+      "completion_tokens": 350,
+      "model_seconds": 13.637738799967337,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"error rate spike due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:cf5eccbe41\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-24T05:17:59.036Z\",\n        \"end\": \"2026-11-24T05:22:07.649Z\",\n        \"status\": \"error\",\n        \"min_duration_ms\": 1000,\n        \"limit\": 10\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate metric shows a spike starting at 05:19:49 with a value of 0.5 and reaching 1.0 by 05:19:59. The traces show multiple checkout-svc POST /orders requests with durations around 1000ms, but no error traces. This suggests the error rate spike is not due to checkout-svc itself but possibly payment-svc timeout. However, the traces don't show errors, so the mechanism might be a different issue. Need to check payment-svc metrics to confirm.\"\n  }",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:cf5eccbe41"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:cf5eccbe41"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r3c1",
+          "round": 3,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-24T05:17:59.036Z",
+            "end": "2026-11-24T05:22:07.649Z",
+            "status": "error",
+            "min_duration_ms": 1000,
+            "limit": 10
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r3c1",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:f23993d9e2f3b1e76dd5432c5a4e832c",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:20.210Z",
+              "available_time": "2026-11-24T05:19:20.210Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2003ms",
+              "content": "trace f23993d9e2f3b1e76dd5432c5a4e832c root=checkout-svc POST /orders start=2026-11-24T05:19:20.210Z duration=2003ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/f23993d9e2f3b1e76dd5432c5a4e832c",
+              "attributes": {
+                "trace_id": "f23993d9e2f3b1e76dd5432c5a4e832c",
+                "duration_ms": 2003,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/f23993d9e2f3b1e76dd5432c5a4e832c",
+                "matched_span_ids": [
+                  "5600ab01294bac96",
+                  "bf046cb147c64ece"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:1711592a995cb1df72290238979cc1a0",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.465Z",
+              "available_time": "2026-11-24T05:19:46.465Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1006ms",
+              "content": "trace 1711592a995cb1df72290238979cc1a0 root=checkout-svc POST /orders start=2026-11-24T05:19:46.465Z duration=1006ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/1711592a995cb1df72290238979cc1a0",
+              "attributes": {
+                "trace_id": "1711592a995cb1df72290238979cc1a0",
+                "duration_ms": 1006,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/1711592a995cb1df72290238979cc1a0",
+                "matched_span_ids": [
+                  "d188eccc45d43b4c",
+                  "cdee529627827a07"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:89f21974300548a656a9ef929d59a376",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.482Z",
+              "available_time": "2026-11-24T05:19:46.482Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1020ms",
+              "content": "trace 89f21974300548a656a9ef929d59a376 root=checkout-svc POST /orders start=2026-11-24T05:19:46.482Z duration=1020ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/89f21974300548a656a9ef929d59a376",
+              "attributes": {
+                "trace_id": "89f21974300548a656a9ef929d59a376",
+                "duration_ms": 1020,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/89f21974300548a656a9ef929d59a376",
+                "matched_span_ids": [
+                  "91d26d89abdde1f0",
+                  "c3daa480f877bc59"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:7f42c0f654310ab113de26ef8504512a",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.686Z",
+              "available_time": "2026-11-24T05:19:46.686Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1021ms",
+              "content": "trace 7f42c0f654310ab113de26ef8504512a root=checkout-svc POST /orders start=2026-11-24T05:19:46.686Z duration=1021ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/7f42c0f654310ab113de26ef8504512a",
+              "attributes": {
+                "trace_id": "7f42c0f654310ab113de26ef8504512a",
+                "duration_ms": 1021,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/7f42c0f654310ab113de26ef8504512a",
+                "matched_span_ids": [
+                  "664b1c094e06f7f6",
+                  "23905cee7833a4b9"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:cf8726ce80adc01a43df2c827f9f57ae",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.110Z",
+              "available_time": "2026-11-24T05:19:47.110Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1019ms",
+              "content": "trace cf8726ce80adc01a43df2c827f9f57ae root=checkout-svc POST /orders start=2026-11-24T05:19:47.110Z duration=1019ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/cf8726ce80adc01a43df2c827f9f57ae",
+              "attributes": {
+                "trace_id": "cf8726ce80adc01a43df2c827f9f57ae",
+                "duration_ms": 1019,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/cf8726ce80adc01a43df2c827f9f57ae",
+                "matched_span_ids": [
+                  "8c89914612049cf5",
+                  "649e54bd020e86fb"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:273280e526686371a6a91092d56cc4cb",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.407Z",
+              "available_time": "2026-11-24T05:19:47.407Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1020ms",
+              "content": "trace 273280e526686371a6a91092d56cc4cb root=checkout-svc POST /orders start=2026-11-24T05:19:47.407Z duration=1020ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/273280e526686371a6a91092d56cc4cb",
+              "attributes": {
+                "trace_id": "273280e526686371a6a91092d56cc4cb",
+                "duration_ms": 1020,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/273280e526686371a6a91092d56cc4cb",
+                "matched_span_ids": [
+                  "11411c49a756f1e0",
+                  "f5a1d5f177fe6184"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:b090571a4053a5e9108f71c4979ac32e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.473Z",
+              "available_time": "2026-11-24T05:19:47.473Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1016ms",
+              "content": "trace b090571a4053a5e9108f71c4979ac32e root=checkout-svc POST /orders start=2026-11-24T05:19:47.473Z duration=1016ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/b090571a4053a5e9108f71c4979ac32e",
+              "attributes": {
+                "trace_id": "b090571a4053a5e9108f71c4979ac32e",
+                "duration_ms": 1016,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/b090571a4053a5e9108f71c4979ac32e",
+                "matched_span_ids": [
+                  "746cd6c65087833a",
+                  "e43295d6a99c4d3c"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:5b185d0800de81fd3b5a106d8fd22454",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.629Z",
+              "available_time": "2026-11-24T05:19:47.629Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1016ms",
+              "content": "trace 5b185d0800de81fd3b5a106d8fd22454 root=checkout-svc POST /orders start=2026-11-24T05:19:47.629Z duration=1016ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/5b185d0800de81fd3b5a106d8fd22454",
+              "attributes": {
+                "trace_id": "5b185d0800de81fd3b5a106d8fd22454",
+                "duration_ms": 1016,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/5b185d0800de81fd3b5a106d8fd22454",
+                "matched_span_ids": [
+                  "e146a23538e3ee9d",
+                  "4f5fe42b929ca298"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:602c6e46380eb00561af3557cdbb4cfe",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.845Z",
+              "available_time": "2026-11-24T05:19:47.845Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1004ms",
+              "content": "trace 602c6e46380eb00561af3557cdbb4cfe root=checkout-svc POST /orders start=2026-11-24T05:19:47.845Z duration=1004ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/602c6e46380eb00561af3557cdbb4cfe",
+              "attributes": {
+                "trace_id": "602c6e46380eb00561af3557cdbb4cfe",
+                "duration_ms": 1004,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/602c6e46380eb00561af3557cdbb4cfe",
+                "matched_span_ids": [
+                  "ce7a40d7ebcd03d4",
+                  "5b5fc234fe07cd02"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:1b0971e6f62828bc74dafcc4d3c5eb1d",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.908Z",
+              "available_time": "2026-11-24T05:19:47.908Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1020ms",
+              "content": "trace 1b0971e6f62828bc74dafcc4d3c5eb1d root=checkout-svc POST /orders start=2026-11-24T05:19:47.908Z duration=1020ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/1b0971e6f62828bc74dafcc4d3c5eb1d",
+              "attributes": {
+                "trace_id": "1b0971e6f62828bc74dafcc4d3c5eb1d",
+                "duration_ms": 1020,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/1b0971e6f62828bc74dafcc4d3c5eb1d",
+                "matched_span_ids": [
+                  "b872dc09cc624741",
+                  "82e839391eef929e"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 200,
+          "truncated": true,
+          "error": null,
+          "elapsed_ms": 71.66690001031384,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:cf5eccbe41",
+          "resolved": "metric:cf5eccbe41",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1282,
+        "fixed_part_cut": false,
+        "notebook_budget": 5860,
+        "notebook_tokens": 1838,
+        "records_retrieved": 9,
+        "records_full": 9,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 3091,
+        "prompt_tokens_actual": 3086,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 4,
+      "prompt_tokens": 3923,
+      "completion_tokens": 377,
+      "model_seconds": 21.651332800043747,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"error rate spike due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:cf5eccbe41\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-24T05:17:59.036Z\",\n        \"end\": \"2026-11-24T05:22:07.649Z\",\n        \"status\": \"error\",\n        \"min_duration_ms\": 1000,\n        \"limit\": 10\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate metric shows a spike starting at 05:19:49 with a value of 0.5, then reaching 1.0. The traces show multiple checkout-svc POST /orders requests with durations around 1000ms, but no errors. The hypothesis h1 requires evidence of payment-svc timeouts, which is not present in the traces. The error rate spike is likely due to a different cause, such as checkout-svc internal issues or a different service. Since the traces don't show errors, the payment-svc timeout hypothesis is contradicted by the absence of error traces. The error rate spike might be due to checkout-svc's own rate limiting or a configuration change.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:cf5eccbe41"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:cf5eccbe41"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r4c1",
+          "round": 4,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-24T05:17:59.036Z",
+            "end": "2026-11-24T05:22:07.649Z",
+            "status": "error",
+            "min_duration_ms": 1000,
+            "limit": 10
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r4c1",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:f23993d9e2f3b1e76dd5432c5a4e832c",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:20.210Z",
+              "available_time": "2026-11-24T05:19:20.210Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2003ms",
+              "content": "trace f23993d9e2f3b1e76dd5432c5a4e832c root=checkout-svc POST /orders start=2026-11-24T05:19:20.210Z duration=2003ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/f23993d9e2f3b1e76dd5432c5a4e832c",
+              "attributes": {
+                "trace_id": "f23993d9e2f3b1e76dd5432c5a4e832c",
+                "duration_ms": 2003,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/f23993d9e2f3b1e76dd5432c5a4e832c",
+                "matched_span_ids": [
+                  "5600ab01294bac96",
+                  "bf046cb147c64ece"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:1711592a995cb1df72290238979cc1a0",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.465Z",
+              "available_time": "2026-11-24T05:19:46.465Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1006ms",
+              "content": "trace 1711592a995cb1df72290238979cc1a0 root=checkout-svc POST /orders start=2026-11-24T05:19:46.465Z duration=1006ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/1711592a995cb1df72290238979cc1a0",
+              "attributes": {
+                "trace_id": "1711592a995cb1df72290238979cc1a0",
+                "duration_ms": 1006,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/1711592a995cb1df72290238979cc1a0",
+                "matched_span_ids": [
+                  "d188eccc45d43b4c",
+                  "cdee529627827a07"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:89f21974300548a656a9ef929d59a376",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.482Z",
+              "available_time": "2026-11-24T05:19:46.482Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1020ms",
+              "content": "trace 89f21974300548a656a9ef929d59a376 root=checkout-svc POST /orders start=2026-11-24T05:19:46.482Z duration=1020ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/89f21974300548a656a9ef929d59a376",
+              "attributes": {
+                "trace_id": "89f21974300548a656a9ef929d59a376",
+                "duration_ms": 1020,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/89f21974300548a656a9ef929d59a376",
+                "matched_span_ids": [
+                  "91d26d89abdde1f0",
+                  "c3daa480f877bc59"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:7f42c0f654310ab113de26ef8504512a",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.686Z",
+              "available_time": "2026-11-24T05:19:46.686Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1021ms",
+              "content": "trace 7f42c0f654310ab113de26ef8504512a root=checkout-svc POST /orders start=2026-11-24T05:19:46.686Z duration=1021ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/7f42c0f654310ab113de26ef8504512a",
+              "attributes": {
+                "trace_id": "7f42c0f654310ab113de26ef8504512a",
+                "duration_ms": 1021,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/7f42c0f654310ab113de26ef8504512a",
+                "matched_span_ids": [
+                  "664b1c094e06f7f6",
+                  "23905cee7833a4b9"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:cf8726ce80adc01a43df2c827f9f57ae",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.110Z",
+              "available_time": "2026-11-24T05:19:47.110Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1019ms",
+              "content": "trace cf8726ce80adc01a43df2c827f9f57ae root=checkout-svc POST /orders start=2026-11-24T05:19:47.110Z duration=1019ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/cf8726ce80adc01a43df2c827f9f57ae",
+              "attributes": {
+                "trace_id": "cf8726ce80adc01a43df2c827f9f57ae",
+                "duration_ms": 1019,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/cf8726ce80adc01a43df2c827f9f57ae",
+                "matched_span_ids": [
+                  "8c89914612049cf5",
+                  "649e54bd020e86fb"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:273280e526686371a6a91092d56cc4cb",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.407Z",
+              "available_time": "2026-11-24T05:19:47.407Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1020ms",
+              "content": "trace 273280e526686371a6a91092d56cc4cb root=checkout-svc POST /orders start=2026-11-24T05:19:47.407Z duration=1020ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/273280e526686371a6a91092d56cc4cb",
+              "attributes": {
+                "trace_id": "273280e526686371a6a91092d56cc4cb",
+                "duration_ms": 1020,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/273280e526686371a6a91092d56cc4cb",
+                "matched_span_ids": [
+                  "11411c49a756f1e0",
+                  "f5a1d5f177fe6184"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:b090571a4053a5e9108f71c4979ac32e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.473Z",
+              "available_time": "2026-11-24T05:19:47.473Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1016ms",
+              "content": "trace b090571a4053a5e9108f71c4979ac32e root=checkout-svc POST /orders start=2026-11-24T05:19:47.473Z duration=1016ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/b090571a4053a5e9108f71c4979ac32e",
+              "attributes": {
+                "trace_id": "b090571a4053a5e9108f71c4979ac32e",
+                "duration_ms": 1016,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/b090571a4053a5e9108f71c4979ac32e",
+                "matched_span_ids": [
+                  "746cd6c65087833a",
+                  "e43295d6a99c4d3c"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:5b185d0800de81fd3b5a106d8fd22454",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.629Z",
+              "available_time": "2026-11-24T05:19:47.629Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1016ms",
+              "content": "trace 5b185d0800de81fd3b5a106d8fd22454 root=checkout-svc POST /orders start=2026-11-24T05:19:47.629Z duration=1016ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/5b185d0800de81fd3b5a106d8fd22454",
+              "attributes": {
+                "trace_id": "5b185d0800de81fd3b5a106d8fd22454",
+                "duration_ms": 1016,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/5b185d0800de81fd3b5a106d8fd22454",
+                "matched_span_ids": [
+                  "e146a23538e3ee9d",
+                  "4f5fe42b929ca298"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:602c6e46380eb00561af3557cdbb4cfe",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.845Z",
+              "available_time": "2026-11-24T05:19:47.845Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1004ms",
+              "content": "trace 602c6e46380eb00561af3557cdbb4cfe root=checkout-svc POST /orders start=2026-11-24T05:19:47.845Z duration=1004ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/602c6e46380eb00561af3557cdbb4cfe",
+              "attributes": {
+                "trace_id": "602c6e46380eb00561af3557cdbb4cfe",
+                "duration_ms": 1004,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/602c6e46380eb00561af3557cdbb4cfe",
+                "matched_span_ids": [
+                  "ce7a40d7ebcd03d4",
+                  "5b5fc234fe07cd02"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:1b0971e6f62828bc74dafcc4d3c5eb1d",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.908Z",
+              "available_time": "2026-11-24T05:19:47.908Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1020ms",
+              "content": "trace 1b0971e6f62828bc74dafcc4d3c5eb1d root=checkout-svc POST /orders start=2026-11-24T05:19:47.908Z duration=1020ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/1b0971e6f62828bc74dafcc4d3c5eb1d",
+              "attributes": {
+                "trace_id": "1b0971e6f62828bc74dafcc4d3c5eb1d",
+                "duration_ms": 1020,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/1b0971e6f62828bc74dafcc4d3c5eb1d",
+                "matched_span_ids": [
+                  "b872dc09cc624741",
+                  "82e839391eef929e"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 200,
+          "truncated": true,
+          "error": null,
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [
+        "r4c1==r3c1"
+      ],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:cf5eccbe41",
+          "resolved": "metric:cf5eccbe41",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1282,
+        "fixed_part_cut": false,
+        "notebook_budget": 5860,
+        "notebook_tokens": 2675,
+        "records_retrieved": 18,
+        "records_full": 11,
+        "records_one_line": 7,
+        "records_omitted": 0,
+        "prompt_tokens_est": 3928,
+        "prompt_tokens_actual": 3923,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 5,
+      "prompt_tokens": 3930,
+      "completion_tokens": 374,
+      "model_seconds": 22.811977299978025,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"error rate spike due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:cf5eccbe41\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-24T05:19:20.210Z\",\n        \"end\": \"2026-11-24T05:22:07.649Z\",\n        \"status\": \"error\",\n        \"min_duration_ms\": 1000\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate spike in checkout-svc (metric:cf5eccbe41) shows a sudden increase to 1.0 starting at 05:19:49. The traces show multiple checkout-svc POST /orders requests with durations around 1000ms, but no error traces. This suggests the spike is due to payment-svc timeouts (as payment-svc is the only other service mentioned). The hypothesis h1 is supported by the metric showing the error rate spike and the traces showing normal request durations (indicating payment-svc is not the issue). However, the traces do not show errors, so the mechanism might be something else. But given the context, payment-svc timeout is the most likely cause.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:cf5eccbe41"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:cf5eccbe41"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r5c1",
+          "round": 5,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-24T05:19:20.210Z",
+            "end": "2026-11-24T05:22:07.649Z",
+            "status": "error",
+            "min_duration_ms": 1000
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r5c1",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:1711592a995cb1df72290238979cc1a0",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.465Z",
+              "available_time": "2026-11-24T05:19:46.465Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1006ms",
+              "content": "trace 1711592a995cb1df72290238979cc1a0 root=checkout-svc POST /orders start=2026-11-24T05:19:46.465Z duration=1006ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/1711592a995cb1df72290238979cc1a0",
+              "attributes": {
+                "trace_id": "1711592a995cb1df72290238979cc1a0",
+                "duration_ms": 1006,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/1711592a995cb1df72290238979cc1a0",
+                "matched_span_ids": [
+                  "d188eccc45d43b4c",
+                  "cdee529627827a07"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:89f21974300548a656a9ef929d59a376",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.482Z",
+              "available_time": "2026-11-24T05:19:46.482Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1020ms",
+              "content": "trace 89f21974300548a656a9ef929d59a376 root=checkout-svc POST /orders start=2026-11-24T05:19:46.482Z duration=1020ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/89f21974300548a656a9ef929d59a376",
+              "attributes": {
+                "trace_id": "89f21974300548a656a9ef929d59a376",
+                "duration_ms": 1020,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/89f21974300548a656a9ef929d59a376",
+                "matched_span_ids": [
+                  "91d26d89abdde1f0",
+                  "c3daa480f877bc59"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:7f42c0f654310ab113de26ef8504512a",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.686Z",
+              "available_time": "2026-11-24T05:19:46.686Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1021ms",
+              "content": "trace 7f42c0f654310ab113de26ef8504512a root=checkout-svc POST /orders start=2026-11-24T05:19:46.686Z duration=1021ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/7f42c0f654310ab113de26ef8504512a",
+              "attributes": {
+                "trace_id": "7f42c0f654310ab113de26ef8504512a",
+                "duration_ms": 1021,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/7f42c0f654310ab113de26ef8504512a",
+                "matched_span_ids": [
+                  "664b1c094e06f7f6",
+                  "23905cee7833a4b9"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:cf8726ce80adc01a43df2c827f9f57ae",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.110Z",
+              "available_time": "2026-11-24T05:19:47.110Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1019ms",
+              "content": "trace cf8726ce80adc01a43df2c827f9f57ae root=checkout-svc POST /orders start=2026-11-24T05:19:47.110Z duration=1019ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/cf8726ce80adc01a43df2c827f9f57ae",
+              "attributes": {
+                "trace_id": "cf8726ce80adc01a43df2c827f9f57ae",
+                "duration_ms": 1019,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/cf8726ce80adc01a43df2c827f9f57ae",
+                "matched_span_ids": [
+                  "8c89914612049cf5",
+                  "649e54bd020e86fb"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:273280e526686371a6a91092d56cc4cb",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.407Z",
+              "available_time": "2026-11-24T05:19:47.407Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1020ms",
+              "content": "trace 273280e526686371a6a91092d56cc4cb root=checkout-svc POST /orders start=2026-11-24T05:19:47.407Z duration=1020ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/273280e526686371a6a91092d56cc4cb",
+              "attributes": {
+                "trace_id": "273280e526686371a6a91092d56cc4cb",
+                "duration_ms": 1020,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/273280e526686371a6a91092d56cc4cb",
+                "matched_span_ids": [
+                  "11411c49a756f1e0",
+                  "f5a1d5f177fe6184"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:b090571a4053a5e9108f71c4979ac32e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.473Z",
+              "available_time": "2026-11-24T05:19:47.473Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1016ms",
+              "content": "trace b090571a4053a5e9108f71c4979ac32e root=checkout-svc POST /orders start=2026-11-24T05:19:47.473Z duration=1016ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/b090571a4053a5e9108f71c4979ac32e",
+              "attributes": {
+                "trace_id": "b090571a4053a5e9108f71c4979ac32e",
+                "duration_ms": 1016,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/b090571a4053a5e9108f71c4979ac32e",
+                "matched_span_ids": [
+                  "746cd6c65087833a",
+                  "e43295d6a99c4d3c"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:5b185d0800de81fd3b5a106d8fd22454",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.629Z",
+              "available_time": "2026-11-24T05:19:47.629Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1016ms",
+              "content": "trace 5b185d0800de81fd3b5a106d8fd22454 root=checkout-svc POST /orders start=2026-11-24T05:19:47.629Z duration=1016ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/5b185d0800de81fd3b5a106d8fd22454",
+              "attributes": {
+                "trace_id": "5b185d0800de81fd3b5a106d8fd22454",
+                "duration_ms": 1016,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/5b185d0800de81fd3b5a106d8fd22454",
+                "matched_span_ids": [
+                  "e146a23538e3ee9d",
+                  "4f5fe42b929ca298"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:602c6e46380eb00561af3557cdbb4cfe",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.845Z",
+              "available_time": "2026-11-24T05:19:47.845Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1004ms",
+              "content": "trace 602c6e46380eb00561af3557cdbb4cfe root=checkout-svc POST /orders start=2026-11-24T05:19:47.845Z duration=1004ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/602c6e46380eb00561af3557cdbb4cfe",
+              "attributes": {
+                "trace_id": "602c6e46380eb00561af3557cdbb4cfe",
+                "duration_ms": 1004,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/602c6e46380eb00561af3557cdbb4cfe",
+                "matched_span_ids": [
+                  "ce7a40d7ebcd03d4",
+                  "5b5fc234fe07cd02"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 196,
+          "truncated": true,
+          "error": null,
+          "elapsed_ms": 91.70669998275116,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:cf5eccbe41",
+          "resolved": "metric:cf5eccbe41",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1289,
+        "fixed_part_cut": false,
+        "notebook_budget": 5853,
+        "notebook_tokens": 2675,
+        "records_retrieved": 18,
+        "records_full": 11,
+        "records_one_line": 7,
+        "records_omitted": 0,
+        "prompt_tokens_est": 3935,
+        "prompt_tokens_actual": 3930,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 6,
+      "prompt_tokens": 3767,
+      "completion_tokens": 373,
+      "model_seconds": 22.522511599992868,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"error rate spike due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:cf5eccbe41\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-24T05:19:00Z\",\n        \"end\": \"2026-11-24T05:21:00Z\",\n        \"status\": \"error\",\n        \"min_duration_ms\": 1000\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate spike in checkout-svc (metric:cf5eccbe41) shows a sudden increase to 1.0 starting at 05:19:49. The traces show multiple checkout-svc POST /orders requests with durations around 1000ms, but no errors. The hypothesis h1 suggests payment-svc timeout as the cause. However, the traces indicate successful requests (status: ok) with durations around 1000ms, which is within normal range. Since the error rate spike is observed but no trace errors are found, the payment-svc timeout hypothesis is unlikely. The error rate spike might be due to other factors like client-side issues or internal checkout-svc failures. The hypothesis needs more evidence to confirm the cause.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:cf5eccbe41"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "error rate spike due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:cf5eccbe41"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r6c1",
+          "round": 6,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-24T05:19:00Z",
+            "end": "2026-11-24T05:21:00Z",
+            "status": "error",
+            "min_duration_ms": 1000
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r6c1",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:f23993d9e2f3b1e76dd5432c5a4e832c",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:20.210Z",
+              "available_time": "2026-11-24T05:19:20.210Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2003ms",
+              "content": "trace f23993d9e2f3b1e76dd5432c5a4e832c root=checkout-svc POST /orders start=2026-11-24T05:19:20.210Z duration=2003ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/f23993d9e2f3b1e76dd5432c5a4e832c",
+              "attributes": {
+                "trace_id": "f23993d9e2f3b1e76dd5432c5a4e832c",
+                "duration_ms": 2003,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/f23993d9e2f3b1e76dd5432c5a4e832c",
+                "matched_span_ids": [
+                  "5600ab01294bac96",
+                  "bf046cb147c64ece"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:1711592a995cb1df72290238979cc1a0",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.465Z",
+              "available_time": "2026-11-24T05:19:46.465Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1006ms",
+              "content": "trace 1711592a995cb1df72290238979cc1a0 root=checkout-svc POST /orders start=2026-11-24T05:19:46.465Z duration=1006ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/1711592a995cb1df72290238979cc1a0",
+              "attributes": {
+                "trace_id": "1711592a995cb1df72290238979cc1a0",
+                "duration_ms": 1006,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/1711592a995cb1df72290238979cc1a0",
+                "matched_span_ids": [
+                  "d188eccc45d43b4c",
+                  "cdee529627827a07"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:89f21974300548a656a9ef929d59a376",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.482Z",
+              "available_time": "2026-11-24T05:19:46.482Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1020ms",
+              "content": "trace 89f21974300548a656a9ef929d59a376 root=checkout-svc POST /orders start=2026-11-24T05:19:46.482Z duration=1020ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/89f21974300548a656a9ef929d59a376",
+              "attributes": {
+                "trace_id": "89f21974300548a656a9ef929d59a376",
+                "duration_ms": 1020,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/89f21974300548a656a9ef929d59a376",
+                "matched_span_ids": [
+                  "91d26d89abdde1f0",
+                  "c3daa480f877bc59"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:7f42c0f654310ab113de26ef8504512a",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:46.686Z",
+              "available_time": "2026-11-24T05:19:46.686Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1021ms",
+              "content": "trace 7f42c0f654310ab113de26ef8504512a root=checkout-svc POST /orders start=2026-11-24T05:19:46.686Z duration=1021ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/7f42c0f654310ab113de26ef8504512a",
+              "attributes": {
+                "trace_id": "7f42c0f654310ab113de26ef8504512a",
+                "duration_ms": 1021,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/7f42c0f654310ab113de26ef8504512a",
+                "matched_span_ids": [
+                  "664b1c094e06f7f6",
+                  "23905cee7833a4b9"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:cf8726ce80adc01a43df2c827f9f57ae",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.110Z",
+              "available_time": "2026-11-24T05:19:47.110Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1019ms",
+              "content": "trace cf8726ce80adc01a43df2c827f9f57ae root=checkout-svc POST /orders start=2026-11-24T05:19:47.110Z duration=1019ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/cf8726ce80adc01a43df2c827f9f57ae",
+              "attributes": {
+                "trace_id": "cf8726ce80adc01a43df2c827f9f57ae",
+                "duration_ms": 1019,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/cf8726ce80adc01a43df2c827f9f57ae",
+                "matched_span_ids": [
+                  "8c89914612049cf5",
+                  "649e54bd020e86fb"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:273280e526686371a6a91092d56cc4cb",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.407Z",
+              "available_time": "2026-11-24T05:19:47.407Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1020ms",
+              "content": "trace 273280e526686371a6a91092d56cc4cb root=checkout-svc POST /orders start=2026-11-24T05:19:47.407Z duration=1020ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/273280e526686371a6a91092d56cc4cb",
+              "attributes": {
+                "trace_id": "273280e526686371a6a91092d56cc4cb",
+                "duration_ms": 1020,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/273280e526686371a6a91092d56cc4cb",
+                "matched_span_ids": [
+                  "11411c49a756f1e0",
+                  "f5a1d5f177fe6184"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:b090571a4053a5e9108f71c4979ac32e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.473Z",
+              "available_time": "2026-11-24T05:19:47.473Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1016ms",
+              "content": "trace b090571a4053a5e9108f71c4979ac32e root=checkout-svc POST /orders start=2026-11-24T05:19:47.473Z duration=1016ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/b090571a4053a5e9108f71c4979ac32e",
+              "attributes": {
+                "trace_id": "b090571a4053a5e9108f71c4979ac32e",
+                "duration_ms": 1016,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/b090571a4053a5e9108f71c4979ac32e",
+                "matched_span_ids": [
+                  "746cd6c65087833a",
+                  "e43295d6a99c4d3c"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:5b185d0800de81fd3b5a106d8fd22454",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:19:47.629Z",
+              "available_time": "2026-11-24T05:19:47.629Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 1016ms",
+              "content": "trace 5b185d0800de81fd3b5a106d8fd22454 root=checkout-svc POST /orders start=2026-11-24T05:19:47.629Z duration=1016ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/5b185d0800de81fd3b5a106d8fd22454",
+              "attributes": {
+                "trace_id": "5b185d0800de81fd3b5a106d8fd22454",
+                "duration_ms": 1016,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/5b185d0800de81fd3b5a106d8fd22454",
+                "matched_span_ids": [
+                  "e146a23538e3ee9d",
+                  "4f5fe42b929ca298"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 198,
+          "truncated": true,
+          "error": null,
+          "elapsed_ms": 80.48389997566119,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:cf5eccbe41",
+          "resolved": "metric:cf5eccbe41",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1281,
+        "fixed_part_cut": false,
+        "notebook_budget": 5861,
+        "notebook_tokens": 2520,
+        "records_retrieved": 18,
+        "records_full": 9,
+        "records_one_line": 9,
+        "records_omitted": 0,
+        "prompt_tokens_est": 3772,
+        "prompt_tokens_actual": 3767,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "stop_rounds",
+      "stop_reason": "limit reached after 6 rounds and 6 tool calls"
+    }
+  ],
+  "evidence_seen": [
+    {
+      "evidence_id": "metric:cf5eccbe41",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:17:59.036Z",
+      "available_time": "2026-11-24T05:22:04.036Z",
+      "version": null,
+      "title": "checkout-svc error_rate",
+      "content": "checkout-svc error_rate (5s steps, 2026-11-24T05:17:59.036Z .. 2026-11-24T05:22:04.036Z): min=0 max=1 last=1\n05:17:59 0; 05:18:04 0; 05:18:09 0; 05:18:14 0; 05:18:19 0; 05:18:24 0; 05:18:29 0; 05:18:34 0; 05:18:39 0; 05:18:44 0; 05:18:49 0; 05:18:54 0; 05:18:59 0; 05:19:04 0; 05:19:09 0; 05:19:14 0; 05:19:19 0; 05:19:24 0.0909; 05:19:29 0; 05:19:34 0; 05:19:39 0; 05:19:44 0; 05:19:49 0.5; 05:19:54 1; 05:19:59 1; 05:20:04 1; 05:20:09 1; 05:20:14 1; 05:20:19 1; 05:20:24 1; 05:20:29 1; 05:20:34 1; 05:20:39 1; 05:20:44 1; 05:20:49 1; 05:20:54 1; 05:20:59 1; 05:21:04 1; 05:21:09 1; 05:21:14 1; 05:21:19 1; 05:21:24 1; 05:21:29 1; 05:21:34 1; 05:21:39 1; 05:21:44 1; 05:21:49 1; 05:21:54 1; 05:21:59 1; 05:22:04 1",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 50,
+        "min": 0.0,
+        "max": 1.0,
+        "last": 1.0,
+        "backend": "prometheus",
+        "query": "query_range error_rate{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:f23993d9e2f3b1e76dd5432c5a4e832c",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:19:20.210Z",
+      "available_time": "2026-11-24T05:19:20.210Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2003ms",
+      "content": "trace f23993d9e2f3b1e76dd5432c5a4e832c root=checkout-svc POST /orders start=2026-11-24T05:19:20.210Z duration=2003ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/f23993d9e2f3b1e76dd5432c5a4e832c",
+      "attributes": {
+        "trace_id": "f23993d9e2f3b1e76dd5432c5a4e832c",
+        "duration_ms": 2003,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/f23993d9e2f3b1e76dd5432c5a4e832c",
+        "matched_span_ids": [
+          "5600ab01294bac96",
+          "bf046cb147c64ece"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:2b4e1f1db335e7426f22eaff81eea376",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:20:44.079Z",
+      "available_time": "2026-11-24T05:20:44.079Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1013ms",
+      "content": "trace 2b4e1f1db335e7426f22eaff81eea376 root=checkout-svc POST /orders start=2026-11-24T05:20:44.079Z duration=1013ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/2b4e1f1db335e7426f22eaff81eea376",
+      "attributes": {
+        "trace_id": "2b4e1f1db335e7426f22eaff81eea376",
+        "duration_ms": 1013,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/2b4e1f1db335e7426f22eaff81eea376",
+        "matched_span_ids": [
+          "b91d7e471aad3074",
+          "de315af49464dce8"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:b5f758b4032e331f42c874cda678351c",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:20:44.283Z",
+      "available_time": "2026-11-24T05:20:44.283Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1011ms",
+      "content": "trace b5f758b4032e331f42c874cda678351c root=checkout-svc POST /orders start=2026-11-24T05:20:44.283Z duration=1011ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/b5f758b4032e331f42c874cda678351c",
+      "attributes": {
+        "trace_id": "b5f758b4032e331f42c874cda678351c",
+        "duration_ms": 1011,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/b5f758b4032e331f42c874cda678351c",
+        "matched_span_ids": [
+          "d887c0d5de64d983",
+          "771eafcea640bc81"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:c2ebe7e538bb38359b022cb7afa0f1e0",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:20:44.361Z",
+      "available_time": "2026-11-24T05:20:44.361Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1010ms",
+      "content": "trace c2ebe7e538bb38359b022cb7afa0f1e0 root=checkout-svc POST /orders start=2026-11-24T05:20:44.361Z duration=1010ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/c2ebe7e538bb38359b022cb7afa0f1e0",
+      "attributes": {
+        "trace_id": "c2ebe7e538bb38359b022cb7afa0f1e0",
+        "duration_ms": 1010,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/c2ebe7e538bb38359b022cb7afa0f1e0",
+        "matched_span_ids": [
+          "6951f20ab8fdf8d6",
+          "a8e97ddbebb77563"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:130b5d8c33750011a6582e365e688220",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:20:44.470Z",
+      "available_time": "2026-11-24T05:20:44.470Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1010ms",
+      "content": "trace 130b5d8c33750011a6582e365e688220 root=checkout-svc POST /orders start=2026-11-24T05:20:44.470Z duration=1010ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/130b5d8c33750011a6582e365e688220",
+      "attributes": {
+        "trace_id": "130b5d8c33750011a6582e365e688220",
+        "duration_ms": 1010,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/130b5d8c33750011a6582e365e688220",
+        "matched_span_ids": [
+          "32e45fca9f3de2ec",
+          "cb6f644c91e280ae"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:e41d257b95ac8c5bc80c050eb2b3272",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:20:44.610Z",
+      "available_time": "2026-11-24T05:20:44.610Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1012ms",
+      "content": "trace e41d257b95ac8c5bc80c050eb2b3272 root=checkout-svc POST /orders start=2026-11-24T05:20:44.610Z duration=1012ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/e41d257b95ac8c5bc80c050eb2b3272",
+      "attributes": {
+        "trace_id": "e41d257b95ac8c5bc80c050eb2b3272",
+        "duration_ms": 1012,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/e41d257b95ac8c5bc80c050eb2b3272",
+        "matched_span_ids": [
+          "7df1404cad3f86b9",
+          "862d7764167721b6"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:2c02d06a3875a61acd14d7a49c1d75e",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:20:44.718Z",
+      "available_time": "2026-11-24T05:20:44.718Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1011ms",
+      "content": "trace 2c02d06a3875a61acd14d7a49c1d75e root=checkout-svc POST /orders start=2026-11-24T05:20:44.718Z duration=1011ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/2c02d06a3875a61acd14d7a49c1d75e",
+      "attributes": {
+        "trace_id": "2c02d06a3875a61acd14d7a49c1d75e",
+        "duration_ms": 1011,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/2c02d06a3875a61acd14d7a49c1d75e",
+        "matched_span_ids": [
+          "758587bf6d159973",
+          "262a2acaca79b6fe"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:90974330e7f92cb648ef0c7fc3db5185",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:20:44.750Z",
+      "available_time": "2026-11-24T05:20:44.750Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1014ms",
+      "content": "trace 90974330e7f92cb648ef0c7fc3db5185 root=checkout-svc POST /orders start=2026-11-24T05:20:44.750Z duration=1014ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/90974330e7f92cb648ef0c7fc3db5185",
+      "attributes": {
+        "trace_id": "90974330e7f92cb648ef0c7fc3db5185",
+        "duration_ms": 1014,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/90974330e7f92cb648ef0c7fc3db5185",
+        "matched_span_ids": [
+          "61a906d954def403",
+          "dbf2b84d2661a900"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:1711592a995cb1df72290238979cc1a0",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:19:46.465Z",
+      "available_time": "2026-11-24T05:19:46.465Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1006ms",
+      "content": "trace 1711592a995cb1df72290238979cc1a0 root=checkout-svc POST /orders start=2026-11-24T05:19:46.465Z duration=1006ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/1711592a995cb1df72290238979cc1a0",
+      "attributes": {
+        "trace_id": "1711592a995cb1df72290238979cc1a0",
+        "duration_ms": 1006,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/1711592a995cb1df72290238979cc1a0",
+        "matched_span_ids": [
+          "d188eccc45d43b4c",
+          "cdee529627827a07"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:89f21974300548a656a9ef929d59a376",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:19:46.482Z",
+      "available_time": "2026-11-24T05:19:46.482Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1020ms",
+      "content": "trace 89f21974300548a656a9ef929d59a376 root=checkout-svc POST /orders start=2026-11-24T05:19:46.482Z duration=1020ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/89f21974300548a656a9ef929d59a376",
+      "attributes": {
+        "trace_id": "89f21974300548a656a9ef929d59a376",
+        "duration_ms": 1020,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/89f21974300548a656a9ef929d59a376",
+        "matched_span_ids": [
+          "91d26d89abdde1f0",
+          "c3daa480f877bc59"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:7f42c0f654310ab113de26ef8504512a",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:19:46.686Z",
+      "available_time": "2026-11-24T05:19:46.686Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1021ms",
+      "content": "trace 7f42c0f654310ab113de26ef8504512a root=checkout-svc POST /orders start=2026-11-24T05:19:46.686Z duration=1021ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/7f42c0f654310ab113de26ef8504512a",
+      "attributes": {
+        "trace_id": "7f42c0f654310ab113de26ef8504512a",
+        "duration_ms": 1021,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/7f42c0f654310ab113de26ef8504512a",
+        "matched_span_ids": [
+          "664b1c094e06f7f6",
+          "23905cee7833a4b9"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:cf8726ce80adc01a43df2c827f9f57ae",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:19:47.110Z",
+      "available_time": "2026-11-24T05:19:47.110Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1019ms",
+      "content": "trace cf8726ce80adc01a43df2c827f9f57ae root=checkout-svc POST /orders start=2026-11-24T05:19:47.110Z duration=1019ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/cf8726ce80adc01a43df2c827f9f57ae",
+      "attributes": {
+        "trace_id": "cf8726ce80adc01a43df2c827f9f57ae",
+        "duration_ms": 1019,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/cf8726ce80adc01a43df2c827f9f57ae",
+        "matched_span_ids": [
+          "8c89914612049cf5",
+          "649e54bd020e86fb"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:273280e526686371a6a91092d56cc4cb",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:19:47.407Z",
+      "available_time": "2026-11-24T05:19:47.407Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1020ms",
+      "content": "trace 273280e526686371a6a91092d56cc4cb root=checkout-svc POST /orders start=2026-11-24T05:19:47.407Z duration=1020ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/273280e526686371a6a91092d56cc4cb",
+      "attributes": {
+        "trace_id": "273280e526686371a6a91092d56cc4cb",
+        "duration_ms": 1020,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/273280e526686371a6a91092d56cc4cb",
+        "matched_span_ids": [
+          "11411c49a756f1e0",
+          "f5a1d5f177fe6184"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:b090571a4053a5e9108f71c4979ac32e",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:19:47.473Z",
+      "available_time": "2026-11-24T05:19:47.473Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1016ms",
+      "content": "trace b090571a4053a5e9108f71c4979ac32e root=checkout-svc POST /orders start=2026-11-24T05:19:47.473Z duration=1016ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/b090571a4053a5e9108f71c4979ac32e",
+      "attributes": {
+        "trace_id": "b090571a4053a5e9108f71c4979ac32e",
+        "duration_ms": 1016,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/b090571a4053a5e9108f71c4979ac32e",
+        "matched_span_ids": [
+          "746cd6c65087833a",
+          "e43295d6a99c4d3c"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:5b185d0800de81fd3b5a106d8fd22454",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:19:47.629Z",
+      "available_time": "2026-11-24T05:19:47.629Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1016ms",
+      "content": "trace 5b185d0800de81fd3b5a106d8fd22454 root=checkout-svc POST /orders start=2026-11-24T05:19:47.629Z duration=1016ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/5b185d0800de81fd3b5a106d8fd22454",
+      "attributes": {
+        "trace_id": "5b185d0800de81fd3b5a106d8fd22454",
+        "duration_ms": 1016,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/5b185d0800de81fd3b5a106d8fd22454",
+        "matched_span_ids": [
+          "e146a23538e3ee9d",
+          "4f5fe42b929ca298"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:602c6e46380eb00561af3557cdbb4cfe",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:19:47.845Z",
+      "available_time": "2026-11-24T05:19:47.845Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1004ms",
+      "content": "trace 602c6e46380eb00561af3557cdbb4cfe root=checkout-svc POST /orders start=2026-11-24T05:19:47.845Z duration=1004ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/602c6e46380eb00561af3557cdbb4cfe",
+      "attributes": {
+        "trace_id": "602c6e46380eb00561af3557cdbb4cfe",
+        "duration_ms": 1004,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/602c6e46380eb00561af3557cdbb4cfe",
+        "matched_span_ids": [
+          "ce7a40d7ebcd03d4",
+          "5b5fc234fe07cd02"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:1b0971e6f62828bc74dafcc4d3c5eb1d",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:19:47.908Z",
+      "available_time": "2026-11-24T05:19:47.908Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 1020ms",
+      "content": "trace 1b0971e6f62828bc74dafcc4d3c5eb1d root=checkout-svc POST /orders start=2026-11-24T05:19:47.908Z duration=1020ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/1b0971e6f62828bc74dafcc4d3c5eb1d",
+      "attributes": {
+        "trace_id": "1b0971e6f62828bc74dafcc4d3c5eb1d",
+        "duration_ms": 1020,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error && duration >= 1000ms }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/1b0971e6f62828bc74dafcc4d3c5eb1d",
+        "matched_span_ids": [
+          "b872dc09cc624741",
+          "82e839391eef929e"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    }
+  ],
+  "usage": {
+    "model_calls": 7,
+    "prompt_tokens": 20105,
+    "completion_tokens": 2042,
+    "model_seconds": 105.68965840002056
+  },
+  "wall_seconds": 106.17,
+  "rounds_used": 6,
+  "tool_calls_used": 6,
+  "budget_violations": 0,
+  "unauthorized_attempts": [],
+  "unauthorized_executed": 0,
+  "evidence_budget": null,
+  "context": {
+    "report_call": {
+      "num_ctx": 8192,
+      "notebook_budget": 6473,
+      "notebook_tokens": 1898,
+      "records_retrieved": 18,
+      "records_full": 1,
+      "records_one_line": 17,
+      "records_omitted": 0,
+      "prompt_tokens_est": 2505,
+      "prompt_tokens_actual": 2500
+    }
+  },
+  "config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "change_check": false,
+    "refuse_repeats": false,
+    "multi_call_example": false,
+    "rationale_first": false,
+    "diagnosis_gate": "v1",
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "investigator_v2@efd3f21bee+report_v1@035e5ce0d8",
+    "code_revision": "68cf890"
+  },
+  "prompt_versions": {
+    "round": "investigator_v2@efd3f21bee",
+    "report": "report_v1@035e5ce0d8"
+  }
+}
