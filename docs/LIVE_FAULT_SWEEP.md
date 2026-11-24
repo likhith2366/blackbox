@@ -35,3 +35,30 @@ Five runs (pool-override in all three sweeps, index-migration once) had no alert
 - When the evidence is placed in front of it (Steps 4–6), it names the right change but still not the mechanism.
 
 Infrastructure is not the bottleneck: every source answered live, and the decisive records were reachable.
+
+## dev_v3: change expansion + from-scratch synthesis (`configs/dev_v3.yaml`, local git, `runs/live_faults_v3_localgit`)
+
+These are two development options in `blackbox/investigator/synthesis.py` and the coordinator, off by default.
+- **Change expansion:** the coordinator follows each deployment in the incident window to its build, commit diff
+  and service metrics.
+- **Synthesis:** at the end, the model rewrites its hypotheses from scratch over all the evidence. The result must
+  still pass the evidence gate.
+
+| Fault | Result | Top cause (shortened) | Faulty change cited | Provisional verdict |
+|---|---|---|---|---|
+| retry-policy | diagnosis | checkout-svc 1.9.0 "causes payment failures to be retried too aggressively" | commit cc699b8 (the injected commit) + build | **likely correct**: right component and change, retry mechanism; it does not mention the 250 ms timeout or call multiplication |
+| endpoint-port | diagnosis | checkout-svc "bug in the payment routing logic" | commit e8d58bd ("route checkout … through the new sidecar port"); also a wrong deploy (d-655) | **partially correct**: right change and area, no "wrong port / nothing listening" |
+| pool-fastpath | diagnosis | "new payment-svc deployment introduced a bug in the fast path for micro-charges" (component field: checkout-svc) | commit d24f5c0 (the injected commit) | **partially correct**: right change, no connection leak, component field names the caller |
+| payment-stop | diagnosis | "timeout in the payment service's database pool" | (no change exists for an operator stop) | **wrong** |
+| index-migration | no alert within 4 min | – | – | not investigated |
+
+**Compared with v1, v2 and v2 + local git (0 of 13 found):**
+- In 3 of 4 investigated faults, the investigation now reaches and cites the injected change, and one diagnosis
+  states the mechanism in substance.
+- The remaining failure modes:
+  - an operator fault with no code change (payment-stop) gets a confident wrong answer that the gate does not stop;
+  - mechanisms stay shallow ("routing bug", "fast path bug") rather than "nothing listens on that port" or
+    "connections not released";
+  - deployments left over from earlier faults can be cited (d-655).
+- **Status:** provisional, scored by me. A second reviewer should confirm before any of this is reported as
+  accuracy. This is n = 4 development faults, not an evaluation.
