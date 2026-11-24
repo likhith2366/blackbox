@@ -110,3 +110,19 @@ alert.
 For comparison, the v1 and v2 settings found 0 of 13. This is still development-only and scored by me; a second
 reviewer is needed. Not yet tested by these options: faults without an alert (index-migration, pool-override) and
 the 47-run evaluation set.
+
+## The same settings on the saved development incidents (`runs/dev_v3d_snapshot/`)
+
+Snapshot mode, dev_v3d settings, one run each. The 47 formal runs are not involved.
+
+| Incident | Top cause | Decisive evidence cited | Lexical matcher | My verdict |
+|---|---|---|---|---|
+| INC-0000 (retry amplification) | "checkout-svc 1.9.0 … HTTP client retry policy that causes excessive retries on payment-svc" | commit e7a0cc0 and attempts metric `17f535fce8` (2 of 4) | no match | correct in substance |
+| INC-9001 (connection leak) | "fast path … bypasses risk scoring … leading to database pool exhaustion" | deploy d-576, commit d142601, pool metric `03d4f590b8` (3 of 4) | no match | partially correct (pool exhaustion through load, not the unreleased connection) |
+| INC-9002 (retry amplification) | "checkout-svc 1.9.0 … HTTP client retry policy that causes excessive retries on payment-svc" | commit 0d6ba14, deploy d-581, attempts metric `858412a4f1` (3 of 4) | no match | correct in substance |
+
+**Comparison with earlier runs:** under v1/v2 every development run either abstained or named a symptom, and the
+decisive change was never cited. These runs cite the faulty commit and the decisive runtime metric.
+
+**The lexical matcher still says "no match".** It needs the key's wording ("retry amplification", "connection
+leak"). A semantic reviewer, human or blinded, should score them.
