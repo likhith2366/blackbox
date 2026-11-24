@@ -1,0 +1,9 @@
+10:38:44 pool-fastpath: reset to baseline
+10:44:25 pool-fastpath: inject (traffic 2.9 req/s)
+10:45:13 pool-fastpath: alert error_rate > 0.1 for 15s fired 2026-11-24T10:45:10.586Z (LIVE-9CD038)
+10:47:54 pool-fastpath: completed in 161s -> diagnosis: Most likely cause: payment-svc - payment-svc's new version 2.5.0 introduced a bug in the micro-charge handling that causes database pool timeouts
+10:47:54 retry-policy: reset to baseline
+10:53:37 retry-policy: inject (traffic 3.2 req/s)
+10:54:24 retry-policy: alert error_rate > 0.1 for 15s fired 2026-11-24T10:54:22.191Z (LIVE-A80202)
+10:56:08 retry-policy: completed in 103s -> diagnosis: Most likely cause: checkout-svc - checkout-svc's payment client configuration changed to a higher timeout and increased retries, causing payment calls to time out more frequently
+10:56:08 sweep finished; resetting to baseline

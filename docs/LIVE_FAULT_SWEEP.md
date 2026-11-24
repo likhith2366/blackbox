@@ -158,3 +158,22 @@ exit) with ordinary read-only `search_logs` calls. This is generic operational c
 - Faults that raise no alert (index-migration, pool-override) were not investigated.
 - Every number here comes from one run per fault, scored by me. These are development results; a second reviewer
   is needed, and the 47 formal runs are untouched.
+
+## Function-context diffs (`runs/live_faults_v3g_localgit`, dev_v3e settings)
+
+Local git now returns each changed function in full (`git show --function-context`), and synthesis shows code
+changes up to 5000 characters.
+
+- **pool-fastpath:** the full `_charge` function (acquire, three `POOL.release` calls, the new `return 201`)
+  reached synthesis. The diagnosis was still "a bug in the micro-charge handling that causes database pool
+  timeouts". The model does not infer that the early return skips the release, even with the code in front of it.
+  This matches Steps 5–6: it is a model-reasoning limit, not missing evidence.
+- **retry-policy (regression check):** "configuration changed to a higher timeout and increased retries".
+  Increased retries is right; **"higher timeout" is wrong**, since 2000 → 250 ms is a reduction. Partially correct,
+  with a factual error.
+
+**Conclusion of the sweeps:**
+- With change expansion, error/lifecycle context, from-scratch synthesis and the causal gate, the live faults
+  that alert are found or partly found. Wrong answers are now rare, but details can still be misread (timeout
+  direction).
+- Leak-style mechanisms that require reading control flow remain beyond qwen3:4b.

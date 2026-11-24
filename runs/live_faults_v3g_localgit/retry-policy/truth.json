@@ -1,0 +1,14 @@
+{
+  "change_id": "retry-policy",
+  "family": "retry_amplification",
+  "kind": "commit",
+  "at": "2026-11-24T10:53:37.191Z",
+  "commit": "3660c96e7209c20f16d168defe35f3c4ff841487",
+  "builds": [
+    "b-1268"
+  ],
+  "deployments": [
+    "d-750"
+  ],
+  "done_at": "2026-11-24T10:53:39.834Z"
+}
