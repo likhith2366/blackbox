@@ -1,0 +1,24 @@
+05:24:12 retry-policy: reset to baseline
+05:25:37 retry-policy: inject
+05:26:11 retry-policy: alert error_rate > 0.1 for 15s fired 2026-11-24T05:26:07.837Z (LIVE-41967D)
+05:32:46 retry-policy: completed in 194s -> insufficient_evidence: No reliable root cause identified.
+05:32:46 index-migration: reset to baseline
+05:34:13 index-migration: inject
+05:34:34 index-migration: alert error_rate > 0.1 for 15s fired 2026-11-24T05:34:28.577Z (LIVE-4046AD)
+05:52:39 index-migration: completed in 231s -> insufficient_evidence: No reliable root cause identified.
+05:52:39 endpoint-port: reset to baseline
+05:54:06 endpoint-port: inject
+05:54:39 endpoint-port: alert error_rate > 0.1 for 15s fired 2026-11-24T05:54:26.731Z (LIVE-263584)
+05:56:23 endpoint-port: completed in 104s -> diagnosis: Most likely cause: checkout-svc - payment-svc timeout
+05:56:23 payment-stop: reset to baseline
+05:57:50 payment-stop: inject
+05:58:06 payment-stop: alert error_rate > 0.1 for 15s fired 2026-11-24T05:58:05.233Z (LIVE-447497)
+06:01:35 payment-stop: completed in 208s -> insufficient_evidence: No reliable root cause identified.
+06:01:35 pool-override: reset to baseline
+06:03:03 pool-override: inject
+06:07:06 pool-override: no alert fired within 4 min; recorded as 'no alert'
+06:07:06 pool-fastpath: reset to baseline
+06:08:31 pool-fastpath: inject
+06:09:18 pool-fastpath: alert error_rate > 0.1 for 15s fired 2026-11-24T06:09:06.058Z (LIVE-1457D1)
+06:10:08 pool-fastpath: completed in 50s -> diagnosis: Most likely cause: checkout-svc - payment-svc dependency failure
+06:10:08 sweep finished; resetting to baseline

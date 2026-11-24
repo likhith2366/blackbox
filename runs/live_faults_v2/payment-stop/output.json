@@ -1,0 +1,3451 @@
+{
+  "schema_version": "1.0",
+  "system": "blackbox",
+  "incident_id": "LIVE-447497",
+  "ablation": "none",
+  "status": "completed",
+  "error": null,
+  "report": {
+    "incident_id": "LIVE-447497",
+    "system": "blackbox",
+    "status": "insufficient_evidence",
+    "headline": "No reliable root cause identified.",
+    "ranked_causes": [],
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "checkout-svc error rate increased due to payment-svc timeout",
+        "kind": "tentative",
+        "evidence_ids": [
+          "metric:9b955e6e86"
+        ]
+      },
+      {
+        "claim_id": "c2",
+        "text": "checkout-svc internal service failure caused high error rate",
+        "kind": "tentative",
+        "evidence_ids": [
+          "metric:e3fba39249"
+        ]
+      },
+      {
+        "claim_id": "c3",
+        "text": "checkout-svc resource exhaustion caused high error rate",
+        "kind": "tentative",
+        "evidence_ids": [
+          "metric:ac91d52a4e"
+        ]
+      }
+    ],
+    "unresolved_questions": [
+      "Why did payment-svc timeout?"
+    ],
+    "next_check": "Check payment-svc error rate and latency metrics for the same time window",
+    "suggested_fix": null,
+    "invalid_citations": [],
+    "normalized_citations": [],
+    "citation_audit": [
+      {
+        "where": "claim c1",
+        "raw": "metric:9b955e6e86",
+        "resolved": "metric:9b955e6e86",
+        "method": "exact"
+      },
+      {
+        "where": "claim c2",
+        "raw": "metric:e3fba39249",
+        "resolved": "metric:e3fba39249",
+        "method": "exact"
+      },
+      {
+        "where": "claim c3",
+        "raw": "metric:ac91d52a4e",
+        "resolved": "metric:ac91d52a4e",
+        "method": "exact"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "round": 1,
+      "prompt_tokens": 1156,
+      "completion_tokens": 93,
+      "model_seconds": 2.7567408999893814,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\"\n      }\n    }\n  ],\n  \"decision\": \"continue\",\n  \"rationale\": \"Start by checking the metrics for checkout-svc to understand the error rate and other relevant metrics. This will help identify if there's a spike in errors or other anomalies.\"\n}",
+      "model_decision": "continue",
+      "hypotheses_before": [],
+      "hypotheses_after": [],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r1c1",
+          "round": 1,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r1c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:9b955e6e86",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:53:05.233Z",
+              "available_time": "2026-11-24T05:58:05.233Z",
+              "version": null,
+              "title": "checkout-svc error_rate",
+              "content": "checkout-svc error_rate (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=1 last=1\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 0; 05:54:00 0; 05:54:05 0; 05:54:10 0; 05:54:15 1; 05:54:20 1; 05:54:25 1; 05:54:30 1; 05:54:35 1; 05:54:40 1; 05:54:45 1; 05:54:50 1; 05:54:55 1; 05:55:00 1; 05:55:05 1; 05:55:10 1; 05:55:15 1; 05:55:20 1; 05:55:25 1; 05:55:30 1; 05:55:35 1; 05:55:40 1; 05:55:45 1; 05:55:50 1; 05:55:55 1; 05:56:00 1; 05:56:05 1; 05:56:10 1; 05:56:15 1; 05:56:20 1; 05:56:25 1; 05:56:30 1; 05:56:35 1; 05:56:40 0; 05:56:45 0; 05:56:50 0; 05:56:55 0; 05:57:00 0; 05:57:05 0; 05:57:10 0; 05:57:15 0; 05:57:20 0; 05:57:25 0; 05:57:30 0; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 0.7778; 05:58:00 1; 05:58:05 1",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 61,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0,
+                "backend": "prometheus",
+                "query": "query_range error_rate{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "metric:8e25305aa1",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:53:05.233Z",
+              "available_time": "2026-11-24T05:58:05.233Z",
+              "version": null,
+              "title": "checkout-svc inflight_requests",
+              "content": "checkout-svc inflight_requests (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=11 last=10\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 1; 05:54:00 0; 05:54:05 1; 05:54:10 1; 05:54:15 2; 05:54:20 7; 05:54:25 6; 05:54:30 5; 05:54:35 5; 05:54:40 5; 05:54:45 2; 05:54:50 10; 05:54:55 2; 05:55:00 6; 05:55:05 4; 05:55:10 8; 05:55:15 4; 05:55:20 7; 05:55:25 3; 05:55:30 2; 05:55:35 6; 05:55:40 5; 05:55:45 4; 05:55:50 9; 05:55:55 11; 05:56:00 6; 05:56:05 11; 05:56:10 7; 05:56:15 7; 05:56:20 6; 05:56:25 6; 05:56:30 6; 05:56:35 6; 05:56:40 1; 05:56:45 0; 05:56:50 1; 05:56:55 0; 05:57:00 0; 05:57:05 1; 05:57:10 1; 05:57:15 1; 05:57:20 0; 05:57:25 0; 05:57:30 1; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 5; 05:58:00 8; 05:58:05 10",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=inflight_requests%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "inflight_requests",
+                "points": 61,
+                "min": 0.0,
+                "max": 11.0,
+                "last": 10.0,
+                "backend": "prometheus",
+                "query": "query_range inflight_requests{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=inflight_requests%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "metric:e3fba39249",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:53:05.233Z",
+              "available_time": "2026-11-24T05:58:05.233Z",
+              "version": null,
+              "title": "checkout-svc latency_p50_ms",
+              "content": "checkout-svc latency_p50_ms (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=35.9 max=2015.29 last=2013.02\n05:53:05 41.07; 05:53:10 46.01; 05:53:15 49.14; 05:53:20 37.86; 05:53:25 41.99; 05:53:30 39.87; 05:53:35 48.01; 05:53:40 38.01; 05:53:45 37.8; 05:53:50 38.08; 05:53:55 37.31; 05:54:00 43.01; 05:54:05 48.98; 05:54:10 60.18; 05:54:15 2010.64; 05:54:20 2007.35; 05:54:25 2008.58; 05:54:30 2014.41; 05:54:35 2008.89; 05:54:40 2013.47; 05:54:45 2006.1; 05:54:50 2008.19; 05:54:55 2012.6; 05:55:00 2013.44; 05:55:05 2007.47; 05:55:10 2008.68; 05:55:15 2007.69; 05:55:20 2012.93; 05:55:25 2013.7; 05:55:30 2015.21; 05:55:35 2015.29; 05:55:40 2010.36; 05:55:45 2015.09; 05:55:50 2006.93; 05:55:55 2014.14; 05:56:00 2012.95; 05:56:05 2012.87; 05:56:10 2011.72; 05:56:15 2009.94; 05:56:20 2013.66; 05:56:25 2007.12; 05:56:30 2014.12; 05:56:35 2014.12; 05:56:40 35.9; 05:56:45 48.41; 05:56:50 41.24; 05:56:55 52.61; 05:57:00 49.84; 05:57:05 44.57; 05:57:10 55.9; 05:57:15 37.92; 05:57:20 51.74; 05:57:25 37; 05:57:30 50.19; 05:57:35 47.05; 05:57:40 43.32; 05:57:45 38.38; 05:57:50 46.46; 05:57:55 2003.88; 05:58:00 2009.37; 05:58:05 2013.02",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=latency_p50_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "latency_p50_ms",
+                "points": 61,
+                "min": 35.9,
+                "max": 2015.29,
+                "last": 2013.02,
+                "backend": "prometheus",
+                "query": "query_range latency_p50_ms{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=latency_p50_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "metric:8f4ada6235",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:53:05.233Z",
+              "available_time": "2026-11-24T05:58:05.233Z",
+              "version": null,
+              "title": "checkout-svc latency_p95_ms",
+              "content": "checkout-svc latency_p95_ms (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=59.63 max=2079.46 last=2016.28\n05:53:05 66.78; 05:53:10 624.69; 05:53:15 649.77; 05:53:20 590.45; 05:53:25 434.57; 05:53:30 69.12; 05:53:35 518.87; 05:53:40 701.31; 05:53:45 66.5; 05:53:50 407.98; 05:53:55 67.2; 05:54:00 682.89; 05:54:05 501.46; 05:54:10 63.17; 05:54:15 2011.99; 05:54:20 2018.09; 05:54:25 2016.53; 05:54:30 2017.51; 05:54:35 2017.49; 05:54:40 2017.53; 05:54:45 2016.71; 05:54:50 2016.5; 05:54:55 2017.02; 05:55:00 2017.8; 05:55:05 2017.14; 05:55:10 2016.69; 05:55:15 2009.84; 05:55:20 2017.22; 05:55:25 2017.68; 05:55:30 2017.15; 05:55:35 2016.24; 05:55:40 2017.35; 05:55:45 2017.87; 05:55:50 2011.24; 05:55:55 2017.84; 05:56:00 2019.22; 05:56:05 2079.46; 05:56:10 2017.87; 05:56:15 2013.16; 05:56:20 2017.46; 05:56:25 2014.51; 05:56:30 2015.85; 05:56:35 2015.85; 05:56:40 396.18; 05:56:45 581.02; 05:56:50 664.99; 05:56:55 717.92; 05:57:00 65.07; 05:57:05 59.63; 05:57:10 305.36; 05:57:15 447.67; 05:57:20 684.66; 05:57:25 269.88; 05:57:30 408.88; 05:57:35 501.8; 05:57:40 571.66; 05:57:45 65.53; 05:57:50 667.34; 05:57:55 2016.58; 05:58:00 2015.32; 05:58:05 2016.28",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=latency_p95_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "latency_p95_ms",
+                "points": 61,
+                "min": 59.63,
+                "max": 2079.46,
+                "last": 2016.28,
+                "backend": "prometheus",
+                "query": "query_range latency_p95_ms{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=latency_p95_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "metric:158d718b0e",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:53:05.233Z",
+              "available_time": "2026-11-24T05:58:05.233Z",
+              "version": null,
+              "title": "checkout-svc requests_per_s",
+              "content": "checkout-svc requests_per_s (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0.6 max=4.4 last=3\n05:53:05 2.6; 05:53:10 2.4; 05:53:15 3.6; 05:53:20 2; 05:53:25 3.8; 05:53:30 3; 05:53:35 3.2; 05:53:40 2.6; 05:53:45 1.8; 05:53:50 4.4; 05:53:55 2.4; 05:54:00 3.8; 05:54:05 2.6; 05:54:10 0.6; 05:54:15 3.2; 05:54:20 2.6; 05:54:25 3.2; 05:54:30 3.4; 05:54:35 3.4; 05:54:40 2.8; 05:54:45 2.2; 05:54:50 2.2; 05:54:55 3.6; 05:55:00 2; 05:55:05 2.8; 05:55:10 3.4; 05:55:15 2.8; 05:55:20 2; 05:55:25 3.2; 05:55:30 2.4; 05:55:35 1.8; 05:55:40 2.2; 05:55:45 3.8; 05:55:50 3.4; 05:55:55 3; 05:56:00 4.2; 05:56:05 3.2; 05:56:10 3.4; 05:56:15 3.4; 05:56:20 2.8; 05:56:25 2.8; 05:56:30 1.2; 05:56:35 1.2; 05:56:40 3.2; 05:56:45 2.8; 05:56:50 3.4; 05:56:55 3.8; 05:57:00 1.8; 05:57:05 4.2; 05:57:10 2.2; 05:57:15 2.6; 05:57:20 2.6; 05:57:25 2; 05:57:30 2.6; 05:57:35 4.2; 05:57:40 2.6; 05:57:45 2.4; 05:57:50 3.2; 05:57:55 1.8; 05:58:00 3.4; 05:58:05 3",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=requests_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "requests_per_s",
+                "points": 61,
+                "min": 0.6,
+                "max": 4.4,
+                "last": 3.0,
+                "backend": "prometheus",
+                "query": "query_range requests_per_s{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=requests_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "metric:ac91d52a4e",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:53:05.233Z",
+              "available_time": "2026-11-24T05:58:05.233Z",
+              "version": null,
+              "title": "checkout-svc upstream_attempts_per_s",
+              "content": "checkout-svc upstream_attempts_per_s (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0.8 max=4.4 last=3.4\n05:53:05 2.6; 05:53:10 2.4; 05:53:15 3.6; 05:53:20 2; 05:53:25 3.8; 05:53:30 3; 05:53:35 3.2; 05:53:40 2.6; 05:53:45 1.8; 05:53:50 4.4; 05:53:55 2.6; 05:54:00 3.6; 05:54:05 2.8; 05:54:10 0.8; 05:54:15 3.6; 05:54:20 3.6; 05:54:25 3; 05:54:30 3.2; 05:54:35 3.4; 05:54:40 2.8; 05:54:45 1.6; 05:54:50 3.8; 05:54:55 2; 05:55:00 2.8; 05:55:05 2.4; 05:55:10 4.2; 05:55:15 2; 05:55:20 2.6; 05:55:25 2.2; 05:55:30 2.4; 05:55:35 2.6; 05:55:40 2; 05:55:45 3.6; 05:55:50 4.4; 05:55:55 3.4; 05:56:00 3.2; 05:56:05 4.2; 05:56:10 2.6; 05:56:15 3.4; 05:56:20 2.6; 05:56:25 2.8; 05:56:30 1.2; 05:56:35 1.2; 05:56:40 3.4; 05:56:45 2.6; 05:56:50 3.6; 05:56:55 3.6; 05:57:00 1.8; 05:57:05 4.2; 05:57:10 2.4; 05:57:15 2.6; 05:57:20 2.4; 05:57:25 2; 05:57:30 2.8; 05:57:35 4; 05:57:40 2.6; 05:57:45 2.4; 05:57:50 3.2; 05:57:55 2.8; 05:58:00 4; 05:58:05 3.4",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=upstream_attempts_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "upstream_attempts_per_s",
+                "points": 61,
+                "min": 0.8,
+                "max": 4.4,
+                "last": 3.4,
+                "backend": "prometheus",
+                "query": "query_range upstream_attempts_per_s{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=upstream_attempts_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "metric:de395593f4",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:53:05.233Z",
+              "available_time": "2026-11-24T05:58:05.233Z",
+              "version": null,
+              "title": "checkout-svc upstream_errors_per_s",
+              "content": "checkout-svc upstream_errors_per_s (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=4.2 last=2.8\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 0; 05:54:00 0; 05:54:05 0; 05:54:10 0; 05:54:15 3.2; 05:54:20 2.6; 05:54:25 3.2; 05:54:30 3.4; 05:54:35 3.4; 05:54:40 2.8; 05:54:45 2.2; 05:54:50 2.6; 05:54:55 3.2; 05:55:00 2; 05:55:05 2.8; 05:55:10 3.4; 05:55:15 2.8; 05:55:20 2; 05:55:25 3.2; 05:55:30 2.4; 05:55:35 1.8; 05:55:40 2.2; 05:55:45 3.8; 05:55:50 3.4; 05:55:55 3; 05:56:00 4.2; 05:56:05 3.2; 05:56:10 3.4; 05:56:15 3.4; 05:56:20 3; 05:56:25 2.6; 05:56:30 1.2; 05:56:35 1.2; 05:56:40 0; 05:56:45 0; 05:56:50 0; 05:56:55 0; 05:57:00 0; 05:57:05 0; 05:57:10 0; 05:57:15 0; 05:57:20 0; 05:57:25 0; 05:57:30 0; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 1.4; 05:58:00 3.6; 05:58:05 2.8",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=upstream_errors_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "upstream_errors_per_s",
+                "points": 61,
+                "min": 0.0,
+                "max": 4.2,
+                "last": 2.8,
+                "backend": "prometheus",
+                "query": "query_range upstream_errors_per_s{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=upstream_errors_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 7,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 32.541299995500594,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [],
+      "orchestration_rules": [
+        "first-tool rule: no evidence yet, so >=1 tool call required and decision limited to 'continue' (orchestration, not model behaviour)"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1187,
+        "fixed_part_cut": false,
+        "prompt_tokens_est": 1161,
+        "prompt_tokens_actual": 1156,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": ""
+    },
+    {
+      "round": 2,
+      "prompt_tokens": 5453,
+      "completion_tokens": 689,
+      "model_seconds": 14.698088700009976,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:9b955e6e86: error_rate jumps to 1 at 05:54:15\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to internal service failure\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:e3fba39249: latency_p50_ms spikes to 2013.02 at 05:54:15\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to resource exhaustion\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:ac91d52a4e: upstream_attempts_per_s increases to 4.4 at 05:53:50\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-24T05:54:15.233Z\",\n        \"end\": \"2026-11-24T05:54:20.233Z\"\n      }\n    },\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"latency_p50_ms\",\n        \"start\": \"2026-11-24T05:54:15.233Z\",\n        \"end\": \"2026-11-24T05:54:20.233Z\"\n      }\n    },\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"upstream_errors_per_s\",\n        \"start\": \"2026-11-24T05:54:15.233Z\",\n        \"end\": \"2026-11-24T05:54:20.233Z\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate spike at 05:54:15 coincides with a latency spike and upstream attempts increase, suggesting payment-svc timeout. Payment-svc is the only other service in the system, so this is the most likely cause.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:9b955e6e86"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to internal service failure",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:e3fba39249"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h3",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to resource exhaustion",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:ac91d52a4e"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [
+        "+ h1 [active/medium] checkout-svc: high error rate due to payment-svc timeout",
+        "+ h2 [active/medium] checkout-svc: high error rate due to internal service failure",
+        "+ h3 [active/medium] checkout-svc: high error rate due to resource exhaustion"
+      ],
+      "tool_requests": [
+        {
+          "call_id": "r2c1",
+          "round": 2,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "error_rate",
+            "start": "2026-11-24T05:54:15.233Z",
+            "end": "2026-11-24T05:54:20.233Z"
+          }
+        },
+        {
+          "call_id": "r2c2",
+          "round": 2,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "latency_p50_ms",
+            "start": "2026-11-24T05:54:15.233Z",
+            "end": "2026-11-24T05:54:20.233Z"
+          }
+        },
+        {
+          "call_id": "r2c3",
+          "round": 2,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "upstream_errors_per_s",
+            "start": "2026-11-24T05:54:15.233Z",
+            "end": "2026-11-24T05:54:20.233Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r2c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:0080f9cae2",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:15.233Z",
+              "available_time": "2026-11-24T05:54:20.233Z",
+              "version": null,
+              "title": "checkout-svc error_rate",
+              "content": "checkout-svc error_rate (5s steps, 2026-11-24T05:54:15.233Z .. 2026-11-24T05:54:20.233Z): min=1 max=1 last=1\n05:54:15 1; 05:54:20 1",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 2,
+                "min": 1.0,
+                "max": 1.0,
+                "last": 1.0,
+                "backend": "prometheus",
+                "query": "query_range error_rate{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 7.156800013035536,
+          "is_retry": false
+        },
+        {
+          "call_id": "r2c2",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:ba852c34f0",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:15.233Z",
+              "available_time": "2026-11-24T05:54:20.233Z",
+              "version": null,
+              "title": "checkout-svc latency_p50_ms",
+              "content": "checkout-svc latency_p50_ms (5s steps, 2026-11-24T05:54:15.233Z .. 2026-11-24T05:54:20.233Z): min=2007.35 max=2010.64 last=2007.35\n05:54:15 2010.64; 05:54:20 2007.35",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=latency_p50_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "latency_p50_ms",
+                "points": 2,
+                "min": 2007.35,
+                "max": 2010.64,
+                "last": 2007.35,
+                "backend": "prometheus",
+                "query": "query_range latency_p50_ms{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=latency_p50_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 24.055699992459267,
+          "is_retry": false
+        },
+        {
+          "call_id": "r2c3",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:2bd373af47",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:15.233Z",
+              "available_time": "2026-11-24T05:54:20.233Z",
+              "version": null,
+              "title": "checkout-svc upstream_errors_per_s",
+              "content": "checkout-svc upstream_errors_per_s (5s steps, 2026-11-24T05:54:15.233Z .. 2026-11-24T05:54:20.233Z): min=2.6 max=3.2 last=2.6\n05:54:15 3.2; 05:54:20 2.6",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=upstream_errors_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "upstream_errors_per_s",
+                "points": 2,
+                "min": 2.6,
+                "max": 3.2,
+                "last": 2.6,
+                "backend": "prometheus",
+                "query": "query_range upstream_errors_per_s{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=upstream_errors_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 8.410900016315281,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [
+        "metric:9b955e6e86: error_rate jumps to 1 at 05:54:15 -> metric:9b955e6e86",
+        "metric:e3fba39249: latency_p50_ms spikes to 2013.02 at 05:54:15 -> metric:e3fba39249",
+        "metric:ac91d52a4e: upstream_attempts_per_s increases to 4.4 at 05:53:50 -> metric:ac91d52a4e"
+      ],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:9b955e6e86: error_rate jumps to 1 at 05:54:15",
+          "resolved": "metric:9b955e6e86",
+          "method": "embedded"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "metric:e3fba39249: latency_p50_ms spikes to 2013.02 at 05:54:15",
+          "resolved": "metric:e3fba39249",
+          "method": "embedded"
+        },
+        {
+          "where": "h3.supporting",
+          "raw": "metric:ac91d52a4e: upstream_attempts_per_s increases to 4.4 at 05:53:50",
+          "resolved": "metric:ac91d52a4e",
+          "method": "embedded"
+        }
+      ],
+      "orchestration_rules": [
+        "change check: no call yet to list_deployments, search_commits"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1196,
+        "fixed_part_cut": false,
+        "notebook_budget": 5946,
+        "notebook_tokens": 4293,
+        "records_retrieved": 7,
+        "records_full": 7,
+        "records_one_line": 0,
+        "records_omitted": 0,
+        "prompt_tokens_est": 5458,
+        "prompt_tokens_actual": 5453,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnose refused by change check: no call yet to list_deployments, search_commits"
+    },
+    {
+      "round": 3,
+      "prompt_tokens": 3942,
+      "completion_tokens": 432,
+      "model_seconds": 14.039343299984466,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:9b955e6e86\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to internal service failure\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:e3fba39249\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to resource exhaustion\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:ac91d52a4e\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"list_deployments\",\n      \"args\": {}\n    },\n    {\n      \"tool\": \"search_commits\",\n      \"args\": {}\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate spike started at 05:54:15 with a 1.0 error rate for 5s. The latency_p50_ms spiked to 2007ms at 05:54:15, indicating a timeout issue with payment-svc. The upstream_errors_per_s metric shows 2.6 errors per second, which aligns with payment-svc timeouts. The error rate spike is consistent with payment-svc timeouts (h1) rather than internal service failure (h2) or resource exhaustion (h3).\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:9b955e6e86"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to internal service failure",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:e3fba39249"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h3",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to resource exhaustion",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:ac91d52a4e"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:9b955e6e86"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to internal service failure",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:e3fba39249"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h3",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to resource exhaustion",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:ac91d52a4e"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r3c1",
+          "round": 3,
+          "tool": "list_deployments",
+          "args": {}
+        },
+        {
+          "call_id": "r3c2",
+          "round": 3,
+          "tool": "search_commits",
+          "args": {}
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r3c1",
+          "tool": "list_deployments",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "deploy:d-601",
+              "source": "deployments",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:04:06.545Z",
+              "available_time": "2026-11-24T05:04:07.095Z",
+              "version": "1.8.2",
+              "title": "deployment of checkout-svc 1.8.2",
+              "content": "2026-11-24T05:04:06.545Z deployment d-601 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-601",
+              "attributes": {
+                "deploy_id": "d-601",
+                "build_id": "b-1215",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-602",
+              "source": "deployments",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:12:28.269Z",
+              "available_time": "2026-11-24T05:12:29.447Z",
+              "version": "2.4.1",
+              "title": "deployment of payment-svc 2.4.1",
+              "content": "2026-11-24T05:12:28.269Z deployment d-602 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-602",
+              "attributes": {
+                "deploy_id": "d-602",
+                "build_id": "b-1214",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-603",
+              "source": "deployments",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:12:31.545Z",
+              "available_time": "2026-11-24T05:12:32.086Z",
+              "version": "1.8.2",
+              "title": "deployment of checkout-svc 1.8.2",
+              "content": "2026-11-24T05:12:31.545Z deployment d-603 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-603",
+              "attributes": {
+                "deploy_id": "d-603",
+                "build_id": "b-1215",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-604",
+              "source": "deployments",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:13:48.986Z",
+              "available_time": "2026-11-24T05:13:49.540Z",
+              "version": "2.4.1",
+              "title": "deployment of payment-svc 2.4.1",
+              "content": "2026-11-24T05:13:48.986Z deployment d-604 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by operator (manual restart) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-604",
+              "attributes": {
+                "deploy_id": "d-604",
+                "build_id": "b-1214",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-605",
+              "source": "deployments",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:17:58.518Z",
+              "available_time": "2026-11-24T05:18:01.314Z",
+              "version": "2.4.1",
+              "title": "deployment of payment-svc 2.4.1",
+              "content": "2026-11-24T05:17:58.518Z deployment d-605 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-605",
+              "attributes": {
+                "deploy_id": "d-605",
+                "build_id": "b-1214",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-606",
+              "source": "deployments",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:18:03.427Z",
+              "available_time": "2026-11-24T05:18:03.991Z",
+              "version": "1.8.2",
+              "title": "deployment of checkout-svc 1.8.2",
+              "content": "2026-11-24T05:18:03.427Z deployment d-606 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-606",
+              "attributes": {
+                "deploy_id": "d-606",
+                "build_id": "b-1215",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-607",
+              "source": "deployments",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:19:21.488Z",
+              "available_time": "2026-11-24T05:19:22.055Z",
+              "version": "2.5.0",
+              "title": "deployment of payment-svc 2.5.0",
+              "content": "2026-11-24T05:19:21.488Z deployment d-607 of payment-svc version 2.5.0 to demo-local build=b-1235 commit=d67b90d artifact_digest=sha256:45db0e3dbb252698b678ef3bee92b4f673d6385ca6a4037adb0c564f034d53eb by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-607",
+              "attributes": {
+                "deploy_id": "d-607",
+                "build_id": "b-1235",
+                "commit": "d67b90d",
+                "commit_full": "d67b90d8cc7d1c594e6bb71f1ee13f6f838b889a",
+                "artifact_digest": "sha256:45db0e3dbb252698b678ef3bee92b4f673d6385ca6a4037adb0c564f034d53eb",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-608",
+              "source": "deployments",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:24:00.898Z",
+              "available_time": "2026-11-24T05:24:03.175Z",
+              "version": "2.4.1",
+              "title": "deployment of payment-svc 2.4.1",
+              "content": "2026-11-24T05:24:00.898Z deployment d-608 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-608",
+              "attributes": {
+                "deploy_id": "d-608",
+                "build_id": "b-1214",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-609",
+              "source": "deployments",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:24:05.254Z",
+              "available_time": "2026-11-24T05:24:05.792Z",
+              "version": "1.8.2",
+              "title": "deployment of checkout-svc 1.8.2",
+              "content": "2026-11-24T05:24:05.254Z deployment d-609 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-609",
+              "attributes": {
+                "deploy_id": "d-609",
+                "build_id": "b-1215",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-610",
+              "source": "deployments",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:24:19.014Z",
+              "available_time": "2026-11-24T05:24:20.193Z",
+              "version": "2.4.1",
+              "title": "deployment of payment-svc 2.4.1",
+              "content": "2026-11-24T05:24:19.014Z deployment d-610 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-610",
+              "attributes": {
+                "deploy_id": "d-610",
+                "build_id": "b-1214",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-611",
+              "source": "deployments",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:24:22.277Z",
+              "available_time": "2026-11-24T05:24:22.816Z",
+              "version": "1.8.2",
+              "title": "deployment of checkout-svc 1.8.2",
+              "content": "2026-11-24T05:24:22.277Z deployment d-611 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-611",
+              "attributes": {
+                "deploy_id": "d-611",
+                "build_id": "b-1215",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-612",
+              "source": "deployments",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:25:40.429Z",
+              "available_time": "2026-11-24T05:25:41.626Z",
+              "version": "1.9.0",
+              "title": "deployment of checkout-svc 1.9.0",
+              "content": "2026-11-24T05:25:40.429Z deployment d-612 of checkout-svc version 1.9.0 to demo-local build=b-1236 commit=f5a1eb6 artifact_digest=sha256:f1e7f11f1811100d36022b150c63593f9dbe294e7eb40ef796f8c4ed0f690020 by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-612",
+              "attributes": {
+                "deploy_id": "d-612",
+                "build_id": "b-1236",
+                "commit": "f5a1eb6",
+                "commit_full": "f5a1eb6d7d1a3220913a8d722b78218c9a5ec000",
+                "artifact_digest": "sha256:f1e7f11f1811100d36022b150c63593f9dbe294e7eb40ef796f8c4ed0f690020",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-613",
+              "source": "deployments",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:32:54.258Z",
+              "available_time": "2026-11-24T05:32:55.905Z",
+              "version": "2.4.1",
+              "title": "deployment of payment-svc 2.4.1",
+              "content": "2026-11-24T05:32:54.258Z deployment d-613 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-613",
+              "attributes": {
+                "deploy_id": "d-613",
+                "build_id": "b-1214",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-614",
+              "source": "deployments",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:32:58.009Z",
+              "available_time": "2026-11-24T05:32:58.550Z",
+              "version": "1.8.2",
+              "title": "deployment of checkout-svc 1.8.2",
+              "content": "2026-11-24T05:32:58.009Z deployment d-614 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-614",
+              "attributes": {
+                "deploy_id": "d-614",
+                "build_id": "b-1215",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-615",
+              "source": "deployments",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:34:16.149Z",
+              "available_time": "2026-11-24T05:34:19.547Z",
+              "version": "2.4.2",
+              "title": "deployment of payment-svc 2.4.2",
+              "content": "2026-11-24T05:34:16.149Z deployment d-615 of payment-svc version 2.4.2 to demo-local build=b-1237 commit=d2abf1f artifact_digest=sha256:bec491275196991f893315162456d16f3cfdff42c48c2d57d35155dea72e93fb by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-615",
+              "attributes": {
+                "deploy_id": "d-615",
+                "build_id": "b-1237",
+                "commit": "d2abf1f",
+                "commit_full": "d2abf1fc75b6e24a3b72fab9027c56c2bef8bef0",
+                "artifact_digest": "sha256:bec491275196991f893315162456d16f3cfdff42c48c2d57d35155dea72e93fb",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-616",
+              "source": "deployments",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:52:46.725Z",
+              "available_time": "2026-11-24T05:52:49.016Z",
+              "version": "2.4.1",
+              "title": "deployment of payment-svc 2.4.1",
+              "content": "2026-11-24T05:52:46.725Z deployment d-616 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-616",
+              "attributes": {
+                "deploy_id": "d-616",
+                "build_id": "b-1214",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-617",
+              "source": "deployments",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:52:51.138Z",
+              "available_time": "2026-11-24T05:52:51.699Z",
+              "version": "1.8.2",
+              "title": "deployment of checkout-svc 1.8.2",
+              "content": "2026-11-24T05:52:51.138Z deployment d-617 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-617",
+              "attributes": {
+                "deploy_id": "d-617",
+                "build_id": "b-1215",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-618",
+              "source": "deployments",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:08.631Z",
+              "available_time": "2026-11-24T05:54:09.177Z",
+              "version": "1.8.2",
+              "title": "deployment of checkout-svc 1.8.2",
+              "content": "2026-11-24T05:54:08.631Z deployment d-618 of checkout-svc version 1.8.2 to demo-local build=b-1238 commit=f914a87 artifact_digest=sha256:66041e1d2a5ab9c461d6af0688a68357dee301dd84eafe47c86eb375bc6e5243 by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-618",
+              "attributes": {
+                "deploy_id": "d-618",
+                "build_id": "b-1238",
+                "commit": "f914a87",
+                "commit_full": "f914a87302e28cc4f9bc76c303850ac902307962",
+                "artifact_digest": "sha256:66041e1d2a5ab9c461d6af0688a68357dee301dd84eafe47c86eb375bc6e5243",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-619",
+              "source": "deployments",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:56:30.908Z",
+              "available_time": "2026-11-24T05:56:32.576Z",
+              "version": "2.4.1",
+              "title": "deployment of payment-svc 2.4.1",
+              "content": "2026-11-24T05:56:30.908Z deployment d-619 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-619",
+              "attributes": {
+                "deploy_id": "d-619",
+                "build_id": "b-1214",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "deploy:d-620",
+              "source": "deployments",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:56:34.669Z",
+              "available_time": "2026-11-24T05:56:35.213Z",
+              "version": "1.8.2",
+              "title": "deployment of checkout-svc 1.8.2",
+              "content": "2026-11-24T05:56:34.669Z deployment d-620 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+              "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-620",
+              "attributes": {
+                "deploy_id": "d-620",
+                "build_id": "b-1215",
+                "commit": "b7ae74f",
+                "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+                "backend": "demo-deploy-records",
+                "mode": "live",
+                "query": "read deployments.jsonl",
+                "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 120,
+          "truncated": true,
+          "error": null,
+          "elapsed_ms": 9.318800002802163,
+          "is_retry": false
+        },
+        {
+          "call_id": "r3c2",
+          "tool": "search_commits",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@b7ae74f",
+              "source": "commits",
+              "service": null,
+              "event_time": "2026-11-19T16:30:00.000Z",
+              "available_time": "2026-11-19T16:30:00.000Z",
+              "version": "b7ae74f",
+              "title": "Update CHANGELOG",
+              "content": "commit b7ae74f 2026-11-19T16:30:00.000Z Likhith Vardhan Goruputi\nUpdate CHANGELOG",
+              "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-24T05:58:39.538Z",
+                "repo": "likhith2366/blackbox-demo-shop",
+                "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "http_status": 200,
+                "sha": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+                "author": "Likhith Vardhan Goruputi",
+                "files": [],
+                "files_total": null,
+                "backend": "github",
+                "mode": "live"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@b6b0d28",
+              "source": "commits",
+              "service": null,
+              "event_time": "2026-11-19T14:50:00.000Z",
+              "available_time": "2026-11-19T14:50:00.000Z",
+              "version": "b6b0d28",
+              "title": "Note idempotency in payment runbook",
+              "content": "commit b6b0d28 2026-11-19T14:50:00.000Z Praneeth Kadem\nNote idempotency in payment runbook",
+              "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/b6b0d2866296d6a150dcf7c6f58bb3015a840a40",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-24T05:58:39.538Z",
+                "repo": "likhith2366/blackbox-demo-shop",
+                "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/b6b0d2866296d6a150dcf7c6f58bb3015a840a40",
+                "http_status": 200,
+                "sha": "b6b0d2866296d6a150dcf7c6f58bb3015a840a40",
+                "author": "Praneeth Kadem",
+                "files": [],
+                "files_total": null,
+                "backend": "github",
+                "mode": "live"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@22dff22",
+              "source": "commits",
+              "service": null,
+              "event_time": "2026-11-18T19:25:00.000Z",
+              "available_time": "2026-11-18T19:25:00.000Z",
+              "version": "22dff22",
+              "title": "Add smoke check script",
+              "content": "commit 22dff22 2026-11-18T19:25:00.000Z Likhith Vardhan Goruputi\nAdd smoke check script",
+              "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/22dff22265f2a5511ea7c8d12b554ea721333c8d",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-24T05:58:39.538Z",
+                "repo": "likhith2366/blackbox-demo-shop",
+                "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/22dff22265f2a5511ea7c8d12b554ea721333c8d",
+                "http_status": 200,
+                "sha": "22dff22265f2a5511ea7c8d12b554ea721333c8d",
+                "author": "Likhith Vardhan Goruputi",
+                "files": [],
+                "files_total": null,
+                "backend": "github",
+                "mode": "live"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@0b96926",
+              "source": "commits",
+              "service": null,
+              "event_time": "2026-11-18T15:00:00.000Z",
+              "available_time": "2026-11-18T15:00:00.000Z",
+              "version": "0b96926",
+              "title": "Add architecture notes",
+              "content": "commit 0b96926 2026-11-18T15:00:00.000Z Praneeth Kadem\nAdd architecture notes",
+              "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/0b969268754b26d6215984292f9e6758b2bc0180",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-24T05:58:39.538Z",
+                "repo": "likhith2366/blackbox-demo-shop",
+                "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/0b969268754b26d6215984292f9e6758b2bc0180",
+                "http_status": 200,
+                "sha": "0b969268754b26d6215984292f9e6758b2bc0180",
+                "author": "Praneeth Kadem",
+                "files": [],
+                "files_total": null,
+                "backend": "github",
+                "mode": "live"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@2bd56f4",
+              "source": "commits",
+              "service": null,
+              "event_time": "2026-11-17T21:10:00.000Z",
+              "available_time": "2026-11-17T21:10:00.000Z",
+              "version": "2bd56f4",
+              "title": "Add on-call ownership doc",
+              "content": "commit 2bd56f4 2026-11-17T21:10:00.000Z Praneeth Kadem\nAdd on-call ownership doc",
+              "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/2bd56f47dc52823b72dfab5f7f2a874f448f07a3",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-24T05:58:39.538Z",
+                "repo": "likhith2366/blackbox-demo-shop",
+                "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/2bd56f47dc52823b72dfab5f7f2a874f448f07a3",
+                "http_status": 200,
+                "sha": "2bd56f47dc52823b72dfab5f7f2a874f448f07a3",
+                "author": "Praneeth Kadem",
+                "files": [],
+                "files_total": null,
+                "backend": "github",
+                "mode": "live"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@cca0cf0",
+              "source": "commits",
+              "service": null,
+              "event_time": "2026-11-17T18:45:00.000Z",
+              "available_time": "2026-11-17T18:45:00.000Z",
+              "version": "cca0cf0",
+              "title": "Add migration notes",
+              "content": "commit cca0cf0 2026-11-17T18:45:00.000Z Likhith Vardhan Goruputi\nAdd migration notes",
+              "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/cca0cf05ef9c76732f23ca587cb6b9a81b6cf5c1",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-24T05:58:39.538Z",
+                "repo": "likhith2366/blackbox-demo-shop",
+                "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/cca0cf05ef9c76732f23ca587cb6b9a81b6cf5c1",
+                "http_status": 200,
+                "sha": "cca0cf05ef9c76732f23ca587cb6b9a81b6cf5c1",
+                "author": "Likhith Vardhan Goruputi",
+                "files": [],
+                "files_total": null,
+                "backend": "github",
+                "mode": "live"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@bc90cd2",
+              "source": "commits",
+              "service": null,
+              "event_time": "2026-11-17T14:20:00.000Z",
+              "available_time": "2026-11-17T14:20:00.000Z",
+              "version": "bc90cd2",
+              "title": "Add ruff config",
+              "content": "commit bc90cd2 2026-11-17T14:20:00.000Z Praneeth Kadem\nAdd ruff config",
+              "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/bc90cd22d622e28c4f11f63856ad7788871f2459",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-24T05:58:39.538Z",
+                "repo": "likhith2366/blackbox-demo-shop",
+                "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/bc90cd22d622e28c4f11f63856ad7788871f2459",
+                "http_status": 200,
+                "sha": "bc90cd22d622e28c4f11f63856ad7788871f2459",
+                "author": "Praneeth Kadem",
+                "files": [],
+                "files_total": null,
+                "backend": "github",
+                "mode": "live"
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@3ba7168",
+              "source": "commits",
+              "service": null,
+              "event_time": "2026-11-16T20:00:00.000Z",
+              "available_time": "2026-11-16T20:00:00.000Z",
+              "version": "3ba7168",
+              "title": "Document service config options",
+              "content": "commit 3ba7168 2026-11-16T20:00:00.000Z Likhith Vardhan Goruputi\nDocument service config options",
+              "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/3ba716845e8e97cc9f6a3c9ff0250e8280a4dc75",
+              "attributes": {
+                "live": true,
+                "retrieved_at": "2026-11-24T05:58:39.538Z",
+                "repo": "likhith2366/blackbox-demo-shop",
+                "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/3ba716845e8e97cc9f6a3c9ff0250e8280a4dc75",
+                "http_status": 200,
+                "sha": "3ba716845e8e97cc9f6a3c9ff0250e8280a4dc75",
+                "author": "Likhith Vardhan Goruputi",
+                "files": [],
+                "files_total": null,
+                "backend": "github",
+                "mode": "live"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 8,
+          "truncated": true,
+          "error": null,
+          "elapsed_ms": 719.76970002288,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:9b955e6e86",
+          "resolved": "metric:9b955e6e86",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "metric:e3fba39249",
+          "resolved": "metric:e3fba39249",
+          "method": "exact"
+        },
+        {
+          "where": "h3.supporting",
+          "raw": "metric:ac91d52a4e",
+          "resolved": "metric:ac91d52a4e",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1453,
+        "fixed_part_cut": false,
+        "notebook_budget": 5689,
+        "notebook_tokens": 2523,
+        "records_retrieved": 10,
+        "records_full": 6,
+        "records_one_line": 4,
+        "records_omitted": 0,
+        "prompt_tokens_est": 3947,
+        "prompt_tokens_actual": 3942,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 4,
+      "prompt_tokens": 6593,
+      "completion_tokens": 618,
+      "model_seconds": 36.30980340001406,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:9b955e6e86\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to internal service failure\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:e3fba39249\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to resource exhaustion\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:ac91d52a4e\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-24T05:53:05.233Z\",\n        \"end\": \"2026-11-24T05:58:06.936Z\"\n      }\n    },\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-24T05:53:05.233Z\",\n        \"end\": \"2026-11-24T05:58:06.936Z\"\n      }\n    },\n    {\n      \"tool\": \"search_traces\",\n      \"args\": {\n        \"service\": \"checkout-svc\",\n        \"start\": \"2026-11-24T05:53:05.233Z\",\n        \"end\": \"2026-11-24T05:58:06.936Z\",\n        \"status\": \"error\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate metric for checkout-svc shows a spike at 0.1 (h1's supporting evidence), but the payment-svc error rate is stable. Traces show errors in checkout-svc due to payment-svc timeouts, confirming h1.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:9b955e6e86"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to internal service failure",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:e3fba39249"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h3",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to resource exhaustion",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:ac91d52a4e"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:9b955e6e86"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to internal service failure",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:e3fba39249"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h3",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to resource exhaustion",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:ac91d52a4e"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r4c1",
+          "round": 4,
+          "tool": "get_metrics",
+          "args": {
+            "service": "checkout-svc",
+            "metric": "error_rate",
+            "start": "2026-11-24T05:53:05.233Z",
+            "end": "2026-11-24T05:58:06.936Z"
+          }
+        },
+        {
+          "call_id": "r4c2",
+          "round": 4,
+          "tool": "get_metrics",
+          "args": {
+            "service": "payment-svc",
+            "metric": "error_rate",
+            "start": "2026-11-24T05:53:05.233Z",
+            "end": "2026-11-24T05:58:06.936Z"
+          }
+        },
+        {
+          "call_id": "r4c3",
+          "round": 4,
+          "tool": "search_traces",
+          "args": {
+            "service": "checkout-svc",
+            "start": "2026-11-24T05:53:05.233Z",
+            "end": "2026-11-24T05:58:06.936Z",
+            "status": "error"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r4c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:9b955e6e86",
+              "source": "metrics",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:53:05.233Z",
+              "available_time": "2026-11-24T05:58:05.233Z",
+              "version": null,
+              "title": "checkout-svc error_rate",
+              "content": "checkout-svc error_rate (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=1 last=1\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 0; 05:54:00 0; 05:54:05 0; 05:54:10 0; 05:54:15 1; 05:54:20 1; 05:54:25 1; 05:54:30 1; 05:54:35 1; 05:54:40 1; 05:54:45 1; 05:54:50 1; 05:54:55 1; 05:55:00 1; 05:55:05 1; 05:55:10 1; 05:55:15 1; 05:55:20 1; 05:55:25 1; 05:55:30 1; 05:55:35 1; 05:55:40 1; 05:55:45 1; 05:55:50 1; 05:55:55 1; 05:56:00 1; 05:56:05 1; 05:56:10 1; 05:56:15 1; 05:56:20 1; 05:56:25 1; 05:56:30 1; 05:56:35 1; 05:56:40 0; 05:56:45 0; 05:56:50 0; 05:56:55 0; 05:57:00 0; 05:57:05 0; 05:57:10 0; 05:57:15 0; 05:57:20 0; 05:57:25 0; 05:57:30 0; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 0.7778; 05:58:00 1; 05:58:05 1",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 61,
+                "min": 0.0,
+                "max": 1.0,
+                "last": 1.0,
+                "backend": "prometheus",
+                "query": "query_range error_rate{job=\"checkout-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 7.397499983198941,
+          "is_retry": false
+        },
+        {
+          "call_id": "r4c2",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:1c7ed73f9c",
+              "source": "metrics",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:53:05.233Z",
+              "available_time": "2026-11-24T05:58:05.233Z",
+              "version": null,
+              "title": "payment-svc error_rate",
+              "content": "payment-svc error_rate (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=0.0588 last=0\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 0; 05:54:00 0; 05:54:05 0; 05:54:10 0.0588; 05:54:15 0; 05:54:20 0; 05:54:25 0; 05:54:30 0; 05:54:35 0; 05:54:40 0; 05:54:45 0; 05:54:50 0; 05:54:55 0; 05:55:00 0; 05:55:05 0; 05:55:10 0; 05:55:15 0; 05:55:20 0; 05:55:25 0; 05:55:30 0; 05:55:35 0; 05:55:40 0; 05:55:45 0; 05:55:50 0; 05:55:55 0; 05:56:00 0; 05:56:05 0; 05:56:10 0; 05:56:15 0; 05:56:20 0; 05:56:25 0; 05:56:30 0; 05:56:35 0; 05:56:40 0; 05:56:45 0; 05:56:50 0; 05:56:55 0; 05:57:00 0; 05:57:05 0; 05:57:10 0; 05:57:15 0; 05:57:20 0; 05:57:25 0; 05:57:30 0; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 0; 05:58:00 0; 05:58:05 0",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22payment-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 61,
+                "min": 0.0,
+                "max": 0.0588,
+                "last": 0.0,
+                "backend": "prometheus",
+                "query": "query_range error_rate{job=\"payment-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22payment-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 6.055500009097159,
+          "is_retry": false
+        },
+        {
+          "call_id": "r4c3",
+          "tool": "search_traces",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "trace:c48846c8510685497fd64f59b45de772",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:08.901Z",
+              "available_time": "2026-11-24T05:54:08.901Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2009ms",
+              "content": "trace c48846c8510685497fd64f59b45de772 root=checkout-svc POST /orders start=2026-11-24T05:54:08.901Z duration=2009ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/c48846c8510685497fd64f59b45de772",
+              "attributes": {
+                "trace_id": "c48846c8510685497fd64f59b45de772",
+                "duration_ms": 2009,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/c48846c8510685497fd64f59b45de772",
+                "matched_span_ids": [
+                  "e95a1632d4f534c1",
+                  "6b4807f72ea8dea6"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:46167491cd931354a61ac24005732ea9",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:08.917Z",
+              "available_time": "2026-11-24T05:54:08.917Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2009ms",
+              "content": "trace 46167491cd931354a61ac24005732ea9 root=checkout-svc POST /orders start=2026-11-24T05:54:08.917Z duration=2009ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/46167491cd931354a61ac24005732ea9",
+              "attributes": {
+                "trace_id": "46167491cd931354a61ac24005732ea9",
+                "duration_ms": 2009,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/46167491cd931354a61ac24005732ea9",
+                "matched_span_ids": [
+                  "1040fcc4466f29f9",
+                  "9518d867cb631dd8"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:70c550a44249ad6837010ad757c71b5a",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:08.963Z",
+              "available_time": "2026-11-24T05:54:08.963Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2011ms",
+              "content": "trace 70c550a44249ad6837010ad757c71b5a root=checkout-svc POST /orders start=2026-11-24T05:54:08.963Z duration=2011ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/70c550a44249ad6837010ad757c71b5a",
+              "attributes": {
+                "trace_id": "70c550a44249ad6837010ad757c71b5a",
+                "duration_ms": 2011,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/70c550a44249ad6837010ad757c71b5a",
+                "matched_span_ids": [
+                  "728cb033a5d473d9",
+                  "b0b86438bbec2fc4"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:d8e7e14c596565f10120931919acd94e",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:09.071Z",
+              "available_time": "2026-11-24T05:54:09.071Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2011ms",
+              "content": "trace d8e7e14c596565f10120931919acd94e root=checkout-svc POST /orders start=2026-11-24T05:54:09.071Z duration=2011ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/d8e7e14c596565f10120931919acd94e",
+              "attributes": {
+                "trace_id": "d8e7e14c596565f10120931919acd94e",
+                "duration_ms": 2011,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/d8e7e14c596565f10120931919acd94e",
+                "matched_span_ids": [
+                  "831804792394b958",
+                  "62fcb7bb32388ddb"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:ce71d98222270a2370148c0b1ac7e2cb",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:09.182Z",
+              "available_time": "2026-11-24T05:54:09.182Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2011ms",
+              "content": "trace ce71d98222270a2370148c0b1ac7e2cb root=checkout-svc POST /orders start=2026-11-24T05:54:09.182Z duration=2011ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/ce71d98222270a2370148c0b1ac7e2cb",
+              "attributes": {
+                "trace_id": "ce71d98222270a2370148c0b1ac7e2cb",
+                "duration_ms": 2011,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/ce71d98222270a2370148c0b1ac7e2cb",
+                "matched_span_ids": [
+                  "e3c9ee3edf47c2a0",
+                  "59211ae736ecfee4"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:2694bf92a243c2bd57f00b7f2197d3cf",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:09.244Z",
+              "available_time": "2026-11-24T05:54:09.244Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2011ms",
+              "content": "trace 2694bf92a243c2bd57f00b7f2197d3cf root=checkout-svc POST /orders start=2026-11-24T05:54:09.244Z duration=2011ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/2694bf92a243c2bd57f00b7f2197d3cf",
+              "attributes": {
+                "trace_id": "2694bf92a243c2bd57f00b7f2197d3cf",
+                "duration_ms": 2011,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/2694bf92a243c2bd57f00b7f2197d3cf",
+                "matched_span_ids": [
+                  "c087f4efd69a356c",
+                  "830018ce26feef1e"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:6af16698ddbca4a5d0cc0376966f96ea",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:09.260Z",
+              "available_time": "2026-11-24T05:54:09.260Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2010ms",
+              "content": "trace 6af16698ddbca4a5d0cc0376966f96ea root=checkout-svc POST /orders start=2026-11-24T05:54:09.260Z duration=2010ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/6af16698ddbca4a5d0cc0376966f96ea",
+              "attributes": {
+                "trace_id": "6af16698ddbca4a5d0cc0376966f96ea",
+                "duration_ms": 2010,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/6af16698ddbca4a5d0cc0376966f96ea",
+                "matched_span_ids": [
+                  "9884553aa131f23b",
+                  "df18e54a5ed906ef"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            },
+            {
+              "evidence_id": "trace:9b12d5557dc0599681d402409168436b",
+              "source": "traces",
+              "service": "checkout-svc",
+              "event_time": "2026-11-24T05:54:09.291Z",
+              "available_time": "2026-11-24T05:54:09.291Z",
+              "version": null,
+              "title": "checkout-svc POST /orders 2011ms",
+              "content": "trace 9b12d5557dc0599681d402409168436b root=checkout-svc POST /orders start=2026-11-24T05:54:09.291Z duration=2011ms matched_spans=2",
+              "content_ref": "http://127.0.0.1:3200/api/traces/9b12d5557dc0599681d402409168436b",
+              "attributes": {
+                "trace_id": "9b12d5557dc0599681d402409168436b",
+                "duration_ms": 2011,
+                "matched_spans": 2,
+                "backend": "tempo",
+                "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:3200/api/traces/9b12d5557dc0599681d402409168436b",
+                "matched_span_ids": [
+                  "cf025504d970d83c",
+                  "e5405996df27647a"
+                ]
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 200,
+          "truncated": true,
+          "error": null,
+          "elapsed_ms": 91.66179999010637,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:9b955e6e86",
+          "resolved": "metric:9b955e6e86",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "metric:e3fba39249",
+          "resolved": "metric:e3fba39249",
+          "method": "exact"
+        },
+        {
+          "where": "h3.supporting",
+          "raw": "metric:ac91d52a4e",
+          "resolved": "metric:ac91d52a4e",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1457,
+        "fixed_part_cut": false,
+        "notebook_budget": 5685,
+        "notebook_tokens": 5170,
+        "records_retrieved": 38,
+        "records_full": 28,
+        "records_one_line": 10,
+        "records_omitted": 0,
+        "prompt_tokens_est": 6598,
+        "prompt_tokens_actual": 6593,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 5,
+      "prompt_tokens": 6599,
+      "completion_tokens": 472,
+      "model_seconds": 23.93139969999902,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:9b955e6e86\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to internal service failure\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:e3fba39249\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to resource exhaustion\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:ac91d52a4e\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-24T05:53:05.233Z\",\n        \"end\": \"2026-11-24T05:58:05.233Z\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The error rate in checkout-svc spiked at 05:54:15, and payment-svc error rate is low (max 0.0588). This supports h1 as the most likely cause. Payment-svc is stable, so checkout-svc's error rate is likely due to payment-svc timeouts. The upstream_attempts_per_s metric shows high attempts, indicating payment-svc is being queried frequently but not failing. This aligns with h1.\"\n}",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:9b955e6e86"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to internal service failure",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:e3fba39249"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h3",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to resource exhaustion",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:ac91d52a4e"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:9b955e6e86"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to internal service failure",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:e3fba39249"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h3",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to resource exhaustion",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:ac91d52a4e"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r5c1",
+          "round": 5,
+          "tool": "get_metrics",
+          "args": {
+            "service": "payment-svc",
+            "metric": "error_rate",
+            "start": "2026-11-24T05:53:05.233Z",
+            "end": "2026-11-24T05:58:05.233Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r5c1",
+          "tool": "get_metrics",
+          "status": "ok",
+          "records": [
+            {
+              "evidence_id": "metric:f0cd0e8825",
+              "source": "metrics",
+              "service": "payment-svc",
+              "event_time": "2026-11-24T05:53:05.233Z",
+              "available_time": "2026-11-24T05:58:05.233Z",
+              "version": null,
+              "title": "payment-svc error_rate",
+              "content": "payment-svc error_rate (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=0.0588 last=0\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 0; 05:54:00 0; 05:54:05 0; 05:54:10 0.0588; 05:54:15 0; 05:54:20 0; 05:54:25 0; 05:54:30 0; 05:54:35 0; 05:54:40 0; 05:54:45 0; 05:54:50 0; 05:54:55 0; 05:55:00 0; 05:55:05 0; 05:55:10 0; 05:55:15 0; 05:55:20 0; 05:55:25 0; 05:55:30 0; 05:55:35 0; 05:55:40 0; 05:55:45 0; 05:55:50 0; 05:55:55 0; 05:56:00 0; 05:56:05 0; 05:56:10 0; 05:56:15 0; 05:56:20 0; 05:56:25 0; 05:56:30 0; 05:56:35 0; 05:56:40 0; 05:56:45 0; 05:56:50 0; 05:56:55 0; 05:57:00 0; 05:57:05 0; 05:57:10 0; 05:57:15 0; 05:57:20 0; 05:57:25 0; 05:57:30 0; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 0; 05:58:00 0; 05:58:05 0",
+              "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22payment-svc%22%7D&g0.tab=0",
+              "attributes": {
+                "metric": "error_rate",
+                "points": 61,
+                "min": 0.0,
+                "max": 0.0588,
+                "last": 0.0,
+                "backend": "prometheus",
+                "query": "query_range error_rate{job=\"payment-svc\"} step=5s",
+                "mode": "live",
+                "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22payment-svc%22%7D&g0.tab=0"
+              },
+              "truncated": false,
+              "fixture": false
+            }
+          ],
+          "total_matches": 1,
+          "truncated": false,
+          "error": null,
+          "elapsed_ms": 23.017600004095584,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:9b955e6e86",
+          "resolved": "metric:9b955e6e86",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "metric:e3fba39249",
+          "resolved": "metric:e3fba39249",
+          "method": "exact"
+        },
+        {
+          "where": "h3.supporting",
+          "raw": "metric:ac91d52a4e",
+          "resolved": "metric:ac91d52a4e",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1460,
+        "fixed_part_cut": false,
+        "notebook_budget": 5682,
+        "notebook_tokens": 5124,
+        "records_retrieved": 47,
+        "records_full": 11,
+        "records_one_line": 36,
+        "records_omitted": 0,
+        "prompt_tokens_est": 6555,
+        "prompt_tokens_actual": 6599,
+        "unchecked_sources_shown": null,
+        "attempts": 2,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "continue",
+      "stop_reason": "diagnosis refused: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+    },
+    {
+      "round": 6,
+      "prompt_tokens": 6511,
+      "completion_tokens": 594,
+      "model_seconds": 39.690502499986906,
+      "parse_ok": true,
+      "parse_error": null,
+      "raw_output": "{\n  \"hypotheses\": [\n    {\n      \"id\": \"h1\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to payment-svc timeout\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:9b955e6e86\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h2\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to internal service failure\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:e3fba39249\"\n      ],\n      \"contradicting\": []\n    },\n    {\n      \"id\": \"h3\",\n      \"component\": \"checkout-svc\",\n      \"mechanism\": \"high error rate due to resource exhaustion\",\n      \"status\": \"active\",\n      \"confidence\": \"medium\",\n      \"supporting\": [\n        \"metric:ac91d52a4e\"\n      ],\n      \"contradicting\": []\n    }\n  ],\n  \"tool_calls\": [\n    {\n      \"tool\": \"get_metrics\",\n      \"args\": {\n        \"service\": \"payment-svc\",\n        \"metric\": \"error_rate\",\n        \"start\": \"2026-11-24T05:53:05.233Z\",\n        \"end\": \"2026-11-24T05:58:05.233Z\"\n      }\n    }\n  ],\n  \"decision\": \"diagnose\",\n  \"rationale\": \"The alert is for checkout-svc error rate > 0.1 for 15s. The metric:9b955e6e86 shows checkout-svc error_rate spiked to 1 at 05:54:15. The metric:f0cd0e8825 shows payment-svc error_rate is low (last=0). The traces show checkout-svc POST /orders taking 2009-2011ms, which is high latency but not errors. The error rate in checkout-svc is high, but payment-svc error rate is low. This supports h1: high error rate due to payment-svc timeout (since payment-svc is slow but not failing). The other hypotheses (h2, h3) lack direct evidence. The error rate spike in checkout-svc correlates with payment-svc latency spikes (from metric:e3fba39249 showing latency_p50_ms jumping to 2010ms at 05:54:15).\"\n  }",
+      "model_decision": "diagnose",
+      "hypotheses_before": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:9b955e6e86"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to internal service failure",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:e3fba39249"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h3",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to resource exhaustion",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:ac91d52a4e"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypotheses_after": [
+        {
+          "hypothesis_id": "h1",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to payment-svc timeout",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:9b955e6e86"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h2",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to internal service failure",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:e3fba39249"
+          ],
+          "contradicting": [],
+          "note": ""
+        },
+        {
+          "hypothesis_id": "h3",
+          "component": "checkout-svc",
+          "mechanism": "high error rate due to resource exhaustion",
+          "status": "active",
+          "confidence": "medium",
+          "supporting": [
+            "metric:ac91d52a4e"
+          ],
+          "contradicting": [],
+          "note": ""
+        }
+      ],
+      "hypothesis_changes": [],
+      "tool_requests": [
+        {
+          "call_id": "r6c1",
+          "round": 6,
+          "tool": "get_metrics",
+          "args": {
+            "service": "payment-svc",
+            "metric": "error_rate",
+            "start": "2026-11-24T05:53:05.233Z",
+            "end": "2026-11-24T05:58:05.233Z"
+          }
+        }
+      ],
+      "tool_results": [
+        {
+          "call_id": "r6c1",
+          "tool": "get_metrics",
+          "status": "invalid_args",
+          "records": [],
+          "total_matches": null,
+          "truncated": false,
+          "error": "identical to r5c1; refused without using budget. Use different arguments or another tool.",
+          "elapsed_ms": 0.0,
+          "is_retry": false
+        }
+      ],
+      "invalid_citations": [],
+      "normalized_citations": [],
+      "duplicate_calls": [],
+      "citation_audit": [
+        {
+          "where": "h1.supporting",
+          "raw": "metric:9b955e6e86",
+          "resolved": "metric:9b955e6e86",
+          "method": "exact"
+        },
+        {
+          "where": "h2.supporting",
+          "raw": "metric:e3fba39249",
+          "resolved": "metric:e3fba39249",
+          "method": "exact"
+        },
+        {
+          "where": "h3.supporting",
+          "raw": "metric:ac91d52a4e",
+          "resolved": "metric:ac91d52a4e",
+          "method": "exact"
+        }
+      ],
+      "orchestration_rules": [
+        "repeat refused: r6c1 == r5c1",
+        "diagnosis gate: h1 cites 1 retrieved evidence id(s); at least 2 are required"
+      ],
+      "context": {
+        "num_ctx": 8192,
+        "num_predict": 900,
+        "fixed_tokens": 1430,
+        "fixed_part_cut": false,
+        "notebook_budget": 5712,
+        "notebook_tokens": 5116,
+        "records_retrieved": 48,
+        "records_full": 4,
+        "records_one_line": 44,
+        "records_omitted": 0,
+        "prompt_tokens_est": 6516,
+        "prompt_tokens_actual": 6511,
+        "unchecked_sources_shown": null,
+        "attempts": 1,
+        "prompt_truncated_by_server": false
+      },
+      "stop_decision": "stop_rounds",
+      "stop_reason": "limit reached after 6 rounds and 10 tool calls"
+    }
+  ],
+  "evidence_seen": [
+    {
+      "evidence_id": "metric:9b955e6e86",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:53:05.233Z",
+      "available_time": "2026-11-24T05:58:05.233Z",
+      "version": null,
+      "title": "checkout-svc error_rate",
+      "content": "checkout-svc error_rate (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=1 last=1\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 0; 05:54:00 0; 05:54:05 0; 05:54:10 0; 05:54:15 1; 05:54:20 1; 05:54:25 1; 05:54:30 1; 05:54:35 1; 05:54:40 1; 05:54:45 1; 05:54:50 1; 05:54:55 1; 05:55:00 1; 05:55:05 1; 05:55:10 1; 05:55:15 1; 05:55:20 1; 05:55:25 1; 05:55:30 1; 05:55:35 1; 05:55:40 1; 05:55:45 1; 05:55:50 1; 05:55:55 1; 05:56:00 1; 05:56:05 1; 05:56:10 1; 05:56:15 1; 05:56:20 1; 05:56:25 1; 05:56:30 1; 05:56:35 1; 05:56:40 0; 05:56:45 0; 05:56:50 0; 05:56:55 0; 05:57:00 0; 05:57:05 0; 05:57:10 0; 05:57:15 0; 05:57:20 0; 05:57:25 0; 05:57:30 0; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 0.7778; 05:58:00 1; 05:58:05 1",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 61,
+        "min": 0.0,
+        "max": 1.0,
+        "last": 1.0,
+        "backend": "prometheus",
+        "query": "query_range error_rate{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:8e25305aa1",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:53:05.233Z",
+      "available_time": "2026-11-24T05:58:05.233Z",
+      "version": null,
+      "title": "checkout-svc inflight_requests",
+      "content": "checkout-svc inflight_requests (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=11 last=10\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 1; 05:54:00 0; 05:54:05 1; 05:54:10 1; 05:54:15 2; 05:54:20 7; 05:54:25 6; 05:54:30 5; 05:54:35 5; 05:54:40 5; 05:54:45 2; 05:54:50 10; 05:54:55 2; 05:55:00 6; 05:55:05 4; 05:55:10 8; 05:55:15 4; 05:55:20 7; 05:55:25 3; 05:55:30 2; 05:55:35 6; 05:55:40 5; 05:55:45 4; 05:55:50 9; 05:55:55 11; 05:56:00 6; 05:56:05 11; 05:56:10 7; 05:56:15 7; 05:56:20 6; 05:56:25 6; 05:56:30 6; 05:56:35 6; 05:56:40 1; 05:56:45 0; 05:56:50 1; 05:56:55 0; 05:57:00 0; 05:57:05 1; 05:57:10 1; 05:57:15 1; 05:57:20 0; 05:57:25 0; 05:57:30 1; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 5; 05:58:00 8; 05:58:05 10",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=inflight_requests%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "inflight_requests",
+        "points": 61,
+        "min": 0.0,
+        "max": 11.0,
+        "last": 10.0,
+        "backend": "prometheus",
+        "query": "query_range inflight_requests{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=inflight_requests%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:e3fba39249",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:53:05.233Z",
+      "available_time": "2026-11-24T05:58:05.233Z",
+      "version": null,
+      "title": "checkout-svc latency_p50_ms",
+      "content": "checkout-svc latency_p50_ms (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=35.9 max=2015.29 last=2013.02\n05:53:05 41.07; 05:53:10 46.01; 05:53:15 49.14; 05:53:20 37.86; 05:53:25 41.99; 05:53:30 39.87; 05:53:35 48.01; 05:53:40 38.01; 05:53:45 37.8; 05:53:50 38.08; 05:53:55 37.31; 05:54:00 43.01; 05:54:05 48.98; 05:54:10 60.18; 05:54:15 2010.64; 05:54:20 2007.35; 05:54:25 2008.58; 05:54:30 2014.41; 05:54:35 2008.89; 05:54:40 2013.47; 05:54:45 2006.1; 05:54:50 2008.19; 05:54:55 2012.6; 05:55:00 2013.44; 05:55:05 2007.47; 05:55:10 2008.68; 05:55:15 2007.69; 05:55:20 2012.93; 05:55:25 2013.7; 05:55:30 2015.21; 05:55:35 2015.29; 05:55:40 2010.36; 05:55:45 2015.09; 05:55:50 2006.93; 05:55:55 2014.14; 05:56:00 2012.95; 05:56:05 2012.87; 05:56:10 2011.72; 05:56:15 2009.94; 05:56:20 2013.66; 05:56:25 2007.12; 05:56:30 2014.12; 05:56:35 2014.12; 05:56:40 35.9; 05:56:45 48.41; 05:56:50 41.24; 05:56:55 52.61; 05:57:00 49.84; 05:57:05 44.57; 05:57:10 55.9; 05:57:15 37.92; 05:57:20 51.74; 05:57:25 37; 05:57:30 50.19; 05:57:35 47.05; 05:57:40 43.32; 05:57:45 38.38; 05:57:50 46.46; 05:57:55 2003.88; 05:58:00 2009.37; 05:58:05 2013.02",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=latency_p50_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "latency_p50_ms",
+        "points": 61,
+        "min": 35.9,
+        "max": 2015.29,
+        "last": 2013.02,
+        "backend": "prometheus",
+        "query": "query_range latency_p50_ms{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=latency_p50_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:8f4ada6235",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:53:05.233Z",
+      "available_time": "2026-11-24T05:58:05.233Z",
+      "version": null,
+      "title": "checkout-svc latency_p95_ms",
+      "content": "checkout-svc latency_p95_ms (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=59.63 max=2079.46 last=2016.28\n05:53:05 66.78; 05:53:10 624.69; 05:53:15 649.77; 05:53:20 590.45; 05:53:25 434.57; 05:53:30 69.12; 05:53:35 518.87; 05:53:40 701.31; 05:53:45 66.5; 05:53:50 407.98; 05:53:55 67.2; 05:54:00 682.89; 05:54:05 501.46; 05:54:10 63.17; 05:54:15 2011.99; 05:54:20 2018.09; 05:54:25 2016.53; 05:54:30 2017.51; 05:54:35 2017.49; 05:54:40 2017.53; 05:54:45 2016.71; 05:54:50 2016.5; 05:54:55 2017.02; 05:55:00 2017.8; 05:55:05 2017.14; 05:55:10 2016.69; 05:55:15 2009.84; 05:55:20 2017.22; 05:55:25 2017.68; 05:55:30 2017.15; 05:55:35 2016.24; 05:55:40 2017.35; 05:55:45 2017.87; 05:55:50 2011.24; 05:55:55 2017.84; 05:56:00 2019.22; 05:56:05 2079.46; 05:56:10 2017.87; 05:56:15 2013.16; 05:56:20 2017.46; 05:56:25 2014.51; 05:56:30 2015.85; 05:56:35 2015.85; 05:56:40 396.18; 05:56:45 581.02; 05:56:50 664.99; 05:56:55 717.92; 05:57:00 65.07; 05:57:05 59.63; 05:57:10 305.36; 05:57:15 447.67; 05:57:20 684.66; 05:57:25 269.88; 05:57:30 408.88; 05:57:35 501.8; 05:57:40 571.66; 05:57:45 65.53; 05:57:50 667.34; 05:57:55 2016.58; 05:58:00 2015.32; 05:58:05 2016.28",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=latency_p95_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "latency_p95_ms",
+        "points": 61,
+        "min": 59.63,
+        "max": 2079.46,
+        "last": 2016.28,
+        "backend": "prometheus",
+        "query": "query_range latency_p95_ms{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=latency_p95_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:158d718b0e",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:53:05.233Z",
+      "available_time": "2026-11-24T05:58:05.233Z",
+      "version": null,
+      "title": "checkout-svc requests_per_s",
+      "content": "checkout-svc requests_per_s (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0.6 max=4.4 last=3\n05:53:05 2.6; 05:53:10 2.4; 05:53:15 3.6; 05:53:20 2; 05:53:25 3.8; 05:53:30 3; 05:53:35 3.2; 05:53:40 2.6; 05:53:45 1.8; 05:53:50 4.4; 05:53:55 2.4; 05:54:00 3.8; 05:54:05 2.6; 05:54:10 0.6; 05:54:15 3.2; 05:54:20 2.6; 05:54:25 3.2; 05:54:30 3.4; 05:54:35 3.4; 05:54:40 2.8; 05:54:45 2.2; 05:54:50 2.2; 05:54:55 3.6; 05:55:00 2; 05:55:05 2.8; 05:55:10 3.4; 05:55:15 2.8; 05:55:20 2; 05:55:25 3.2; 05:55:30 2.4; 05:55:35 1.8; 05:55:40 2.2; 05:55:45 3.8; 05:55:50 3.4; 05:55:55 3; 05:56:00 4.2; 05:56:05 3.2; 05:56:10 3.4; 05:56:15 3.4; 05:56:20 2.8; 05:56:25 2.8; 05:56:30 1.2; 05:56:35 1.2; 05:56:40 3.2; 05:56:45 2.8; 05:56:50 3.4; 05:56:55 3.8; 05:57:00 1.8; 05:57:05 4.2; 05:57:10 2.2; 05:57:15 2.6; 05:57:20 2.6; 05:57:25 2; 05:57:30 2.6; 05:57:35 4.2; 05:57:40 2.6; 05:57:45 2.4; 05:57:50 3.2; 05:57:55 1.8; 05:58:00 3.4; 05:58:05 3",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=requests_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "requests_per_s",
+        "points": 61,
+        "min": 0.6,
+        "max": 4.4,
+        "last": 3.0,
+        "backend": "prometheus",
+        "query": "query_range requests_per_s{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=requests_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:ac91d52a4e",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:53:05.233Z",
+      "available_time": "2026-11-24T05:58:05.233Z",
+      "version": null,
+      "title": "checkout-svc upstream_attempts_per_s",
+      "content": "checkout-svc upstream_attempts_per_s (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0.8 max=4.4 last=3.4\n05:53:05 2.6; 05:53:10 2.4; 05:53:15 3.6; 05:53:20 2; 05:53:25 3.8; 05:53:30 3; 05:53:35 3.2; 05:53:40 2.6; 05:53:45 1.8; 05:53:50 4.4; 05:53:55 2.6; 05:54:00 3.6; 05:54:05 2.8; 05:54:10 0.8; 05:54:15 3.6; 05:54:20 3.6; 05:54:25 3; 05:54:30 3.2; 05:54:35 3.4; 05:54:40 2.8; 05:54:45 1.6; 05:54:50 3.8; 05:54:55 2; 05:55:00 2.8; 05:55:05 2.4; 05:55:10 4.2; 05:55:15 2; 05:55:20 2.6; 05:55:25 2.2; 05:55:30 2.4; 05:55:35 2.6; 05:55:40 2; 05:55:45 3.6; 05:55:50 4.4; 05:55:55 3.4; 05:56:00 3.2; 05:56:05 4.2; 05:56:10 2.6; 05:56:15 3.4; 05:56:20 2.6; 05:56:25 2.8; 05:56:30 1.2; 05:56:35 1.2; 05:56:40 3.4; 05:56:45 2.6; 05:56:50 3.6; 05:56:55 3.6; 05:57:00 1.8; 05:57:05 4.2; 05:57:10 2.4; 05:57:15 2.6; 05:57:20 2.4; 05:57:25 2; 05:57:30 2.8; 05:57:35 4; 05:57:40 2.6; 05:57:45 2.4; 05:57:50 3.2; 05:57:55 2.8; 05:58:00 4; 05:58:05 3.4",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=upstream_attempts_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "upstream_attempts_per_s",
+        "points": 61,
+        "min": 0.8,
+        "max": 4.4,
+        "last": 3.4,
+        "backend": "prometheus",
+        "query": "query_range upstream_attempts_per_s{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=upstream_attempts_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:de395593f4",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:53:05.233Z",
+      "available_time": "2026-11-24T05:58:05.233Z",
+      "version": null,
+      "title": "checkout-svc upstream_errors_per_s",
+      "content": "checkout-svc upstream_errors_per_s (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=4.2 last=2.8\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 0; 05:54:00 0; 05:54:05 0; 05:54:10 0; 05:54:15 3.2; 05:54:20 2.6; 05:54:25 3.2; 05:54:30 3.4; 05:54:35 3.4; 05:54:40 2.8; 05:54:45 2.2; 05:54:50 2.6; 05:54:55 3.2; 05:55:00 2; 05:55:05 2.8; 05:55:10 3.4; 05:55:15 2.8; 05:55:20 2; 05:55:25 3.2; 05:55:30 2.4; 05:55:35 1.8; 05:55:40 2.2; 05:55:45 3.8; 05:55:50 3.4; 05:55:55 3; 05:56:00 4.2; 05:56:05 3.2; 05:56:10 3.4; 05:56:15 3.4; 05:56:20 3; 05:56:25 2.6; 05:56:30 1.2; 05:56:35 1.2; 05:56:40 0; 05:56:45 0; 05:56:50 0; 05:56:55 0; 05:57:00 0; 05:57:05 0; 05:57:10 0; 05:57:15 0; 05:57:20 0; 05:57:25 0; 05:57:30 0; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 1.4; 05:58:00 3.6; 05:58:05 2.8",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=upstream_errors_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "upstream_errors_per_s",
+        "points": 61,
+        "min": 0.0,
+        "max": 4.2,
+        "last": 2.8,
+        "backend": "prometheus",
+        "query": "query_range upstream_errors_per_s{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=upstream_errors_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:0080f9cae2",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:15.233Z",
+      "available_time": "2026-11-24T05:54:20.233Z",
+      "version": null,
+      "title": "checkout-svc error_rate",
+      "content": "checkout-svc error_rate (5s steps, 2026-11-24T05:54:15.233Z .. 2026-11-24T05:54:20.233Z): min=1 max=1 last=1\n05:54:15 1; 05:54:20 1",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 2,
+        "min": 1.0,
+        "max": 1.0,
+        "last": 1.0,
+        "backend": "prometheus",
+        "query": "query_range error_rate{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:ba852c34f0",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:15.233Z",
+      "available_time": "2026-11-24T05:54:20.233Z",
+      "version": null,
+      "title": "checkout-svc latency_p50_ms",
+      "content": "checkout-svc latency_p50_ms (5s steps, 2026-11-24T05:54:15.233Z .. 2026-11-24T05:54:20.233Z): min=2007.35 max=2010.64 last=2007.35\n05:54:15 2010.64; 05:54:20 2007.35",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=latency_p50_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "latency_p50_ms",
+        "points": 2,
+        "min": 2007.35,
+        "max": 2010.64,
+        "last": 2007.35,
+        "backend": "prometheus",
+        "query": "query_range latency_p50_ms{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=latency_p50_ms%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:2bd373af47",
+      "source": "metrics",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:15.233Z",
+      "available_time": "2026-11-24T05:54:20.233Z",
+      "version": null,
+      "title": "checkout-svc upstream_errors_per_s",
+      "content": "checkout-svc upstream_errors_per_s (5s steps, 2026-11-24T05:54:15.233Z .. 2026-11-24T05:54:20.233Z): min=2.6 max=3.2 last=2.6\n05:54:15 3.2; 05:54:20 2.6",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=upstream_errors_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "upstream_errors_per_s",
+        "points": 2,
+        "min": 2.6,
+        "max": 3.2,
+        "last": 2.6,
+        "backend": "prometheus",
+        "query": "query_range upstream_errors_per_s{job=\"checkout-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=upstream_errors_per_s%7Bjob%3D%22checkout-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-601",
+      "source": "deployments",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:04:06.545Z",
+      "available_time": "2026-11-24T05:04:07.095Z",
+      "version": "1.8.2",
+      "title": "deployment of checkout-svc 1.8.2",
+      "content": "2026-11-24T05:04:06.545Z deployment d-601 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-601",
+      "attributes": {
+        "deploy_id": "d-601",
+        "build_id": "b-1215",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-602",
+      "source": "deployments",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:12:28.269Z",
+      "available_time": "2026-11-24T05:12:29.447Z",
+      "version": "2.4.1",
+      "title": "deployment of payment-svc 2.4.1",
+      "content": "2026-11-24T05:12:28.269Z deployment d-602 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-602",
+      "attributes": {
+        "deploy_id": "d-602",
+        "build_id": "b-1214",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-603",
+      "source": "deployments",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:12:31.545Z",
+      "available_time": "2026-11-24T05:12:32.086Z",
+      "version": "1.8.2",
+      "title": "deployment of checkout-svc 1.8.2",
+      "content": "2026-11-24T05:12:31.545Z deployment d-603 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-603",
+      "attributes": {
+        "deploy_id": "d-603",
+        "build_id": "b-1215",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-604",
+      "source": "deployments",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:13:48.986Z",
+      "available_time": "2026-11-24T05:13:49.540Z",
+      "version": "2.4.1",
+      "title": "deployment of payment-svc 2.4.1",
+      "content": "2026-11-24T05:13:48.986Z deployment d-604 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by operator (manual restart) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-604",
+      "attributes": {
+        "deploy_id": "d-604",
+        "build_id": "b-1214",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-605",
+      "source": "deployments",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:17:58.518Z",
+      "available_time": "2026-11-24T05:18:01.314Z",
+      "version": "2.4.1",
+      "title": "deployment of payment-svc 2.4.1",
+      "content": "2026-11-24T05:17:58.518Z deployment d-605 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-605",
+      "attributes": {
+        "deploy_id": "d-605",
+        "build_id": "b-1214",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-606",
+      "source": "deployments",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:18:03.427Z",
+      "available_time": "2026-11-24T05:18:03.991Z",
+      "version": "1.8.2",
+      "title": "deployment of checkout-svc 1.8.2",
+      "content": "2026-11-24T05:18:03.427Z deployment d-606 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-606",
+      "attributes": {
+        "deploy_id": "d-606",
+        "build_id": "b-1215",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-607",
+      "source": "deployments",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:19:21.488Z",
+      "available_time": "2026-11-24T05:19:22.055Z",
+      "version": "2.5.0",
+      "title": "deployment of payment-svc 2.5.0",
+      "content": "2026-11-24T05:19:21.488Z deployment d-607 of payment-svc version 2.5.0 to demo-local build=b-1235 commit=d67b90d artifact_digest=sha256:45db0e3dbb252698b678ef3bee92b4f673d6385ca6a4037adb0c564f034d53eb by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-607",
+      "attributes": {
+        "deploy_id": "d-607",
+        "build_id": "b-1235",
+        "commit": "d67b90d",
+        "commit_full": "d67b90d8cc7d1c594e6bb71f1ee13f6f838b889a",
+        "artifact_digest": "sha256:45db0e3dbb252698b678ef3bee92b4f673d6385ca6a4037adb0c564f034d53eb",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-608",
+      "source": "deployments",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:24:00.898Z",
+      "available_time": "2026-11-24T05:24:03.175Z",
+      "version": "2.4.1",
+      "title": "deployment of payment-svc 2.4.1",
+      "content": "2026-11-24T05:24:00.898Z deployment d-608 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-608",
+      "attributes": {
+        "deploy_id": "d-608",
+        "build_id": "b-1214",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-609",
+      "source": "deployments",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:24:05.254Z",
+      "available_time": "2026-11-24T05:24:05.792Z",
+      "version": "1.8.2",
+      "title": "deployment of checkout-svc 1.8.2",
+      "content": "2026-11-24T05:24:05.254Z deployment d-609 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-609",
+      "attributes": {
+        "deploy_id": "d-609",
+        "build_id": "b-1215",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-610",
+      "source": "deployments",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:24:19.014Z",
+      "available_time": "2026-11-24T05:24:20.193Z",
+      "version": "2.4.1",
+      "title": "deployment of payment-svc 2.4.1",
+      "content": "2026-11-24T05:24:19.014Z deployment d-610 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-610",
+      "attributes": {
+        "deploy_id": "d-610",
+        "build_id": "b-1214",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-611",
+      "source": "deployments",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:24:22.277Z",
+      "available_time": "2026-11-24T05:24:22.816Z",
+      "version": "1.8.2",
+      "title": "deployment of checkout-svc 1.8.2",
+      "content": "2026-11-24T05:24:22.277Z deployment d-611 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-611",
+      "attributes": {
+        "deploy_id": "d-611",
+        "build_id": "b-1215",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-612",
+      "source": "deployments",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:25:40.429Z",
+      "available_time": "2026-11-24T05:25:41.626Z",
+      "version": "1.9.0",
+      "title": "deployment of checkout-svc 1.9.0",
+      "content": "2026-11-24T05:25:40.429Z deployment d-612 of checkout-svc version 1.9.0 to demo-local build=b-1236 commit=f5a1eb6 artifact_digest=sha256:f1e7f11f1811100d36022b150c63593f9dbe294e7eb40ef796f8c4ed0f690020 by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-612",
+      "attributes": {
+        "deploy_id": "d-612",
+        "build_id": "b-1236",
+        "commit": "f5a1eb6",
+        "commit_full": "f5a1eb6d7d1a3220913a8d722b78218c9a5ec000",
+        "artifact_digest": "sha256:f1e7f11f1811100d36022b150c63593f9dbe294e7eb40ef796f8c4ed0f690020",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-613",
+      "source": "deployments",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:32:54.258Z",
+      "available_time": "2026-11-24T05:32:55.905Z",
+      "version": "2.4.1",
+      "title": "deployment of payment-svc 2.4.1",
+      "content": "2026-11-24T05:32:54.258Z deployment d-613 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-613",
+      "attributes": {
+        "deploy_id": "d-613",
+        "build_id": "b-1214",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-614",
+      "source": "deployments",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:32:58.009Z",
+      "available_time": "2026-11-24T05:32:58.550Z",
+      "version": "1.8.2",
+      "title": "deployment of checkout-svc 1.8.2",
+      "content": "2026-11-24T05:32:58.009Z deployment d-614 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-614",
+      "attributes": {
+        "deploy_id": "d-614",
+        "build_id": "b-1215",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-615",
+      "source": "deployments",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:34:16.149Z",
+      "available_time": "2026-11-24T05:34:19.547Z",
+      "version": "2.4.2",
+      "title": "deployment of payment-svc 2.4.2",
+      "content": "2026-11-24T05:34:16.149Z deployment d-615 of payment-svc version 2.4.2 to demo-local build=b-1237 commit=d2abf1f artifact_digest=sha256:bec491275196991f893315162456d16f3cfdff42c48c2d57d35155dea72e93fb by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-615",
+      "attributes": {
+        "deploy_id": "d-615",
+        "build_id": "b-1237",
+        "commit": "d2abf1f",
+        "commit_full": "d2abf1fc75b6e24a3b72fab9027c56c2bef8bef0",
+        "artifact_digest": "sha256:bec491275196991f893315162456d16f3cfdff42c48c2d57d35155dea72e93fb",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-616",
+      "source": "deployments",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:52:46.725Z",
+      "available_time": "2026-11-24T05:52:49.016Z",
+      "version": "2.4.1",
+      "title": "deployment of payment-svc 2.4.1",
+      "content": "2026-11-24T05:52:46.725Z deployment d-616 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-616",
+      "attributes": {
+        "deploy_id": "d-616",
+        "build_id": "b-1214",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-617",
+      "source": "deployments",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:52:51.138Z",
+      "available_time": "2026-11-24T05:52:51.699Z",
+      "version": "1.8.2",
+      "title": "deployment of checkout-svc 1.8.2",
+      "content": "2026-11-24T05:52:51.138Z deployment d-617 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-617",
+      "attributes": {
+        "deploy_id": "d-617",
+        "build_id": "b-1215",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-618",
+      "source": "deployments",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:08.631Z",
+      "available_time": "2026-11-24T05:54:09.177Z",
+      "version": "1.8.2",
+      "title": "deployment of checkout-svc 1.8.2",
+      "content": "2026-11-24T05:54:08.631Z deployment d-618 of checkout-svc version 1.8.2 to demo-local build=b-1238 commit=f914a87 artifact_digest=sha256:66041e1d2a5ab9c461d6af0688a68357dee301dd84eafe47c86eb375bc6e5243 by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-618",
+      "attributes": {
+        "deploy_id": "d-618",
+        "build_id": "b-1238",
+        "commit": "f914a87",
+        "commit_full": "f914a87302e28cc4f9bc76c303850ac902307962",
+        "artifact_digest": "sha256:66041e1d2a5ab9c461d6af0688a68357dee301dd84eafe47c86eb375bc6e5243",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-619",
+      "source": "deployments",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:56:30.908Z",
+      "available_time": "2026-11-24T05:56:32.576Z",
+      "version": "2.4.1",
+      "title": "deployment of payment-svc 2.4.1",
+      "content": "2026-11-24T05:56:30.908Z deployment d-619 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-619",
+      "attributes": {
+        "deploy_id": "d-619",
+        "build_id": "b-1214",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "deploy:d-620",
+      "source": "deployments",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:56:34.669Z",
+      "available_time": "2026-11-24T05:56:35.213Z",
+      "version": "1.8.2",
+      "title": "deployment of checkout-svc 1.8.2",
+      "content": "2026-11-24T05:56:34.669Z deployment d-620 of checkout-svc version 1.8.2 to demo-local build=b-1215 commit=b7ae74f artifact_digest=sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1 by deploy-bot (pipeline) status=succeeded",
+      "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-620",
+      "attributes": {
+        "deploy_id": "d-620",
+        "build_id": "b-1215",
+        "commit": "b7ae74f",
+        "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "artifact_digest": "sha256:43d9bf180b9b2bd93f54e26808e36223b42182ec364aeee1abc34fe9bf88cfc1",
+        "backend": "demo-deploy-records",
+        "mode": "live",
+        "query": "read deployments.jsonl",
+        "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@b7ae74f",
+      "source": "commits",
+      "service": null,
+      "event_time": "2026-11-19T16:30:00.000Z",
+      "available_time": "2026-11-19T16:30:00.000Z",
+      "version": "b7ae74f",
+      "title": "Update CHANGELOG",
+      "content": "commit b7ae74f 2026-11-19T16:30:00.000Z Likhith Vardhan Goruputi\nUpdate CHANGELOG",
+      "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-24T05:58:39.538Z",
+        "repo": "likhith2366/blackbox-demo-shop",
+        "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "http_status": 200,
+        "sha": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+        "author": "Likhith Vardhan Goruputi",
+        "files": [],
+        "files_total": null,
+        "backend": "github",
+        "mode": "live"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@b6b0d28",
+      "source": "commits",
+      "service": null,
+      "event_time": "2026-11-19T14:50:00.000Z",
+      "available_time": "2026-11-19T14:50:00.000Z",
+      "version": "b6b0d28",
+      "title": "Note idempotency in payment runbook",
+      "content": "commit b6b0d28 2026-11-19T14:50:00.000Z Praneeth Kadem\nNote idempotency in payment runbook",
+      "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/b6b0d2866296d6a150dcf7c6f58bb3015a840a40",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-24T05:58:39.538Z",
+        "repo": "likhith2366/blackbox-demo-shop",
+        "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/b6b0d2866296d6a150dcf7c6f58bb3015a840a40",
+        "http_status": 200,
+        "sha": "b6b0d2866296d6a150dcf7c6f58bb3015a840a40",
+        "author": "Praneeth Kadem",
+        "files": [],
+        "files_total": null,
+        "backend": "github",
+        "mode": "live"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@22dff22",
+      "source": "commits",
+      "service": null,
+      "event_time": "2026-11-18T19:25:00.000Z",
+      "available_time": "2026-11-18T19:25:00.000Z",
+      "version": "22dff22",
+      "title": "Add smoke check script",
+      "content": "commit 22dff22 2026-11-18T19:25:00.000Z Likhith Vardhan Goruputi\nAdd smoke check script",
+      "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/22dff22265f2a5511ea7c8d12b554ea721333c8d",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-24T05:58:39.538Z",
+        "repo": "likhith2366/blackbox-demo-shop",
+        "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/22dff22265f2a5511ea7c8d12b554ea721333c8d",
+        "http_status": 200,
+        "sha": "22dff22265f2a5511ea7c8d12b554ea721333c8d",
+        "author": "Likhith Vardhan Goruputi",
+        "files": [],
+        "files_total": null,
+        "backend": "github",
+        "mode": "live"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@0b96926",
+      "source": "commits",
+      "service": null,
+      "event_time": "2026-11-18T15:00:00.000Z",
+      "available_time": "2026-11-18T15:00:00.000Z",
+      "version": "0b96926",
+      "title": "Add architecture notes",
+      "content": "commit 0b96926 2026-11-18T15:00:00.000Z Praneeth Kadem\nAdd architecture notes",
+      "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/0b969268754b26d6215984292f9e6758b2bc0180",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-24T05:58:39.538Z",
+        "repo": "likhith2366/blackbox-demo-shop",
+        "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/0b969268754b26d6215984292f9e6758b2bc0180",
+        "http_status": 200,
+        "sha": "0b969268754b26d6215984292f9e6758b2bc0180",
+        "author": "Praneeth Kadem",
+        "files": [],
+        "files_total": null,
+        "backend": "github",
+        "mode": "live"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@2bd56f4",
+      "source": "commits",
+      "service": null,
+      "event_time": "2026-11-17T21:10:00.000Z",
+      "available_time": "2026-11-17T21:10:00.000Z",
+      "version": "2bd56f4",
+      "title": "Add on-call ownership doc",
+      "content": "commit 2bd56f4 2026-11-17T21:10:00.000Z Praneeth Kadem\nAdd on-call ownership doc",
+      "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/2bd56f47dc52823b72dfab5f7f2a874f448f07a3",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-24T05:58:39.538Z",
+        "repo": "likhith2366/blackbox-demo-shop",
+        "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/2bd56f47dc52823b72dfab5f7f2a874f448f07a3",
+        "http_status": 200,
+        "sha": "2bd56f47dc52823b72dfab5f7f2a874f448f07a3",
+        "author": "Praneeth Kadem",
+        "files": [],
+        "files_total": null,
+        "backend": "github",
+        "mode": "live"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@cca0cf0",
+      "source": "commits",
+      "service": null,
+      "event_time": "2026-11-17T18:45:00.000Z",
+      "available_time": "2026-11-17T18:45:00.000Z",
+      "version": "cca0cf0",
+      "title": "Add migration notes",
+      "content": "commit cca0cf0 2026-11-17T18:45:00.000Z Likhith Vardhan Goruputi\nAdd migration notes",
+      "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/cca0cf05ef9c76732f23ca587cb6b9a81b6cf5c1",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-24T05:58:39.538Z",
+        "repo": "likhith2366/blackbox-demo-shop",
+        "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/cca0cf05ef9c76732f23ca587cb6b9a81b6cf5c1",
+        "http_status": 200,
+        "sha": "cca0cf05ef9c76732f23ca587cb6b9a81b6cf5c1",
+        "author": "Likhith Vardhan Goruputi",
+        "files": [],
+        "files_total": null,
+        "backend": "github",
+        "mode": "live"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@bc90cd2",
+      "source": "commits",
+      "service": null,
+      "event_time": "2026-11-17T14:20:00.000Z",
+      "available_time": "2026-11-17T14:20:00.000Z",
+      "version": "bc90cd2",
+      "title": "Add ruff config",
+      "content": "commit bc90cd2 2026-11-17T14:20:00.000Z Praneeth Kadem\nAdd ruff config",
+      "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/bc90cd22d622e28c4f11f63856ad7788871f2459",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-24T05:58:39.538Z",
+        "repo": "likhith2366/blackbox-demo-shop",
+        "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/bc90cd22d622e28c4f11f63856ad7788871f2459",
+        "http_status": 200,
+        "sha": "bc90cd22d622e28c4f11f63856ad7788871f2459",
+        "author": "Praneeth Kadem",
+        "files": [],
+        "files_total": null,
+        "backend": "github",
+        "mode": "live"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@3ba7168",
+      "source": "commits",
+      "service": null,
+      "event_time": "2026-11-16T20:00:00.000Z",
+      "available_time": "2026-11-16T20:00:00.000Z",
+      "version": "3ba7168",
+      "title": "Document service config options",
+      "content": "commit 3ba7168 2026-11-16T20:00:00.000Z Likhith Vardhan Goruputi\nDocument service config options",
+      "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/commit/3ba716845e8e97cc9f6a3c9ff0250e8280a4dc75",
+      "attributes": {
+        "live": true,
+        "retrieved_at": "2026-11-24T05:58:39.538Z",
+        "repo": "likhith2366/blackbox-demo-shop",
+        "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/commits/3ba716845e8e97cc9f6a3c9ff0250e8280a4dc75",
+        "http_status": 200,
+        "sha": "3ba716845e8e97cc9f6a3c9ff0250e8280a4dc75",
+        "author": "Likhith Vardhan Goruputi",
+        "files": [],
+        "files_total": null,
+        "backend": "github",
+        "mode": "live"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:1c7ed73f9c",
+      "source": "metrics",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:53:05.233Z",
+      "available_time": "2026-11-24T05:58:05.233Z",
+      "version": null,
+      "title": "payment-svc error_rate",
+      "content": "payment-svc error_rate (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=0.0588 last=0\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 0; 05:54:00 0; 05:54:05 0; 05:54:10 0.0588; 05:54:15 0; 05:54:20 0; 05:54:25 0; 05:54:30 0; 05:54:35 0; 05:54:40 0; 05:54:45 0; 05:54:50 0; 05:54:55 0; 05:55:00 0; 05:55:05 0; 05:55:10 0; 05:55:15 0; 05:55:20 0; 05:55:25 0; 05:55:30 0; 05:55:35 0; 05:55:40 0; 05:55:45 0; 05:55:50 0; 05:55:55 0; 05:56:00 0; 05:56:05 0; 05:56:10 0; 05:56:15 0; 05:56:20 0; 05:56:25 0; 05:56:30 0; 05:56:35 0; 05:56:40 0; 05:56:45 0; 05:56:50 0; 05:56:55 0; 05:57:00 0; 05:57:05 0; 05:57:10 0; 05:57:15 0; 05:57:20 0; 05:57:25 0; 05:57:30 0; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 0; 05:58:00 0; 05:58:05 0",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22payment-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 61,
+        "min": 0.0,
+        "max": 0.0588,
+        "last": 0.0,
+        "backend": "prometheus",
+        "query": "query_range error_rate{job=\"payment-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22payment-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:c48846c8510685497fd64f59b45de772",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:08.901Z",
+      "available_time": "2026-11-24T05:54:08.901Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2009ms",
+      "content": "trace c48846c8510685497fd64f59b45de772 root=checkout-svc POST /orders start=2026-11-24T05:54:08.901Z duration=2009ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/c48846c8510685497fd64f59b45de772",
+      "attributes": {
+        "trace_id": "c48846c8510685497fd64f59b45de772",
+        "duration_ms": 2009,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/c48846c8510685497fd64f59b45de772",
+        "matched_span_ids": [
+          "e95a1632d4f534c1",
+          "6b4807f72ea8dea6"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:46167491cd931354a61ac24005732ea9",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:08.917Z",
+      "available_time": "2026-11-24T05:54:08.917Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2009ms",
+      "content": "trace 46167491cd931354a61ac24005732ea9 root=checkout-svc POST /orders start=2026-11-24T05:54:08.917Z duration=2009ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/46167491cd931354a61ac24005732ea9",
+      "attributes": {
+        "trace_id": "46167491cd931354a61ac24005732ea9",
+        "duration_ms": 2009,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/46167491cd931354a61ac24005732ea9",
+        "matched_span_ids": [
+          "1040fcc4466f29f9",
+          "9518d867cb631dd8"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:70c550a44249ad6837010ad757c71b5a",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:08.963Z",
+      "available_time": "2026-11-24T05:54:08.963Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2011ms",
+      "content": "trace 70c550a44249ad6837010ad757c71b5a root=checkout-svc POST /orders start=2026-11-24T05:54:08.963Z duration=2011ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/70c550a44249ad6837010ad757c71b5a",
+      "attributes": {
+        "trace_id": "70c550a44249ad6837010ad757c71b5a",
+        "duration_ms": 2011,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/70c550a44249ad6837010ad757c71b5a",
+        "matched_span_ids": [
+          "728cb033a5d473d9",
+          "b0b86438bbec2fc4"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:d8e7e14c596565f10120931919acd94e",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:09.071Z",
+      "available_time": "2026-11-24T05:54:09.071Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2011ms",
+      "content": "trace d8e7e14c596565f10120931919acd94e root=checkout-svc POST /orders start=2026-11-24T05:54:09.071Z duration=2011ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/d8e7e14c596565f10120931919acd94e",
+      "attributes": {
+        "trace_id": "d8e7e14c596565f10120931919acd94e",
+        "duration_ms": 2011,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/d8e7e14c596565f10120931919acd94e",
+        "matched_span_ids": [
+          "831804792394b958",
+          "62fcb7bb32388ddb"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:ce71d98222270a2370148c0b1ac7e2cb",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:09.182Z",
+      "available_time": "2026-11-24T05:54:09.182Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2011ms",
+      "content": "trace ce71d98222270a2370148c0b1ac7e2cb root=checkout-svc POST /orders start=2026-11-24T05:54:09.182Z duration=2011ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/ce71d98222270a2370148c0b1ac7e2cb",
+      "attributes": {
+        "trace_id": "ce71d98222270a2370148c0b1ac7e2cb",
+        "duration_ms": 2011,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/ce71d98222270a2370148c0b1ac7e2cb",
+        "matched_span_ids": [
+          "e3c9ee3edf47c2a0",
+          "59211ae736ecfee4"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:2694bf92a243c2bd57f00b7f2197d3cf",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:09.244Z",
+      "available_time": "2026-11-24T05:54:09.244Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2011ms",
+      "content": "trace 2694bf92a243c2bd57f00b7f2197d3cf root=checkout-svc POST /orders start=2026-11-24T05:54:09.244Z duration=2011ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/2694bf92a243c2bd57f00b7f2197d3cf",
+      "attributes": {
+        "trace_id": "2694bf92a243c2bd57f00b7f2197d3cf",
+        "duration_ms": 2011,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/2694bf92a243c2bd57f00b7f2197d3cf",
+        "matched_span_ids": [
+          "c087f4efd69a356c",
+          "830018ce26feef1e"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:6af16698ddbca4a5d0cc0376966f96ea",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:09.260Z",
+      "available_time": "2026-11-24T05:54:09.260Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2010ms",
+      "content": "trace 6af16698ddbca4a5d0cc0376966f96ea root=checkout-svc POST /orders start=2026-11-24T05:54:09.260Z duration=2010ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/6af16698ddbca4a5d0cc0376966f96ea",
+      "attributes": {
+        "trace_id": "6af16698ddbca4a5d0cc0376966f96ea",
+        "duration_ms": 2010,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/6af16698ddbca4a5d0cc0376966f96ea",
+        "matched_span_ids": [
+          "9884553aa131f23b",
+          "df18e54a5ed906ef"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "trace:9b12d5557dc0599681d402409168436b",
+      "source": "traces",
+      "service": "checkout-svc",
+      "event_time": "2026-11-24T05:54:09.291Z",
+      "available_time": "2026-11-24T05:54:09.291Z",
+      "version": null,
+      "title": "checkout-svc POST /orders 2011ms",
+      "content": "trace 9b12d5557dc0599681d402409168436b root=checkout-svc POST /orders start=2026-11-24T05:54:09.291Z duration=2011ms matched_spans=2",
+      "content_ref": "http://127.0.0.1:3200/api/traces/9b12d5557dc0599681d402409168436b",
+      "attributes": {
+        "trace_id": "9b12d5557dc0599681d402409168436b",
+        "duration_ms": 2011,
+        "matched_spans": 2,
+        "backend": "tempo",
+        "query": "search { resource.service.name = \"checkout-svc\" && status = error }",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:3200/api/traces/9b12d5557dc0599681d402409168436b",
+        "matched_span_ids": [
+          "cf025504d970d83c",
+          "e5405996df27647a"
+        ]
+      },
+      "truncated": false,
+      "fixture": false
+    },
+    {
+      "evidence_id": "metric:f0cd0e8825",
+      "source": "metrics",
+      "service": "payment-svc",
+      "event_time": "2026-11-24T05:53:05.233Z",
+      "available_time": "2026-11-24T05:58:05.233Z",
+      "version": null,
+      "title": "payment-svc error_rate",
+      "content": "payment-svc error_rate (5s steps, 2026-11-24T05:53:05.233Z .. 2026-11-24T05:58:05.233Z): min=0 max=0.0588 last=0\n05:53:05 0; 05:53:10 0; 05:53:15 0; 05:53:20 0; 05:53:25 0; 05:53:30 0; 05:53:35 0; 05:53:40 0; 05:53:45 0; 05:53:50 0; 05:53:55 0; 05:54:00 0; 05:54:05 0; 05:54:10 0.0588; 05:54:15 0; 05:54:20 0; 05:54:25 0; 05:54:30 0; 05:54:35 0; 05:54:40 0; 05:54:45 0; 05:54:50 0; 05:54:55 0; 05:55:00 0; 05:55:05 0; 05:55:10 0; 05:55:15 0; 05:55:20 0; 05:55:25 0; 05:55:30 0; 05:55:35 0; 05:55:40 0; 05:55:45 0; 05:55:50 0; 05:55:55 0; 05:56:00 0; 05:56:05 0; 05:56:10 0; 05:56:15 0; 05:56:20 0; 05:56:25 0; 05:56:30 0; 05:56:35 0; 05:56:40 0; 05:56:45 0; 05:56:50 0; 05:56:55 0; 05:57:00 0; 05:57:05 0; 05:57:10 0; 05:57:15 0; 05:57:20 0; 05:57:25 0; 05:57:30 0; 05:57:35 0; 05:57:40 0; 05:57:45 0; 05:57:50 0; 05:57:55 0; 05:58:00 0; 05:58:05 0",
+      "content_ref": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22payment-svc%22%7D&g0.tab=0",
+      "attributes": {
+        "metric": "error_rate",
+        "points": 61,
+        "min": 0.0,
+        "max": 0.0588,
+        "last": 0.0,
+        "backend": "prometheus",
+        "query": "query_range error_rate{job=\"payment-svc\"} step=5s",
+        "mode": "live",
+        "source_url": "http://127.0.0.1:9090/graph?g0.expr=error_rate%7Bjob%3D%22payment-svc%22%7D&g0.tab=0"
+      },
+      "truncated": false,
+      "fixture": false
+    }
+  ],
+  "usage": {
+    "model_calls": 8,
+    "prompt_tokens": 42106,
+    "completion_tokens": 4012,
+    "model_seconds": 206.80577919993084
+  },
+  "wall_seconds": 208.15,
+  "rounds_used": 6,
+  "tool_calls_used": 10,
+  "budget_violations": 0,
+  "unauthorized_attempts": [],
+  "unauthorized_executed": 0,
+  "evidence_budget": null,
+  "context": {
+    "report_call": {
+      "num_ctx": 8192,
+      "notebook_budget": 6320,
+      "notebook_tokens": 4547,
+      "records_retrieved": 48,
+      "records_full": 3,
+      "records_one_line": 45,
+      "records_omitted": 0,
+      "prompt_tokens_est": 5307,
+      "prompt_tokens_actual": 5302
+    }
+  },
+  "config": {
+    "model": "qwen3:4b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "num_predict": 900,
+    "think": false,
+    "max_rounds": 6,
+    "max_tool_calls": 12,
+    "max_calls_per_round": 3,
+    "model_timeout_s": 240.0,
+    "tool_timeout_s": 10.0,
+    "run_timeout_s": 1200.0,
+    "reserve_output_tokens": 1100,
+    "reserve_instruction_tokens": 1300,
+    "coverage_hint": false,
+    "change_check": true,
+    "refuse_repeats": true,
+    "multi_call_example": true,
+    "rationale_first": false,
+    "diagnosis_gate": "v1",
+    "round_prompt": "investigator_v2",
+    "report_prompt": "report_v1",
+    "baseline_prompt": "baseline_v1",
+    "prompt_version": "investigator_v2@efd3f21bee+report_v1@035e5ce0d8",
+    "code_revision": "82f7326"
+  },
+  "prompt_versions": {
+    "round": "investigator_v2@efd3f21bee",
+    "report": "report_v1@035e5ce0d8"
+  }
+}

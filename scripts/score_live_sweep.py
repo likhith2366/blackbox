@@ -12,7 +12,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-RUNS = ROOT / "runs" / "live_faults"
+RUNS = Path(sys.argv[sys.argv.index("--runs") + 1]) if "--runs" in sys.argv else ROOT / "runs" / "live_faults"
 # component words, mechanism words (a cause must hit one of each)
 FAMILY = {
     "retry_amplification": (["checkout", "httpclient", "client"], ["retr", "amplif", "attempt"]),

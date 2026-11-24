@@ -1,0 +1,58 @@
+[
+  {
+    "source": "logs",
+    "available": true,
+    "healthy": true,
+    "detail": "live Grafana Loki at http://127.0.0.1:3100",
+    "fixture": false
+  },
+  {
+    "source": "metrics",
+    "available": true,
+    "healthy": true,
+    "detail": "live Prometheus at http://127.0.0.1:9090",
+    "fixture": false
+  },
+  {
+    "source": "traces",
+    "available": true,
+    "healthy": true,
+    "detail": "live Grafana Tempo at http://127.0.0.1:3200",
+    "fixture": false
+  },
+  {
+    "source": "deployments",
+    "available": true,
+    "healthy": true,
+    "detail": "live deployment records (A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl)",
+    "fixture": false
+  },
+  {
+    "source": "builds",
+    "available": true,
+    "healthy": true,
+    "detail": "build manifests of the demo platform; Jenkins: live Jenkins at http://127.0.0.1:8080",
+    "fixture": false
+  },
+  {
+    "source": "commits",
+    "available": true,
+    "healthy": true,
+    "detail": "live GitHub API (likhith2366/blackbox-demo-shop), pinned to the deployed SHA",
+    "fixture": false
+  },
+  {
+    "source": "configs",
+    "available": true,
+    "healthy": true,
+    "detail": "live GitHub API (likhith2366/blackbox-demo-shop), pinned to the deployed SHA",
+    "fixture": false
+  },
+  {
+    "source": "tickets",
+    "available": false,
+    "healthy": false,
+    "detail": "Jira not configured",
+    "fixture": false
+  }
+]
