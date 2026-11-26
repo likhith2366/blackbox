@@ -2353,5 +2353,47 @@
       "d-805",
       "d-806"
     ]
+  },
+  {
+    "at": "2026-11-26T19:25:55.720Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-807",
+      "d-808"
+    ]
+  },
+  {
+    "at": "2026-11-26T19:26:12.166Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-809",
+      "d-810"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-26T19:31:42.187Z",
+    "commit": "04a9433f72dc6d965720e74c78086731791ecf20",
+    "builds": [
+      "b-1278"
+    ],
+    "deployments": [
+      "d-811"
+    ],
+    "done_at": "2026-11-26T19:31:44.891Z"
+  },
+  {
+    "at": "2026-11-26T19:38:34.361Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-812",
+      "d-813"
+    ]
   }
 ]

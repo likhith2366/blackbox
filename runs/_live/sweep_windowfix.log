@@ -1,0 +1,6 @@
+19:26:02 retry-policy: reset to baseline
+19:31:42 retry-policy: inject (traffic 3.6 req/s)
+19:32:14 retry-policy: alert error_rate > 0.1 for 15s fired 2026-11-26T19:32:07.187Z (LIVE-EDDFB9); window 2026-11-26T19:27:07.187Z .. cutoff 2026-11-26T19:32:14.951Z
+19:32:15 retry-policy: investigation starts 2026-11-26T19:32:15.026Z
+19:38:24 retry-policy: completed in 369s -> insufficient_evidence: No reliable root cause identified.
+19:38:24 sweep finished; resetting to baseline

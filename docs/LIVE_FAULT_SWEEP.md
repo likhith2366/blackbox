@@ -254,3 +254,35 @@ run time, but a sweep process runs the code it imported at start. In `runs/live_
 run records `e0fdbcc`, and the other four investigated runs record `d742132`; all five actually ran `e0fdbcc` code,
 because the process started at 11:58Z, before `d742132` was committed (12:07Z). New runs write `provenance.json`
 with the revision taken at process start (`blackbox/provenance.py`).
+
+## Retry-policy with the corrected incident window (`runs/live_faults_windowfix`, dev_v3e, extended alerts)
+
+Command: `python scripts/live_fault_sweep.py --faults retry-policy --config configs/dev_v3e.yaml --alerts extended --out runs/live_faults_windowfix`.
+BlackBox `a53160d` (clean), same settings and model digest as before; fault commit `04a9433`, deploy `d-811`, build `b-1278`.
+
+**Window (D19 fix): working.**
+- The payment-svc error-rate alert first fired at 19:32:07Z, with its first onset at 19:31:57Z.
+- The incident was created at 19:32:14.951Z, which is the cutoff.
+- The window starts at 19:27:07Z; the investigation started at 19:32:15Z.
+- Deploy `d-811` (19:31:42Z) is inside the window.
+
+**Retrieval and attribution: working.**
+- Change expansion fetched `deploy:d-811`, `build:b-1278` and `commit:04a9433` (full diff: 2000→250 ms timeout, 1→4
+  retries, retry on timeout/5xx, no backoff).
+- All three records carry `service: checkout-svc`.
+- Runtime context added payment-svc "charge failed … UNIQUE constraint failed: payments.order_id" errors.
+
+**Result: insufficient evidence (abstained), unedited headline "No reliable root cause identified."**
+- In the loop rounds, every hypothesis was payment-svc database pool or latency, citing metrics only. The gate
+  refused each as "runtime effect missing".
+- Synthesis wrote three hypotheses. The first cites the right change chain ("Checkout service deployed new version
+  with retry logic for payment failures", `deploy:d-811`, `build:b-1278`, `commit:04a9433`). But each one names
+  **payment-svc** as the component, because that is where the alert fired.
+- The causal gate refused all three: "change evidence missing: … cites no retrieved deployment, commit, build or
+  config record of payment-svc".
+- With correct attribution, the checkout-svc change no longer passes as a payment-svc cause. This is the case the
+  `libs/` fix was meant to stop (the repeat2 run accepted a payment-svc cause before it).
+- What remains is the model labelling the symptom's service as the component. It is a model limit, so per this
+  task I did not change the gate or the model.
+
+One run; not a stability or accuracy claim.

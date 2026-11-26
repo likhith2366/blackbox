@@ -1,0 +1,71 @@
+{
+  "blackbox_commit": "a53160de7b890283d2b07bd3e2c9c7b4dc88666f",
+  "blackbox_dirty": false,
+  "blackbox_dirty_files": [],
+  "captured_at": "2026-11-26T19:26:01Z",
+  "code_revision_note": "revision at process start; the code this process imported",
+  "config_file": "configs/dev_v3e.yaml",
+  "config_file_sha256": "3e5789670a5cfbf93590263f91e6b54c3beae0b65df8745aa64aa92e7f88d467",
+  "config_effective_sha256": "c231449be9800ce9e4927fde03e8b61ac62a17c5638e617c36e7b328f39a04d2",
+  "model": "qwen3:4b",
+  "model_digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+  "code_source": {
+    "repo": "A:/subjects/genAI/final_project/blackbox-demo-shop",
+    "head": "04a9433f72dc6d965720e74c78086731791ecf20"
+  },
+  "fault": "retry-policy",
+  "alerts": "extended",
+  "argv": [
+    "scripts/live_fault_sweep.py",
+    "--faults",
+    "retry-policy",
+    "--config",
+    "configs/dev_v3e.yaml",
+    "--alerts",
+    "extended",
+    "--out",
+    "runs/live_faults_windowfix"
+  ],
+  "outcome": "completed",
+  "injected": {
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-26T19:31:42.187Z",
+    "commit": "04a9433f72dc6d965720e74c78086731791ecf20",
+    "builds": [
+      "b-1278"
+    ],
+    "deployments": [
+      "d-811"
+    ],
+    "done_at": "2026-11-26T19:31:44.891Z"
+  },
+  "incident_id": "LIVE-EDDFB9",
+  "alert": "error_rate > 0.1 for 15s",
+  "incident_timing": {
+    "rule": "payment-svc:error_rate>0.1:15",
+    "created_at": "2026-11-26T19:32:14.951Z",
+    "searched_since": "2026-11-26T19:31:42.187Z",
+    "lookback_s": 300,
+    "episodes_found": 1,
+    "episodes_in_incident": 1,
+    "first_onset_at": "2026-11-26T19:31:57.187Z",
+    "first_fired_at": "2026-11-26T19:32:07.187Z",
+    "latest_onset_at": "2026-11-26T19:31:57.187Z",
+    "latest_fired_at": "2026-11-26T19:32:07.187Z",
+    "window_start": "2026-11-26T19:27:07.187Z",
+    "window_end": "2026-11-26T19:32:14.951Z",
+    "investigation_cutoff": "2026-11-26T19:32:14.951Z",
+    "episodes": [
+      {
+        "onset": "2026-11-26T19:31:57.187Z",
+        "fired": "2026-11-26T19:32:07.187Z",
+        "end": "2026-11-26T19:32:12.187Z",
+        "value": 0.2
+      }
+    ],
+    "rule_note": "window starts lookback_s before the first episode of the latest chain of episodes; cutoff fixed when the incident was opened",
+    "investigation_started_at": "2026-11-26T19:32:15.026Z"
+  }
+}
