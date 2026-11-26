@@ -68,6 +68,7 @@ def main():
     ap.add_argument("--config", default="configs/frozen_v1.yaml", help="investigator settings (dev_v2.yaml adds the change check)")
     a = ap.parse_args()
     import yaml
+    from blackbox import provenance            # first: the code revision is the one this process imports now
     from demo import controller
     from demo.lock import demo_lock
     from demo.paths import RUNTIME
@@ -77,6 +78,13 @@ def main():
     from blackbox.systems import run_system
     from blackbox.api import gpu_lock
     cfg = RunConfig(**yaml.safe_load((ROOT / a.config).read_text(encoding="utf-8")))
+    cfg = cfg.model_copy(update={"code_revision": provenance.short_revision()})
+    from blackbox.connectors.jira import setting
+
+    def prov(d, fault, **kw):
+        (d / "provenance.json").write_text(json.dumps(provenance.record(
+            ROOT / a.config, cfg, code_repo=setting("BLACKBOX_GIT_REPO_DIR") or None, fault=fault,
+            alerts=a.alerts, argv=sys.argv, **kw), indent=2), encoding="utf-8")
     out_root = Path(a.out)
     for fault in [f.strip() for f in a.faults.split(",") if f.strip()]:
         d = out_root / fault
@@ -97,6 +105,7 @@ def main():
         else:
             log(f"{fault}: no healthy traffic; skipped (recorded as 'no traffic')")
             (d / "output.json").write_text(json.dumps({"status": "no_traffic", "fault": fault}), encoding="utf-8")
+            prov(d, fault, outcome="no_traffic")
             continue
         log(f"{fault}: inject (traffic {rps:.1f} req/s)")
         with demo_lock(f"live sweep inject {fault}"):
@@ -114,6 +123,7 @@ def main():
         if inc is None:
             log(f"{fault}: no alert fired within 4 min; recorded as 'no alert'")
             (d / "output.json").write_text(json.dumps({"status": "no_alert", "fault": fault}), encoding="utf-8")
+            prov(d, fault, outcome="no_alert", injected=ev)
             continue
         log(f"{fault}: alert {inc.alert.condition} fired {inc.alert.fired_at} ({inc.incident_id})")
         while gpu_temp() >= 80:
@@ -132,6 +142,7 @@ def main():
             t0 = time.time()
             out = run_system("blackbox", backend, cfg)
             (d / "output.json").write_text(out.model_dump_json(indent=2), encoding="utf-8")
+            prov(d, fault, outcome=out.status, injected=ev, incident_id=inc.incident_id, alert=inc.alert.condition)
             rep = out.report
             log(f"{fault}: {out.status} in {time.time() - t0:.0f}s -> {rep.status if rep else 'no report'}: "
                 f"{rep.headline if rep else ''}")

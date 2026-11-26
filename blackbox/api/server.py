@@ -19,6 +19,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
+from blackbox import provenance as _provenance_at_start  # noqa: F401  (records the code revision at server start)
 from blackbox.api import gpu_lock
 from blackbox.schemas import RunConfig
 
@@ -618,19 +619,26 @@ def _worker() -> None:
             cfg_file = SETTINGS.get(req.settings, CONFIG)
             cfg = RunConfig(**(yaml.safe_load(cfg_file.read_text(encoding="utf-8")) or {}))
             import hashlib
-            from blackbox.systems import code_revision as _rev
+            from blackbox import provenance
+            cfg = cfg.model_copy(update={"code_revision": provenance.short_revision()})
             man = SNAPSHOTS / req.incident_id / "manifest.json"
             _set(job, meta={"mode": req.mode, "settings": req.settings, "config_file": str(cfg_file.relative_to(REPO)),
                             "model": cfg.model_dump(include={"model", "temperature", "seed", "num_ctx", "num_predict",
                                                               "max_rounds", "max_tool_calls", "round_prompt",
                                                               "report_prompt", "coverage_hint"}),
-                            "code_revision": _rev(), "snapshot": req.incident_id,
+                            "code_revision": provenance.short_revision(),
+                            "config_file_sha256": provenance.file_sha256(cfg_file), "snapshot": req.incident_id,
                             "snapshot_manifest_sha256": hashlib.sha256(man.read_bytes()).hexdigest() if man.exists() else None})
             out = run_system("blackbox", _WithUserContext(base, req), cfg,
                              on_event=lambda kind, payload: _event(job, kind, data=payload),
                              should_cancel=lambda: bool(job.get("cancel")))
             d = Path(job["dir"])
             (d / "output.json").write_text(out.model_dump_json(indent=2), encoding="utf-8")
+            if req.mode in ("live", "live_stack"):
+                from blackbox.connectors.jira import setting as _setting
+                (d / "provenance.json").write_text(json.dumps(provenance.record(
+                    cfg_file, cfg, code_repo=_setting("BLACKBOX_GIT_REPO_DIR") or None, mode=req.mode,
+                    settings=req.settings, alert=req.alert, incident_id=out.incident_id), indent=2), encoding="utf-8")
             (d / "meta.json").write_text(json.dumps({"phase": "BlackBox UI job (not evaluation)", **(job["meta"] or {}),
                                                     "request": req.model_dump(), "status": out.status,
                                                     "retry_of": job.get("retry_of")}, indent=2), encoding="utf-8")
