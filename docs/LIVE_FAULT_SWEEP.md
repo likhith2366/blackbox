@@ -66,7 +66,7 @@ These are two development options in `blackbox/investigator/synthesis.py` and th
 ## dev_v3c: dev_v3 + the causal-evidence gate (`configs/dev_v3c.yaml`, local git, `runs/live_faults_v3c_localgit`)
 
 Fixes found and made while getting this run clean (earlier attempts are kept in `runs/live_faults_v3c_superseded/`):
-- **D15:** a commit fetched with its diff could not replace the diff-less copy from the commit list (coordinator).
+- **D18** (first written as D15): a commit fetched with its diff could not replace the diff-less copy from the commit list (coordinator).
 - **Local git:** commits now carry the services they touch, taken from their paths.
 - **Causal gate onset:** onset is now the start of the latest error episode.
 - **Sweep:** the demo settles longer than the 5-minute incident lookback, so the previous fault is outside the window.
@@ -228,3 +228,29 @@ development results, not a re-run of the 47-run evaluation.
 attribution flaw that is now fixed.
 
 **Stable across both runs:** endpoint-port, payment-stop, index-migration (correct); pool-fastpath (partial).
+
+## Retry-policy rerun after the attribution fix (`runs/live_faults_retryfix`, dev_v3e, extended alerts)
+
+Command: `python scripts/live_fault_sweep.py --faults retry-policy --config configs/dev_v3e.yaml --alerts extended --out runs/live_faults_retryfix`
+
+- **Provenance** (`provenance.json`): BlackBox `950b073` (clean at process start), `configs/dev_v3e.yaml` sha256
+  `3e578967…`, effective config sha256 `c231449b…`, qwen3:4b digest `359d7dd4…`, demo-shop fault commit `0a56709`.
+- **Attribution:** the connector now attributes the real fault commit `0a56709` (libs/httpclient/policy.py +
+  services/checkout/VERSION) to `checkout-svc` only, in both `list_commits` and `get_commit` (checked directly against
+  the demo-shop repository; unit tests in `tests/test_local_git.py`).
+- **Result: insufficient evidence.** The fix was **not exercised** by the investigation:
+  - the alert fired at 17:30:00Z, but the GPU was at 91–92 °C and the sweep's thermal gate held the investigation
+    until 17:37:54Z;
+  - the sweep re-opens the incident at investigation start using the latest alert episode, which by then began at
+    17:37:05Z (payment-svc error rate), so the window was 17:32:05–17:37:54Z;
+  - deploy `d-792` (17:29:43Z) was outside that window, change expansion did not follow it, the commit was never
+    fetched, and the only hypothesis ("payment-svc database connection pool exhaustion") had no change, so it was
+    reported as insufficient evidence.
+- One run, abstained, and it says nothing about stability. The harness defect (a delayed start moves the window
+  past the change) is recorded in `docs/KNOWN_DEFECTS.md` (D19).
+
+**Correction about earlier recorded revisions.** `output.json` → `config.code_revision` was read from `git HEAD` at
+run time, but a sweep process runs the code it imported at start. In `runs/live_faults_repeat2` the retry-policy
+run records `e0fdbcc`, and the other four investigated runs record `d742132`; all five actually ran `e0fdbcc` code,
+because the process started at 11:58Z, before `d742132` was committed (12:07Z). New runs write `provenance.json`
+with the revision taken at process start (`blackbox/provenance.py`).
