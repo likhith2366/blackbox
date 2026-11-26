@@ -63,3 +63,7 @@ notes). This table maps one to the other, in order.
 | `019bd42` | `3a32378` | Rehearsal driver: keep the steps already recorded when a later step fails |
 | `9256cf1` | `6272152` | Live demo rehearsal 2026-11-26: endpoint-port and payment-stop investigated through the UI |
 | `0b6bbd8` | `62801fb` | Rehearsal write-up and service logs |
+| `95329a0` | `b6c1cd7` | Live incidents keep the first alert onset: window starts before the first episode of the c |
+| `a53160d` | `1956590` | Live incident window: do not clip to the alert search start (it would reveal the injection |
+| `c0ff788` | `0390f92` | Retry-policy with the corrected window: change retrieved and attributed to checkout-svc; a |
+| `9a29104` | `9c02814` | Windowfix session logs |
