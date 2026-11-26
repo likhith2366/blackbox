@@ -47,7 +47,7 @@ def test_delayed_investigation_keeps_the_first_onset():
     inc, timing = open_at(prom, now_offset=1100, since_offset=590)
     assert timing["episodes_in_incident"] == 3
     assert inc.alert.fired_at == _iso(at(620))                      # first firing, not the latest (+1010)
-    assert _ts(inc.window_start) == at(590)                           # bounded by `since` (620 - 300 < 590)
+    assert _ts(inc.window_start) == at(620 - 300)                     # not clipped to `since`
     assert _ts(inc.window_start) <= at(600)                           # the deploy at +600 is inside the window
     # the old rule (latest episode, 300 s lookback) would have started the window at +710, after the deploy
     assert timing["latest_fired_at"] == _iso(at(1010))

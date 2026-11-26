@@ -15,7 +15,7 @@ first episode in that chain, and the window starts `lookback_s` before it. Conse
 - a delayed or re-opened investigation keeps the original onset: later re-firings of the same fault extend the
   chain, they do not move the window past the change that started it;
 - an earlier, unrelated episode separated by a quiet period longer than the lookback is not pulled in, and the
-  window never reaches further back than `lookback_s` before the first chained firing (nor before `since`);
+  window never reaches further back than `lookback_s` before the first chained firing;
 - the cutoff is the moment the incident is opened ("created"); nothing later is visible, however late the
   investigation starts. Callers that queue an investigation keep the incident they opened, they do not re-open.
 
@@ -91,7 +91,9 @@ def open_live_incident(service: str, metric: str, op: str, threshold: float, for
     ch = chain(eps, lookback_s)
     first = ch[0]
     fired_at = _iso(first["fired"])
-    start = _iso(max(first["fired"] - lookback_s, _ts(since)))
+    # `since` only bounds the episode search; the window itself is not clipped to it (a window that began exactly
+    # at the injection time would hand the investigator the moment of the change)
+    start = _iso(first["fired"] - lookback_s)
     iid = "LIVE-" + hashlib.sha1(f"{service}|{metric}|{fired_at}".encode()).hexdigest()[:6].upper()
     inc = Incident(
         incident_id=iid,
