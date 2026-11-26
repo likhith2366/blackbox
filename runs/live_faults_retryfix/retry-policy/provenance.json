@@ -1,0 +1,46 @@
+{
+  "blackbox_commit": "950b0730f4859e231685d434e47b820d61892250",
+  "blackbox_dirty": false,
+  "blackbox_dirty_files": [],
+  "captured_at": "2026-11-26T17:23:58Z",
+  "code_revision_note": "revision at process start; the code this process imported",
+  "config_file": "configs/dev_v3e.yaml",
+  "config_file_sha256": "3e5789670a5cfbf93590263f91e6b54c3beae0b65df8745aa64aa92e7f88d467",
+  "config_effective_sha256": "c231449be9800ce9e4927fde03e8b61ac62a17c5638e617c36e7b328f39a04d2",
+  "model": "qwen3:4b",
+  "model_digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+  "code_source": {
+    "repo": "A:/subjects/genAI/final_project/blackbox-demo-shop",
+    "head": "0a56709e7ed86083253e67394e844572599b1700"
+  },
+  "fault": "retry-policy",
+  "alerts": "extended",
+  "argv": [
+    "scripts/live_fault_sweep.py",
+    "--faults",
+    "retry-policy",
+    "--config",
+    "configs/dev_v3e.yaml",
+    "--alerts",
+    "extended",
+    "--out",
+    "runs/live_faults_retryfix"
+  ],
+  "outcome": "completed",
+  "injected": {
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-26T17:29:40.554Z",
+    "commit": "0a56709e7ed86083253e67394e844572599b1700",
+    "builds": [
+      "b-1275"
+    ],
+    "deployments": [
+      "d-792"
+    ],
+    "done_at": "2026-11-26T17:29:43.352Z"
+  },
+  "incident_id": "LIVE-542DFF",
+  "alert": "error_rate > 0.1 for 15s"
+}
