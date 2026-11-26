@@ -147,7 +147,10 @@ function Conversation({ initial }: { initial: ChatSessionData }) {
   const [err, setErr] = useState<string | null>(null)
   const end = useRef<HTMLDivElement>(null)
   const index = useMemo(() => buildIndex(Object.values(s.evidence)), [s.evidence])
-  useEffect(() => end.current?.scrollIntoView({ behavior: 'smooth' }), [s.turns.length, pending])
+  // braces: newer browsers return a Promise from scrollIntoView, and React would call it as the effect's cleanup
+  useEffect(() => {
+    end.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [s.turns.length, pending])
 
   async function send(ev: FormEvent) {
     ev.preventDefault()
