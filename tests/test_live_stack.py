@@ -152,3 +152,16 @@ def test_provenance_is_stamped_on_every_record():
     b = LiveStackBackend(INC, loki=Recorder(BackendResult(status="ok", records=[rec()])))
     r = b.search_logs()
     assert r.records[0].attributes["backend"] == "loki" and r.records[0].attributes["mode"] == "live"
+
+
+def test_local_git_code_source_keeps_github_actions_for_ci(tmp_path):
+    from blackbox.connectors.local_git import LocalGitConnector
+
+    class Actions:
+        def list_workflow_runs(self, limit=5, status=None):
+            return BackendResult(status="empty", total_matches=0)
+
+    b = LiveStackBackend(INC, github=LocalGitConnector(str(tmp_path)), actions=Actions())
+    assert b.list_workflow_runs(limit=2).status == "empty"          # answered by Actions, not by the git connector
+    alone = LiveStackBackend(INC, github=LocalGitConnector(str(tmp_path)))
+    assert alone.list_workflow_runs(limit=2).status == "unavailable"  # no Actions connector: unavailable, no crash

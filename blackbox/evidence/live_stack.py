@@ -39,12 +39,14 @@ class LiveStackBackend:
     ablation = "none"
 
     def __init__(self, incident: Incident, *, loki=None, prometheus=None, tempo=None, deploys=None, github=None,
-                 jira=None, jenkins=None):
+                 jira=None, jenkins=None, actions=None):
         self._incident = incident
         self.incident_id = incident.incident_id
         self.cutoff = incident.investigation_cutoff
         self.loki, self.prom, self.tempo, self.deploys = loki, prometheus, tempo, deploys
         self.github, self.jira, self.jenkins = github, jira, jenkins
+        # GitHub Actions is its own source: with a local git code source, CI still comes from the GitHub API
+        self.actions = actions if actions is not None else (github if hasattr(github, "list_workflow_runs") else None)
         self._full: dict[str, EvidenceRecord] = {}     # records whose preview was shortened, for open_record
 
     # ------------------------------------------------------------------ helpers
@@ -182,24 +184,24 @@ class LiveStackBackend:
 
     # ------------------------------------------------------------------ CI
     def list_workflow_runs(self, limit=5, status=None) -> BackendResult:
-        if self.github is None:
+        if self.actions is None:
             return self._missing("GitHub Actions")
-        return self._before_cutoff(self._keep(self.github.list_workflow_runs(limit=limit, status=status), "github-actions"))
+        return self._before_cutoff(self._keep(self.actions.list_workflow_runs(limit=limit, status=status), "github-actions"))
 
     def get_workflow_run(self, run_id) -> BackendResult:
-        if self.github is None:
+        if self.actions is None:
             return self._missing("GitHub Actions")
-        return self._before_cutoff(self._keep(self.github.get_run(run_id), "github-actions"))
+        return self._before_cutoff(self._keep(self.actions.get_run(run_id), "github-actions"))
 
     def get_job_log(self, job_id, failed_only=True) -> BackendResult:
-        if self.github is None:
+        if self.actions is None:
             return self._missing("GitHub Actions")
-        return self._before_cutoff(self._keep(self.github.get_job_log(job_id, failed_only=failed_only), "github-actions"))
+        return self._before_cutoff(self._keep(self.actions.get_job_log(job_id, failed_only=failed_only), "github-actions"))
 
     def list_run_artifacts(self, run_id) -> BackendResult:
-        if self.github is None:
+        if self.actions is None:
             return self._missing("GitHub Actions")
-        return self._before_cutoff(self._keep(self.github.list_run_artifacts(run_id), "github-actions"))
+        return self._before_cutoff(self._keep(self.actions.list_run_artifacts(run_id), "github-actions"))
 
     def list_jenkins_builds(self, job=None, limit=5) -> BackendResult:
         if self.jenkins is None or not self.jenkins.configured:
@@ -270,6 +272,15 @@ def load_live_stack(incident: Incident, repo: Optional[str] = None, capture_dir=
             github = GitHubConnector(repo, session=capture.RecordingSession(capture_dir, repo=repo))
         else:
             github = GitHubConnector(repo)
+    actions = None
+    if repo is None:                               # local git for code; GitHub Actions still answers for CI
+        from blackbox.connectors.github_api import GitHubConnector
+        ci_repo = os.environ.get("BLACKBOX_GITHUB_REPO", "likhith2366/blackbox-demo-shop")
+        if capture_dir is not None:
+            from blackbox.connectors import capture
+            actions = GitHubConnector(ci_repo, session=capture.RecordingSession(capture_dir, repo=ci_repo))
+        else:
+            actions = GitHubConnector(ci_repo)
     jira, jenkins = JiraConnector(), JenkinsConnector()
     return LiveStackBackend(incident, loki=LokiLogs(), prometheus=PrometheusMetrics(), tempo=TempoTraces(),
-                            deploys=DemoRuntime(), github=github, jira=jira, jenkins=jenkins)
+                            deploys=DemoRuntime(), github=github, jira=jira, jenkins=jenkins, actions=actions)
