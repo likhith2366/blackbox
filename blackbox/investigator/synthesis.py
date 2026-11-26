@@ -19,10 +19,16 @@ investigation. Each record starts with its id in square brackets. Some records m
 
 Propose up to 3 candidate root-cause hypotheses, written from scratch from the evidence (ignore any earlier guesses).
 For each one give:
-- component: the service, and the part of it if the evidence shows it.
+- component: the service that OWNS the cause: the service whose code, configuration, deployment or operation
+  contains the fault (and the part of it if the evidence shows it). This is not necessarily the alerting service.
+  A change in a calling service can make the service it calls report errors; then the component is the caller.
+  A fault inside the called service (it stopped, its own resources, its own code) makes that service the component.
+  A deployment, commit, build or config record names the service it belongs to.
+- symptom_service: the service where the alerted symptom is observed.
 - mechanism: concretely how the fault works.
 - chain: three links, each with a short statement and the ids of the records that directly support that link:
-  cause (the underlying fault or change), runtime_effect (what it does while the system runs), symptom (the alerted symptom).
+  cause (the underlying fault or change, in the component), runtime_effect (what it does while the system runs),
+  symptom (the alerted symptom, in symptom_service).
 - contradicting: ids of records that argue against the hypothesis.
 
 Cite only ids that appear in the evidence. Do not cite a record for a link it does not show.
@@ -38,12 +44,13 @@ SCHEMA: dict[str, Any] = {
     "properties": {
         "hypotheses": {"type": "array", "maxItems": 3, "items": {
             "type": "object",
-            "properties": {"id": {"type": "string"}, "component": {"type": "string"}, "mechanism": {"type": "string"},
+            "properties": {"id": {"type": "string"}, "component": {"type": "string"},
+                           "symptom_service": {"type": "string"}, "mechanism": {"type": "string"},
                            "chain": {"type": "object", "properties": {"cause": _LINK, "runtime_effect": _LINK,
                                                                       "symptom": _LINK},
                                      "required": ["cause", "runtime_effect", "symptom"]},
                            "contradicting": {"type": "array", "items": {"type": "string"}}},
-            "required": ["id", "component", "mechanism", "chain", "contradicting"]}},
+            "required": ["id", "component", "symptom_service", "mechanism", "chain", "contradicting"]}},
         "decision": {"type": "string", "enum": ["diagnosis", "insufficient_evidence"]},
         "top_hypothesis": {"type": ["string", "null"]},
         "rationale": {"type": "string"},
@@ -53,6 +60,7 @@ SCHEMA: dict[str, Any] = {
 
 
 OUTPUT_TOKENS = 1600
+PROMPT_VERSION = __import__("hashlib").sha256(PROMPT.encode()).hexdigest()[:10]
 
 
 def recover(raw: str) -> dict | None:

@@ -575,7 +575,8 @@ class Coordinator:
             self.synthesis_log["error"] = str(exc)
             return stop, stop_reason
         p = reply.parsed or synth.recover(reply.text) or {}
-        self.synthesis_log.update({"raw_output": reply.text, "parsed": p, "loop_stop": stop,
+        self.synthesis_log.update({"prompt_version": synth.PROMPT_VERSION, "raw_output": reply.text, "parsed": p,
+                                   "loop_stop": stop,
                                    "recovered_from_cut_output": reply.parsed is None and bool(p)})
         hs = [h for h in p.get("hypotheses") or [] if isinstance(h, dict)]
         top = next((h for h in hs if h.get("id") == p.get("top_hypothesis")), hs[0] if hs else None)

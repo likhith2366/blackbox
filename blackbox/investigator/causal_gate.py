@@ -152,6 +152,12 @@ def check(h: Optional[Hypothesis], seen: dict[str, EvidenceRecord],
     if not comp_ok:
         return False, (f"{hid}: component missing: '{h.component}' is not a service seen in the retrieved "
                        f"evidence"), roles
+    named = sorted(s for s in services if s in h.component.lower())
+    if len(named) > 1:
+        # a component naming several services leaves the owner of the cause open; every change/mechanism check
+        # below would then match records of either service
+        return False, (f"{hid}: component ambiguous: '{h.component}' names more than one service "
+                       f"({', '.join(named)}); the component must be the one service that owns the cause"), roles
     if not terms:
         return False, (f"{hid}: mechanism not stated: '{h.mechanism}' names a symptom or a change, not how "
                        f"the fault produces the symptom"), roles
