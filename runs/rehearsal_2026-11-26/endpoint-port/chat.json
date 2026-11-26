@@ -1,0 +1,316 @@
+{
+ "session_id": "20261126T181155-d0cfe1",
+ "title": "checkout-svc error rate high",
+ "incident": {
+  "incident_id": "LIVE-BCFE57",
+  "alert": {
+   "alert_id": "ALR-BCFE57",
+   "title": "checkout-svc error rate high",
+   "service": "checkout-svc",
+   "signal": "error_rate",
+   "condition": "error_rate > 0.1 for 15s",
+   "observed_value": 1.0,
+   "fired_at": "2026-11-26T18:02:10.494Z"
+  },
+  "window_start": "2026-11-26T17:57:10.494Z",
+  "window_end": "2026-11-26T18:11:55.494Z",
+  "investigation_cutoff": "2026-11-26T18:11:55.494Z",
+  "environment": "demo-local (live)",
+  "services": [
+   "checkout-svc",
+   "payment-svc"
+  ],
+  "available_sources": [
+   "logs",
+   "traces",
+   "metrics",
+   "deployments",
+   "builds",
+   "commits",
+   "configs",
+   "tickets"
+  ],
+  "notes": "Live incident opened from a Prometheus alert evaluation. Investigate using the available evidence sources."
+ },
+ "mode": "live",
+ "prompt_version": "chat_v1@8318c5f55b",
+ "turns": [
+  {
+   "role": "user",
+   "text": "What changed shortly before this incident, and what is the most likely cause of the failures?",
+   "at": 1795719318.4779744,
+   "citations": [],
+   "confidence": null,
+   "verification": null,
+   "tools": [],
+   "seconds": 0.0
+  },
+  {
+   "role": "assistant",
+   "text": "Shortly before the incident, a deployment of checkout-svc version 1.8.2 (commit c736e86) was made at 2026-11-26T18:01:52.288Z. This deployment changed the payment-svc base URL from 18102 to 18112 in config/checkout-svc.yaml. The most likely cause of the failures is that the new port (18112) was not running on the payment-svc sidecar, causing payment calls to time out after 2000ms. Evidence: deploy:d-799, build:b-1276, commit:c736e86, log:655a1622d0, log:891b10c273, log:bed0c004cd",
+   "at": 1795719318.478506,
+   "citations": [
+    "deploy:d-799",
+    "build:b-1276",
+    "commit:c736e86",
+    "log:655a1622d0",
+    "log:891b10c273",
+    "log:bed0c004cd"
+   ],
+   "confidence": "high",
+   "verification": {
+    "verdict": "verified",
+    "cited": 6,
+    "cited_known": 6,
+    "unknown_ids": [],
+    "checked_tokens": [
+     "1.8.2",
+     "2000ms",
+     "build:b-1276",
+     "c736e86",
+     "commit:c736e86",
+     "deploy:d-799",
+     "log:655a1622d0",
+     "log:891b10c273",
+     "log:bed0c004cd"
+    ],
+    "unsupported_tokens": [],
+    "unqueried_absence_claims": []
+   },
+   "tools": [
+    {
+     "tool": "list_deployments",
+     "args": {
+      "service": "checkout-svc",
+      "start": "2026-11-26T17:57:10.494Z",
+      "end": "2026-11-26T18:11:55.494Z"
+     },
+     "status": "ok",
+     "records": 1,
+     "error": null,
+     "backends": [
+      "demo-deploy-records"
+     ],
+     "ids": [
+      "deploy:d-799"
+     ]
+    },
+    {
+     "tool": "get_build",
+     "args": {
+      "build_id": "b-1276"
+     },
+     "status": "ok",
+     "records": 1,
+     "error": null,
+     "auto": true,
+     "ids": [
+      "build:b-1276"
+     ],
+     "backends": [
+      "demo-deploy-records"
+     ]
+    },
+    {
+     "tool": "get_commit",
+     "args": {
+      "sha": "c736e863c2f004e683f602951810c27ea731fb8b"
+     },
+     "status": "ok",
+     "records": 1,
+     "error": null,
+     "auto": true,
+     "ids": [
+      "commit:c736e86"
+     ],
+     "backends": [
+      "local-git"
+     ]
+    },
+    {
+     "tool": "search_logs",
+     "args": {
+      "service": "checkout-svc",
+      "start": "2026-11-26T18:01:50.000Z",
+      "end": "2026-11-26T18:01:55.000Z",
+      "query": "payment",
+      "level": "ERROR"
+     },
+     "status": "ok",
+     "records": 3,
+     "error": null,
+     "backends": [
+      "loki"
+     ],
+     "ids": [
+      "log:655a1622d0",
+      "log:891b10c273",
+      "log:bed0c004cd"
+     ]
+    }
+   ],
+   "seconds": 60.7
+  }
+ ],
+ "evidence": {
+  "deploy:d-799": {
+   "evidence_id": "deploy:d-799",
+   "source": "deployments",
+   "service": "checkout-svc",
+   "event_time": "2026-11-26T18:01:52.288Z",
+   "available_time": "2026-11-26T18:01:52.852Z",
+   "version": "1.8.2",
+   "title": "deployment of checkout-svc 1.8.2",
+   "content": "2026-11-26T18:01:52.288Z deployment d-799 of checkout-svc version 1.8.2 to demo-local build=b-1276 commit=c736e86 artifact_digest=sha256:bf64118d499f7fc9d7a946ec969eea23b123604b549aff4cfbbd21ae431e6f57 by deploy-bot (pipeline) status=succeeded",
+   "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-799",
+   "attributes": {
+    "deploy_id": "d-799",
+    "build_id": "b-1276",
+    "commit": "c736e86",
+    "commit_full": "c736e863c2f004e683f602951810c27ea731fb8b",
+    "artifact_digest": "sha256:bf64118d499f7fc9d7a946ec969eea23b123604b549aff4cfbbd21ae431e6f57",
+    "backend": "demo-deploy-records",
+    "mode": "live",
+    "query": "read deployments.jsonl",
+    "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+   },
+   "truncated": false,
+   "fixture": false
+  },
+  "build:b-1276": {
+   "evidence_id": "build:b-1276",
+   "source": "builds",
+   "service": "checkout-svc",
+   "event_time": "2026-11-26T18:01:50.295Z",
+   "available_time": "2026-11-26T18:01:50.408Z",
+   "version": "1.8.2",
+   "title": "build b-1276 of checkout-svc 1.8.2",
+   "content": "build b-1276 service=checkout-svc version=1.8.2 commit=c736e863c2f004e683f602951810c27ea731fb8b artifact=checkout-svc-1.8.2-b-1276.tar artifact_digest=sha256:bf64118d499f7fc9d7a946ec969eea23b123604b549aff4cfbbd21ae431e6f57 status=success pipeline=local-build started=2026-11-26T18:01:50.295Z finished=2026-11-26T18:01:50.408Z source_paths=services/__init__.py,services/checkout,libs,config/checkout-svc.yaml",
+   "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\builds\\b-1276.json",
+   "attributes": {
+    "commit": "c736e86",
+    "artifact_digest": "sha256:bf64118d499f7fc9d7a946ec969eea23b123604b549aff4cfbbd21ae431e6f57",
+    "backend": "demo-deploy-records",
+    "mode": "live",
+    "query": "read builds/b-1276.json",
+    "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\builds\\b-1276.json"
+   },
+   "truncated": false,
+   "fixture": false
+  },
+  "commit:c736e86": {
+   "evidence_id": "commit:c736e86",
+   "source": "commits",
+   "service": "checkout-svc",
+   "event_time": "2026-11-26T18:01:50.000Z",
+   "available_time": "2026-11-26T18:01:50.000Z",
+   "version": "c736e86",
+   "title": "DEMO-58: route checkout to payment-svc through the new sidecar port",
+   "content": "commit c736e86 2026-11-26T18:01:50.000Z Likhith Vardhan Goruputi\nDEMO-58: route checkout to payment-svc through the new sidecar port\nfiles: M config/checkout-svc.yaml\n\ndiff --git a/config/checkout-svc.yaml b/config/checkout-svc.yaml\nindex d2f8a69..06e92f9 100644\n--- a/config/checkout-svc.yaml\n+++ b/config/checkout-svc.yaml\n@@ -3,5 +3,5 @@ service: checkout-svc\n port: 18101\n log_level: INFO\n payment:\n-  base_url: http://127.0.0.1:18102\n+  base_url: http://127.0.0.1:18112\n   # timeout / retry policy: defaults from libs/httpclient/policy.py unless set here\n",
+   "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox-demo-shop@c736e86",
+   "attributes": {
+    "backend": "local-git",
+    "mode": "live",
+    "query": "git show c736e86",
+    "source_url": "A:\\subjects\\genAI\\final_project\\blackbox-demo-shop@c736e86",
+    "sha": "c736e863c2f004e683f602951810c27ea731fb8b",
+    "author": "Likhith Vardhan Goruputi"
+   },
+   "truncated": false,
+   "fixture": false
+  },
+  "log:655a1622d0": {
+   "evidence_id": "log:655a1622d0",
+   "source": "logs",
+   "service": "checkout-svc",
+   "event_time": "2026-11-26T18:01:54.780Z",
+   "available_time": "2026-11-26T18:01:54.780Z",
+   "version": null,
+   "title": "ERROR checkout-svc: payment call timed out after 2000ms",
+   "content": "{\"ts\":\"2026-11-26T18:01:54.780Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 2000ms\",\"trace_id\":\"c7c752a35b9d09b0e330e175552866f8\",\"span_id\":\"0fb120ddcb492645\",\"order_id\":\"ord-0706844\",\"attempts\":1}",
+   "content_ref": "loki:http://127.0.0.1:3100#checkout-svc@1795716114780000000",
+   "attributes": {
+    "live": true,
+    "retrieved_at": "2026-11-26T18:54:42.582Z",
+    "backend": "loki",
+    "mode": "live",
+    "query": "{job=\"blackbox-demo\", service=\"checkout-svc\", level=\"ERROR\"} |~ `(?i)(payment)`",
+    "source_url": "http://127.0.0.1:3100/loki/api/v1/query_range",
+    "labels": {
+     "detected_level": "ERROR",
+     "filename": "/telemetry/logs/checkout-svc.jsonl",
+     "job": "blackbox-demo",
+     "level": "ERROR",
+     "service": "checkout-svc",
+     "service_name": "checkout-svc"
+    },
+    "level": "ERROR",
+    "trace_id": "c7c752a35b9d09b0e330e175552866f8"
+   },
+   "truncated": false,
+   "fixture": false
+  },
+  "log:891b10c273": {
+   "evidence_id": "log:891b10c273",
+   "source": "logs",
+   "service": "checkout-svc",
+   "event_time": "2026-11-26T18:01:54.934Z",
+   "available_time": "2026-11-26T18:01:54.934Z",
+   "version": null,
+   "title": "ERROR checkout-svc: payment call timed out after 2000ms",
+   "content": "{\"ts\":\"2026-11-26T18:01:54.934Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 2000ms\",\"trace_id\":\"2d8f1a26f9b8c94941f56c49d5358bd0\",\"span_id\":\"9fe6fb6f27fb5594\",\"order_id\":\"ord-0706845\",\"attempts\":1}",
+   "content_ref": "loki:http://127.0.0.1:3100#checkout-svc@1795716114934000000",
+   "attributes": {
+    "live": true,
+    "retrieved_at": "2026-11-26T18:54:42.582Z",
+    "backend": "loki",
+    "mode": "live",
+    "query": "{job=\"blackbox-demo\", service=\"checkout-svc\", level=\"ERROR\"} |~ `(?i)(payment)`",
+    "source_url": "http://127.0.0.1:3100/loki/api/v1/query_range",
+    "labels": {
+     "detected_level": "ERROR",
+     "filename": "/telemetry/logs/checkout-svc.jsonl",
+     "job": "blackbox-demo",
+     "level": "ERROR",
+     "service": "checkout-svc",
+     "service_name": "checkout-svc"
+    },
+    "level": "ERROR",
+    "trace_id": "2d8f1a26f9b8c94941f56c49d5358bd0"
+   },
+   "truncated": false,
+   "fixture": false
+  },
+  "log:bed0c004cd": {
+   "evidence_id": "log:bed0c004cd",
+   "source": "logs",
+   "service": "checkout-svc",
+   "event_time": "2026-11-26T18:01:54.964Z",
+   "available_time": "2026-11-26T18:01:54.964Z",
+   "version": null,
+   "title": "ERROR checkout-svc: payment call timed out after 2000ms",
+   "content": "{\"ts\":\"2026-11-26T18:01:54.964Z\",\"level\":\"ERROR\",\"service\":\"checkout-svc\",\"msg\":\"payment call timed out after 2000ms\",\"trace_id\":\"d3a52898a25f676caca5356e44968bda\",\"span_id\":\"449cb5ccf7f17053\",\"order_id\":\"ord-0706846\",\"attempts\":1}",
+   "content_ref": "loki:http://127.0.0.1:3100#checkout-svc@1795716114964000000",
+   "attributes": {
+    "live": true,
+    "retrieved_at": "2026-11-26T18:54:42.582Z",
+    "backend": "loki",
+    "mode": "live",
+    "query": "{job=\"blackbox-demo\", service=\"checkout-svc\", level=\"ERROR\"} |~ `(?i)(payment)`",
+    "source_url": "http://127.0.0.1:3100/loki/api/v1/query_range",
+    "labels": {
+     "detected_level": "ERROR",
+     "filename": "/telemetry/logs/checkout-svc.jsonl",
+     "job": "blackbox-demo",
+     "level": "ERROR",
+     "service": "checkout-svc",
+     "service_name": "checkout-svc"
+    },
+    "level": "ERROR",
+    "trace_id": "d3a52898a25f676caca5356e44968bda"
+   },
+   "truncated": false,
+   "fixture": false
+  }
+ }
+}

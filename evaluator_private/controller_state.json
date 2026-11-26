@@ -2227,5 +2227,131 @@
       "d-786",
       "d-787"
     ]
+  },
+  {
+    "at": "2026-11-26T17:23:44.574Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-788",
+      "d-789"
+    ]
+  },
+  {
+    "at": "2026-11-26T17:24:10.504Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-790",
+      "d-791"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-26T17:29:40.554Z",
+    "commit": "0a56709e7ed86083253e67394e844572599b1700",
+    "builds": [
+      "b-1275"
+    ],
+    "deployments": [
+      "d-792"
+    ],
+    "done_at": "2026-11-26T17:29:43.352Z"
+  },
+  {
+    "at": "2026-11-26T17:41:33.984Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-793",
+      "d-794"
+    ]
+  },
+  {
+    "at": "2026-11-26T17:43:27.634Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-795",
+      "d-796"
+    ]
+  },
+  {
+    "at": "2026-11-26T17:56:11.792Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-797",
+      "d-798"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "endpoint-port",
+    "family": "config_mismatch_endpoint",
+    "kind": "commit",
+    "at": "2026-11-26T18:01:50.118Z",
+    "commit": "c736e863c2f004e683f602951810c27ea731fb8b",
+    "builds": [
+      "b-1276"
+    ],
+    "deployments": [
+      "d-799"
+    ],
+    "done_at": "2026-11-26T18:01:52.865Z"
+  },
+  {
+    "at": "2026-11-26T18:14:09.712Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-800",
+      "d-801"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-26T18:29:51.455Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-26T18:29:53.355Z"
+  },
+  {
+    "at": "2026-11-26T18:40:42.997Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-802",
+      "d-803"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "h-payment-currency-log",
+    "family": "harmless",
+    "kind": "commit",
+    "at": "2026-11-26T18:48:52.097Z",
+    "commit": "51b22a26f7df8a3b4a2d5f1681fed7021662658c",
+    "builds": [
+      "b-1277"
+    ],
+    "deployments": [
+      "d-804"
+    ],
+    "done_at": "2026-11-26T18:48:54.958Z"
+  },
+  {
+    "at": "2026-11-26T18:53:57.800Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-805",
+      "d-806"
+    ]
   }
 ]

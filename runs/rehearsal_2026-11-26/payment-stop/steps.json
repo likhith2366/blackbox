@@ -1,0 +1,39 @@
+{
+  "change": "payment-stop",
+  "started": "2026-11-26T18:13:56.142Z",
+  "steps": [
+    {
+      "step": "02_healthy_order",
+      "result_text": "HTTP 201 Created\n37 ms\nweb-mwxvg7tf-hzqo\nsku-1001 \u00d7 1 = $18.50\ncustomer 10081\npayment_id pay_91b953c571f2\nsent 1:14:13 pm\n{\n  \"order_id\": \"web-mwxvg7tf-hzqo\",\n  \"payment_id\": \"pay_91b953c571f2\"\n}"
+    },
+    {
+      "step": "04_order_after_change",
+      "result_text": "HTTP 504 Gateway Timeout\n2020 ms\nweb-mwxw1agi-dtw8\nsku-1001 \u00d7 1 = $18.50\ncustomer 176\nsent 1:30:36 pm\n{\n  \"error\": \"payment timeout\"\n}"
+    }
+  ],
+  "reset": "reset to healthy baseline\n1:13:59 pm\nHTTP 200 OK\n10.5 s\nPOST /control/api/reset\nhide body\n{\n  \"status\": \"healthy baseline deployed\",\n  \"seconds\": 10.5,\n  \"deployments\": [\n    {\n      \"deploy_id\": \"d-800\",\n      \"service\": \"payment-svc\",\n      \"version\": \"2.4.1\",\n      \"build_id\": \"b-1214\"\n    },\n    {\n      \"deploy_id\": \"d-801\",\n      \"service\": \"checkout-svc\",\n      \"version\": \"1.8.2\",\n      \"build_id\": \"b-1215\"\n    }\n  ]\n}",
+  "inject": {
+    "clicked_at": "2026-11-26T18:29:51.436Z",
+    "result": "inject payment-stop\n1:29:51 pm\nHTTP 200 OK\n1926 ms\nPOST /control/api/inject\nhide body\n{\n  \"status\": \"applied\",\n  \"fault_id\": \"payment-stop\",\n  \"seconds\": 1.9,\n  \"commit\": null,\n  \"deployments\": null\n}"
+  },
+  "alert": "checkout-svc:error_rate>0.1:15",
+  "job_id": "20261126T183101-52810c",
+  "job_status": "completed",
+  "job_seconds": 490,
+  "run_id": "ui_jobs~20261126T183101-52810c",
+  "job_error": null,
+  "copied_from": "runs/ui_jobs/20261126T183101-52810c",
+  "sha256": {
+    "output.json": "f562b845d3b6f143d89a1a40dbe0cd0027f71cb4f87a5c4a98864e7e525f64f7",
+    "meta.json": "57946a156aa38a998a28b49289d09f8228d96334680301d64e77655d2c7ea593",
+    "provenance.json": "f0f5baf66279afebe1f13e789150bee6bb71daddd13c5b00af9a1742483ff46e",
+    "incident.json": "43b6fdc91e378c062e5ca18aeb749afcf0355ed801e830c1f1ed3103512fa3c6",
+    "request.json": "3a3bb1b1fd02fee4cc578671b2eb6c083e56fda5d61dd552795a35f22140b55a",
+    "job.json": "7ee73722ff8cbd19679129397de48766a0b2b6975ca7bf9e5b5a9f2bc8f13e87"
+  },
+  "report_status": "diagnosis",
+  "headline": "Most likely cause: payment-svc - payment-svc was shut down by an operator request, causing checkout-svc to time out on payment calls",
+  "chat_question": "What changed shortly before this incident, and what is the most likely cause of the failures?",
+  "chat_session": "20261126T183944-3048f0",
+  "outcome": "investigated"
+}

@@ -1,0 +1,21 @@
+{
+  "change": "endpoint-port",
+  "note": "Reconstructed from runs/_live/rehearsal/driver.log and the copied job files, because the driver lost its in-memory record when the chat step failed (blank chat page, fixed in 6fd4452). steps.json keeps the driver's original error record.",
+  "driver_log": [
+    "17:55:58 endpoint-port: reset from the shop operator page",
+    "17:56:16 endpoint-port: settle 330s so the previous change is outside the incident lookback",
+    "18:01:53 endpoint-port: injected; 'inject endpoint-port\\n1:01:50 pm\\nHTTP 200 OK\\n2802 ms\\nPOST /control/api/inject\\nhide body\\n{\\n  \"status\": \"applied\",\\n  \"fault'",
+    "18:02:55 endpoint-port: alert checkout-svc:error_rate>0.1:15; starting a live-stack investigation from the BlackBox UI",
+    "18:03:01 endpoint-port: job 20261126T180301-3c1dab",
+    "18:11:51 endpoint-port: diagnosis - Most likely cause: checkout-svc - checkout-svc's payment client configuration changed to use a non-existent port in the sidecar"
+  ],
+  "alert": "checkout-svc:error_rate>0.1:15",
+  "job_id": "20261126T180301-3c1dab",
+  "run_id": "ui_jobs~20261126T180301-3c1dab",
+  "chat": {
+    "session": "20261126T181155-d0cfe1",
+    "opened_by_driver": "18:11:55Z (UI then went blank)",
+    "question_asked_via_ui_at": "after the rehearsal, ~18:57Z, same open session; its live cutoff stays 18:11:55Z",
+    "file": "chat.json"
+  }
+}

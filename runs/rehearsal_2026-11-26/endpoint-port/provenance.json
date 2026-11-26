@@ -1,0 +1,20 @@
+{
+  "blackbox_commit": "1c65f87aa8aa6e23a1cfa562266e997ab669eb33",
+  "blackbox_dirty": false,
+  "blackbox_dirty_files": [],
+  "captured_at": "2026-11-26T17:26:06Z",
+  "code_revision_note": "revision at process start; the code this process imported",
+  "config_file": "configs/dev_v3e.yaml",
+  "config_file_sha256": "3e5789670a5cfbf93590263f91e6b54c3beae0b65df8745aa64aa92e7f88d467",
+  "config_effective_sha256": "c231449be9800ce9e4927fde03e8b61ac62a17c5638e617c36e7b328f39a04d2",
+  "model": "qwen3:4b",
+  "model_digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+  "code_source": {
+    "repo": "A:/subjects/genAI/final_project/blackbox-demo-shop",
+    "head": "c736e863c2f004e683f602951810c27ea731fb8b"
+  },
+  "mode": "live_stack",
+  "settings": "improved",
+  "alert": "checkout-svc:error_rate>0.1:15",
+  "incident_id": "LIVE-F27F91"
+}

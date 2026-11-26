@@ -1,0 +1,888 @@
+{
+ "checked_at": "2026-11-26T17:44:28.737Z",
+ "raw": {
+  "loki": {
+   "query": "{job=\"blackbox-demo\", service=\"payment-svc\", level=\"ERROR\"}",
+   "ts_ns": "1795714880737000000",
+   "line": {
+    "ts": "2026-11-26T17:41:20.737Z",
+    "level": "ERROR",
+    "service": "payment-svc",
+    "msg": "charge failed",
+    "trace_id": "983b1b3d090d886865d4703b961d00f4",
+    "span_id": "6cc0f7a922ac44d3",
+    "order_id": "ord-0703171",
+    "error": "IntegrityError: UNIQUE constraint failed: payments.order_id"
+   },
+   "labels": {
+    "detected_level": "ERROR",
+    "filename": "/telemetry/logs/payment-svc.jsonl",
+    "job": "blackbox-demo",
+    "level": "ERROR",
+    "service": "payment-svc",
+    "service_name": "payment-svc"
+   }
+  },
+  "tempo": {
+   "trace_id": "983b1b3d090d886865d4703b961d00f4",
+   "spans": [
+    {
+     "service": "checkout-svc",
+     "name": "POST /charge",
+     "spanId": "v+Cle5Sp5nw=",
+     "start": "1795714880145000000",
+     "status": {
+      "message": "timeout after 250ms",
+      "code": "STATUS_CODE_ERROR"
+     }
+    },
+    {
+     "service": "checkout-svc",
+     "name": "POST /charge",
+     "spanId": "fRxRiDFZaG4=",
+     "start": "1795714880408000000",
+     "status": {
+      "message": "timeout after 250ms",
+      "code": "STATUS_CODE_ERROR"
+     }
+    },
+    {
+     "service": "checkout-svc",
+     "name": "POST /charge",
+     "spanId": "Q494uEYfhkE=",
+     "start": "1795714880675000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "checkout-svc",
+     "name": "POST /orders",
+     "spanId": "p4oELIE19Qo=",
+     "start": "1795714880144000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "db.pool.acquire",
+     "spanId": "KBflVrCxLUE=",
+     "start": "1795714880146000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "db.pool.acquire",
+     "spanId": "SbGdnKHLqxc=",
+     "start": "1795714880411000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "risk.score",
+     "spanId": "B3NT0Yimqc8=",
+     "start": "1795714880147000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "db.query",
+     "spanId": "HnQQyLGrgp8=",
+     "start": "1795714880471000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "db.query",
+     "spanId": "NFpMWp8cu/I=",
+     "start": "1795714880476000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "db.query",
+     "spanId": "7XgFk/o1Wzs=",
+     "start": "1795714880476000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "POST /charge",
+     "spanId": "mHeIMhMHu3Q=",
+     "start": "1795714880146000000",
+     "status": {
+      "message": "ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine",
+      "code": "STATUS_CODE_ERROR"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "db.pool.acquire",
+     "spanId": "q0rVK3vXOPI=",
+     "start": "1795714880678000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "POST /charge",
+     "spanId": "S9taagpdG9o=",
+     "start": "1795714880678000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "risk.score",
+     "spanId": "MTlk9OKA/Y8=",
+     "start": "1795714880412000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "db.query",
+     "spanId": "idsghdOiHB8=",
+     "start": "1795714880734000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "db.query",
+     "spanId": "xXPXMbP9oH0=",
+     "start": "1795714880735000000",
+     "status": {
+      "code": "STATUS_CODE_OK"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "db.query",
+     "spanId": "hgxYWeIciwE=",
+     "start": "1795714880736000000",
+     "status": {
+      "message": "IntegrityError: UNIQUE constraint failed: payments.order_id",
+      "code": "STATUS_CODE_ERROR"
+     }
+    },
+    {
+     "service": "payment-svc",
+     "name": "POST /charge",
+     "spanId": "bMD3qSKsRNM=",
+     "start": "1795714880411000000",
+     "status": {
+      "message": "ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine",
+      "code": "STATUS_CODE_ERROR"
+     }
+    }
+   ]
+  },
+  "prometheus": {
+   "db_pool_in_use": [
+    [
+     1795714820.737,
+     "-3"
+    ],
+    [
+     1795714825.737,
+     "-3"
+    ],
+    [
+     1795714830.737,
+     "-3"
+    ],
+    [
+     1795714835.737,
+     "-2"
+    ],
+    [
+     1795714840.737,
+     "-3"
+    ],
+    [
+     1795714845.737,
+     "-3"
+    ],
+    [
+     1795714850.737,
+     "-3"
+    ],
+    [
+     1795714855.737,
+     "-3"
+    ],
+    [
+     1795714860.737,
+     "-3"
+    ],
+    [
+     1795714865.737,
+     "0"
+    ],
+    [
+     1795714870.737,
+     "-3"
+    ],
+    [
+     1795714875.737,
+     "-3"
+    ],
+    [
+     1795714880.737,
+     "-1"
+    ],
+    [
+     1795714885.737,
+     "-3"
+    ]
+   ],
+   "error_rate": [
+    [
+     1795714820.737,
+     "0.881"
+    ],
+    [
+     1795714825.737,
+     "0.9848"
+    ],
+    [
+     1795714830.737,
+     "1"
+    ],
+    [
+     1795714835.737,
+     "0.96"
+    ],
+    [
+     1795714840.737,
+     "1"
+    ],
+    [
+     1795714845.737,
+     "1"
+    ],
+    [
+     1795714850.737,
+     "0.8214"
+    ],
+    [
+     1795714855.737,
+     "0.2"
+    ],
+    [
+     1795714860.737,
+     "0"
+    ],
+    [
+     1795714865.737,
+     "0.1538"
+    ],
+    [
+     1795714870.737,
+     "0.2273"
+    ],
+    [
+     1795714875.737,
+     "0.1333"
+    ],
+    [
+     1795714880.737,
+     "0.1111"
+    ],
+    [
+     1795714885.737,
+     "0.5"
+    ]
+   ]
+  }
+ },
+ "blackbox": {
+  "search_logs": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "log:992244556d",
+     "source": "logs",
+     "service": "payment-svc",
+     "event_time": "2026-11-26T17:41:20.737Z",
+     "available_time": "2026-11-26T17:41:20.737Z",
+     "version": null,
+     "title": "ERROR payment-svc: charge failed",
+     "content": "{\"ts\":\"2026-11-26T17:41:20.737Z\",\"level\":\"ERROR\",\"service\":\"payment-svc\",\"msg\":\"charge failed\",\"trace_id\":\"983b1b3d090d886865d4703b961d00f4\",\"span_id\":\"6cc0f7a922ac44d3\",\"order_id\":\"ord-0703171\",\"error\":\"IntegrityError: UNIQUE constraint failed: payments.order_id\"}",
+     "content_ref": "loki:http://127.0.0.1:3100#payment-svc@1795714880737000000",
+     "attributes": {
+      "live": true,
+      "retrieved_at": "2026-11-26T17:44:29.166Z",
+      "backend": "loki",
+      "mode": "live",
+      "query": "{job=\"blackbox-demo\", service=\"payment-svc\", level=\"ERROR\"}",
+      "source_url": "http://127.0.0.1:3100/loki/api/v1/query_range",
+      "labels": {
+       "detected_level": "ERROR",
+       "filename": "/telemetry/logs/payment-svc.jsonl",
+       "job": "blackbox-demo",
+       "level": "ERROR",
+       "service": "payment-svc",
+       "service_name": "payment-svc"
+      },
+      "level": "ERROR",
+      "trace_id": "983b1b3d090d886865d4703b961d00f4"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "get_trace": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "span:a78a042c8135f50a",
+     "source": "traces",
+     "service": "checkout-svc",
+     "event_time": "2026-11-26T17:41:20.144Z",
+     "available_time": "2026-11-26T17:41:20.681Z",
+     "version": null,
+     "title": "checkout-svc POST /orders 537.0ms ok",
+     "content": "span a78a042c8135f50a parent=- trace=983b1b3d090d886865d4703b961d00f4 start=2026-11-26T17:41:20.144Z checkout-svc POST /orders 537.0ms ok {\"order.id\":\"ord-0703171\",\"http.route\":\"/orders\",\"http.status_code\":\"201\"} resource={\"service.version\":\"1.9.0\",\"telemetry.source\":\"demo-shop libs/telemetry JSONL (forwarded live)\",\"service.name\":\"checkout-svc\"}",
+     "content_ref": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4",
+     "attributes": {
+      "trace_id": "983b1b3d090d886865d4703b961d00f4",
+      "parent_span_id": null,
+      "kind": "server",
+      "duration_ms": 537.0,
+      "status": "ok",
+      "backend": "tempo",
+      "query": "GET /api/traces/983b1b3d090d886865d4703b961d00f4",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "span:bfe0a57b94a9e67c",
+     "source": "traces",
+     "service": "checkout-svc",
+     "event_time": "2026-11-26T17:41:20.145Z",
+     "available_time": "2026-11-26T17:41:20.407Z",
+     "version": null,
+     "title": "checkout-svc POST /charge 262.0ms error",
+     "content": "span bfe0a57b94a9e67c parent=a78a042c8135f50a trace=983b1b3d090d886865d4703b961d00f4 start=2026-11-26T17:41:20.145Z checkout-svc POST /charge 262.0ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":\"1\",\"http.timeout_ms\":\"250\"} resource={\"service.version\":\"1.9.0\",\"telemetry.source\":\"demo-shop libs/telemetry JSONL (forwarded live)\",\"service.name\":\"checkout-svc\"}",
+     "content_ref": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4",
+     "attributes": {
+      "trace_id": "983b1b3d090d886865d4703b961d00f4",
+      "parent_span_id": "a78a042c8135f50a",
+      "kind": "client",
+      "duration_ms": 262.0,
+      "status": "error",
+      "backend": "tempo",
+      "query": "GET /api/traces/983b1b3d090d886865d4703b961d00f4",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "span:2817e556b0b12d41",
+     "source": "traces",
+     "service": "payment-svc",
+     "event_time": "2026-11-26T17:41:20.146Z",
+     "available_time": "2026-11-26T17:41:20.146Z",
+     "version": null,
+     "title": "payment-svc db.pool.acquire 0.0ms ok",
+     "content": "span 2817e556b0b12d41 parent=987788321307bb74 trace=983b1b3d090d886865d4703b961d00f4 start=2026-11-26T17:41:20.146Z payment-svc db.pool.acquire 0.0ms ok {\"db.pool.wait_ms\":0} resource={\"service.version\":\"2.4.1\",\"telemetry.source\":\"demo-shop libs/telemetry JSONL (forwarded live)\",\"service.name\":\"payment-svc\"}",
+     "content_ref": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4",
+     "attributes": {
+      "trace_id": "983b1b3d090d886865d4703b961d00f4",
+      "parent_span_id": "987788321307bb74",
+      "kind": "internal",
+      "duration_ms": 0.0,
+      "status": "ok",
+      "backend": "tempo",
+      "query": "GET /api/traces/983b1b3d090d886865d4703b961d00f4",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "span:987788321307bb74",
+     "source": "traces",
+     "service": "payment-svc",
+     "event_time": "2026-11-26T17:41:20.146Z",
+     "available_time": "2026-11-26T17:41:20.479Z",
+     "version": null,
+     "title": "payment-svc POST /charge 333.0ms error",
+     "content": "span 987788321307bb74 parent=bfe0a57b94a9e67c trace=983b1b3d090d886865d4703b961d00f4 start=2026-11-26T17:41:20.146Z payment-svc POST /charge 333.0ms error (ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine) {\"order.id\":\"ord-0703171\",\"http.route\":\"/charge\"} resource={\"service.version\":\"2.4.1\",\"telemetry.source\":\"demo-shop libs/telemetry JSONL (forwarded live)\",\"service.name\":\"payment-svc\"}",
+     "content_ref": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4",
+     "attributes": {
+      "trace_id": "983b1b3d090d886865d4703b961d00f4",
+      "parent_span_id": "bfe0a57b94a9e67c",
+      "kind": "server",
+      "duration_ms": 333.0,
+      "status": "error",
+      "backend": "tempo",
+      "query": "GET /api/traces/983b1b3d090d886865d4703b961d00f4",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "span:077353d188a6a9cf",
+     "source": "traces",
+     "service": "payment-svc",
+     "event_time": "2026-11-26T17:41:20.147Z",
+     "available_time": "2026-11-26T17:41:20.470Z",
+     "version": null,
+     "title": "payment-svc risk.score 323.0ms ok",
+     "content": "span 077353d188a6a9cf parent=987788321307bb74 trace=983b1b3d090d886865d4703b961d00f4 start=2026-11-26T17:41:20.147Z payment-svc risk.score 323.0ms ok {\"amount\":368.45} resource={\"service.version\":\"2.4.1\",\"telemetry.source\":\"demo-shop libs/telemetry JSONL (forwarded live)\",\"service.name\":\"payment-svc\"}",
+     "content_ref": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4",
+     "attributes": {
+      "trace_id": "983b1b3d090d886865d4703b961d00f4",
+      "parent_span_id": "987788321307bb74",
+      "kind": "internal",
+      "duration_ms": 323.0,
+      "status": "ok",
+      "backend": "tempo",
+      "query": "GET /api/traces/983b1b3d090d886865d4703b961d00f4",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "span:7d1c51883159686e",
+     "source": "traces",
+     "service": "checkout-svc",
+     "event_time": "2026-11-26T17:41:20.408Z",
+     "available_time": "2026-11-26T17:41:20.674Z",
+     "version": null,
+     "title": "checkout-svc POST /charge 266.0ms error",
+     "content": "span 7d1c51883159686e parent=a78a042c8135f50a trace=983b1b3d090d886865d4703b961d00f4 start=2026-11-26T17:41:20.408Z checkout-svc POST /charge 266.0ms error (timeout after 250ms) {\"peer.service\":\"payment-svc\",\"http.attempt\":\"2\",\"http.timeout_ms\":\"250\"} resource={\"service.version\":\"1.9.0\",\"telemetry.source\":\"demo-shop libs/telemetry JSONL (forwarded live)\",\"service.name\":\"checkout-svc\"}",
+     "content_ref": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4",
+     "attributes": {
+      "trace_id": "983b1b3d090d886865d4703b961d00f4",
+      "parent_span_id": "a78a042c8135f50a",
+      "kind": "client",
+      "duration_ms": 266.0,
+      "status": "error",
+      "backend": "tempo",
+      "query": "GET /api/traces/983b1b3d090d886865d4703b961d00f4",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:3200/api/traces/983b1b3d090d886865d4703b961d00f4"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "get_metrics": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "metric:40afac104a",
+     "source": "metrics",
+     "service": "payment-svc",
+     "event_time": "2026-11-26T17:39:20.737Z",
+     "available_time": "2026-11-26T17:41:25.737Z",
+     "version": null,
+     "title": "payment-svc db_pool_in_use",
+     "content": "payment-svc db_pool_in_use (5s steps, 2026-11-26T17:39:20.737Z .. 2026-11-26T17:41:25.737Z): min=-3 max=2 last=-3\n17:39:20 -3; 17:39:25 -3; 17:39:30 -3; 17:39:35 -3; 17:39:40 -1; 17:39:45 -2; 17:39:50 -2; 17:39:55 -2; 17:40:00 -2; 17:40:05 2; 17:40:10 -3; 17:40:15 -2; 17:40:20 -3; 17:40:25 -3; 17:40:30 -3; 17:40:35 -2; 17:40:40 -3; 17:40:45 -3; 17:40:50 -3; 17:40:55 -3; 17:41:00 -3; 17:41:05 0; 17:41:10 -3; 17:41:15 -3; 17:41:20 -1; 17:41:25 -3",
+     "content_ref": "http://127.0.0.1:9090/graph?g0.expr=db_pool_in_use%7Bjob%3D%22payment-svc%22%7D&g0.tab=0",
+     "attributes": {
+      "metric": "db_pool_in_use",
+      "points": 26,
+      "min": -3.0,
+      "max": 2.0,
+      "last": -3.0,
+      "backend": "prometheus",
+      "query": "query_range db_pool_in_use{job=\"payment-svc\"} step=5s",
+      "mode": "live",
+      "source_url": "http://127.0.0.1:9090/graph?g0.expr=db_pool_in_use%7Bjob%3D%22payment-svc%22%7D&g0.tab=0"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "list_deployments": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "deploy:d-756",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T11:18:51.223Z",
+     "available_time": "2026-11-24T11:18:52.864Z",
+     "version": "2.4.1",
+     "title": "deployment of payment-svc 2.4.1",
+     "content": "2026-11-24T11:18:51.223Z deployment d-756 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-756",
+     "attributes": {
+      "deploy_id": "d-756",
+      "build_id": "b-1214",
+      "commit": "b7ae74f",
+      "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "deploy:d-758",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T11:24:27.471Z",
+     "available_time": "2026-11-24T11:24:28.016Z",
+     "version": "2.4.1",
+     "title": "deployment of payment-svc 2.4.1",
+     "content": "2026-11-24T11:24:27.471Z deployment d-758 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by operator (manual restart) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-758",
+     "attributes": {
+      "deploy_id": "d-758",
+      "build_id": "b-1214",
+      "commit": "b7ae74f",
+      "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "deploy:d-759",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T11:28:34.681Z",
+     "available_time": "2026-11-24T11:28:35.225Z",
+     "version": "2.4.1",
+     "title": "deployment of payment-svc 2.4.1",
+     "content": "2026-11-24T11:28:34.681Z deployment d-759 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-759",
+     "attributes": {
+      "deploy_id": "d-759",
+      "build_id": "b-1214",
+      "commit": "b7ae74f",
+      "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "deploy:d-761",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T11:29:25.637Z",
+     "available_time": "2026-11-24T11:29:27.289Z",
+     "version": "2.4.1",
+     "title": "deployment of payment-svc 2.4.1",
+     "content": "2026-11-24T11:29:25.637Z deployment d-761 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-761",
+     "attributes": {
+      "deploy_id": "d-761",
+      "build_id": "b-1214",
+      "commit": "b7ae74f",
+      "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "deploy:d-763",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T11:35:01.961Z",
+     "available_time": "2026-11-24T11:35:02.514Z",
+     "version": "2.4.2",
+     "title": "deployment of payment-svc 2.4.2",
+     "content": "2026-11-24T11:35:01.961Z deployment d-763 of payment-svc version 2.4.2 to demo-local build=b-1270 commit=8e3b34b artifact_digest=sha256:8612a15c7212ebf5c21934c31afff1f99173a0b7c93c6da18825c7cdcc413582 by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-763",
+     "attributes": {
+      "deploy_id": "d-763",
+      "build_id": "b-1270",
+      "commit": "8e3b34b",
+      "commit_full": "8e3b34b03dbb4f9854630d7c2bd814f6b64696ac",
+      "artifact_digest": "sha256:8612a15c7212ebf5c21934c31afff1f99173a0b7c93c6da18825c7cdcc413582",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "deploy:d-764",
+     "source": "deployments",
+     "service": "payment-svc",
+     "event_time": "2026-11-24T11:37:17.603Z",
+     "available_time": "2026-11-24T11:37:19.267Z",
+     "version": "2.4.1",
+     "title": "deployment of payment-svc 2.4.1",
+     "content": "2026-11-24T11:37:17.603Z deployment d-764 of payment-svc version 2.4.1 to demo-local build=b-1214 commit=b7ae74f artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f by deploy-bot (pipeline) status=succeeded",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl#d-764",
+     "attributes": {
+      "deploy_id": "d-764",
+      "build_id": "b-1214",
+      "commit": "b7ae74f",
+      "commit_full": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read deployments.jsonl",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\deployments.jsonl"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "get_build": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "build:b-1214",
+     "source": "builds",
+     "service": "payment-svc",
+     "event_time": "2026-11-20T02:37:16.699Z",
+     "available_time": "2026-11-20T02:37:16.831Z",
+     "version": "2.4.1",
+     "title": "build b-1214 of payment-svc 2.4.1",
+     "content": "build b-1214 service=payment-svc version=2.4.1 commit=b7ae74f40b4cbabbd9f731663eb42bf8b238b75f artifact=payment-svc-2.4.1-b-1214.tar artifact_digest=sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f status=success pipeline=local-build started=2026-11-20T02:37:16.699Z finished=2026-11-20T02:37:16.831Z source_paths=services/__init__.py,services/payment,libs,config/payment-svc.yaml,db",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\builds\\b-1214.json",
+     "attributes": {
+      "commit": "b7ae74f",
+      "artifact_digest": "sha256:e76674c55b40986869e746e6c0add32eef256b8c6d361d0e804cf8396012f53f",
+      "backend": "demo-deploy-records",
+      "mode": "live",
+      "query": "read builds/b-1214.json",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox\\demo\\.runtime\\builds\\b-1214.json"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "get_config": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "file:b7ae74f:config/payment-svc.yaml",
+     "source": "configs",
+     "service": null,
+     "event_time": "2026-11-19T16:30:00.000Z",
+     "available_time": "2026-11-19T16:30:00.000Z",
+     "version": "b7ae74f",
+     "title": "config/payment-svc.yaml @ b7ae74f",
+     "content": "config/payment-svc.yaml @ b7ae74f\n# payment-svc runtime configuration\nservice: payment-svc\nport: 18102\nlog_level: INFO\ndb:\n  path: payments.db          # overridden by PAYMENT_DB_PATH in deployed environments\n  pool_size: 4\n  acquire_timeout_ms: 1000\n",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox-demo-shop@b7ae74f:config/payment-svc.yaml",
+     "attributes": {
+      "backend": "local-git",
+      "mode": "live",
+      "query": "git show b7ae74f:config/payment-svc.yaml",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox-demo-shop@b7ae74f",
+      "sha": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "path": "config/payment-svc.yaml"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "get_commit(running)": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "commit:b7ae74f",
+     "source": "commits",
+     "service": null,
+     "event_time": "2026-11-19T16:30:00.000Z",
+     "available_time": "2026-11-19T16:30:00.000Z",
+     "version": "b7ae74f",
+     "title": "Update CHANGELOG",
+     "content": "commit b7ae74f 2026-11-19T16:30:00.000Z Likhith Vardhan Goruputi\nUpdate CHANGELOG\nfiles: M CHANGELOG.md\n\ndiff --git a/CHANGELOG.md b/CHANGELOG.md\nindex 993a58d..3009623 100644\n--- a/CHANGELOG.md\n+++ b/CHANGELOG.md\n@@ -1,14 +1,18 @@\n # Changelog\n \n ## 2026-11\n - DEMO-18: `/charge` is idempotent on `order_id`\n - DEMO-15: pool acquire timeout lowered from 3s to 1s\n - DEMO-12: customer order notes are logged for support\n \n ## 2026-10\n - DEMO-7: shared http client retries connect errors once\n - README with service map\n \n ## 2026-09\n - DEMO-3: customer/time index for payment velocity checks\n - initial import of checkout-svc and payment-svc\n+\n+## Unreleased\n+- runbooks for checkout-svc and payment-svc, on-call and architecture docs\n+- CI workflow, policy tests, ruff config, smoke check script\n",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox-demo-shop@b7ae74f",
+     "attributes": {
+      "backend": "local-git",
+      "mode": "live",
+      "query": "git show b7ae74f",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox-demo-shop@b7ae74f",
+      "sha": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "author": "Likhith Vardhan Goruputi"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "get_commit(b7ae74f)": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "commit:b7ae74f",
+     "source": "commits",
+     "service": null,
+     "event_time": "2026-11-19T16:30:00.000Z",
+     "available_time": "2026-11-19T16:30:00.000Z",
+     "version": "b7ae74f",
+     "title": "Update CHANGELOG",
+     "content": "commit b7ae74f 2026-11-19T16:30:00.000Z Likhith Vardhan Goruputi\nUpdate CHANGELOG\nfiles: M CHANGELOG.md\n\ndiff --git a/CHANGELOG.md b/CHANGELOG.md\nindex 993a58d..3009623 100644\n--- a/CHANGELOG.md\n+++ b/CHANGELOG.md\n@@ -1,14 +1,18 @@\n # Changelog\n \n ## 2026-11\n - DEMO-18: `/charge` is idempotent on `order_id`\n - DEMO-15: pool acquire timeout lowered from 3s to 1s\n - DEMO-12: customer order notes are logged for support\n \n ## 2026-10\n - DEMO-7: shared http client retries connect errors once\n - README with service map\n \n ## 2026-09\n - DEMO-3: customer/time index for payment velocity checks\n - initial import of checkout-svc and payment-svc\n+\n+## Unreleased\n+- runbooks for checkout-svc and payment-svc, on-call and architecture docs\n+- CI workflow, policy tests, ruff config, smoke check script\n",
+     "content_ref": "A:\\subjects\\genAI\\final_project\\blackbox-demo-shop@b7ae74f",
+     "attributes": {
+      "backend": "local-git",
+      "mode": "live",
+      "query": "git show b7ae74f",
+      "source_url": "A:\\subjects\\genAI\\final_project\\blackbox-demo-shop@b7ae74f",
+      "sha": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "author": "Likhith Vardhan Goruputi"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  },
+  "list_workflow_runs": {
+   "status": "ok",
+   "error": null,
+   "records": [
+    {
+     "evidence_id": "gh:run:likhith2366/blackbox-demo-shop#44663434650",
+     "source": "builds",
+     "service": null,
+     "event_time": "2026-11-20T02:48:56.000Z",
+     "available_time": "2026-11-20T02:49:08.000Z",
+     "version": "e7a0cc0",
+     "title": "CI run ci #3: completed/success @ e7a0cc0",
+     "content": "workflow run 44663434650 'ci' #3 attempt 1 event=push branch=capture/INC-0000 status=completed conclusion=success\nhead commit e7a0cc0: DEMO-9: retry transient payment failures in shared client\ncreated=2026-11-20T02:48:56.000Z started=2026-11-20T02:48:56.000Z updated=2026-11-20T02:49:08.000Z workflow=.github/workflows/ci.yml",
+     "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/actions/runs/44663434650",
+     "attributes": {
+      "live": true,
+      "retrieved_at": "2026-11-26T17:44:30.345Z",
+      "repo": "likhith2366/blackbox-demo-shop",
+      "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/actions/runs/44663434650",
+      "http_status": 200,
+      "run_id": 44663434650,
+      "head_sha": "e7a0cc0f0e8492abe652cb31eec201d653cffb1d",
+      "commit_evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@e7a0cc0",
+      "workflow_id": 424543330,
+      "workflow": "ci",
+      "path": ".github/workflows/ci.yml",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_branch": "capture/INC-0000",
+      "run_number": 3,
+      "run_attempt": 1,
+      "backend": "github-actions",
+      "mode": "live"
+     },
+     "truncated": false,
+     "fixture": false
+    },
+    {
+     "evidence_id": "gh:run:likhith2366/blackbox-demo-shop#44661337079",
+     "source": "builds",
+     "service": null,
+     "event_time": "2026-11-20T02:30:53.000Z",
+     "available_time": "2026-11-20T02:31:09.000Z",
+     "version": "b7ae74f",
+     "title": "CI run ci #2: completed/success @ b7ae74f",
+     "content": "workflow run 44661337079 'ci' #2 attempt 1 event=push branch=main status=completed conclusion=success\nhead commit b7ae74f: Update CHANGELOG\ncreated=2026-11-20T02:30:53.000Z started=2026-11-20T02:30:53.000Z updated=2026-11-20T02:31:09.000Z workflow=.github/workflows/ci.yml",
+     "content_ref": "https://github.com/likhith2366/blackbox-demo-shop/actions/runs/44661337079",
+     "attributes": {
+      "live": true,
+      "retrieved_at": "2026-11-26T17:44:30.345Z",
+      "repo": "likhith2366/blackbox-demo-shop",
+      "url": "https://api.github.com/repos/likhith2366/blackbox-demo-shop/actions/runs/44661337079",
+      "http_status": 200,
+      "run_id": 44661337079,
+      "head_sha": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+      "commit_evidence_id": "gh:commit:likhith2366/blackbox-demo-shop@b7ae74f",
+      "workflow_id": 424543330,
+      "workflow": "ci",
+      "path": ".github/workflows/ci.yml",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_branch": "main",
+      "run_number": 2,
+      "run_attempt": 1,
+      "backend": "github-actions",
+      "mode": "live"
+     },
+     "truncated": false,
+     "fixture": false
+    }
+   ]
+  }
+ },
+ "compare": [
+  {
+   "what": "log line",
+   "raw": "2026-11-26T17:41:20.737Z charge failed",
+   "blackbox": "log:992244556d 2026-11-26T17:41:20.737Z",
+   "same": true
+  },
+  {
+   "what": "trace spans",
+   "raw": "18 spans",
+   "blackbox": "18 spans",
+   "same": true
+  },
+  {
+   "what": "db_pool_in_use",
+   "raw": "max=0 last=-3",
+   "blackbox": "max=2.0 last=-3.0",
+   "same": true
+  }
+ ]
+}

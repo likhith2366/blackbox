@@ -1,0 +1,21 @@
+{
+  "change": "h-payment-currency-log",
+  "started": "2026-11-26T18:40:29.031Z",
+  "steps": [
+    {
+      "step": "02_healthy_order",
+      "result_text": "HTTP 201 Created\n30 ms\nweb-mwxwecw8-5ef6\nsku-1001 \u00d7 1 = $18.50\ncustomer 9071\npayment_id pay_abe6fc6bf70e\nsent 1:40:46 pm\n{\n  \"order_id\": \"web-mwxwecw8-5ef6\",\n  \"payment_id\": \"pay_abe6fc6bf70e\"\n}"
+    },
+    {
+      "step": "04_order_after_change",
+      "result_text": "HTTP 201 Created\n40 ms\nweb-mwxwprbq-nlvr\nsku-1001 \u00d7 1 = $18.50\ncustomer 8089\npayment_id pay_22667b7055c6\nsent 1:49:38 pm\n{\n  \"order_id\": \"web-mwxwprbq-nlvr\",\n  \"payment_id\": \"pay_22667b7055c6\"\n}"
+    }
+  ],
+  "reset": "reset to healthy baseline\n1:40:32 pm\nHTTP 200 OK\n10.9 s\nPOST /control/api/reset\nhide body\n{\n  \"status\": \"healthy baseline deployed\",\n  \"seconds\": 10.9,\n  \"deployments\": [\n    {\n      \"deploy_id\": \"d-802\",\n      \"service\": \"payment-svc\",\n      \"version\": \"2.4.1\",\n      \"build_id\": \"b-1214\"\n    },\n    {\n      \"deploy_id\": \"d-803\",\n      \"service\": \"checkout-svc\",\n      \"version\": \"1.8.2\",\n      \"build_id\": \"b-1215\"\n    }\n  ]\n}",
+  "inject": {
+    "clicked_at": "2026-11-26T18:48:52.084Z",
+    "result": "inject h-payment-currency-log\n1:48:52 pm\nHTTP 200 OK\n2882 ms\nPOST /control/api/inject\nhide body\n{\n  \"status\": \"applied\",\n  \"fault_id\": \"h-payment-currency-log\",\n  \"seconds\": 2.9,\n  \"commit\": \"51b22a26f7df8a3b4a2d5f1681fed7021662658c\",\n  \"deployments\": [\n    \"d-804\"\n  ]\n}"
+  },
+  "alert": null,
+  "outcome": "no_alert"
+}

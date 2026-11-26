@@ -1,0 +1,15 @@
+17:43:15 endpoint-port: reset from the shop operator page
+17:43:33 endpoint-port: settle 330s so the previous change is outside the incident lookback
+17:49:03 endpoint-port: GPU 83 C; waiting below 75 C before injecting
+17:49:33 endpoint-port: GPU 83 C; waiting below 75 C before injecting
+17:50:03 endpoint-port: GPU 83 C; waiting below 75 C before injecting
+17:50:33 endpoint-port: GPU 82 C; waiting below 75 C before injecting
+17:51:03 endpoint-port: GPU 82 C; waiting below 75 C before injecting
+17:51:33 endpoint-port: GPU 83 C; waiting below 75 C before injecting
+17:52:03 endpoint-port: GPU 82 C; waiting below 75 C before injecting
+17:52:34 endpoint-port: GPU 82 C; waiting below 75 C before injecting
+17:53:04 endpoint-port: GPU 83 C; waiting below 75 C before injecting
+17:53:34 endpoint-port: GPU 84 C; waiting below 75 C before injecting
+17:54:04 endpoint-port: GPU 84 C; waiting below 75 C before injecting
+17:54:34 endpoint-port: GPU 85 C; waiting below 75 C before injecting
+17:55:04 endpoint-port: GPU 85 C; waiting below 75 C before injecting

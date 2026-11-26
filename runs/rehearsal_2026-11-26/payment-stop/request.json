@@ -1,0 +1,10 @@
+{
+  "incident_id": "LIVE-18146A",
+  "mode": "live_stack",
+  "alert": "checkout-svc:error_rate>0.1:15",
+  "settings": "improved",
+  "followup_of": null,
+  "problem_description": null,
+  "window_start": null,
+  "window_end": null
+}
