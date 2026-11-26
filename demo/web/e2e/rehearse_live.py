@@ -98,10 +98,10 @@ def copy_verbatim(src: Path, dst: Path, hashes: dict):
         hashes[dst.name] = hashlib.sha256(dst.read_bytes()).hexdigest()
 
 
-def rehearse(b, change, out: Path, settle: int, gpu_max: int):
+def rehearse(b, change, out: Path, settle: int, gpu_max: int, rec: dict):
     d = out / change
     d.mkdir(parents=True, exist_ok=True)
-    rec = {"change": change, "started": now(), "steps": []}
+    rec.update({"change": change, "started": now(), "steps": []})
     log(f"{change}: reset from the shop operator page")
     rec["reset"] = shop_control(b, "reset")
     b.shot(d / "01_reset.png")
@@ -225,10 +225,11 @@ def main():
         b.goto(BB + "#/connections", settle=5)
         b.shot(out / "00_connections.png")
         for change in a.changes:
+            rec: dict = {}
             try:
-                rec = rehearse(b, change, out, a.settle, a.gpu_max)
-            except Exception as exc:              # record the failure; never invent a result
-                rec = {"change": change, "outcome": "driver_error", "error": f"{type(exc).__name__}: {exc}"[:500]}
+                rehearse(b, change, out, a.settle, a.gpu_max, rec)
+            except Exception as exc:              # keep what was recorded; never invent a result
+                rec.update({"change": change, "outcome": "driver_error", "error": f"{type(exc).__name__}: {exc}"[:500]})
                 try:
                     b.shot(out / change / "99_driver_error.png")
                 except Exception:
