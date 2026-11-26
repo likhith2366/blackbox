@@ -98,7 +98,7 @@ def copy_verbatim(src: Path, dst: Path, hashes: dict):
         hashes[dst.name] = hashlib.sha256(dst.read_bytes()).hexdigest()
 
 
-def rehearse(b, change, out: Path, settle: int):
+def rehearse(b, change, out: Path, settle: int, gpu_max: int):
     d = out / change
     d.mkdir(parents=True, exist_ok=True)
     rec = {"change": change, "started": now(), "steps": []}
@@ -109,8 +109,8 @@ def rehearse(b, change, out: Path, settle: int):
     log(f"{change}: settle {settle}s so the previous change is outside the incident lookback")
     time.sleep(settle)
     # the investigation must start soon after the alert: a hot GPU would delay it until the alert episode moves on
-    while gpu_temp() >= 75:
-        log(f"{change}: GPU {gpu_temp()} C; waiting below 75 C before injecting")
+    while gpu_temp() > gpu_max:
+        log(f"{change}: GPU {gpu_temp()} C; waiting for <= {gpu_max} C before injecting")
         time.sleep(30)
     b.goto(SHOP + "#/controls", settle=3)
     b.wait(f"""(() => {{ const r = document.querySelector('input[name=fault][value="{change}"]');
@@ -215,6 +215,7 @@ def main():
     ap.add_argument("changes", nargs="+")
     ap.add_argument("--out", required=True)
     ap.add_argument("--settle", type=int, default=330)
+    ap.add_argument("--gpu-max", type=int, default=85, help="inject only when the GPU is at or below this temperature")
     a = ap.parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -225,7 +226,7 @@ def main():
         b.shot(out / "00_connections.png")
         for change in a.changes:
             try:
-                rec = rehearse(b, change, out, a.settle)
+                rec = rehearse(b, change, out, a.settle, a.gpu_max)
             except Exception as exc:              # record the failure; never invent a result
                 rec = {"change": change, "outcome": "driver_error", "error": f"{type(exc).__name__}: {exc}"[:500]}
                 try:
