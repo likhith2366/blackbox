@@ -195,6 +195,34 @@ export function RunDetailBody({ detail, fromFixture, expand = false }: { detail:
               <KVTable data={{ ...o.config, prompt_versions: o.prompt_versions }} />
             </Card>
           </div>
+          {detail.meta?.incident_timing != null && typeof detail.meta.incident_timing === 'object' && (
+            <Card title="Incident timing (live)">
+              <KVTable
+                data={Object.fromEntries(
+                  Object.entries(detail.meta.incident_timing as Record<string, unknown>).filter(([k]) =>
+                    [
+                      'rule',
+                      'first_onset_at',
+                      'first_fired_at',
+                      'latest_fired_at',
+                      'episodes_in_incident',
+                      'episodes_found',
+                      'window_start',
+                      'investigation_cutoff',
+                      'created_at',
+                      'investigation_started_at',
+                      'lookback_s',
+                    ].includes(k),
+                  ),
+                )}
+              />
+              <p className="muted small">
+                The window starts {String((detail.meta.incident_timing as Record<string, unknown>).lookback_s ?? 300)} s
+                before the first alert episode of this incident; the cutoff is when the incident was opened. A job that
+                waited for the GPU keeps both.
+              </p>
+            </Card>
+          )}
           {detail.meta && (
             <Card title="Run metadata (meta.json)">
               <KVTable data={detail.meta} />

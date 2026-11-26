@@ -238,4 +238,5 @@ class ChatSession:
         return {"session_id": self.id, "title": self.title, "incident": inc.model_dump(mode="json"),
                 "mode": getattr(self.backend, "mode", "snapshot"), "prompt_version": self.prompt_version,
                 "turns": [t.__dict__ for t in self.turns],
+                "incident_timing": getattr(self, "incident_timing", None),
                 "evidence": {k: v.model_dump(mode="json") for k, v in self.evidence.items()}}

@@ -72,7 +72,7 @@ def main():
     from demo import controller
     from demo.lock import demo_lock
     from demo.paths import RUNTIME
-    from blackbox.evidence.live_incident import open_incident
+    from blackbox.evidence.live_incident import open_live_incident
     from blackbox.evidence.live_stack import load_live_stack
     from blackbox.schemas import RunConfig
     from blackbox.systems import run_system
@@ -111,12 +111,13 @@ def main():
         with demo_lock(f"live sweep inject {fault}"):
             ev = controller.apply(fault)
         (d / "truth.json").write_text(json.dumps(ev, indent=2), encoding="utf-8")
-        inc, deadline = None, time.time() + 240
+        inc, timing, deadline = None, None, time.time() + 240
         while inc is None and time.time() < deadline:
             time.sleep(15)
             for svc, metric, op, thr, for_s in (EXTENDED_ALERTS if a.alerts == "extended" else ALERTS):
                 try:
-                    inc = open_incident(svc, metric, op, thr, for_s, since=ev["at"])
+                    # the incident is created here: its cutoff is now, its window starts before the first episode
+                    inc, timing = open_live_incident(svc, metric, op, thr, for_s, since=ev["at"])
                     break
                 except LookupError:
                     continue
@@ -125,24 +126,26 @@ def main():
             (d / "output.json").write_text(json.dumps({"status": "no_alert", "fault": fault}), encoding="utf-8")
             prov(d, fault, outcome="no_alert", injected=ev)
             continue
-        log(f"{fault}: alert {inc.alert.condition} fired {inc.alert.fired_at} ({inc.incident_id})")
+        log(f"{fault}: alert {inc.alert.condition} fired {inc.alert.fired_at} ({inc.incident_id}); "
+            f"window {inc.window_start} .. cutoff {inc.investigation_cutoff}")
+        (d / "incident.json").write_text(inc.model_dump_json(indent=2), encoding="utf-8")
         while gpu_temp() >= 80:
             time.sleep(20)
         while not gpu_lock.try_acquire(f"live sweep {fault}"):
             time.sleep(10)
         try:
-            # the cutoff is the start of the investigation: re-open so the window ends now
-            parts = inc.alert.condition.split()
-            inc = open_incident(inc.alert.service, inc.alert.signal, parts[1], float(parts[2]), int(parts[4].rstrip("s")),
-                                since=ev["at"])
+            # the investigation uses the incident as created (no re-open): a delayed start changes neither the
+            # window nor the cutoff
+            timing["investigation_started_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+            log(f"{fault}: investigation starts {timing['investigation_started_at']}")
             backend = load_live_stack(inc)
-            (d / "incident.json").write_text(inc.model_dump_json(indent=2), encoding="utf-8")
             (d / "sources.json").write_text(json.dumps([s.model_dump() for s in backend.source_status()], indent=2),
                                             encoding="utf-8")
             t0 = time.time()
             out = run_system("blackbox", backend, cfg)
             (d / "output.json").write_text(out.model_dump_json(indent=2), encoding="utf-8")
-            prov(d, fault, outcome=out.status, injected=ev, incident_id=inc.incident_id, alert=inc.alert.condition)
+            prov(d, fault, outcome=out.status, injected=ev, incident_id=inc.incident_id, alert=inc.alert.condition,
+                 incident_timing=timing)
             rep = out.report
             log(f"{fault}: {out.status} in {time.time() - t0:.0f}s -> {rep.status if rep else 'no report'}: "
                 f"{rep.headline if rep else ''}")

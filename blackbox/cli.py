@@ -125,14 +125,15 @@ def _main(argv: list[str] | None = None) -> int:
         m = _re.fullmatch(r"([\w.-]+):(\w+)([<>])([\d.]+):(\d+)", args.alert.replace(" ", ""))
         if not m:
             p.error("--alert must look like checkout-svc:error_rate>0.1:15")
-        from blackbox.evidence.live_incident import open_incident
+        from blackbox.evidence.live_incident import open_live_incident
         from blackbox.evidence.live_stack import load_live_stack
         from blackbox.connectors.capture import capture_dir_for
-        incident = open_incident(m[1], m[2], m[3], float(m[4]), int(m[5]))
+        incident, timing = open_live_incident(m[1], m[2], m[3], float(m[4]), int(m[5]))
         backend = load_live_stack(incident, capture_dir=capture_dir_for(args.capture_id) if args.capture_id else None)
         args.incident = incident.incident_id
         print(f"live incident {incident.incident_id}: {incident.alert.condition} fired {incident.alert.fired_at}; "
-              f"cutoff {incident.investigation_cutoff}")
+              f"cutoff {incident.investigation_cutoff}; window starts {incident.window_start} "
+              f"({timing['episodes_in_incident']} episode(s) since first onset {timing['first_onset_at']})")
         for s_ in backend.source_status():
             print(f"  {s_.source:12s} {'live' if s_.available else 'NOT AVAILABLE':14s} {s_.detail}")
     elif not args.incident:

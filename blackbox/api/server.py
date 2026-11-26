@@ -220,19 +220,22 @@ def health() -> dict:
 
 
 # ------------------------------------------------------------------ live stack
-def _open_live_incident(alert: str) -> dict:
+def _open_live_incident(alert: str, with_timing: bool = False):
+    """Open the live incident now (its cutoff). The window starts before the first episode of the current chain
+    of alert episodes, so a queued job keeps the onset however late it runs (see live_incident.py)."""
     import re as _re
     m = _re.fullmatch(r"([\w.-]+):(\w+)([<>])([\d.]+):(\d+)", (alert or "").replace(" ", ""))
     if not m:
         raise HTTPException(400, "alert must look like checkout-svc:error_rate>0.1:15")
-    from blackbox.evidence.live_incident import open_incident
+    from blackbox.evidence.live_incident import open_live_incident
     try:
-        inc = open_incident(m[1], m[2], m[3], float(m[4]), int(m[5]))
+        inc, timing = open_live_incident(m[1], m[2], m[3], float(m[4]), int(m[5]))
     except LookupError as exc:
         raise HTTPException(409, str(exc))
     except OSError as exc:
         raise HTTPException(503, f"Prometheus not reachable: {type(exc).__name__}")
-    return inc.model_dump(mode="json")
+    d = inc.model_dump(mode="json")
+    return (d, timing) if with_timing else d
 
 
 def _status_word(available: bool, detail: str) -> str:
@@ -270,7 +273,8 @@ def live_sources() -> dict:
 
 @app.post("/api/live/incidents")
 def live_incident(body: dict) -> dict:
-    return _open_live_incident(str(body.get("alert", "")))
+    inc, timing = _open_live_incident(str(body.get("alert", "")), with_timing=True)
+    return {**inc, "timing": timing}
 
 
 # ------------------------------------------------------------------ chat (Ask BlackBox)
@@ -302,7 +306,8 @@ def chat_start(req: ChatStart) -> dict:
     if req.mode == "live_stack":
         from blackbox.evidence.live_stack import load_live_stack
         from blackbox.schemas import Incident
-        backend = load_live_stack(Incident(**_open_live_incident(req.alert or "")))
+        inc_d, chat_timing = _open_live_incident(req.alert or "", with_timing=True)
+        backend = load_live_stack(Incident(**inc_d))
     elif req.mode == "snapshot":
         if not req.incident_id or not (SNAPSHOTS / req.incident_id / "incident.json").exists():
             raise HTTPException(404, f"unknown incident {req.incident_id}")
@@ -310,6 +315,8 @@ def chat_start(req: ChatStart) -> dict:
     else:
         raise HTTPException(400, "mode must be live_stack or snapshot")
     sess = ChatSession(backend, cfg, title=backend.incident().alert.title)
+    if req.mode == "live_stack":
+        sess.incident_timing = chat_timing
     with CHAT_LOCK:
         CHATS[sess.id] = sess
     _chat_save(sess)
@@ -411,7 +418,7 @@ def submit(req: InvestigationRequest, retry_of: Optional[str] = None) -> dict:
         raise HTTPException(400, "mode must be snapshot, live or live_stack")
     live_incident = None
     if req.mode == "live_stack":
-        live_incident = _open_live_incident(req.alert or "")
+        live_incident, live_timing = _open_live_incident(req.alert or "", with_timing=True)
         req.incident_id = live_incident["incident_id"]
         inc = live_incident
     else:
@@ -435,6 +442,7 @@ def submit(req: InvestigationRequest, retry_of: Optional[str] = None) -> dict:
     (d / "request.json").write_text(json.dumps(req.model_dump(), indent=2), encoding="utf-8")
     if live_incident is not None:
         (d / "incident.json").write_text(json.dumps(live_incident, indent=2), encoding="utf-8")
+        (d / "incident_timing.json").write_text(json.dumps(live_timing, indent=2), encoding="utf-8")
     with JOBS_LOCK:
         JOBS[job_id] = job
         position = sum(1 for j in JOBS.values() if j["status"] in ("queued", "waiting_gpu"))
@@ -601,6 +609,7 @@ def _worker() -> None:
                 from blackbox.evidence.live_stack import load_live_stack
                 from blackbox.connectors.capture import capture_dir_for
                 from blackbox.schemas import Incident
+                # the incident as created at submission: window and cutoff do not move while the job waited
                 inc_live = Incident(**json.loads((Path(job["dir"]) / "incident.json").read_text(encoding="utf-8")))
                 base = load_live_stack(inc_live, capture_dir=capture_dir_for(f"ui-{job_id}"))
             elif req.mode == "live":
@@ -622,7 +631,12 @@ def _worker() -> None:
             from blackbox import provenance
             cfg = cfg.model_copy(update={"code_revision": provenance.short_revision()})
             man = SNAPSHOTS / req.incident_id / "manifest.json"
-            _set(job, meta={"mode": req.mode, "settings": req.settings, "config_file": str(cfg_file.relative_to(REPO)),
+            tf = Path(job["dir"]) / "incident_timing.json"
+            timing = json.loads(tf.read_text(encoding="utf-8")) if tf.exists() else None
+            if timing is not None:
+                timing["investigation_started_at"] = _now()
+                tf.write_text(json.dumps(timing, indent=2), encoding="utf-8")
+            _set(job, meta={"incident_timing": timing,"mode": req.mode, "settings": req.settings, "config_file": str(cfg_file.relative_to(REPO)),
                             "model": cfg.model_dump(include={"model", "temperature", "seed", "num_ctx", "num_predict",
                                                               "max_rounds", "max_tool_calls", "round_prompt",
                                                               "report_prompt", "coverage_hint"}),
@@ -638,7 +652,8 @@ def _worker() -> None:
                 from blackbox.connectors.jira import setting as _setting
                 (d / "provenance.json").write_text(json.dumps(provenance.record(
                     cfg_file, cfg, code_repo=_setting("BLACKBOX_GIT_REPO_DIR") or None, mode=req.mode,
-                    settings=req.settings, alert=req.alert, incident_id=out.incident_id), indent=2), encoding="utf-8")
+                    settings=req.settings, alert=req.alert, incident_id=out.incident_id, incident_timing=timing),
+                    indent=2), encoding="utf-8")
             (d / "meta.json").write_text(json.dumps({"phase": "BlackBox UI job (not evaluation)", **(job["meta"] or {}),
                                                     "request": req.model_dump(), "status": out.status,
                                                     "retry_of": job.get("retry_of")}, indent=2), encoding="utf-8")
