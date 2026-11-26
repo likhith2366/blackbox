@@ -1,0 +1,4 @@
+The fault was injected (truth.json) and the alert opened incident LIVE-3CBFC7 (incident.json; window
+2026-11-26T21:09:38.637Z .. cutoff 21:14:50.665Z). The sweep then waited for the GPU to drop below 80 C before
+investigating. The GPU stayed at 88-89 C (20-31 % load from other desktop applications) for 52 minutes, so the
+sweep was stopped at 22:07Z without an investigation. No output.json exists; nothing was scored.

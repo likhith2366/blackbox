@@ -2395,5 +2395,65 @@
       "d-812",
       "d-813"
     ]
+  },
+  {
+    "at": "2026-11-26T20:43:44.249Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-814",
+      "d-815"
+    ]
+  },
+  {
+    "at": "2026-11-26T20:44:01.553Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-816",
+      "d-817"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "retry-policy",
+    "family": "retry_amplification",
+    "kind": "commit",
+    "at": "2026-11-26T20:49:31.586Z",
+    "commit": "f7fddbc066dc19bd09ef0d41bfbabe4d87211815",
+    "builds": [
+      "b-1279"
+    ],
+    "deployments": [
+      "d-818"
+    ],
+    "done_at": "2026-11-26T20:49:34.296Z"
+  },
+  {
+    "at": "2026-11-26T21:08:48.599Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-819",
+      "d-820"
+    ]
+  },
+  {
+    "action": "apply",
+    "change_id": "payment-stop",
+    "family": "stopped_dependency",
+    "kind": "stop",
+    "at": "2026-11-26T21:14:18.637Z",
+    "service": "payment-svc",
+    "done_at": "2026-11-26T21:14:20.611Z"
+  },
+  {
+    "at": "2026-11-26T22:08:10.573Z",
+    "action": "reset",
+    "head": "b7ae74f40b4cbabbd9f731663eb42bf8b238b75f",
+    "deployments": [
+      "d-821",
+      "d-822"
+    ]
   }
 ]

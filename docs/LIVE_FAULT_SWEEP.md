@@ -286,3 +286,35 @@ BlackBox `a53160d` (clean), same settings and model digest as before; fault comm
   task I did not change the gate or the model.
 
 One run; not a stability or accuracy claim.
+
+## Component ownership correction (`runs/live_faults_ownership`, dev_v3e, extended alerts)
+
+**Finding from the saved runs.**
+- Across every saved synthesis output, 14 hypotheses named a component that differs from the service owning the
+  change they cite as the cause.
+- In 11 of those 14, the component is the alerting service: for example, the windowfix retry run named
+  payment-svc while citing checkout-svc's deploy, build and commit.
+- The synthesis prompt defined the component only as "the service, and the part of it if the evidence shows it".
+
+**Correction (`c3aeb4b`).** It is general and names no incident, service or fault.
+- **Prompt and schema:** the synthesis prompt defines the component as the service that owns the cause, which is
+  not necessarily the alerting service. It describes both directions: a caller's change, and a fault inside the
+  called service.
+- **New field:** a separate `symptom_service` field records where the symptom is seen.
+- **Version:** the synthesis prompt version is now recorded in `context.synthesis.prompt_version`.
+- **Gate:** the causal gate is stricter in one way: a component naming more than one service is refused as
+  ambiguous.
+- **Tests:** `tests/test_component_ownership.py` (9 tests).
+
+**Live check, one injection each.**
+- **retry-policy** (fault commit `f7fddbc`, deploy `d-818`, build `b-1279`; BlackBox `c3aeb4b`, clean):
+  - The window was kept despite a 6-minute thermal wait (D19 fix working).
+  - Deploy, build and commit were retrieved, all attributed to `checkout-svc`.
+  - The **synthesis call timed out after 240 s** (GPU at 95 °C), so the corrected prompt produced no output.
+  - The round-loop hypotheses (payment-svc database, metrics only) were refused for a missing runtime effect.
+  - Result: **insufficient evidence**. This does not test the correction.
+- **payment-stop:** injected and alerted (incident `LIVE-3CBFC7`), but **not investigated**. The GPU stayed at
+  88–89 °C under load from other desktop applications, so the sweep's 80 °C gate never opened; the sweep was
+  stopped after 52 minutes. See `NOT_INVESTIGATED.txt`.
+
+The correction is therefore covered by unit tests only. Its live effect is still unmeasured.

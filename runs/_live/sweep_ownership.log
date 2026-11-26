@@ -1,0 +1,8 @@
+20:43:51 retry-policy: reset to baseline
+20:49:31 retry-policy: inject (traffic 3.7 req/s)
+20:50:04 retry-policy: alert error_rate > 0.1 for 15s fired 2026-11-26T20:49:56.586Z (LIVE-A5EA58); window 2026-11-26T20:44:56.586Z .. cutoff 2026-11-26T20:50:04.382Z
+20:56:25 retry-policy: investigation starts 2026-11-26T20:56:25.624Z
+21:08:36 retry-policy: completed in 731s -> insufficient_evidence: No reliable root cause identified.
+21:08:36 payment-stop: reset to baseline
+21:14:18 payment-stop: inject (traffic 2.7 req/s)
+21:14:50 payment-stop: alert error_rate > 0.1 for 15s fired 2026-11-26T21:14:38.637Z (LIVE-3CBFC7); window 2026-11-26T21:09:38.637Z .. cutoff 2026-11-26T21:14:50.665Z
