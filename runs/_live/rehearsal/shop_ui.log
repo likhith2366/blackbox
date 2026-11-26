@@ -1,0 +1,98 @@
+
+> blackbox-demo-shop-web@0.0.0 dev
+> vite --host 127.0.0.1 --port 5174 --strictPort
+
+
+  [32m[1mVITE[22m v8.3.8[39m  [2mready in [0m[1m861[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+[2m12:43:20 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18101
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m12:43:20 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m12:43:25 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18101
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m12:56:04 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18101
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m12:56:04 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m12:56:09 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18101
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:01:51 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18101
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:14:01 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:14:06 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18101
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:14:06 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:29:52 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:29:53 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:29:53 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:29:58 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:30:03 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:30:08 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:30:13 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:30:18 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:30:23 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:30:28 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:30:33 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:40:29 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:40:29 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:40:34 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:40:39 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18101
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:40:39 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:48:53 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:53:50 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18101
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:53:50 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18102
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+[2m1:53:55 pm[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /health[39m
+Error: connect ECONNREFUSED 127.0.0.1:18101
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)

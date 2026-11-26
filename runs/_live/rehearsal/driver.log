@@ -1,0 +1,65 @@
+17:55:58 endpoint-port: reset from the shop operator page
+17:56:16 endpoint-port: settle 330s so the previous change is outside the incident lookback
+18:01:53 endpoint-port: injected; 'inject endpoint-port\n1:01:50 pm\nHTTP 200 OK\n2802 ms\nPOST /control/api/inject\nhide body\n{\n  "status": "applied",\n  "fault'
+18:02:55 endpoint-port: alert checkout-svc:error_rate>0.1:15; starting a live-stack investigation from the BlackBox UI
+18:03:01 endpoint-port: job 20261126T180301-3c1dab
+18:11:51 endpoint-port: diagnosis - Most likely cause: checkout-svc - checkout-svc's payment client configuration changed to use a non-existent port in the sidecar
+18:13:56 payment-stop: reset from the shop operator page
+18:14:14 payment-stop: settle 330s so the previous change is outside the incident lookback
+18:19:45 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:20:15 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:20:45 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:21:15 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:21:45 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:22:15 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:22:45 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:23:16 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:23:46 payment-stop: GPU 87 C; waiting for <= 85 C before injecting
+18:24:16 payment-stop: GPU 87 C; waiting for <= 85 C before injecting
+18:24:46 payment-stop: GPU 87 C; waiting for <= 85 C before injecting
+18:25:16 payment-stop: GPU 87 C; waiting for <= 85 C before injecting
+18:25:46 payment-stop: GPU 87 C; waiting for <= 85 C before injecting
+18:26:16 payment-stop: GPU 87 C; waiting for <= 85 C before injecting
+18:26:47 payment-stop: GPU 87 C; waiting for <= 85 C before injecting
+18:27:17 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:27:47 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:28:17 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:28:47 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:29:17 payment-stop: GPU 86 C; waiting for <= 85 C before injecting
+18:29:54 payment-stop: injected; 'inject payment-stop\n1:29:51 pm\nHTTP 200 OK\n1926 ms\nPOST /control/api/inject\nhide body\n{\n  "status": "applied",\n  "fault_'
+18:30:55 payment-stop: alert checkout-svc:error_rate>0.1:15; starting a live-stack investigation from the BlackBox UI
+18:31:02 payment-stop: job 20261126T183101-52810c
+18:39:40 payment-stop: diagnosis - Most likely cause: payment-svc - payment-svc was shut down by an operator request, causing checkout-svc to time out on payment calls
+18:40:29 h-payment-currency-log: reset from the shop operator page
+18:40:47 h-payment-currency-log: settle 330s so the previous change is outside the incident lookback
+18:46:18 h-payment-currency-log: GPU 86 C; waiting for <= 85 C before injecting
+18:46:48 h-payment-currency-log: GPU 86 C; waiting for <= 85 C before injecting
+18:47:18 h-payment-currency-log: GPU 86 C; waiting for <= 85 C before injecting
+18:47:48 h-payment-currency-log: GPU 86 C; waiting for <= 85 C before injecting
+18:48:18 h-payment-currency-log: GPU 86 C; waiting for <= 85 C before injecting
+18:48:55 h-payment-currency-log: injected; 'inject h-payment-currency-log\n1:48:52 pm\nHTTP 200 OK\n2882 ms\nPOST /control/api/inject\nhide body\n{\n  "status": "applied",'
+18:53:40 h-payment-currency-log: no alert within 4 min -> no-alert control (nothing investigated)
+18:53:44 final reset from the shop operator page
+[
+  {
+    "change": "endpoint-port",
+    "outcome": "driver_error",
+    "alert": null,
+    "report_status": null,
+    "headline": null
+  },
+  {
+    "change": "payment-stop",
+    "outcome": "investigated",
+    "alert": "checkout-svc:error_rate>0.1:15",
+    "report_status": "diagnosis",
+    "headline": "Most likely cause: payment-svc - payment-svc was shut down by an operator request, causing checkout-svc to time out on payment calls"
+  },
+  {
+    "change": "h-payment-currency-log",
+    "outcome": "no_alert",
+    "alert": null,
+    "report_status": null,
+    "headline": null
+  }
+]
