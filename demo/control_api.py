@@ -23,6 +23,7 @@ Endpoints
 from __future__ import annotations
 
 import json
+import os
 import threading
 import time
 
@@ -47,6 +48,8 @@ SUPPORTED = {
     "endpoint-port": "checkout config points payment base_url at port 18112 (checkout redeploy)",
     "payment-stop": "operator stops payment-svc",
     "pool-override": "payment-svc restarted with PAYMENT_DB_POOL_SIZE=1 env override",
+    # control: a real, harmless change (no fault); BlackBox should not blame it
+    "h-payment-currency-log": "harmless control: payment-svc adds currency to the charge approval log (payment redeploy)",
 }
 
 app = FastAPI(title="BlackBox demo control (local only)")
@@ -114,7 +117,9 @@ def reset():
             if _traffic_running():
                 raise HTTPException(409, "traffic generation is running; wait for it to finish")
             started = time.time()
-            session_dir = RUNTIME / "telemetry" / "sessions" / time.strftime("%Y%m%dT%H%M%S", time.gmtime(started))
+            # with the live observability stack, the services must write where Alloy and the telemetry bridge read
+            session_dir = (RUNTIME / "telemetry" / "stack" if os.environ.get("DEMO_TELEMETRY") == "stack" else
+                           RUNTIME / "telemetry" / "sessions" / time.strftime("%Y%m%dT%H%M%S", time.gmtime(started)))
             recs = controller.baseline(str(session_dir))
             st = load_state()
             st["session"] = {"started": iso(started), "telemetry_dir": str(session_dir)}
