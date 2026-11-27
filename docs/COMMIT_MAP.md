@@ -67,3 +67,7 @@ notes). This table maps one to the other, in order.
 | `a53160d` | `1956590` | Live incident window: do not clip to the alert search start (it would reveal the injection |
 | `c0ff788` | `0390f92` | Retry-policy with the corrected window: change retrieved and attributed to checkout-svc; a |
 | `9a29104` | `9c02814` | Windowfix session logs |
+| `256ac68` | `aed1192` | Commit map: D19 revisions |
+| `c3aeb4b` | `a45c221` | Synthesis: component is the service that owns the cause, separate symptom_service field; c |
+| `56338e3` | `eedcd0c` | Ownership check: retry-policy abstained (synthesis timed out on a hot GPU), payment-stop n |
+| `2ffe71c` | `f6ab53d` | Ownership session logs |
