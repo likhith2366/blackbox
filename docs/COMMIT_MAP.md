@@ -71,3 +71,5 @@ notes). This table maps one to the other, in order.
 | `c3aeb4b` | `a45c221` | Synthesis: component is the service that owns the cause, separate symptom_service field; c |
 | `56338e3` | `eedcd0c` | Ownership check: retry-policy abstained (synthesis timed out on a hot GPU), payment-stop n |
 | `2ffe71c` | `f6ab53d` | Ownership session logs |
+| `7b22004` | `ca6849d` | Commit map: ownership revisions |
+| `42018ae` | `fb15b3b` | Ownership live verification: environment blocked at the pre-injection check (no incident c |
